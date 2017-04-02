@@ -38,7 +38,7 @@ public class Movement : MonoBehaviour
     private Color b_Color;
     private Color y_Color;
     private Rigidbody myBody;
-    public GameObject asteroidSpawn;
+    private GameObject asteroidSpawn;
     private AsteroidSpawner spawnScript;
     private PlanetSpawner planetScript;
     private GameManager gameManager;
@@ -46,7 +46,7 @@ public class Movement : MonoBehaviour
     private ExperienceManager ExperienceMan;
     private GameObject Cam;
     private CameraShake CamShake;
-    public GameObject joystick;
+    private GameObject joystick;
     private VirtualJoystick joystickscript;
     private ModelSwitch modelScript;
     private AudioController audioCon;
@@ -57,8 +57,8 @@ public class Movement : MonoBehaviour
     private Vector3 newVelocity;
     public GameObject trail;
     private float bumperSpeed = 20.0f;
-    private float velocityCap = 65;
-    private float velocityMin = -65;
+    private float velocityCap = 80;
+    private float velocityMin = -80;
     float DefaultSpeed;
 
     //buffs and debuffs
@@ -121,24 +121,29 @@ public class Movement : MonoBehaviour
         }
         else
         {
-            Debug.Log("Assign Camera");
+            Debug.Log("Place Camera in scene");
         }
         //Look for joystick
-        if(joystick)
+        if(!joystick)
         {
-            joystickscript = joystick.GetComponent<VirtualJoystick>();
+            joystickscript = GameObject.FindGameObjectWithTag("GameController").GetComponent<VirtualJoystick>();
+            Debug.Log("Joystick Assigned");
         }
         //For collecting asteroids and returning them to the pool
-        if(asteroidSpawn)
+        if(!asteroidSpawn)
         {
-            spawnScript = asteroidSpawn.GetComponent<AsteroidSpawner> ();
-            gameManager = asteroidSpawn.GetComponent<GameManager>();
-            ScoreManager = asteroidSpawn.GetComponent<ScoreManager>();
-            ExperienceMan = asteroidSpawn.GetComponent<ExperienceManager>();
+            asteroidSpawn = GameObject.FindGameObjectWithTag("Spawner");
+            if(asteroidSpawn)
+            {
+                spawnScript = asteroidSpawn.GetComponent<AsteroidSpawner>();
+                gameManager = asteroidSpawn.GetComponent<GameManager>();
+                ScoreManager = asteroidSpawn.GetComponent<ScoreManager>();
+                ExperienceMan = asteroidSpawn.GetComponent<ExperienceManager>();
+            }
         }
         else
         {
-            Debug.Log("Assign GameManager GameObject in inspector");
+            Debug.Log("Assign GameManager GameObject in scene");
         }
 
         HealthBar = new Rect(Screen.width / 10, Screen.height / 6, Screen.width / 3, Screen.height / 50);
@@ -169,7 +174,7 @@ public class Movement : MonoBehaviour
 
         if(ChangeToKeyboard)
         {
-            if(joystick&&!isDead)
+            if(joystickscript && !isDead)
             {
                 //Joystick
                 var move = Vector3.zero;
