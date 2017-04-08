@@ -448,6 +448,15 @@ public class Movement : MonoBehaviour
             myBody.AddForce (c.contacts[0].normal * bumperSpeed, ForceMode.VelocityChange);
 		}
 
+        else if(c.gameObject.tag=="MazeWall")
+        {
+            if (audioCon)
+            {
+                audioCon.WallBounce();
+            }
+            myBody.AddForce(c.contacts[0].normal * bumperSpeed/2, ForceMode.VelocityChange);
+        }
+
         else if(c.gameObject.tag=="Uranus")
         {
             c.gameObject.GetComponent<DestroyMoons>().DestroyAllMoons();

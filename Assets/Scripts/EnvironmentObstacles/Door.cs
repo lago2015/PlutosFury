@@ -13,6 +13,12 @@ public class Door : MonoBehaviour {
 
     private int keyObtained;
     private int numKeyRequired=3;
+    private GameManager gameScript;
+
+    void Awake()
+    {
+        gameScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<GameManager>();
+    }
 
     public void OpenDoor()
     {
@@ -36,7 +42,9 @@ public class Door : MonoBehaviour {
 		// the direction to fade: in = -1 or out = 1
     IEnumerator ChangeScene()
     {
+        //gameScript.YouWin();
         yield return new WaitForSeconds(2);
+        gameScript.YouWin();
         fadeDir = -1;
         //GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraStop>().ChangeToBoss();
        // GameObject.FindGameObjectWithTag("Player").GetComponent<Movement>().MoveToBoss();
