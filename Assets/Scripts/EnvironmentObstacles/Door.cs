@@ -12,13 +12,15 @@ public class Door : MonoBehaviour {
 
 
     private int keyObtained;
-
+    private int numKeyRequired=3;
 
     public void OpenDoor()
     {
-
-        GetComponent<SphereCollider>().isTrigger = true;
-       // Destroy(gameObject);
+        if(keyObtained==numKeyRequired)
+        {
+            GetComponent<SphereCollider>().isTrigger = true;
+         
+        }
     }
 
     void OnTriggerEnter(Collider col)
@@ -36,13 +38,14 @@ public class Door : MonoBehaviour {
     {
         yield return new WaitForSeconds(2);
         fadeDir = -1;
-        GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraStop>().ChangeToBoss();
-        GameObject.FindGameObjectWithTag("Player").GetComponent<Movement>().MoveToBoss();
+        //GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraStop>().ChangeToBoss();
+       // GameObject.FindGameObjectWithTag("Player").GetComponent<Movement>().MoveToBoss();
     }
 
-    void KeyAcquired()
+    public void KeyAcquired()
     {
         keyObtained++;
+        OpenDoor();
     }
 
     void OnGUI()

@@ -7,11 +7,11 @@ public class Key : MonoBehaviour {
     {
         if(col.gameObject.tag=="Player")
         {
-            GameObject.FindGameObjectWithTag("Door").GetComponent<Door>().OpenDoor();
+            GameObject.FindGameObjectWithTag("Door").GetComponent<Door>().KeyAcquired();
             AudioController AudioCon = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
             if(AudioCon)
             {
-                AudioCon.WormholeOpen(col.gameObject.transform.position);
+                //AudioCon.WormholeOpen(col.gameObject.transform.position);
 
             }
             Destroy(gameObject);

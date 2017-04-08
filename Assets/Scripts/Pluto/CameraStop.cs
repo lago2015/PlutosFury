@@ -16,7 +16,6 @@ public class CameraStop : MonoBehaviour {
     float bossXMin = 490;
 
 	public float dampTime = 0.15f;
-	public float lookMax = 1.0f;
 	private Vector3 velocity = Vector3.zero;
 	GameObject target;
 	//Rigidbody targetBody;
