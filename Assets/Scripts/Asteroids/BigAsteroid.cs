@@ -8,7 +8,7 @@ public class BigAsteroid : MonoBehaviour {
     public GameObject AsteroidModel;
     private SphereCollider Collider;
     public float spawnRadius = 2;
-    private int curHits;
+    public int curHits;
     public int HitPoints;
     private Vector3 SpawnPoint;
     private float DestroyTimeout=2;
@@ -24,6 +24,7 @@ public class BigAsteroid : MonoBehaviour {
         {
             Explosion.SetActive(false);
         }
+        doOnce = false;
     }
 
     void SpawnAsteroids()

@@ -7,6 +7,7 @@ public class DetectThenExplode : MonoBehaviour {
     public GameObject regularState;
     public GameObject explosionState;
     private bool doOnce;
+    public bool isRocket;
 
     void Awake()
     {
@@ -20,7 +21,21 @@ public class DetectThenExplode : MonoBehaviour {
         }
     }
 
-    void OnTriggerStay(Collider col)
+    void Start()
+    {
+        if(isRocket)
+        {
+            StartCoroutine(LaunchTime());
+        }
+    }
+
+    IEnumerator LaunchTime()
+    {
+        yield return new WaitForSeconds(2);
+        StartCoroutine(SwitchModels());
+    }
+
+    void OnTriggerEnter(Collider col)
     {
         if(col.gameObject.tag=="Player")
         {
@@ -43,6 +58,13 @@ public class DetectThenExplode : MonoBehaviour {
     {
         regularState.SetActive(false);
         yield return new WaitForSeconds(0.05f);
-        explosionState.SetActive(true);
+        if(explosionState)
+        {
+            explosionState.SetActive(true);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 }
