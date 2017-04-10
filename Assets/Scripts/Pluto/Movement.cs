@@ -56,7 +56,9 @@ public class Movement : MonoBehaviour
     private Vector3 normDirToClick;
     private Vector3 newVelocity;
     public GameObject trail;
-    private float bumperSpeed = 20.0f;
+    public float wallBump = 20.0f;
+    public float mazeBump = 10f;
+    public float explosionBump = 20f;
     private float velocityCap = 80;
     private float velocityMin = -80;
     float DefaultSpeed;
@@ -303,7 +305,7 @@ public class Movement : MonoBehaviour
 
             if (DashChargeActive)
             {
-                DashDamage = 2;
+                DashDamage = 20;
                 MoveSpeed = SuperDashSpeed;
             }
             else
@@ -422,18 +424,23 @@ public class Movement : MonoBehaviour
                 c.gameObject.GetComponent<BigAsteroid>().AsteroidHit(DashDamage);
                 StartCoroutine(PlutoHit(c.contacts[0].point));
                 bool Smashed = c.gameObject.GetComponent<BigAsteroid>().RockStatus();
-                if(Smashed)
+                if (Smashed)
                 {
-                    if(modelScript)
+                    if (modelScript)
                     {
-                        modelScript.ChangeModel(ModelSwitch.Models.Smash );
+                        modelScript.ChangeModel(ModelSwitch.Models.Smash);
                     }
+                    myBody.AddForce(c.contacts[0].normal * explosionBump, ForceMode.VelocityChange);
+
                 }
-                myBody.AddForce(c.contacts[0].normal * bumperSpeed, ForceMode.VelocityChange);
+                else
+                {
+                    myBody.AddForce(c.contacts[0].normal * wallBump, ForceMode.VelocityChange);
+                }
             }
             else
             {
-                myBody.AddForce(c.contacts[0].normal * bumperSpeed, ForceMode.VelocityChange);
+                myBody.AddForce(c.contacts[0].normal * wallBump, ForceMode.VelocityChange);
 
             }
 
@@ -445,7 +452,7 @@ public class Movement : MonoBehaviour
             {
                 audioCon.WallBounce();
             }
-            myBody.AddForce (c.contacts[0].normal * bumperSpeed, ForceMode.VelocityChange);
+            myBody.AddForce (c.contacts[0].normal * wallBump, ForceMode.VelocityChange);
 		}
 
         else if(c.gameObject.tag=="MazeWall")
@@ -454,7 +461,7 @@ public class Movement : MonoBehaviour
             {
                 audioCon.WallBounce();
             }
-            myBody.AddForce(c.contacts[0].normal * bumperSpeed/2, ForceMode.VelocityChange);
+            myBody.AddForce(c.contacts[0].normal * mazeBump, ForceMode.VelocityChange);
         }
 
         else if(c.gameObject.tag=="Uranus")
@@ -466,7 +473,7 @@ public class Movement : MonoBehaviour
         {
             if(!ShouldDash)
             {
-                myBody.AddForce(c.contacts[0].normal * bumperSpeed, ForceMode.VelocityChange);
+                myBody.AddForce(c.contacts[0].normal * wallBump, ForceMode.VelocityChange);
             }
         }
         else if(c.gameObject.tag=="Neptune")
