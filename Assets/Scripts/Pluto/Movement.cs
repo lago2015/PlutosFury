@@ -58,7 +58,8 @@ public class Movement : MonoBehaviour
     public GameObject trail;
     public float wallBump = 20.0f;
     public float mazeBump = 10f;
-    public float explosionBump = 20f;
+    public float dashAsteroidBump = 20f;
+    public float explosionBump = 50f;
     private float velocityCap = 80;
     private float velocityMin = -80;
     float DefaultSpeed;
@@ -435,7 +436,7 @@ public class Movement : MonoBehaviour
                 }
                 else
                 {
-                    myBody.AddForce(c.contacts[0].normal * wallBump, ForceMode.VelocityChange);
+                    myBody.AddForce(c.contacts[0].normal * dashAsteroidBump, ForceMode.VelocityChange);
                 }
             }
             else
