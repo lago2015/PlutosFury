@@ -31,15 +31,21 @@ public class LookAtObject : MonoBehaviour {
     {
         if(col.gameObject.tag=="Player")
         {
-            Player = col.gameObject;
-            ObjectNear = true;
+            if(AmITurret)
+            {
+                Player = col.gameObject;
+                ObjectNear = true;
+            }
         }
     }
     void OnTriggerExit(Collider col)
     {
         if(col.gameObject== Player)
         {
-            ObjectNear = false;
+            if(AmITurret)
+            {
+                ObjectNear = false;
+            }
         }
     }
 }

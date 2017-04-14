@@ -6,11 +6,26 @@ public class DetectThenExplode : MonoBehaviour {
     
     public GameObject regularState;
     public GameObject explosionState;
+    private BoxCollider collider;
+    private SphereCollider TriggerCollider;
+    private HomingProjectile moveScript;
     private bool doOnce;
     public bool isRocket;
-
+    public bool isHomingLandmine;
     void Awake()
     {
+        moveScript = GetComponent<HomingProjectile>();
+        TriggerCollider = GetComponent<SphereCollider>();
+        if (isHomingLandmine)
+        {
+            collider = GetComponent<BoxCollider>();
+            TriggerCollider.enabled = true;
+            collider.isTrigger = false;
+        }
+        else
+        {
+            TriggerCollider.enabled = false;
+        }
         if(regularState)
         {
             regularState.SetActive(true);
@@ -35,20 +50,43 @@ public class DetectThenExplode : MonoBehaviour {
         StartCoroutine(SwitchModels());
     }
 
+    void OnCollisionEnter(Collision col)
+    {
+        if(col.gameObject.tag=="Player")
+        {
+            if (regularState && explosionState)
+            {
+                if (!doOnce)
+                {
+                    GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>().DestructionSmall(transform.position);
+                    doOnce = true;
+                }
+                StartCoroutine(SwitchModels());
+            }
+        }
+    }
+
     void OnTriggerEnter(Collider col)
     {
         if(col.gameObject.tag=="Player")
         {
-            if(!col.isTrigger)
+            if(isHomingLandmine)
             {
-                if (regularState && explosionState)
+                moveScript.ShouldMove = true;
+            }
+            else
+            {
+                if (!col.isTrigger)
                 {
-                    if(!doOnce)
+                    if (regularState && explosionState)
                     {
-                        GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>().DestructionSmall(transform.position);
-                        doOnce = true;
+                        if (!doOnce)
+                        {
+                            GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>().DestructionSmall(transform.position);
+                            doOnce = true;
+                        }
+                        StartCoroutine(SwitchModels());
                     }
-                    StartCoroutine(SwitchModels());
                 }
             }
         }
