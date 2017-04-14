@@ -19,10 +19,12 @@ public class Movement : MonoBehaviour
     private bool ObtainedWhileDash;
     public bool chargeOnce;
     public bool DashChargeActive;
+    private bool isCharged;
     private bool ShouldDash;
     public float MoveSpeed;
     public float DashSpeed;
     public float SuperDashSpeed = 100;
+    public float PowerDashTimeout = 5;
     //Dash Charges
 
     private float DefaultDashSpeed;
@@ -36,6 +38,7 @@ public class Movement : MonoBehaviour
     public GameObject hitEffect;
     private Color r_Color;
     private Color b_Color;
+    private Color o_Color;
     private Color y_Color;
     private Rigidbody myBody;
     private GameObject asteroidSpawn;
@@ -44,11 +47,11 @@ public class Movement : MonoBehaviour
     private GameManager gameManager;
     private ScoreManager ScoreManager;
     private ExperienceManager ExperienceMan;
-    private GameObject Cam;
     private CameraShake CamShake;
     private GameObject joystick;
     private VirtualJoystick joystickscript;
     private ModelSwitch modelScript;
+    private ButtonIndicator dashButt;
     private AudioController audioCon;
     //Basic Movement
     private float dirToClickX;
@@ -85,14 +88,19 @@ public class Movement : MonoBehaviour
     private float curForce=7;
 
     bool ShieldStatus() { Shielded = GetComponent<Shield>().PlutoShieldStatus(); return Shielded; }
-    public void DashKeyDown() { Dash(); }
-
+    public bool DashKeyDown() { return DashChargeActive; }
+    public bool ChargedUp(bool curCharge) { return isCharged = curCharge; }
+    public float CurPowerDashTimeout() { return PowerDashTimeout; }
+    public void isCharging() { Trail.startColor = o_Color; }
+    public void cancelCharge() { Trail.startColor = b_Color; }
+    
     // Use this for initialization
     void Awake () 
 	{
         //setting colors
         r_Color = Color.red;
         y_Color = Color.yellow;
+        o_Color = Color.red + Color.yellow+Color.blue;
         if(Trail)
         {
             b_Color = Trail.startColor;
@@ -101,9 +109,16 @@ public class Movement : MonoBehaviour
         {
             hitEffect.SetActive(false);
         }
-        
+
+        //Dash Button
+        dashButt = GameObject.FindGameObjectWithTag("DashButt").GetComponent<ButtonIndicator>();
+        if(!dashButt)
+        {
+            Debug.Log("No Dash Button");
+        }
         //model change
         modelScript = GetComponent<ModelSwitch>();
+        
         //Audio Controller
         audioCon = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
         //Ensure speed is saved for default settings
@@ -117,20 +132,14 @@ public class Movement : MonoBehaviour
         }
 
         //For camera Shakes
-        Cam = GameObject.FindGameObjectWithTag("MainCamera");
-        if (Cam)
-        {
-            CamShake = Cam.GetComponent<CameraShake>();
-        }
-        else
-        {
-            Debug.Log("Place Camera in scene");
-        }
+        CamShake = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraShake>();
+
+        
         //Look for joystick
         if(!joystick)
         {
             joystickscript = GameObject.FindGameObjectWithTag("GameController").GetComponent<VirtualJoystick>();
-            Debug.Log("Joystick Assigned");
+            //Debug.Log("Joystick Assigned");
         }
         //For collecting asteroids and returning them to the pool
         if(!asteroidSpawn)
@@ -271,12 +280,10 @@ public class Movement : MonoBehaviour
 
         }
 
-
-        if (Input.GetKeyDown(KeyCode.S))
+        if(Input.GetKeyDown(KeyCode.O))
         {
-            Dash();
+            DashChargeActive = true;
         }
-
 
         if (Input.GetKeyDown(KeyCode.D))
         {
@@ -291,33 +298,44 @@ public class Movement : MonoBehaviour
         {
             if(!chargeOnce)
             {
-                modelScript.ChangeModel(ModelSwitch.Models.Dash);
                 chargeOnce = true;
+                modelScript.ChangeModel(ModelSwitch.Models.Dash);
             }
         }
-        
-	}
+        else
+        {
+            if(chargeOnce)
+            {
+                chargeOnce = false;
+                modelScript.ChangeModel(ModelSwitch.Models.Idol);
+            }
+        }
+
+    }
 
 
     public void Dash()
     {
+        //Check if exhausted dash
         if(!isExhausted)
         {
-
-            if (DashChargeActive)
+            //Check if power pick up as been obtained
+            //also if power dash is charged
+            if (DashChargeActive&&isCharged)
             {
                 DashDamage = 20;
                 MoveSpeed = SuperDashSpeed;
             }
+            //normal dash
             else
             {
                 DashDamage = 1;
-                modelScript.ChangeModel(ModelSwitch.Models.Idol);    
                 MoveSpeed = DashSpeed;
             }
             //audio
             if (audioCon)
             {
+                //audio for power and normal dash
                 if(DashChargeActive)
                 {
                     audioCon.PlutoPowerDash(transform.position);
@@ -327,15 +345,19 @@ public class Movement : MonoBehaviour
                     audioCon.PlutoDash1(transform.position);
                 }
             }
-            ShouldDash = true;
-            StartCoroutine(DashTransition());
+            
+            ShouldDash = true;  //Update dash status
+            StartCoroutine(DashTransition());   //Start dash
         }
     }
 
     IEnumerator DashTransition()
     {
-        if (DashChargeActive && Trail)
+
+        //Change Trail color according to Power Dash Status
+        if (DashChargeActive && Trail && isCharged)
         {
+
             Trail.startColor = r_Color;
 
         }
@@ -345,27 +367,42 @@ public class Movement : MonoBehaviour
         }
 
         yield return new WaitForSeconds(DashTimeout);
-        if(!ObtainedWhileDash&&chargeOnce)
+
+        //Check if a dash pick up was obtained while dashing
+        if(!ObtainedWhileDash&&isCharged&&DashChargeActive)
         {
             DashChargeActive = false;
-            chargeOnce = false;
-            modelScript.ChangeModel(ModelSwitch.Models.Dash);
+            isCharged = false;
+            
         }
+
+        //Reset Value
         ObtainedWhileDash = false;
         ShouldDash = false;
         DashTime = 0;
+
+        //Change trail back
         Trail.startColor = b_Color;
+        
+        //Reset values on button script
+        dashButt.ResetValues();
+
+        //Start Slowdown/Cooldown
         StartCoroutine(DashCooldown());
         StartCoroutine(SlowDown());
         MoveSpeed = DefaultSpeed;
     }
 
+    //Cool down for exhaustion from dash
     IEnumerator DashCooldown()
     {
+       
         isExhausted = true;
         yield return new WaitForSeconds(DashCooldownTime);
         isExhausted = false;
     }
+    
+    //Reset velocity by increasing drag
     IEnumerator SlowDown()
     {
         myBody.drag = slowDownDrag;

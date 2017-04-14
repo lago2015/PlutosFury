@@ -93,16 +93,8 @@ public class ModelSwitch : MonoBehaviour {
 
     void ActivateDash()
     {
-        if (!isDashActive)
-        {
-            PlutoModels[7].SetActive(true);
-            isDashActive = true;
-        }
-        else
-        {
-            PlutoModels[7].SetActive(false);
-            isDashActive = false;
-        }
+        PlutoModels[7].SetActive(true);
+        isDashActive = true;
         curModel = Models.Idol;
     }
 
