@@ -14,18 +14,20 @@ public class Door : MonoBehaviour {
     private int keyObtained;
     private int numKeyRequired=3;
     private GameManager gameScript;
-
+    private AudioController audioScript;
     void Awake()
     {
         gameScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<GameManager>();
+        audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
     }
 
-    public void OpenDoor()
+    public void OpenDoor(Vector3 curPosition)
     {
+    
         if(keyObtained==numKeyRequired)
         {
             GetComponent<SphereCollider>().isTrigger = true;
-         
+            audioScript.WormholeOpen(curPosition);
         }
     }
 
@@ -50,10 +52,14 @@ public class Door : MonoBehaviour {
        // GameObject.FindGameObjectWithTag("Player").GetComponent<Movement>().MoveToBoss();
     }
 
-    public void KeyAcquired()
+    public void KeyAcquired(Vector3 curPosition)
     {
         keyObtained++;
-        OpenDoor();
+        if(curPosition!=Vector3.zero)
+        {
+            audioScript.MoonAcquiredSound(curPosition);
+        }
+        OpenDoor(curPosition);
     }
 
     void OnGUI()

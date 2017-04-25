@@ -66,6 +66,7 @@ public class BigAsteroid : MonoBehaviour {
         {
             if(!doOnce)
             {
+                GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>().AsteroidExplosion(transform.position);
                 SpawnAsteroids();
                 doOnce = true;
             }

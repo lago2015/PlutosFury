@@ -6,12 +6,12 @@ public class ExperienceManager : MonoBehaviour
 
     public int[] Levels;
     private int curLevelDisplay;
-    public int levelIndex;
-    public int curExpPoints;
-    public int CurrLevelNum;
-    public int curLevelRequirement;
-    public int baseRegenPoints;
-    public bool gotHurt;
+    private int levelIndex;
+    private int curExpPoints;
+    private int CurrLevelNum;
+    private int curLevelRequirement;
+    private int baseRegenPoints;
+    private bool gotHurt;
     public int CurrentExperience() { return curExpPoints; }
     public int CurrentRequirement() { return curLevelRequirement; }
 

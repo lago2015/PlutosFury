@@ -7,8 +7,8 @@ public class Key : MonoBehaviour {
     {
         if(col.gameObject.tag=="Player")
         {
-            GameObject.FindGameObjectWithTag("Door").GetComponent<Door>().KeyAcquired();
-         
+            GameObject.FindGameObjectWithTag("Door").GetComponent<Door>().KeyAcquired(transform.position);
+            
             Destroy(gameObject);
         }
     }

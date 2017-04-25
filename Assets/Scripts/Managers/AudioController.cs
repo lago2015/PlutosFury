@@ -67,6 +67,14 @@ public class AudioController : MonoBehaviour {
     public AudioSource WormholeOpenSource;
     public float WorholeDelay = 0.5f;
 
+    [Header("MoonAcquired")]
+    public AudioSource moonAcquiredSource;
+    public float MoonAcquiredDelay = 0.5f;
+
+    [Header("AsteroidExplosion")]
+    public AudioSource asteroidExplosion;
+    public float asteroidExplosionDelay = 0.5f;
+
     [Header("GameOver")]
     public AudioSource GameOverSource;
     public float GameOverDelay = 0.5f;
@@ -114,7 +122,7 @@ public class AudioController : MonoBehaviour {
             }
         }
     }
-
+    
     public void PlutoDash1(Vector3 pos)
     {
         if(timer_01>=dash1Delay)
@@ -224,6 +232,42 @@ public class AudioController : MonoBehaviour {
         }
     }
 
+    public void AsteroidExplosion(Vector3 pos)
+    {
+        if (timer_02 >= asteroidExplosionDelay)
+        {
+
+            if (asteroidExplosion != null)
+            {
+                asteroidExplosion.pitch = Random.Range(0.8f, 1f);
+                asteroidExplosion.volume = Random.Range(0.8f, 1f);
+                asteroidExplosion.minDistance = 20f;
+                asteroidExplosion.loop = false;
+                asteroidExplosion.Play();
+
+                timer_02 = 0f;
+            }
+        }
+    }
+
+
+    public void MoonAcquiredSound(Vector3 pos)
+    {
+        if (timer_01 >= MoonAcquiredDelay)
+        {
+            if (moonAcquiredSource != null)
+            {
+                moonAcquiredSource.pitch = Random.Range(0.8f, 1f);
+                moonAcquiredSource.volume = Random.Range(0.8f, 1f);
+                moonAcquiredSource.minDistance = 20f;
+                moonAcquiredSource.loop = false;
+                moonAcquiredSource.Play();
+
+                timer_01 = 0f;
+            }
+        }
+    }
+
     public void DestructionSmall(Vector3 pos)
     {
         if (timer_01 >= wallBounceDelay)
@@ -237,6 +281,7 @@ public class AudioController : MonoBehaviour {
             }
         }
     }
+
     public void GameOver(Vector3 pos)
     {
         if (timer_01 >= GameOverDelay)
