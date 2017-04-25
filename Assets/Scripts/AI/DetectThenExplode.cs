@@ -11,6 +11,7 @@ public class DetectThenExplode : MonoBehaviour {
     private HomingProjectile moveScript;
     private bool doOnce;
     public bool isRocket;
+    public bool isLandmine;
     public bool isHomingLandmine;
     void Awake()
     {
@@ -22,9 +23,17 @@ public class DetectThenExplode : MonoBehaviour {
             TriggerCollider.enabled = true;
             collider.isTrigger = false;
         }
-        else
+        else if(isLandmine)
         {
-            TriggerCollider.enabled = false;
+            if(TriggerCollider)
+            {
+                TriggerCollider.enabled = true;
+            }
+        }
+        else if(isRocket)
+        {
+            collider = GetComponent<BoxCollider>();
+            collider.enabled = true;
         }
         if(regularState)
         {
@@ -73,7 +82,7 @@ public class DetectThenExplode : MonoBehaviour {
             if(isHomingLandmine)
             {
                 moveScript.ShouldMove = true;
-            }
+            }   
             else
             {
                 if (!col.isTrigger)

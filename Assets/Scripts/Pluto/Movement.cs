@@ -353,13 +353,10 @@ public class Movement : MonoBehaviour
 
     IEnumerator DashTransition()
     {
-
         //Change Trail color according to Power Dash Status
         if (DashChargeActive && Trail && isCharged)
         {
-
             Trail.startColor = r_Color;
-
         }
         else
         {
@@ -492,8 +489,17 @@ public class Movement : MonoBehaviour
             }
             myBody.AddForce (c.contacts[0].normal * wallBump, ForceMode.VelocityChange);
 		}
+        else if (c.gameObject.tag == "EnvironmentObstacle")
+        {
+            if (audioCon)
+            {
+                audioCon.WallBounce();
+            }
+            myBody.AddForce(c.contacts[0].normal * wallBump, ForceMode.VelocityChange);
+        }
 
-        else if(c.gameObject.tag=="MazeWall")
+
+        else if (c.gameObject.tag=="MazeWall")
         {
             if (audioCon)
             {

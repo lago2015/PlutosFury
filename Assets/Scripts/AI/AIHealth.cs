@@ -4,6 +4,24 @@ using System.Collections;
 public class AIHealth : MonoBehaviour {
 
     public int EnemyHealth=3;
+    public GameObject Explosion;
+    public GameObject Model;
+    public GameObject Model2;
+    
+
+    void Awake()
+    {
+        if(Explosion&&Model)
+        {
+            Explosion.SetActive(false);
+            Model.SetActive(true);
+
+        }
+        if(Model2)
+        {
+            Model2.SetActive(true);
+        }
+    }
 
     void OnCollisionEnter(Collision col)
     {
@@ -15,7 +33,16 @@ public class AIHealth : MonoBehaviour {
                 EnemyHealth--;
                 if (EnemyHealth <= 0)
                 {
-                    Destroy(transform.parent.gameObject);
+                    if(Explosion&&Model)
+                    {
+                        Explosion.SetActive(true);
+                        Model.SetActive(false);
+                        Model2.SetActive(false);
+                    }
+                    else
+                    {
+                        Destroy(transform.parent.gameObject);
+                    }
                 }
             }
         }

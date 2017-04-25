@@ -1,78 +1,109 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ExperienceManager : MonoBehaviour {
+public class ExperienceManager : MonoBehaviour
+{
 
     public int[] Levels;
     private int curLevelDisplay;
-    private int levelIndex;
+    public int levelIndex;
     public int curExpPoints;
-    private int curLevelRequirement;
-    private int baseRegenPoints;
-    bool gotHurt;
+    public int CurrLevelNum;
+    public int curLevelRequirement;
+    public int baseRegenPoints;
+    public bool gotHurt;
     public int CurrentExperience() { return curExpPoints; }
     public int CurrentRequirement() { return curLevelRequirement; }
-    public int CurrentLevel() { return curLevelDisplay; }
 
-     float GameOverTimer;
+    float GameOverTimer;
     ModelSwitch modelScript;
     GameManager gameMan;
 
     void Awake()
     {
-    
+
         modelScript = GameObject.FindGameObjectWithTag("Player").GetComponent<ModelSwitch>();
         gameMan = GetComponent<GameManager>();
         curLevelDisplay = 1;
-        levelIndex = 1;
-        curLevelRequirement = Levels[curLevelDisplay-1];
+        levelIndex = -1;
+        CurrLevelNum = -1;
+        curLevelRequirement = Levels[levelIndex+1];
+    }
+
+    public int CurrentLevel()
+    {
+        if(CurrLevelNum==-1)
+        {
+            return 0;
+        }
+        else
+        {
+            return CurrLevelNum;
+        }
     }
 
     public void ExpAcquired()
     {
-        if(curExpPoints>=baseRegenPoints)
+        if (curExpPoints >= baseRegenPoints)
         {
             gotHurt = false;
         }
-        if(gotHurt)
+        if (gotHurt)
         {
+            //restore lost experience to level
             if (curExpPoints < baseRegenPoints)
             {
-                //check if curexp is stil being reganed
-
-                if (levelIndex - 1 == 1)
+                //if player is level 1
+                
+                if (levelIndex == -1 && levelIndex <=CurrLevelNum)
+                {
+                    curExpPoints = Levels[0];
+                    levelIndex++;
+                }
+                //level 2
+                else if (levelIndex == 0 && levelIndex <= CurrLevelNum)
                 {
                     curExpPoints = Levels[1];
+                    levelIndex++;
                 }
-                else if (levelIndex - 1 == 2)
+                //level 3
+                else if (levelIndex == 1 && levelIndex <= CurrLevelNum)
                 {
                     curExpPoints = Levels[2];
                 }
-                levelIndex++;
-            }
+            } 
         }
         else
         {
             //gain experience and check to level up
             curExpPoints++;
-            if (curExpPoints >= Levels[curLevelDisplay-1])
+            if (curExpPoints >= curLevelRequirement-1)
             {
-                if(curLevelDisplay<Levels.Length)
+                if (levelIndex == CurrLevelNum)
+                {
+                    CurrLevelNum++;
+                }
+                if (CurrLevelNum < Levels.Length)
                 {
                     curLevelDisplay++;
+                    if(levelIndex<=Levels.Length-1)
+                    {
+                        baseRegenPoints = Levels[levelIndex+1];
+                        curLevelRequirement = Levels[levelIndex + 1];
+                    }
                     levelIndex++;
-                    curLevelRequirement = Levels[curLevelDisplay-1];
-                    baseRegenPoints = curLevelRequirement;
+                    
                 }
+                
             }
         }
 
-        
+
     }
     public void DamageExperience()
     {
         gotHurt = true;
-        if(curExpPoints<=0)
+        if (curExpPoints <= 0)
         {
             GameObject.FindGameObjectWithTag("Player").GetComponent<Movement>().DisableMovement();
             modelScript.ChangeModel(ModelSwitch.Models.Lose);
@@ -82,23 +113,35 @@ public class ExperienceManager : MonoBehaviour {
         else if (curExpPoints <= baseRegenPoints)
         {
             modelScript.ChangeModel(ModelSwitch.Models.Damaged);
-            if (levelIndex-1<=0)
+            //check if level index is equal or less then 0
+            if (levelIndex < 0)
             {
-                levelIndex = 0;
+                //make sure its 0 if true
+                levelIndex = -1;
             }
             else
             {
+                //decrease level index
                 levelIndex--;
             }
-            if (levelIndex - 1 == 0)
+            if (levelIndex <= -1)
             {
                 curExpPoints = 0;
             }
-            else if (levelIndex - 1 == 1)
+
+            //Level 1
+            if (levelIndex == 0)
+            {
+                curExpPoints = Levels[0];
+            }
+            //Level 2
+            else if (levelIndex == 1)
             {
                 curExpPoints = Levels[1];
             }
-            else if (levelIndex - 1 == 2)
+
+            //Level 3
+            else if (levelIndex == 2)
             {
                 curExpPoints = Levels[2];
             }
@@ -111,5 +154,4 @@ public class ExperienceManager : MonoBehaviour {
             curExpPoints = baseRegenPoints;
         }
     }
-    
 }

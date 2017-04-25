@@ -14,8 +14,12 @@ public class MoveAsteroidHack : MonoBehaviour
 	private Rigidbody myBody;
 
 	GameObject pluto;
+    private bool isNewAsteroid;
     public bool isConsumable;
     float AttractionStrength = 5f;
+
+    public bool newSpawnedAsteroid() { return isNewAsteroid = true; }
+    public bool asteroidStatus() { return isNewAsteroid; }
 
     void Start()
     {
