@@ -6,11 +6,12 @@ public class ButtonIndicator : MonoBehaviour, IPointerUpHandler,IPointerDownHand
 
     private Movement playerScript;
     private float PowerDashTimeout;
-    public float curTime;
+    private float curTime;
     private bool curStatus;
     private bool isButtDown;
     private bool isCharged;
     private bool doOnce;
+
     void Start()
     {
         playerScript = GameObject.FindGameObjectWithTag("Player").GetComponent<Movement>();
@@ -36,7 +37,6 @@ public class ButtonIndicator : MonoBehaviour, IPointerUpHandler,IPointerDownHand
                 {
                     //if successful start power dash
                     curTime = 0;
-                    curStatus = false;
                     isCharged = true;
                     playerScript.ChargedUp(true);
                     playerScript.Dash();
@@ -73,11 +73,13 @@ public class ButtonIndicator : MonoBehaviour, IPointerUpHandler,IPointerDownHand
             doOnce = false;
             isButtDown = false;
             curTime = 0;
+            
             if(!isCharged)
             {
                 playerScript.ChargedUp(false);
                 playerScript.Dash();
             }
+            isCharged = false;
         }
     }
     public void OnPointerUp(PointerEventData eventData)

@@ -17,11 +17,12 @@ public class ModelSwitch : MonoBehaviour {
     private bool isPoweredUp;
     private bool doOnce;
     public int tempIndex;
-
+    public bool gameOver;
     void Start()
     {
         RunModels(0);
     }
+    
 
 
     public Models ChangeModel(Models NewModel)
@@ -33,10 +34,15 @@ public class ModelSwitch : MonoBehaviour {
 
     void DetermineModel()
     {
+
         switch(curModel)
         {
             case Models.Idol:
                 curDelay = idolDelay;
+                if(gameOver)
+                {
+                    ChangeModel(Models.Lose);
+                }
                 RunModels(0);
                 break;
             case Models.Inflate:
@@ -60,6 +66,7 @@ public class ModelSwitch : MonoBehaviour {
                 break;
             case Models.Lose:
                 curDelay = 1000;
+                gameOver = true;
                 RunModels(2);
                 break;
             case Models.Dash:
@@ -95,7 +102,14 @@ public class ModelSwitch : MonoBehaviour {
     {
         PlutoModels[7].SetActive(true);
         isDashActive = true;
-        curModel = Models.Idol;
+        if(!gameOver)
+        {
+            curModel = Models.Idol;
+        }
+        else
+        {
+            ChangeModel(Models.Lose);
+        }
     }
 
     IEnumerator TransitionModel()
@@ -105,7 +119,14 @@ public class ModelSwitch : MonoBehaviour {
         PlutoModels[modelIndex].SetActive(false);
         modelIndex = 0;
         PlutoModels[modelIndex].SetActive(true);
-        curModel = Models.Idol;
+        if(!gameOver)
+        {
+            curModel = Models.Idol;
+        }
+        else
+        {
+            ChangeModel(Models.Lose);
+        }
     }
 
 }

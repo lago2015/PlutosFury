@@ -121,9 +121,19 @@ public class AsteroidSpawner : MonoBehaviour
     }
     public void ReturnPooledAsteroid(GameObject asteroid)
 	{
-		// Return asteroid to the list
-		asteroid.SetActive (false);
-		asteroidPool.Add (asteroid);
+        // Return asteroid to the list
+
+        bool isNew = asteroid.GetComponent<MoveAsteroidHack>().asteroidStatus();
+        if(isNew)
+        {
+            Destroy(asteroid);
+        }
+        else
+        {
+            asteroid.SetActive(false);
+            int asteroidIndex=asteroidPool.IndexOf(asteroid);
+            asteroidPool.Insert(asteroidIndex, asteroid);
+        }
 	}
 
     
