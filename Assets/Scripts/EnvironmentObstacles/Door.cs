@@ -9,8 +9,8 @@ public class Door : MonoBehaviour {
     private int drawDepth = -1000;		// the texture's order in the draw hierarchy: a low number means it renders on top
     private float alpha = 1.0f;			// the texture's alpha value between 0 and 1
     public int fadeDir=-1;
-
-
+    bool isOpen;
+    public float fadeTime=2;
     private int keyObtained;
     private int numKeyRequired=3;
     private GameManager gameScript;
@@ -19,6 +19,7 @@ public class Door : MonoBehaviour {
     {
         gameScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<GameManager>();
         audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
+        isOpen = false;
     }
 
     public void OpenDoor(Vector3 curPosition)
@@ -26,7 +27,7 @@ public class Door : MonoBehaviour {
     
         if(keyObtained==numKeyRequired)
         {
-            GetComponent<SphereCollider>().isTrigger = true;
+            isOpen = true;
             audioScript.WormholeOpen(curPosition);
         }
     }
@@ -35,21 +36,36 @@ public class Door : MonoBehaviour {
     {
         if(col.gameObject.tag=="Player")
         {
-            //do something winning here
-
-            fadeDir = 1;
-            StartCoroutine(ChangeScene()); 
+            if(isOpen)
+            {
+                //do something winning here
+                fadeDir = 1;
+                StartCoroutine(ChangeScene());
+            }
         }
     }
 		// the direction to fade: in = -1 or out = 1
     IEnumerator ChangeScene()
     {
+        Vector3 moveToBoss = GameObject.FindGameObjectWithTag("Door2").transform.position;
+        
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        GameObject camera = GameObject.FindGameObjectWithTag("MainCamera"); ;
         //gameScript.YouWin();
-        yield return new WaitForSeconds(2);
-        gameScript.YouWin();
+        yield return new WaitForSeconds(fadeTime);
+        if (player && moveToBoss != Vector3.zero&&camera)
+        {
+            player.SetActive(false);
+            moveToBoss.z = camera.transform.position.z;
+            camera.transform.position = moveToBoss;
+            moveToBoss.z = 0;
+            player.transform.position = moveToBoss;
+            
+            player.SetActive(true);
+        }
+
         fadeDir = -1;
-        //GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraStop>().ChangeToBoss();
-       // GameObject.FindGameObjectWithTag("Player").GetComponent<Movement>().MoveToBoss();
+       
     }
 
     public void KeyAcquired(Vector3 curPosition)

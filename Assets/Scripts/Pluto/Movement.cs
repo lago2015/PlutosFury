@@ -440,6 +440,8 @@ public class Movement : MonoBehaviour
     
 
 
+
+
     //Basic collision for BASIC PLUTO
     void OnCollisionEnter(Collision c)
 	{
@@ -481,6 +483,24 @@ public class Movement : MonoBehaviour
 
         }
 
+        else if(c.gameObject.tag=="Planet")
+        {
+            if(ShouldDash==false)
+            {
+                myBody.AddForce(c.contacts[0].normal * wallBump*2, ForceMode.VelocityChange);
+                DamagePluto();
+                modelScript.ChangeModel(ModelSwitch.Models.Damaged);
+            }
+            else
+            {
+                AIHealth healthScipt = c.gameObject.GetComponent<AIHealth>();
+                if(healthScipt)
+                {
+                    healthScipt.IncrementDamage();
+                }
+            }
+        }
+
         else if (c.gameObject.tag == "Wall") 
 		{
             if(audioCon)
@@ -496,8 +516,8 @@ public class Movement : MonoBehaviour
                 audioCon.WallBounce();
             }
             myBody.AddForce(c.contacts[0].normal * wallBump, ForceMode.VelocityChange);
+            
         }
-
 
         else if (c.gameObject.tag=="MazeWall")
         {
@@ -615,6 +635,8 @@ public class Movement : MonoBehaviour
         myBody.drag = 0.25f;
     }
     
+   
+
     //Getter for SuperBool
     public bool SuperBool()
     {

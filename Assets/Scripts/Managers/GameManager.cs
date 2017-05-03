@@ -40,15 +40,7 @@ public class GameManager : MonoBehaviour
     }
 	void Start ()
     {
-        Wormhole = GameObject.FindGameObjectWithTag("Door");
-        if(Wormhole)
-        {
-            //Wormhole.SetActive(false);
-        }
-        else
-        {
-            Debug.Log("No Door");
-        }
+        
         if(GameEndedUI)
         {
             GameEndedUI.SetActive(false);

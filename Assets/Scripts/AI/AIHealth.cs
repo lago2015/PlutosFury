@@ -23,6 +23,24 @@ public class AIHealth : MonoBehaviour {
         }
     }
 
+    public void IncrementDamage()
+    {
+        EnemyHealth--;
+        if(EnemyHealth<=0)
+        {
+            if (Explosion && Model)
+            {
+                Explosion.SetActive(true);
+                Model.SetActive(false);
+                Model2.SetActive(false);
+            }
+            else
+            {
+                Destroy(transform.parent.gameObject);
+            }
+        }
+    }
+
     void OnCollisionEnter(Collision col)
     {
         if(col.gameObject.tag=="Player")
@@ -37,7 +55,8 @@ public class AIHealth : MonoBehaviour {
                     {
                         Explosion.SetActive(true);
                         Model.SetActive(false);
-                        Model2.SetActive(false);
+                        if(Model2)
+                            Model2.SetActive(false);
                     }
                     else
                     {
