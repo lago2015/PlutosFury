@@ -12,6 +12,8 @@ public class AudioController : MonoBehaviour {
     public AudioSource BgMusicSource;
     public float bgMusicDelay;
 
+    [Header("BackgroundBossMusic")]
+    public AudioSource BgBossSource;
 
     [Header("Pluto Hit")]
     public AudioClip plutoHit;
@@ -23,17 +25,21 @@ public class AudioController : MonoBehaviour {
     public AudioSource plutoDeathSource;
     public float deathDelay = 0.5f;
 
-    [Header("Dash 1")]
+    [Header("Dash")]
     public AudioSource plutoDash1;
     public float dash1Delay = 0.5f;
 
-    [Header("Dash 2")]
+    [Header("PowerDash")]
     public AudioSource plutoDash2;
     public float dash2Delay = 0.5f;
 
-    [Header("Dash 3")]
-    public AudioSource plutoDash3;
+    [Header("PowerDashReady")]
+    public AudioSource plutoDashReady;
     public float dash3Delay = 0.5f;
+
+    [Header("PlutoLevelUp")]
+    public AudioSource plutoLevelUp;
+    public float levelDelay = 0.5f;
 
     [Header("ShieldActive")]
     public AudioSource ShieldActive;
@@ -46,6 +52,9 @@ public class AudioController : MonoBehaviour {
     [Header("InflateActive")]
     public AudioSource InflateActive;
     public float inflateActiveDelay = 0.5f;
+
+    [Header("RogueDash")]
+    public AudioSource RogueDashSource;
 
     [Header("Wall Bounce")]
     public AudioSource wallBounceSource;
@@ -66,6 +75,10 @@ public class AudioController : MonoBehaviour {
     [Header("WormholeOpen")]
     public AudioSource WormholeOpenSource;
     public float WorholeDelay = 0.5f;
+
+    [Header("WormholeLocked")]
+    public AudioSource WormholeLockedSource;
+    public float WormholeDelay = 0.5f;
 
     [Header("MoonAcquired")]
     public AudioSource moonAcquiredSource;
@@ -97,10 +110,31 @@ public class AudioController : MonoBehaviour {
         {
             if(BgMusicSource!=null)
             {
-                BgMusicSource.volume = 0.5f;
+                BgMusicSource.priority = 200;
+                BgMusicSource.volume = 0.25f;
                 BgMusicSource.minDistance = 1000f;
                 BgMusicSource.loop = true;
                 BgMusicSource.Play();
+            }
+        }
+    }
+
+    public void BackgroundBossMusic()
+    {
+        if (timer_02 >= bgMusicDelay)
+        {
+            if (BgBossSource != null)
+            {
+                if (BgMusicSource != null)
+                {
+                    BgMusicSource.Stop();
+                }
+
+                BgBossSource.priority = 200;
+                BgBossSource.volume = 0.25f;
+                BgBossSource.minDistance = 1000f;
+                BgBossSource.loop = true;
+                BgBossSource.Play();
             }
         }
     }
@@ -155,6 +189,41 @@ public class AudioController : MonoBehaviour {
         }
     }
 
+
+    public void PlutoPowerDashReady(Vector3 pos)
+    {
+        if (timer_02 >= dash3Delay)
+        {
+            if (plutoDashReady != null)
+            {
+                
+                plutoDashReady.transform.position = pos;
+                plutoDashReady.minDistance = 20f;
+                plutoDashReady.loop = false;
+                plutoDashReady.Play();
+
+                timer_02 = 0f;
+            }
+        }
+    }
+
+
+    public void PlutoLevelUp(Vector3 pos)
+    {
+        if (timer_01 >= levelDelay)
+        {
+            if (plutoLevelUp != null)
+            {
+                plutoLevelUp.transform.position = pos;
+                plutoLevelUp.minDistance = 20f;
+                plutoLevelUp.loop = false;
+                plutoLevelUp.Play();
+
+                timer_01 = 0f;
+            }
+        }
+    }
+
     public void ShieldLive(Vector3 MyPos)
     {
         if(timer_01>=shieldActiveDelay)
@@ -202,6 +271,40 @@ public class AudioController : MonoBehaviour {
             }
         }
     }
+
+    public void WormholeLock(Vector3 MyPos)
+    {
+        if (timer_01 >= WorholeDelay)
+        {
+            if (WormholeLockedSource != null)
+            {
+                WormholeLockedSource.volume = 0.25f;
+                WormholeLockedSource.transform.position = MyPos;
+                WormholeLockedSource.minDistance = 20f;
+                WormholeLockedSource.loop = false;
+                WormholeLockedSource.Play();
+                timer_01 = 0f;
+
+            }
+        }
+    }
+
+    public void RogueDash(Vector3 pos)
+    {
+        if (timer_01 >= dash1Delay)
+        {
+            if (RogueDashSource != null)
+            {
+                RogueDashSource.transform.position = pos;
+                RogueDashSource.minDistance = 20f;
+                RogueDashSource.loop = false;
+                RogueDashSource.Play();
+
+                timer_01 = 0f;
+            }
+        }
+    }
+
 
     public void WormholeOpen(Vector3 MyPos)
     {

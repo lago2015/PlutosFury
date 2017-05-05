@@ -7,7 +7,7 @@ public class ChasePlayer : MonoBehaviour
 
     //Properties from player
     GameObject Player;
-
+    FleeOrPursue DashScript;
 
     //Properties for planet
     public float RotationSpeed;
@@ -19,6 +19,7 @@ public class ChasePlayer : MonoBehaviour
     // Use this for initialization
     void Awake()
     {
+        DashScript = GetComponent<FleeOrPursue>();
         Player = GameObject.FindGameObjectWithTag("Player");
         if (isTriggered)
         {
@@ -37,6 +38,7 @@ public class ChasePlayer : MonoBehaviour
         if (PlayerNear)
         {
             Chase();
+            //DashScript.Dash();
             transform.position = new Vector3(transform.position.x, transform.position.y, 0);
         }
     }

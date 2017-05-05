@@ -52,7 +52,7 @@ public class Movement : MonoBehaviour
     private VirtualJoystick joystickscript;
     private ModelSwitch modelScript;
     private ButtonIndicator dashButt;
-    private AudioController audioCon;
+    private AudioController audioScript;
     //Basic Movement
     private float dirToClickX;
     private float dirToClickY;
@@ -120,7 +120,7 @@ public class Movement : MonoBehaviour
         modelScript = GetComponent<ModelSwitch>();
         
         //Audio Controller
-        audioCon = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
+        audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
         //Ensure speed is saved for default settings
         DefaultSpeed = MoveSpeed;
         DefaultDashSpeed = DashSpeed;
@@ -333,16 +333,16 @@ public class Movement : MonoBehaviour
                 MoveSpeed = DashSpeed;
             }
             //audio
-            if (audioCon)
+            if (audioScript)
             {
                 //audio for power and normal dash
                 if(DashChargeActive)
                 {
-                    audioCon.PlutoPowerDash(transform.position);
+                    audioScript.PlutoPowerDash(transform.position);
                 }
                 else
                 {
-                    audioCon.PlutoDash1(transform.position);
+                    audioScript.PlutoDash1(transform.position);
                 }
             }
             
@@ -428,6 +428,7 @@ public class Movement : MonoBehaviour
         {
             ObtainedWhileDash = true;
         }
+
         return DashChargeActive = true;
     }
 
@@ -485,45 +486,50 @@ public class Movement : MonoBehaviour
 
         else if(c.gameObject.tag=="Planet")
         {
-            if(ShouldDash==false)
+
+            if (ShouldDash == false)
             {
-                myBody.AddForce(c.contacts[0].normal * wallBump*2, ForceMode.VelocityChange);
+                myBody.AddForce(c.contacts[0].normal * wallBump * 2, ForceMode.VelocityChange);
                 DamagePluto();
                 modelScript.ChangeModel(ModelSwitch.Models.Damaged);
             }
             else
             {
-                AIHealth healthScipt = c.gameObject.GetComponent<AIHealth>();
-                if(healthScipt)
-                {
-                    healthScipt.IncrementDamage();
-                }
+                myBody.AddForce(c.contacts[0].normal * wallBump * 4, ForceMode.VelocityChange);
             }
+            //else
+            //{
+            //    AIHealth healthScipt = c.gameObject.GetComponent<AIHealth>();
+            //    if(healthScipt)
+            //    {
+            //        healthScipt.IncrementDamage();
+            //    }
+            //}
         }
 
         else if (c.gameObject.tag == "Wall") 
 		{
-            if(audioCon)
+            if(audioScript)
             {
-                audioCon.WallBounce();
+                audioScript.WallBounce();
             }
             myBody.AddForce (c.contacts[0].normal * wallBump, ForceMode.VelocityChange);
 		}
         else if (c.gameObject.tag == "EnvironmentObstacle")
         {
-            if (audioCon)
+            if(!ShouldDash)
             {
-                audioCon.WallBounce();
+                
+                myBody.AddForce(c.contacts[0].normal * wallBump, ForceMode.VelocityChange);
             }
-            myBody.AddForce(c.contacts[0].normal * wallBump, ForceMode.VelocityChange);
             
         }
 
         else if (c.gameObject.tag=="MazeWall")
         {
-            if (audioCon)
+            if (audioScript)
             {
-                audioCon.WallBounce();
+                audioScript.WallBounce();
             }
             myBody.AddForce(c.contacts[0].normal * mazeBump, ForceMode.VelocityChange);
         }
@@ -568,9 +574,9 @@ public class Movement : MonoBehaviour
     {
         if (!ShieldStatus())
         {
-            if(audioCon)
+            if(audioScript)
             {
-                audioCon.PlutoHit(transform.position);
+                audioScript.PlutoHit(transform.position);
             }
             ExperienceMan.DamageExperience();
             ScoreManager.GotDamaged();
@@ -578,9 +584,9 @@ public class Movement : MonoBehaviour
         }
         else
         {
-            if(audioCon)
+            if(audioScript)
             {
-                audioCon.ShieldDing(transform.position);
+                audioScript.ShieldDing(transform.position);
             }
         }
             

@@ -32,7 +32,11 @@ public class AIHealth : MonoBehaviour {
             {
                 Explosion.SetActive(true);
                 Model.SetActive(false);
-                Model2.SetActive(false);
+                if(Model2)
+                {
+
+                    Model2.SetActive(false);
+                }
             }
             else
             {

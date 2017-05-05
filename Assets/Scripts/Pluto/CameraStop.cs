@@ -11,9 +11,9 @@ public class CameraStop : MonoBehaviour {
 	public float maxY;
 	public float minX;
 	public float minY;
-
-    float bossXMax = 830;
-    float bossXMin = 490;
+    bool bossChange;
+    public float bossXMax = 2360;
+    public float bossXMin = 1590;
 
 	public float dampTime = 0.15f;
 	private Vector3 velocity = Vector3.zero;
@@ -45,6 +45,11 @@ public class CameraStop : MonoBehaviour {
 	// Update is called once per frame
 	void FixedUpdate () 
 	{
+        if(bossChange)
+        {
+            minX = bossXMin;
+            maxX = bossXMax;
+        }
         if (target)
         {
             Vector3 point = GetComponent<Camera>().WorldToViewportPoint(target.transform.position);
@@ -82,16 +87,12 @@ public class CameraStop : MonoBehaviour {
             cachedCameraPosition = transform.position;
     }
     
-    public void ChangeToBoss()
+    public void ChangeToBoss(Vector3 curPos)
     {
         maxX = bossXMax;
         minX = bossXMin;
-        float zAxis = gameObject.transform.position.z;
-        if(target)
-        {
-            gameObject.transform.position = new Vector3(target.transform.position.x, target.transform.position.y, zAxis);
-        }
+        cachedCameraPosition = curPos;
+        bossChange = true;
 
-        
     }
 }

@@ -5,7 +5,6 @@ public class ExperienceManager : MonoBehaviour
 {
 
     public int[] Levels;
-    private int curLevelDisplay;
     public int levelIndex;
     private int curExpPoints;
     private int CurrLevelNum;
@@ -16,15 +15,20 @@ public class ExperienceManager : MonoBehaviour
     public int CurrentRequirement() { return curLevelRequirement; }
 
     float GameOverTimer;
+    AudioController audioScript;
     ModelSwitch modelScript;
     GameManager gameMan;
 
     void Awake()
     {
-
+        //grab audio controller for level up
+        audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
+        //grab model for game over
         modelScript = GameObject.FindGameObjectWithTag("Player").GetComponent<ModelSwitch>();
+        //send function to set up game over
         gameMan = GetComponent<GameManager>();
-        curLevelDisplay = 1;
+
+        //initialize values
         levelIndex = -1;
         CurrLevelNum = -1;
         curLevelRequirement = Levels[levelIndex+1];
@@ -87,12 +91,14 @@ public class ExperienceManager : MonoBehaviour
                 //update how far the player has leveled up
                 if (levelIndex >= CurrLevelNum)
                 {
+                    GameObject player = GameObject.FindGameObjectWithTag("Player");
+                    Vector3 curPos = player.transform.position;
+                    audioScript.PlutoLevelUp(curPos);
                     CurrLevelNum++;
                 }
                 //is current level within the number of levels in array
                 if (CurrLevelNum < Levels.Length)
                 {
-                    curLevelDisplay++;
                     levelIndex++;
                     //update variables for level up according to level
                     //level 1

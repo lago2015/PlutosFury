@@ -12,7 +12,7 @@ public class Door : MonoBehaviour {
     bool isOpen;
     public float fadeTime=2;
     private int keyObtained;
-    private int numKeyRequired=3;
+    private int numKeyRequired=1;
     private GameManager gameScript;
     private AudioController audioScript;
     void Awake()
@@ -42,6 +42,10 @@ public class Door : MonoBehaviour {
                 fadeDir = 1;
                 StartCoroutine(ChangeScene());
             }
+            else
+            {
+                audioScript.WormholeLock(transform.position);
+            }
         }
     }
 		// the direction to fade: in = -1 or out = 1
@@ -58,12 +62,18 @@ public class Door : MonoBehaviour {
             player.SetActive(false);
             moveToBoss.z = camera.transform.position.z;
             camera.transform.position = moveToBoss;
+            float zAxis = moveToBoss.z;
             moveToBoss.z = 0;
+            Vector3 curPos = new Vector3(player.transform.position.x, player.transform.position.y, zAxis);
             player.transform.position = moveToBoss;
-            
+            camera.GetComponent<CameraStop>().ChangeToBoss(curPos);
             player.SetActive(true);
+            
         }
-
+        if(audioScript)
+        {
+            audioScript.BackgroundBossMusic();
+        }
         fadeDir = -1;
        
     }

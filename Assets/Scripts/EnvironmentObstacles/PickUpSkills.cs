@@ -15,7 +15,7 @@ public class PickUpSkills : MonoBehaviour {
             switch(curSkill)
             {
                 case Skills.DashCharge:
-                    col.GetComponent<Dash>().DashPluto();
+                    col.GetComponent<Dash>().DashPluto(transform.position);
                     Destroy(gameObject);
                     break;
                 case Skills.Shield:
