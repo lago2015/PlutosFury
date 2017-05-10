@@ -92,6 +92,21 @@ public class AudioController : MonoBehaviour {
     public AudioSource GameOverSource;
     public float GameOverDelay = 0.5f;
 
+    //*******Neptune********
+    [Header("NeptuneHit")]
+    public AudioSource NeptuneHitSource;
+
+    [Header("NeptuneMoonShot")]
+    public AudioSource NeptuneMoonShot;
+    public float moonShotDelay = 0.5f;
+
+    [Header("NeptuneMoonHit")]
+    public AudioSource NeptuneMoonHit;
+
+    [Header("NeptuneMoonRetract")]
+    public AudioSource NeptuneMoonRetract;
+    public float MoonRetractDelay = 0.5f;
+
     // Use this for initialization
     void Start () {
         instance = this;
@@ -354,6 +369,7 @@ public class AudioController : MonoBehaviour {
     }
 
 
+
     public void MoonAcquiredSound(Vector3 pos)
     {
         if (timer_01 >= MoonAcquiredDelay)
@@ -384,6 +400,20 @@ public class AudioController : MonoBehaviour {
             }
         }
     }
+    public void DestructionSmallEnvirObstacle(Vector3 pos)
+    {
+        if (timer_01 >= wallBounceDelay)
+        {
+            if (DestrcSmllSource != null)
+            {
+                DestrcSmllSource.transform.position = pos;
+                DestrcSmllSource.volume = 0.1f;
+                DestrcSmllSource.minDistance = 10f;
+                DestrcSmllSource.loop = false;
+                DestrcSmllSource.Play();
+            }
+        }
+    }
 
     public void GameOver(Vector3 pos)
     {
@@ -403,5 +433,73 @@ public class AudioController : MonoBehaviour {
         }
     }
 
-    
+    /********Neptune and Moon********/
+    public void NeptunesHit(Vector3 pos)
+    {
+        if (timer_02 >= maxHitDelay)
+        {
+
+            if (NeptuneHitSource != null)
+            {
+                NeptuneHitSource.pitch = Random.Range(0.8f, 1f);
+                NeptuneHitSource.volume = Random.Range(0.8f, 1f);
+                NeptuneHitSource.minDistance = 20f;
+                NeptuneHitSource.loop = false;
+                NeptuneHitSource.Play();
+
+                timer_02 = 0f;
+            }
+        }
+    }
+    public void NeptunesMoonShot(Vector3 pos)
+    {
+        if (timer_02 >= maxHitDelay)
+        {
+
+            if (NeptuneMoonShot != null)
+            {
+                NeptuneMoonShot.pitch = Random.Range(0.8f, 1f);
+                NeptuneMoonShot.volume = Random.Range(0.8f, 1f);
+                NeptuneMoonShot.minDistance = 20f;
+                NeptuneMoonShot.loop = false;
+                NeptuneMoonShot.Play();
+
+                timer_02 = 0f;
+            }
+        }
+    }
+    public void NeptunesMoonHit(Vector3 pos)
+    {
+        if (timer_02 >= maxHitDelay)
+        {
+
+            if (NeptuneMoonHit != null)
+            {
+                NeptuneMoonHit.pitch = Random.Range(0.8f, 1f);
+                NeptuneMoonHit.volume = Random.Range(0.8f, 1f);
+                NeptuneMoonHit.minDistance = 20f;
+                NeptuneMoonHit.loop = false;
+                NeptuneMoonHit.Play();
+
+                timer_02 = 0f;
+            }
+        }
+    }
+    public void NeptunesMoonRetract(Vector3 pos)
+    {
+        if (timer_02 >= maxHitDelay)
+        {
+
+            if (NeptuneMoonRetract != null)
+            {
+                NeptuneMoonRetract.minDistance = 20f;
+                NeptuneMoonRetract.loop = false;
+                NeptuneMoonRetract.Play();
+
+                timer_02 = 0f;
+            }
+        }
+    }
+
+
 }

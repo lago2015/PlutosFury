@@ -77,11 +77,24 @@ public class DetectThenExplode : MonoBehaviour {
 
     void OnTriggerEnter(Collider col)
     {
-        if(col.gameObject.tag=="Player")
+        string CurTag = col.gameObject.tag;
+        if(CurTag == "Player")
         {
             if(isHomingLandmine)
             {
                 moveScript.ShouldMove = true;
+            }
+            else if(isLandmine)
+            {
+                if (regularState && explosionState)
+                {
+                    if (!doOnce)
+                    {
+                        GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>().DestructionSmall(transform.position);
+                        doOnce = true;
+                    }
+                    StartCoroutine(SwitchModels());
+                }
             }   
             else
             {
@@ -96,6 +109,21 @@ public class DetectThenExplode : MonoBehaviour {
                         }
                         StartCoroutine(SwitchModels());
                     }
+                }
+            }
+        }
+        else if(CurTag == "BigAsteroid"|| CurTag=="EnvironmentObstacle")
+        {
+            if (isLandmine)
+            {
+                if (regularState && explosionState)
+                {
+                    if (!doOnce)
+                    {
+                        GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>().DestructionSmallEnvirObstacle(transform.position);
+                        doOnce = true;
+                    }
+                    StartCoroutine(SwitchModels());
                 }
             }
         }

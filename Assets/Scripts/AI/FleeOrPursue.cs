@@ -6,11 +6,11 @@ public class FleeOrPursue : MonoBehaviour {
 
     //Dash
     public float MoveSpeed;
-    public float MarsDashSpeed;
+    public float DashSpeed;
     public float slowDownDrag;
     public float DashTimeout = 2f;
     public float DashCooldownTime = 0.5f;
-
+    public float chargeTime = 0.5f;
     public bool isExhausted = false;
     public bool ShouldDash;
     private float DefaultSpeed;
@@ -19,6 +19,7 @@ public class FleeOrPursue : MonoBehaviour {
     //components
     AudioController audioScript;
     Transform Player;
+    public GameObject myParent;
     private Rigidbody myBody;
 
     public bool isTriggered;
@@ -26,6 +27,7 @@ public class FleeOrPursue : MonoBehaviour {
     
     private bool AmIMars;//Check if this is mars.
 
+    private bool isCharging;
     private bool doOnce;
     private bool PlayerNear;
     private readonly int RotationSpeed=10;
@@ -37,7 +39,7 @@ public class FleeOrPursue : MonoBehaviour {
         Player = GameObject.FindGameObjectWithTag("Player").transform;
         DefaultSpeed = MoveSpeed;
 
-        myBody = GetComponent<Rigidbody>();
+        myBody = myParent.GetComponent<Rigidbody>();
         if (myBody)
         {
             normalDrag = myBody.drag;
@@ -57,7 +59,7 @@ public class FleeOrPursue : MonoBehaviour {
     void FixedUpdate()
     {
 
-        transform.position = new Vector3(transform.position.x, transform.position.y, 0);
+        transform.parent.position = new Vector3(transform.position.x, transform.position.y, 0);
         if(PlayerNear)
         {
             if (ShouldPursue)
@@ -73,7 +75,10 @@ public class FleeOrPursue : MonoBehaviour {
                     }
                     if (!isExhausted)
                     {
-                        Dash();
+                        if(!isCharging)
+                        {
+                            Dash();
+                        }
                         transform.parent.position += transform.forward * MoveSpeed * Time.deltaTime;
                     }
                     else
@@ -94,7 +99,7 @@ public class FleeOrPursue : MonoBehaviour {
 
                         transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * RotationSpeed);
                     }
-                    transform.position -= transform.forward * MoveSpeed * Time.deltaTime;
+                    transform.parent.position -= transform.forward * MoveSpeed * Time.deltaTime;
                 }
 
             }
@@ -106,34 +111,45 @@ public class FleeOrPursue : MonoBehaviour {
         //Check if exhausted dash
         if (!isExhausted)
         {
-            //audio
-            if (audioScript)
-            {
-                //apply rogue dash here
-                if(doOnce==false)
-                {
-                    audioScript.RogueDash(transform.position);
-                    doOnce = true;
-                }
-            }
-            ShouldDash = true;  //Update dash status
-            StartCoroutine(DashTransition());   //Start dash
+            StartCoroutine(ChargeDash());   //start charge
+            
         }
     }
+
+    IEnumerator ChargeDash()
+    {
+        MoveSpeed = 0;
+        isCharging = true;
+        yield return new WaitForSeconds(chargeTime);
+        StartCoroutine(DashTransition());   //Start dash
+    }
+
     IEnumerator DashTransition()
     {
-        MoveSpeed = MarsDashSpeed;
-
+        
+        MoveSpeed = DashSpeed;
+        ShouldDash = true;  //Update dash status
+        //audio
+        if (audioScript)
+        {
+            //apply rogue dash here
+            if (doOnce == false)
+            {
+                audioScript.RogueDash(transform.position);
+                doOnce = true;
+            }
+        }
         yield return new WaitForSeconds(DashTimeout);
         
         //Reset Value
         ShouldDash = false;
-        doOnce = false;
+        
+        MoveSpeed = DefaultSpeed;
 
         //Start Slowdown/Cooldown
         StartCoroutine(DashCooldown());
         StartCoroutine(SlowDown());
-        MoveSpeed = DefaultSpeed;
+        
     }
 
     //Cool down for exhaustion from dash
@@ -151,7 +167,8 @@ public class FleeOrPursue : MonoBehaviour {
         myBody.drag = slowDownDrag;
 
         yield return new WaitForSeconds(0.1f);
-
+        doOnce = false;
+        isCharging = false;
         myBody.drag = normalDrag;
     }
     public bool Flee()

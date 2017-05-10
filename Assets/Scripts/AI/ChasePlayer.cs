@@ -39,7 +39,7 @@ public class ChasePlayer : MonoBehaviour
         {
             Chase();
             //DashScript.Dash();
-            transform.position = new Vector3(transform.position.x, transform.position.y, 0);
+            transform.parent.position = new Vector3(transform.position.x, transform.position.y, 0);
         }
     }
 

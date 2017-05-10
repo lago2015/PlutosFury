@@ -9,12 +9,14 @@ public class NeptuneMoon : MonoBehaviour {
 	public float RotateSpeed=50;
     //public Vector3 MoonOffset;
 
+    private AudioController audioScript;
     Transform Player;
     GameObject Neptune;
     bool CapturedLocation;
     bool resetTime;
     bool GetLocation;
     bool doOnce;
+    bool shootOnce;
     //attacking and returning positions
     Vector3 startMarker;
     Vector3 endMarker;
@@ -40,6 +42,11 @@ public class NeptuneMoon : MonoBehaviour {
 	public float maxY;
 	public float minY;
 
+
+    void Awake()
+    {
+        audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
+    }
 
 	// Use this for initialization
 	void Start () 
@@ -111,6 +118,7 @@ public class NeptuneMoon : MonoBehaviour {
     {
         if(MoonReady)
         {
+            
             if (MoonState == 0)
             {
                 MoonState = 1;
@@ -122,6 +130,14 @@ public class NeptuneMoon : MonoBehaviour {
 	{
         if(LaunchReady)
         {
+            if(audioScript)
+            {
+                if(!shootOnce)
+                {
+                    audioScript.NeptunesMoonShot(transform.position);
+                    shootOnce = true;
+                }
+            }
             if (!CapturedLocation)
             {
                 endMarker = Player.transform.position;
@@ -150,6 +166,10 @@ public class NeptuneMoon : MonoBehaviour {
 
 	void RetractMoon()
 	{
+        if(audioScript)
+        {
+            audioScript.NeptunesMoonRetract(transform.position);
+        }
         if(!resetTime)
         {
             startTime = Time.time;
@@ -168,6 +188,7 @@ public class NeptuneMoon : MonoBehaviour {
         float fracJour = distCov / returnTime;
         transform.position = Vector3.Lerp(startMarker, returnMarker, fracJour);
         CapturedLocation = false;
+        shootOnce = false;
         if (returnTime <= 0.5f)
         {
             MoonState = 0;
@@ -190,6 +211,10 @@ public class NeptuneMoon : MonoBehaviour {
             MoonState = 2;
             if(!doOnce)
             {
+                if(audioScript)
+                {
+                    audioScript.NeptunesMoonHit(transform.position);
+                }
                 col.GetComponent<Movement>().DamagePluto();
                 doOnce = true;
             }

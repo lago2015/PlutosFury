@@ -437,16 +437,12 @@ public class Movement : MonoBehaviour
         
         return DashChargeActive = false;
     }
-
     
-
-
-
-
     //Basic collision for BASIC PLUTO
     void OnCollisionEnter(Collision c)
 	{
-		if (c.gameObject.tag == "Asteroid") 
+        string curTag = c.gameObject.tag;
+		if (curTag == "Asteroid") 
 		{
 			
             score += 100 * ExperienceMan.CurrentLevel();
@@ -455,7 +451,15 @@ public class Movement : MonoBehaviour
             spawnScript.SpawnAsteroid();
 
         }
-        else if (c.gameObject.tag == "BigAsteroid")
+        else if(curTag == "Neptune")
+        {
+            if(ShouldDash)
+            {
+
+            }
+        }
+
+        else if (curTag == "BigAsteroid")
         {
             if (ShouldDash)
             {
@@ -484,7 +488,7 @@ public class Movement : MonoBehaviour
 
         }
 
-        else if(c.gameObject.tag=="Planet")
+        else if(curTag == "Planet")
         {
 
             if (ShouldDash == false)
@@ -495,7 +499,10 @@ public class Movement : MonoBehaviour
             }
             else
             {
-                myBody.AddForce(c.contacts[0].normal * wallBump * 4, ForceMode.VelocityChange);
+                if(!DashChargeActive)
+                {
+                    myBody.AddForce(c.contacts[0].normal * wallBump * 4, ForceMode.VelocityChange);
+                }
             }
             //else
             //{
@@ -507,7 +514,7 @@ public class Movement : MonoBehaviour
             //}
         }
 
-        else if (c.gameObject.tag == "Wall") 
+        else if (curTag == "Wall") 
 		{
             if(audioScript)
             {
@@ -515,7 +522,7 @@ public class Movement : MonoBehaviour
             }
             myBody.AddForce (c.contacts[0].normal * wallBump, ForceMode.VelocityChange);
 		}
-        else if (c.gameObject.tag == "EnvironmentObstacle")
+        else if (curTag == "EnvironmentObstacle")
         {
             if(!ShouldDash)
             {
@@ -525,7 +532,7 @@ public class Movement : MonoBehaviour
             
         }
 
-        else if (c.gameObject.tag=="MazeWall")
+        else if (curTag == "MazeWall")
         {
             if (audioScript)
             {
@@ -534,22 +541,19 @@ public class Movement : MonoBehaviour
             myBody.AddForce(c.contacts[0].normal * mazeBump, ForceMode.VelocityChange);
         }
 
-        else if(c.gameObject.tag=="Uranus")
+        else if(curTag == "Uranus")
         {
             c.gameObject.GetComponent<DestroyMoons>().DestroyAllMoons();
             Destroy(c.gameObject);
         }
-        else if(c.gameObject.tag=="GravityWell")
+        else if(curTag == "GravityWell")
         {
             if(!ShouldDash)
             {
                 myBody.AddForce(c.contacts[0].normal * wallBump, ForceMode.VelocityChange);
             }
         }
-        else if(c.gameObject.tag=="Neptune")
-        {
-            DamagePluto();
-        }
+        
 	}
 
 

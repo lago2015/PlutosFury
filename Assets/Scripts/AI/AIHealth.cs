@@ -7,10 +7,12 @@ public class AIHealth : MonoBehaviour {
     public GameObject Explosion;
     public GameObject Model;
     public GameObject Model2;
-    
+    public float wallBump = 20;
+    private Rigidbody myBody;
 
     void Awake()
     {
+        myBody = GetComponent<Rigidbody>();
         if(Explosion&&Model)
         {
             Explosion.SetActive(false);
@@ -47,7 +49,9 @@ public class AIHealth : MonoBehaviour {
 
     void OnCollisionEnter(Collision col)
     {
-        if(col.gameObject.tag=="Player")
+        string CurTag = col.gameObject.tag;
+
+        if(CurTag == "Player")
         {
             bool isDashing = col.gameObject.GetComponent<Movement>().DashStatus();
             if(isDashing)
@@ -67,7 +71,17 @@ public class AIHealth : MonoBehaviour {
                         Destroy(transform.parent.gameObject);
                     }
                 }
+                if(myBody)
+                {
+                    myBody.AddForce(col.contacts[0].normal * wallBump, ForceMode.VelocityChange);
+                }
+
             }
+        }
+        else if(CurTag=="RogueWall"||CurTag=="Wall"||CurTag=="MazeWall")
+        {
+
+            myBody.AddForce(col.contacts[0].normal * wallBump, ForceMode.VelocityChange);
         }
     }
 }

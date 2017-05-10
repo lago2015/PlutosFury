@@ -6,9 +6,12 @@ public class DetectPlayer : MonoBehaviour {
     public GameObject ScriptModel;
     private ChasePlayer ChaseScript;
     private FleeOrPursue dashScript;
+    
+
     void Awake()
     {
-        if(ScriptModel)
+
+        if (ScriptModel)
         {
             ChaseScript = ScriptModel.GetComponent<ChasePlayer>();
             if(!ChaseScript)
@@ -18,23 +21,28 @@ public class DetectPlayer : MonoBehaviour {
         }
     }
 
-	/* This is meant for Boss Planet Detection*/
+    /* This is meant for Boss Planet Detection*/
     void OnTriggerStay(Collider col)
     {
-        if (col.gameObject.tag==("Player"))
+        string CurTag = col.gameObject.tag;
+        if (CurTag == ("Player"))
         {
-            if(ChaseScript)
+            if (ChaseScript)
             {
                 ChaseScript.PlayerIsNear();
             }
-            if(dashScript)
+            if (dashScript)
             {
                 dashScript.PlayerIsNear();
             }
         }
+        
+
     }
     void OnTriggerExit(Collider col)
     {
+        string CurTag = col.gameObject.tag;
+
         if (col.gameObject.tag == ("Player"))
         {
             if (ChaseScript)
@@ -46,5 +54,7 @@ public class DetectPlayer : MonoBehaviour {
                 dashScript.PlayerNotNear();
             }
         }
+
+        
     }
 }
