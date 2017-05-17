@@ -444,8 +444,9 @@ public class Movement : MonoBehaviour
         string curTag = c.gameObject.tag;
 		if (curTag == "Asteroid") 
 		{
-			
-            score += 100 * ExperienceMan.CurrentLevel();
+            int curLevel = ExperienceMan.CurrentLevel()+1;
+
+            score += 100 * curLevel;
             ScoreManager.IncreaseScore(score);
             spawnScript.ReturnPooledAsteroid(c.gameObject);
             spawnScript.SpawnAsteroid();

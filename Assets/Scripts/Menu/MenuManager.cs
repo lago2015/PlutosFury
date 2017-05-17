@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using System.Collections;
 
 public class MenuManager : MonoBehaviour 
@@ -38,6 +40,7 @@ public class MenuManager : MonoBehaviour
                 }
             }
         }
+        
     }
 
     public void CreditsMenu ()
@@ -61,7 +64,10 @@ public class MenuManager : MonoBehaviour
 
     public void LevelSelected(int LevelNum)
     {
-        Application.LoadLevel(LevelNum);
+        SceneManager.LoadSceneAsync(1);
+
+//        SceneManager.LoadScene(LevelNum);
+        
     }
 
 	public void BackToMainMenu ()

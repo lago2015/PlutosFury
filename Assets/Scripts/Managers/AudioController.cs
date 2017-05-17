@@ -92,6 +92,9 @@ public class AudioController : MonoBehaviour {
     public AudioSource GameOverSource;
     public float GameOverDelay = 0.5f;
 
+    [Header("Victory")]
+    public AudioSource VictorySource;
+
     //*******Neptune********
     [Header("NeptuneHit")]
     public AudioSource NeptuneHitSource;
@@ -432,7 +435,23 @@ public class AudioController : MonoBehaviour {
             }
         }
     }
-
+    public void Victory(Vector3 pos)
+    {
+        if (timer_01 >= GameOverDelay)
+        {
+            if (VictorySource != null)
+            {
+                VictorySource.transform.position = pos;
+                VictorySource.minDistance = 20f;
+                VictorySource.loop = true;
+                if (BgMusicSource)
+                {
+                    BgMusicSource.Stop();
+                }
+                VictorySource.Play();
+            }
+        }
+    }
     /********Neptune and Moon********/
     public void NeptunesHit(Vector3 pos)
     {

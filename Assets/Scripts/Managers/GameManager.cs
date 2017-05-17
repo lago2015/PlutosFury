@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -76,6 +77,33 @@ public class GameManager : MonoBehaviour
         highScoreText.text = "High Score:\n\n" + HighScore;
         
     }
+    public void StartYouWin()
+    {
+        StartCoroutine(YouWin());
+    }
+    public IEnumerator YouWin()
+    {
+        if (audioCon)
+        {
+            audioCon.Victory(pluto.transform.position);
+        }
+
+        yield return new WaitForSeconds(GameOverDelay);
+        ScoreManager.SaveScore();
+        GameEndedUI.SetActive(true);
+        gameOverText.SetActive(false);
+        gameOverUI.SetActive(false);
+        youAreAStarNowUI.SetActive(true);
+
+        pluto.GetComponent<Movement>().DisableMovement();
+        int EndScore = ScoreManager.ReturnScore();
+        int HighScore = ScoreManager.ReturnHighScore();
+        int AsteroidsLeft = ExpManager.CurrentRequirement();
+        asertoidsLeftText.text = " Next Level:\n\n " + AsteroidsLeft;
+        ScoreText.text = "Score:\n\n" + EndScore;
+        highScoreText.text = "High Score:\n\n" + HighScore;
+
+    }
     public void AsteroidEaten(float curEaten)
     {
         
@@ -95,35 +123,19 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-
-    
-
     public void Restart ()
 	{
 		Time.timeScale = 1.0f;
-		Application.LoadLevel (0);
+        SceneManager.LoadScene(0);
+		
         
 	}
-
     public int EatNum()
     {
         return asteroidsEaten;
     }
-
-	public void YouWin()
+	public void You2Win()
 	{
-        ScoreManager.SaveScore();
-        GameEndedUI.SetActive(true);
-        gameOverText.SetActive(false);
-        gameOverUI.SetActive(false);
-        youAreAStarNowUI.SetActive(true);
-        
-        pluto.GetComponent<Movement>().DisableMovement();
-        int EndScore = ScoreManager.ReturnScore();
-        int HighScore = ScoreManager.ReturnHighScore();
-        int AsteroidsLeft = ExpManager.CurrentRequirement();
-        asertoidsLeftText.text = " Next Level:\n\n " + AsteroidsLeft;
-        ScoreText.text = "Score:\n\n" + EndScore;
-        highScoreText.text = "High Score:\n\n" + HighScore;
+
 	}
 }

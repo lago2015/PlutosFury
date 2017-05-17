@@ -94,6 +94,10 @@ public class ModelSwitch : MonoBehaviour {
                     PlutoModels[i].SetActive(false);
                 }
             }
+            if (isDashActive)
+            {
+                PlutoModels[7].SetActive(true);
+            }
             StartCoroutine(TransitionModel());
         }
     }
@@ -119,7 +123,8 @@ public class ModelSwitch : MonoBehaviour {
         PlutoModels[modelIndex].SetActive(false);
         modelIndex = 0;
         PlutoModels[modelIndex].SetActive(true);
-        if(!gameOver)
+
+        if (!gameOver)
         {
             curModel = Models.Idol;
         }

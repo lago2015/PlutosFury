@@ -6,19 +6,20 @@ public class ExperienceManager : MonoBehaviour
 
     public int[] Levels;
     public int levelIndex;
-    private int curExpPoints;
-    private int CurrLevelNum;
-    private int curLevelRequirement;
+    public int curExpPoints;
+    public int CurrLevelNum;
+    public int curLevelRequirement;
     public int baseRegenPoints;
     public bool gotHurt;
     public int CurrentExperience() { return curExpPoints; }
     public int CurrentRequirement() { return curLevelRequirement; }
-
+    private bool maxLevel;
     float GameOverTimer;
     AudioController audioScript;
     ModelSwitch modelScript;
     GameManager gameMan;
 
+    //Intialize scripts and indexs according to start level
     void Awake()
     {
         //grab audio controller for level up
@@ -34,9 +35,10 @@ public class ExperienceManager : MonoBehaviour
         curLevelRequirement = Levels[levelIndex+1];
     }
 
+    //HUD return
     public int CurrentLevel()
     {
-
+        
         if(CurrLevelNum==-1)
         {
             return 0;
@@ -53,15 +55,18 @@ public class ExperienceManager : MonoBehaviour
 
     public void ExpAcquired()
     {
+        //check if player got hurt for regen function
         if (curExpPoints >= baseRegenPoints)
         {
             gotHurt = false;
         }
+        //regen function
         if (gotHurt)
         {
-            //restore lost experience to level
+            //restore lost experience points to max level achieved and number of asteroids collected
             if (curExpPoints < baseRegenPoints)
             {
+                //increment level index to determine which regen to apply
                 levelIndex++;
                 //if player is level 1
                 if (levelIndex == 0 && levelIndex <=CurrLevelNum)
@@ -85,16 +90,16 @@ public class ExperienceManager : MonoBehaviour
         {
             //gain experience and check to level up
             curExpPoints++;
-            //does exp points more then required to level up
-            if (curExpPoints >= curLevelRequirement-1)
+            //is exp points more then required to level up
+            if (curExpPoints >= curLevelRequirement)
             {
                 //update how far the player has leveled up
                 if (levelIndex >= CurrLevelNum)
                 {
-                    GameObject player = GameObject.FindGameObjectWithTag("Player");
-                    Vector3 curPos = player.transform.position;
-                    audioScript.PlutoLevelUp(curPos);
-                    CurrLevelNum++;
+                    GameObject player = GameObject.FindGameObjectWithTag("Player"); //reference player
+                    Vector3 curPos = player.transform.position; //get player location
+                    audioScript.PlutoLevelUp(curPos);   //start level up audio track
+                    CurrLevelNum++; //increment Max level player has reached.
                 }
                 //is current level within the number of levels in array
                 if (CurrLevelNum < Levels.Length)
@@ -104,31 +109,34 @@ public class ExperienceManager : MonoBehaviour
                     //level 1
                     if (levelIndex == 0)
                     {
+                        //update base regen for damage function
                         baseRegenPoints = Levels[levelIndex];
+                        //update level requirement
                         curLevelRequirement = Levels[levelIndex + 1];
+                        //update max level for display
                         if (CurrLevelNum <= 0)
                         {
                             CurrLevelNum = 1;
                         }
                     }
 
-                    //level 2 & 3
-                    else if (levelIndex >= 1)
+                    //level 2
+                    else if (levelIndex == 1)
                     {
+                        //update base regen for damage function
                         baseRegenPoints = Levels[levelIndex];
                         curLevelRequirement = Levels[levelIndex + 1];
                     }
                     //max level
-                    else if (levelIndex > 2)
+                    else if (levelIndex == 2)
                     {
+                        //update base regen for damage function
                         baseRegenPoints = Levels[levelIndex];
+                        //update display for no more levels
                         curLevelRequirement = 0;
                     }
-                    //double checking for level index is within array
-                    if (gotHurt)
-                    {
-                        
-                    }
+                   
+                    
                 }
             }
         }
@@ -138,9 +146,13 @@ public class ExperienceManager : MonoBehaviour
     {
         if (curExpPoints <= 0)
         {
+            //Disable player movement
             GameObject.FindGameObjectWithTag("Player").GetComponent<Movement>().DisableMovement();
+            //Apply model switch to display lose 
             modelScript.ChangeModel(ModelSwitch.Models.Lose);
+            //freeze time
             Time.timeScale = 0.0f;
+            //update UI game over screen
             gameMan.StartGameover();
         }
         else if (curExpPoints <= baseRegenPoints)
