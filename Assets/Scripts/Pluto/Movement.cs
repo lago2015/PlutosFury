@@ -444,13 +444,14 @@ public class Movement : MonoBehaviour
         string curTag = c.gameObject.tag;
 		if (curTag == "Asteroid") 
 		{
-            int curLevel = ExperienceMan.CurrentLevel()+1;
-
-            score += 100 * curLevel;
-            ScoreManager.IncreaseScore(score);
+            if(!isDead)
+            {
+                int curLevel = ExperienceMan.CurrentLevel() + 1;
+                score += 100 * curLevel;
+                ScoreManager.IncreaseScore(score);
+            }
             spawnScript.ReturnPooledAsteroid(c.gameObject);
             spawnScript.SpawnAsteroid();
-
         }
         else if(curTag == "Neptune")
         {

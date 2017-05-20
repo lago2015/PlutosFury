@@ -5,8 +5,30 @@ public class PickUpSkills : MonoBehaviour {
 
     public enum Skills { DashCharge,Shield, Inflation}
     public Skills curSkill;
+    //Script references
+    private Dash DashScript;
+    private Movement playerScript;
+    private Shield ShieldScript;
+    private Inflation InflateScript;
 
-
+    void Awake()
+    {
+        GameObject playerRef = GameObject.FindGameObjectWithTag("Player");
+        switch(curSkill)
+        {
+            
+            case Skills.DashCharge:
+                DashScript = playerRef.GetComponent<Dash>();
+                break;
+            case Skills.Shield:
+                ShieldScript = playerRef.GetComponent<Shield>();
+                playerScript = playerRef.GetComponent<Movement>();
+                break;
+            case Skills.Inflation:
+                InflateScript = playerRef.GetComponent<Inflation>();
+                break;
+        }
+    }
 
     void OnTriggerEnter(Collider col)
     {
@@ -15,17 +37,27 @@ public class PickUpSkills : MonoBehaviour {
             switch(curSkill)
             {
                 case Skills.DashCharge:
-                    col.GetComponent<Dash>().DashPluto(transform.position);
-                    Destroy(gameObject);
+                    if(DashScript)
+                    {
+                        DashScript.DashPluto(transform.position);
+                        Destroy(gameObject);
+                    }
                     break;
                 case Skills.Shield:
-                    col.GetComponent<Movement>().IndicatePickup();
-                    col.GetComponent<Shield>().ShieldPluto();
-                    Destroy(gameObject);
+                    if(ShieldScript&&playerScript)
+                    {
+                        playerScript.IndicatePickup();
+                        ShieldScript.ShieldPluto();
+                        Destroy(gameObject);
+                    }
                     break;
                 case Skills.Inflation:
-                    col.GetComponent<Inflation>().Inflate();
-                    Destroy(gameObject);
+                    if(InflateScript)
+                    {
+                        InflateScript.Inflate();
+                        InflateScript.InflatePluto();
+                        Destroy(gameObject);
+                    }
                     break;
             }
         }

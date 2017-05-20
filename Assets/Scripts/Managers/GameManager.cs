@@ -134,8 +134,5 @@ public class GameManager : MonoBehaviour
     {
         return asteroidsEaten;
     }
-	public void You2Win()
-	{
-
-	}
+	
 }

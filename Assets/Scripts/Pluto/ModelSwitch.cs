@@ -18,23 +18,28 @@ public class ModelSwitch : MonoBehaviour {
     private bool doOnce;
     public int tempIndex;
     public bool gameOver;
+
+    Coroutine cor;
     void Start()
     {
+        //Start as idol
         RunModels(0);
     }
     
 
-
+    //start model change 
     public Models ChangeModel(Models NewModel)
     {
+        //update model to switch to 
         curModel = NewModel;
+        //update model
         DetermineModel();
         return curModel;
     }
 
     void DetermineModel()
     {
-
+        //controls which model to switch to and when
         switch(curModel)
         {
             case Models.Idol:
@@ -47,6 +52,7 @@ public class ModelSwitch : MonoBehaviour {
                 break;
             case Models.Inflate:
                 curDelay = InflateDelay;
+                isPoweredUp = true;
                 RunModels(1);
                 break;
             case Models.Damaged:
@@ -77,10 +83,17 @@ public class ModelSwitch : MonoBehaviour {
 
     void RunModels(int Index)
     {
-        if(!doOnce)
+        if(cor!=null)
         {
-            tempIndex = Index;
+            if (isPoweredUp == true && gameOver == true)
+            {
+                StopCoroutine(cor);
+            }
+        }
+        if (!doOnce)
+        {
             doOnce = true;
+            //iterate through to turn off models and turn on the current model
             for (int i = 0; i <= PlutoModels.Length - 1; ++i)
             {
                 if (i == Index)
@@ -94,16 +107,20 @@ public class ModelSwitch : MonoBehaviour {
                     PlutoModels[i].SetActive(false);
                 }
             }
+            //ensure dash glow is active with model if active
             if (isDashActive)
             {
                 PlutoModels[7].SetActive(true);
             }
-            StartCoroutine(TransitionModel());
+           //Start transition
+            cor=StartCoroutine(TransitionModel());
         }
     }
 
+    //Dash needs its own function because its a background glow compared to model switch
     void ActivateDash()
     {
+        //turn on dash glow
         PlutoModels[7].SetActive(true);
         isDashActive = true;
         if(!gameOver)
@@ -120,10 +137,12 @@ public class ModelSwitch : MonoBehaviour {
     {
         yield return new WaitForSeconds(curDelay);
         doOnce = false;
+        //Switch back to idol
         PlutoModels[modelIndex].SetActive(false);
         modelIndex = 0;
         PlutoModels[modelIndex].SetActive(true);
 
+        //check for game over
         if (!gameOver)
         {
             curModel = Models.Idol;

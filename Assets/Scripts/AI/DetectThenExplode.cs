@@ -112,9 +112,25 @@ public class DetectThenExplode : MonoBehaviour {
                 }
             }
         }
-        else if(CurTag == "BigAsteroid"|| CurTag=="EnvironmentObstacle")
+        else if(CurTag == "BigAsteroid")
         {
-            if (isLandmine)
+            if(isRocket)
+            {
+                if (regularState && explosionState)
+                {
+                    if (!doOnce)
+                    {
+                        GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>().DestructionSmallEnvirObstacle(transform.position);
+                        doOnce = true;
+                    }
+                    col.gameObject.GetComponent<BigAsteroid>().AsteroidHit(1);
+                    StartCoroutine(SwitchModels());
+                }
+            }
+        }
+        else if(CurTag=="EnvironmentObstacle"||CurTag=="Wall"||CurTag=="MazeWall")
+        {
+            if (isLandmine || isRocket)
             {
                 if (regularState && explosionState)
                 {

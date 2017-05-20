@@ -4,11 +4,10 @@ using System.Collections;
 public class Inflation : MonoBehaviour {
 
     public float InflateTimeout;
-    public Vector3 InflatedSize;
-    private Vector3 NormalSize;
+    public float InflatedSize;
+    private float NormalSize;
     private SphereCollider myCollider;
-    private float NormalCol;
-    private float InflateCol=3;
+    
 
     private AudioController audioCon;
     private ModelSwitch changeModel;
@@ -21,25 +20,13 @@ public class Inflation : MonoBehaviour {
         myCollider = GetComponent<SphereCollider>();
         if(myCollider)
         {
-            NormalCol = myCollider.radius;
+            NormalSize = myCollider.radius;
         }
     }
-
-    void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.Z))
-        {
-            Inflate();
-        }
-        if(isInflated)
-        {
-            InflatePluto();
-        }
-    }
+    
 
 	public void InflatePluto()
-    {
-        
+    {   
         if(changeModel)
         {
             if(!currInflated)
@@ -49,7 +36,7 @@ public class Inflation : MonoBehaviour {
                     audioCon.InflateActiv(transform.position);
                 }       
                 changeModel.ChangeModel(ModelSwitch.Models.Inflate);
-                myCollider.radius = InflateCol;
+                myCollider.radius = InflatedSize;
                 currInflated = true;
                 StartCoroutine(InflateDuration());
             }
@@ -57,12 +44,12 @@ public class Inflation : MonoBehaviour {
         }
         
     }
-    public bool Inflate() { isInflated = true; return isInflated; }
+    public bool Inflate() {  return isInflated=true; }
     IEnumerator InflateDuration()
     {
         yield return new WaitForSeconds(InflateTimeout);
         isInflated = false;
         currInflated = false;
-        myCollider.radius = NormalCol;
+        myCollider.radius = NormalSize;
     }
 }
