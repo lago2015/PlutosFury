@@ -64,7 +64,7 @@ public class MenuManager : MonoBehaviour
 
     public void LevelSelected(int LevelNum)
     {
-        SceneManager.LoadSceneAsync(1);
+        SceneManager.LoadSceneAsync(LevelNum);
 
 //        SceneManager.LoadScene(LevelNum);
         

@@ -14,7 +14,7 @@ public class ModelSwitch : MonoBehaviour {
     private float curDelay;
     private int modelIndex;
     public GameObject[] PlutoModels;
-    private bool isPoweredUp;
+    public bool isPoweredUp;
     private bool doOnce;
     public int tempIndex;
     public bool gameOver;
@@ -56,23 +56,47 @@ public class ModelSwitch : MonoBehaviour {
                 RunModels(1);
                 break;
             case Models.Damaged:
-                curDelay = statusChangeDelay;
-                RunModels(3);
+                if(!isPoweredUp)
+                {
+                    curDelay = statusChangeDelay;
+                    RunModels(3);
+                }
+                else
+                {
+                    curModel = Models.Inflate;
+                }
                 break;
             case Models.PickUp:
                 curDelay = statusChangeDelay;
                 RunModels(4);
                 break;
             case Models.Smash:
-                curDelay = statusChangeDelay;
-                RunModels(5);
+                if (!isPoweredUp)
+                {
+                    curDelay = statusChangeDelay;
+                    RunModels(5);
+                }
+                else
+                {
+                    curModel = Models.Inflate;
+                }
+                
                 break;
             case Models.Win:
                 RunModels(6);
                 break;
             case Models.Lose:
+                
                 curDelay = 1000;
                 gameOver = true;
+                if (cor != null)
+                {
+                    if (isPoweredUp == true && gameOver == true)
+                    {
+                        doOnce = false;
+                        StopCoroutine(cor);
+                    }
+                }
                 RunModels(2);
                 break;
             case Models.Dash:
@@ -83,13 +107,6 @@ public class ModelSwitch : MonoBehaviour {
 
     void RunModels(int Index)
     {
-        if(cor!=null)
-        {
-            if (isPoweredUp == true && gameOver == true)
-            {
-                StopCoroutine(cor);
-            }
-        }
         if (!doOnce)
         {
             doOnce = true;
@@ -107,11 +124,19 @@ public class ModelSwitch : MonoBehaviour {
                     PlutoModels[i].SetActive(false);
                 }
             }
-            //ensure dash glow is active with model if active
-            if (isDashActive)
+            //turn on dash glow depending on if inflated or not
+            if (isPoweredUp)
             {
-                PlutoModels[7].SetActive(true);
+                if (isDashActive)
+                    PlutoModels[8].SetActive(false);
             }
+            else
+            {
+                if (isDashActive)
+                    PlutoModels[7].SetActive(true);
+            }
+            //ensure dash glow is active with model if active
+            
            //Start transition
             cor=StartCoroutine(TransitionModel());
         }
@@ -120,8 +145,15 @@ public class ModelSwitch : MonoBehaviour {
     //Dash needs its own function because its a background glow compared to model switch
     void ActivateDash()
     {
-        //turn on dash glow
-        PlutoModels[7].SetActive(true);
+        //turn on dash glow depending on if inflated or not
+        if(isPoweredUp)
+        {
+            PlutoModels[8].SetActive(false);
+        }
+        else
+        {
+            PlutoModels[7].SetActive(true);
+        }
         isDashActive = true;
         if(!gameOver)
         {
@@ -152,5 +184,4 @@ public class ModelSwitch : MonoBehaviour {
             ChangeModel(Models.Lose);
         }
     }
-
 }

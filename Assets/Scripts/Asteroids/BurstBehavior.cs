@@ -9,6 +9,18 @@ public class BurstBehavior : MonoBehaviour {
     private float TimeIncrement = 1;
     public bool ShouldBurst=false;
     
+    void LateStart()
+    {
+        StartCoroutine(StartBurst());
+    }
+    
+    IEnumerator StartBurst()
+    {
+        transform.position += moveSpeed * transform.forward * Time.deltaTime;
+        transform.position = new Vector3(transform.position.x, transform.position.y, 0);
+        yield return new WaitForSeconds(BurstTimeout);
+    }
+
 	// Update is called once per frame
 	void FixedUpdate ()
     {
@@ -17,8 +29,7 @@ public class BurstBehavior : MonoBehaviour {
             if(BurstTime<=BurstTimeout)
             {
                 BurstTime += Time.deltaTime * TimeIncrement;
-                transform.position += moveSpeed * transform.forward * Time.deltaTime;
-                transform.position = new Vector3(transform.position.x, transform.position.y, 0);
+                
             }
             else
             {

@@ -5,25 +5,20 @@ using System.Collections.Generic;
 public class AsteroidSpawner : MonoBehaviour 
 {
 	public GameObject[] asteroids;
-    public GameObject[] ClusterModels;
-    public int AsteroidNum;
-    public int ClusterNum;
-    public int ClusterReward;
-    private List<GameObject> ClusterPool;
-	public List<GameObject> asteroidPool;
+	private List<GameObject> asteroidPool;
 
     public float minX;
     public float maxX;
     public float minY;
     public float maxY;
+
 	void Awake()
 	{
 		// Populate the list with various asteroids
 		asteroidPool = new List<GameObject>();
-		for (int i = 0; i < AsteroidNum; i++) 
+		for (int i = 0; i < asteroids.Length; ++i) 
 		{
-			int j = Random.Range(0, asteroids.Length);
-			GameObject asteroid = (GameObject)Instantiate (asteroids[j]);
+            GameObject asteroid = asteroids[i];
 			asteroid.SetActive (false);
 			asteroidPool.Add (asteroid);
 		}
@@ -31,44 +26,11 @@ public class AsteroidSpawner : MonoBehaviour
 		{
 			SpawnAsteroid();
 		}
-
-        ////Populate the list with various cluster asteroids
-        //ClusterPool = new List<GameObject>();
-        //for(int i=0;i<ClusterNum;i++)
-        //{
-        //    int CRand = Random.Range(0, ClusterModels.Length);
-        //    GameObject Cluster = (GameObject)Instantiate(ClusterModels[CRand]);
-        //    Cluster.SetActive(false);
-        //    ClusterPool.Add(Cluster);
-        //    //determine how many asteroids goes into one cluster
-        //    for(int j=0;i<ClusterReward;i++)
-        //    {
-        //        int ARand = Random.Range(0, asteroids.Length);
-        //    }
-        //}
-	}
-    void SpawnCluster()
-    {
         
-    }
-
-    GameObject GetClusterPool()
-    {
-        //Get cluster from pool
-        for(int i=0;i<ClusterPool.Count;i++)
-        {
-            if(!ClusterPool[i].activeInHierarchy)
-            {
-                return ClusterPool[i];
-            }
-            int j = Random.Range(0, ClusterModels.Length);
-            
-        }
-        return null;
-    }
+	}
     public int AsteroidPool()
     {
-        return AsteroidNum;
+        return asteroids.Length;
     }
 
     public void SpawnAsteroid()
