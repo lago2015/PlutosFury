@@ -13,8 +13,6 @@ public class ExperienceManager : MonoBehaviour
     public bool gotHurt;
     public int CurrentExperience() { return curExpPoints; }
     public int CurrentRequirement() { return curLevelRequirement; }
-    private bool maxLevel;
-    float GameOverTimer;
     AudioController audioScript;
     ModelSwitch modelScript;
     GameManager gameMan;
@@ -38,19 +36,24 @@ public class ExperienceManager : MonoBehaviour
     //HUD return
     public int CurrentLevel()
     {
-        
-        if(CurrLevelNum==-1)
+
+
+        if (CurrLevelNum >= Levels.Length - 1)
         {
-            return 0;
-        }
-        else if(CurrLevelNum>=Levels.Length-1)
-        {
-            return Levels.Length - 1;
+            return Levels.Length;
         }
         else
         {
-            return CurrLevelNum;
+            return CurrLevelNum + 1;
         }
+        //if(CurrLevelNum==-1)
+        //{
+        //    return 0;
+        //}
+        //else
+        //{
+        //    return CurrLevelNum;
+        //}
     }
 
     public void ExpAcquired()
@@ -113,11 +116,7 @@ public class ExperienceManager : MonoBehaviour
                         baseRegenPoints = Levels[levelIndex];
                         //update level requirement
                         curLevelRequirement = Levels[levelIndex + 1];
-                        //update max level for display
-                        if (CurrLevelNum <= 0)
-                        {
-                            CurrLevelNum = 1;
-                        }
+                  
                     }
 
                     //level 2

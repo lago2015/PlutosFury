@@ -6,7 +6,7 @@ using System.Collections;
 public class Movement : MonoBehaviour 
 {
     //Controller interface
-    private bool ChangeToKeyboard=true;
+    public bool ChangeToKeyboard=true;
 
     //Check for shield
     bool Shielded;
@@ -218,11 +218,7 @@ public class Movement : MonoBehaviour
         else
         {
 
-            if (Input.touchCount>0)
-            {
-                Touch tempTouch = Input.GetTouch(0);
-
-            }
+            
 
             //basic movement with mouse
             if (Input.GetMouseButton(0))
@@ -230,6 +226,7 @@ public class Movement : MonoBehaviour
                 //check if theres two fingers down on screen
                 if (Input.touchCount == 2)
                 {
+                    Dash();
                     Touch tempTouch = Input.GetTouch(0);
 
                     Ray ray = Camera.main.ScreenPointToRay(tempTouch.position);
@@ -268,22 +265,6 @@ public class Movement : MonoBehaviour
             }
 
 
-            //if (Input.touchCount == 2)
-            //{
-            //    Touch touch = Input.GetTouch(1);
-            //    switch (touch.phase)
-            //    {
-            //        //begin touch
-            //        case TouchPhase.Began:
-            //            Dash();
-            //            break;
-            //        //end touch
-            //        case TouchPhase.Ended:
-            //            ShouldDash = false;
-            //            break;
-
-            //    }
-            //}
 
         }
 

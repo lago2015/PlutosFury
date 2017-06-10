@@ -6,13 +6,15 @@ public class MoveAsteroidHack : MonoBehaviour
 {
     public float bumperSpeed = 5.0f;
 	public double plutoG = 2;
-
+    public Vector3 directionToPluto;
+    public double distanceToPluto;
     public float GravityStrength=5f;
     public float maxDistanceForGravity = 50;
 	public float minForce = 25f ;
 	public float maxForce = 50f;
 	private Rigidbody myBody;
-
+    private float curX;
+    private float curY;
 	GameObject pluto;
     private bool isNewAsteroid;
     public bool isConsumable;
@@ -39,9 +41,9 @@ public class MoveAsteroidHack : MonoBehaviour
     {
         if(isConsumable)
         {
-            Vector3 directionToPluto = (pluto.transform.position - transform.position).normalized;
-            double distanceToPluto = Vector3.Distance(transform.position, pluto.transform.position);
-
+            directionToPluto = (pluto.transform.position - transform.position).normalized;
+            distanceToPluto = Vector3.Distance(transform.position, pluto.transform.position);
+            
             if (distanceToPluto <= maxDistanceForGravity)
             {
                 double strength = plutoG * GravityStrength / distanceToPluto * distanceToPluto;
@@ -52,7 +54,11 @@ public class MoveAsteroidHack : MonoBehaviour
                 {
                     myBody.AddForce(forceOnMe);
                 }
+
             }
+            curX = transform.position.x;
+            curY = transform.position.y;
+            transform.position = new Vector3(curX, curY, 0);
         }
     }
     
