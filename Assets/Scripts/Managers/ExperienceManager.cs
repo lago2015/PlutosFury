@@ -94,7 +94,7 @@ public class ExperienceManager : MonoBehaviour
             if (curExpPoints >= curLevelRequirement)
             {
                 //update how far the player has leveled up
-                if (levelIndex >= CurrLevelNum)
+                if (levelIndex == CurrLevelNum)
                 {
                     GameObject player = GameObject.FindGameObjectWithTag("Player"); //reference player
                     Vector3 curPos = player.transform.position; //get player location

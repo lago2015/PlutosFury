@@ -218,6 +218,12 @@ public class Movement : MonoBehaviour
         else
         {
 
+            if (Input.touchCount>0)
+            {
+                Touch tempTouch = Input.GetTouch(0);
+
+            }
+
             //basic movement with mouse
             if (Input.GetMouseButton(0))
             {
@@ -225,6 +231,7 @@ public class Movement : MonoBehaviour
                 if (Input.touchCount == 2)
                 {
                     Touch tempTouch = Input.GetTouch(0);
+
                     Ray ray = Camera.main.ScreenPointToRay(tempTouch.position);
                     RaycastHit hitInfo;
                     if (Physics.Raycast(ray, out hitInfo, Mathf.Infinity))
@@ -261,22 +268,22 @@ public class Movement : MonoBehaviour
             }
 
 
-            if (Input.touchCount == 2)
-            {
-                Touch touch = Input.GetTouch(1);
-                switch (touch.phase)
-                {
-                    //begin touch
-                    case TouchPhase.Began:
-                        Dash();
-                        break;
-                    //end touch
-                    case TouchPhase.Ended:
-                        ShouldDash = false;
-                        break;
+            //if (Input.touchCount == 2)
+            //{
+            //    Touch touch = Input.GetTouch(1);
+            //    switch (touch.phase)
+            //    {
+            //        //begin touch
+            //        case TouchPhase.Began:
+            //            Dash();
+            //            break;
+            //        //end touch
+            //        case TouchPhase.Ended:
+            //            ShouldDash = false;
+            //            break;
 
-                }
-            }
+            //    }
+            //}
 
         }
 
