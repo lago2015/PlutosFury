@@ -2,12 +2,13 @@
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System.Collections;
+using UnityEngine.Events;
 
 public class Movement : MonoBehaviour 
 {
     //Controller interface
     public bool ChangeToKeyboard=true;
-
+    
     //Check for shield
     bool Shielded;
 
@@ -47,6 +48,7 @@ public class Movement : MonoBehaviour
     private GameManager gameManager;
     private ScoreManager ScoreManager;
     private ExperienceManager ExperienceMan;
+    private Camera camera;
     private CameraShake CamShake;
     private GameObject joystick;
     private VirtualJoystick joystickscript;
@@ -110,6 +112,10 @@ public class Movement : MonoBehaviour
             hitEffect.SetActive(false);
         }
 
+        if(trail)
+        {
+            trail.SetActive(false);
+        }
         //Dash Button
         dashButt = GameObject.FindGameObjectWithTag("DashButt").GetComponent<ButtonIndicator>();
         if(!dashButt)
@@ -133,16 +139,26 @@ public class Movement : MonoBehaviour
 
         //For camera Shakes
         CamShake = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraShake>();
+        camera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
 
-        
-        //Look for joystick
-        if(!joystick)
+
+        if (ChangeToKeyboard)
         {
-            joystickscript = GameObject.FindGameObjectWithTag("GameController").GetComponent<VirtualJoystick>();
-            //Debug.Log("Joystick Assigned");
+            //Look for joystick
+            if (!joystick)
+            {
+                joystickscript = GameObject.FindGameObjectWithTag("GameController").GetComponent<VirtualJoystick>();
+                //Debug.Log("Joystick Assigned");
+            }
+        }
+        else
+        {
+            GameObject.FindGameObjectWithTag("GameController").SetActive(false);
+            GameObject.FindGameObjectWithTag("DashButt").SetActive(false);
+
         }
         //For collecting asteroids and returning them to the pool
-        if(!asteroidSpawn)
+        if (!asteroidSpawn)
         {
             asteroidSpawn = GameObject.FindGameObjectWithTag("Spawner");
             if(asteroidSpawn)
@@ -218,51 +234,95 @@ public class Movement : MonoBehaviour
         else
         {
 
-            
+            //            dirToClickX = transform.position.x - hitInfo.point.x;
+            //            dirToClickY = transform.position.y - hitInfo.point.y;
+            //            normDirToClick = new Vector3(dirToClickX, dirToClickY, 0.0f).normalized;
+            //            float rotationInDegrees = Mathf.Atan2(dirToClickX, -dirToClickY) * Mathf.Rad2Deg;
+            //            trail.SetActive(true);
+            //            trail.transform.rotation = Quaternion.Euler(0.0f, 0.0f, rotationInDegrees);
 
-            //basic movement with mouse
-            if (Input.GetMouseButton(0))
+
+            for (int i = 0; i < Input.touchCount; ++i)
             {
-                //check if theres two fingers down on screen
                 if (Input.touchCount == 2)
                 {
                     Dash();
-                    Touch tempTouch = Input.GetTouch(0);
-
-                    Ray ray = Camera.main.ScreenPointToRay(tempTouch.position);
-                    RaycastHit hitInfo;
-                    if (Physics.Raycast(ray, out hitInfo, Mathf.Infinity))
-                    {
-                        dirToClickX = transform.position.x - hitInfo.point.x;
-                        dirToClickY = transform.position.y - hitInfo.point.y;
-                        normDirToClick = new Vector3(dirToClickX, dirToClickY, 0.0f).normalized;
-                        float rotationInDegrees = Mathf.Atan2(dirToClickX, -dirToClickY) * Mathf.Rad2Deg;
-                        trail.SetActive(true);
-                        trail.transform.rotation = Quaternion.Euler(0.0f, 0.0f, rotationInDegrees);
-                    }
-                    myBody.AddForce(normDirToClick * MoveSpeed * Time.deltaTime, ForceMode.VelocityChange);
                 }
-                else
+                if (Input.GetTouch(i).phase == TouchPhase.Began || Input.GetTouch(i).phase == TouchPhase.Moved)
                 {
-                    //one finger down
-                    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                    RaycastHit hitInfo;
-                    if (Physics.Raycast(ray, out hitInfo, Mathf.Infinity))
-                    {
-                        dirToClickX = transform.position.x - hitInfo.point.x;
-                        dirToClickY = transform.position.y - hitInfo.point.y;
-                        normDirToClick = new Vector3(dirToClickX, dirToClickY, 0.0f).normalized;
-                        float rotationInDegrees = Mathf.Atan2(dirToClickX, -dirToClickY) * Mathf.Rad2Deg;
-                        trail.SetActive(true);
-                        trail.transform.rotation = Quaternion.Euler(0.0f, 0.0f, rotationInDegrees);
-                    }
+                    //get first touch position
+                    Touch curTouch = Input.GetTouch(0);
+                    //translate pluto position to pixel coordinates
+                    Vector3 plutoPos = camera.WorldToScreenPoint(transform.position);
+
+
+                    //grab distance from touch to player to get direction for trail
+                    dirToClickX = plutoPos.x - curTouch.position.x;
+                    dirToClickY = plutoPos.y - curTouch.position.y;
+                    //normalize Vector
+                    normDirToClick = new Vector3(dirToClickX, dirToClickY, 0.0f).normalized;
+
+                    //calculate rotation
+                    float rotationInDegrees = Mathf.Atan2(dirToClickX, -dirToClickY) * Mathf.Rad2Deg;
+                    
+                    //Setting z axis rotation for trail
+                    trail.transform.rotation = Quaternion.Euler(0.0f, 0.0f, rotationInDegrees);
+                    //turn on trail
+                    trail.SetActive(true);
+                    //apply movement
                     myBody.AddForce(normDirToClick * MoveSpeed * Time.deltaTime, ForceMode.VelocityChange);
                 }
+                //if theres no touch then turn off trail
+                if(Input.GetTouch(i).phase==TouchPhase.Ended|| Input.GetTouch(i).phase == TouchPhase.Canceled)
+                {
+                    trail.SetActive(false);
+
+                }    
             }
-            else
-            {
-                trail.SetActive(false);
-            }
+            
+            ////basic movement with mouse
+            //if (Input.GetMouseButton(0))
+            //{
+            //    //check if theres two fingers down on screen
+            //    if (Input.touchCount == 2)
+            //    {
+            //        Dash();
+            //        Touch tempTouch = Input.GetTouch(0);
+
+            //        Ray ray = Camera.main.ScreenPointToRay(tempTouch.position);
+            //        RaycastHit hitInfo;
+            //        if (Physics.Raycast(ray, out hitInfo, Mathf.Infinity))
+            //        {
+            //            dirToClickX = transform.position.x - hitInfo.point.x;
+            //            dirToClickY = transform.position.y - hitInfo.point.y;
+            //            normDirToClick = new Vector3(dirToClickX, dirToClickY, 0.0f).normalized;
+            //            float rotationInDegrees = Mathf.Atan2(dirToClickX, -dirToClickY) * Mathf.Rad2Deg;
+            //            trail.SetActive(true);
+            //            trail.transform.rotation = Quaternion.Euler(0.0f, 0.0f, rotationInDegrees);
+            //        }
+            //        myBody.AddForce(normDirToClick * MoveSpeed * Time.deltaTime, ForceMode.VelocityChange);
+            //    }
+            //    else
+            //    {
+            //        //one finger down
+            //        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            //        RaycastHit hitInfo;
+            //        if (Physics.Raycast(ray, out hitInfo, Mathf.Infinity))
+            //        {
+            //            dirToClickX = transform.position.x - hitInfo.point.x;
+            //            dirToClickY = transform.position.y - hitInfo.point.y;
+            //            normDirToClick = new Vector3(dirToClickX, dirToClickY, 0.0f).normalized;
+            //            float rotationInDegrees = Mathf.Atan2(dirToClickX, -dirToClickY) * Mathf.Rad2Deg;
+            //            trail.SetActive(true);
+            //            trail.transform.rotation = Quaternion.Euler(0.0f, 0.0f, rotationInDegrees);
+            //        }
+            //        myBody.AddForce(normDirToClick * MoveSpeed * Time.deltaTime, ForceMode.VelocityChange);
+            //    }
+            //}
+            //else
+            //{
+            //    trail.SetActive(false);
+            //}
 
 
 

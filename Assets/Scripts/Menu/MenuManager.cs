@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Collections;
-
+using UnityEngine.Events;
 public class MenuManager : MonoBehaviour 
 {
     //Load screen variables
