@@ -14,7 +14,7 @@ public class ExperienceManager : MonoBehaviour
     public int CurrentExperience() { return curExpPoints; }
     public int CurrentRequirement() { return curLevelRequirement; }
     AudioController audioScript;
-    ModelSwitch modelScript;
+    TextureSwap modelScript;
     GameManager gameMan;
 
     //Intialize scripts and indexs according to start level
@@ -23,7 +23,7 @@ public class ExperienceManager : MonoBehaviour
         //grab audio controller for level up
         audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
         //grab model for game over
-        modelScript = GameObject.FindGameObjectWithTag("Player").GetComponent<ModelSwitch>();
+        modelScript = GameObject.FindGameObjectWithTag("Player").GetComponent<TextureSwap>();
         //send function to set up game over
         gameMan = GetComponent<GameManager>();
 
@@ -148,7 +148,7 @@ public class ExperienceManager : MonoBehaviour
             //Disable player movement
             GameObject.FindGameObjectWithTag("Player").GetComponent<Movement>().DisableMovement();
             //Apply model switch to display lose 
-            modelScript.ChangeModel(ModelSwitch.Models.Lose);
+            modelScript.SwapMaterial(TextureSwap.PlutoState.Lose);
             //freeze time
             Time.timeScale = 0.0f;
             //update UI game over screen
@@ -157,7 +157,7 @@ public class ExperienceManager : MonoBehaviour
         else if (curExpPoints <= baseRegenPoints)
         {
             //change pluto to damage model
-            modelScript.ChangeModel(ModelSwitch.Models.Damaged);
+            modelScript.SwapMaterial(TextureSwap.PlutoState.Damaged);
             gotHurt = true;
             //check if level index is equal or less then 0
             if (levelIndex < -1)
@@ -195,7 +195,7 @@ public class ExperienceManager : MonoBehaviour
         }
         else
         {
-            modelScript.ChangeModel(ModelSwitch.Models.Damaged);
+            modelScript.SwapMaterial(TextureSwap.PlutoState.Damaged);
             gotHurt = false;
             curExpPoints = baseRegenPoints;
         }

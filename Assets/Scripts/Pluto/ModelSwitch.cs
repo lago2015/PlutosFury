@@ -16,7 +16,6 @@ public class ModelSwitch : MonoBehaviour {
     public GameObject[] PlutoModels;
     public bool isPoweredUp;
     private bool doOnce;
-    public int tempIndex;
     public bool gameOver;
 
     Coroutine cor;

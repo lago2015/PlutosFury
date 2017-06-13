@@ -52,7 +52,8 @@ public class Movement : MonoBehaviour
     private CameraShake CamShake;
     private GameObject joystick;
     private VirtualJoystick joystickscript;
-    private ModelSwitch modelScript;
+    private TextureSwap modelScript;
+    private Dash dashScript;
     private ButtonIndicator dashButt;
     private AudioController audioScript;
     //Basic Movement
@@ -123,8 +124,9 @@ public class Movement : MonoBehaviour
             Debug.Log("No Dash Button");
         }
         //model change
-        modelScript = GetComponent<ModelSwitch>();
-        
+        modelScript = GetComponent<TextureSwap>();
+        //dash script
+        dashScript = GetComponent<Dash>();
         //Audio Controller
         audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
         //Ensure speed is saved for default settings
@@ -233,14 +235,7 @@ public class Movement : MonoBehaviour
         }
         else
         {
-
-            //            dirToClickX = transform.position.x - hitInfo.point.x;
-            //            dirToClickY = transform.position.y - hitInfo.point.y;
-            //            normDirToClick = new Vector3(dirToClickX, dirToClickY, 0.0f).normalized;
-            //            float rotationInDegrees = Mathf.Atan2(dirToClickX, -dirToClickY) * Mathf.Rad2Deg;
-            //            trail.SetActive(true);
-            //            trail.transform.rotation = Quaternion.Euler(0.0f, 0.0f, rotationInDegrees);
-
+            
 
             for (int i = 0; i < Input.touchCount; ++i)
             {
@@ -279,53 +274,7 @@ public class Movement : MonoBehaviour
 
                 }    
             }
-            
-            ////basic movement with mouse
-            //if (Input.GetMouseButton(0))
-            //{
-            //    //check if theres two fingers down on screen
-            //    if (Input.touchCount == 2)
-            //    {
-            //        Dash();
-            //        Touch tempTouch = Input.GetTouch(0);
-
-            //        Ray ray = Camera.main.ScreenPointToRay(tempTouch.position);
-            //        RaycastHit hitInfo;
-            //        if (Physics.Raycast(ray, out hitInfo, Mathf.Infinity))
-            //        {
-            //            dirToClickX = transform.position.x - hitInfo.point.x;
-            //            dirToClickY = transform.position.y - hitInfo.point.y;
-            //            normDirToClick = new Vector3(dirToClickX, dirToClickY, 0.0f).normalized;
-            //            float rotationInDegrees = Mathf.Atan2(dirToClickX, -dirToClickY) * Mathf.Rad2Deg;
-            //            trail.SetActive(true);
-            //            trail.transform.rotation = Quaternion.Euler(0.0f, 0.0f, rotationInDegrees);
-            //        }
-            //        myBody.AddForce(normDirToClick * MoveSpeed * Time.deltaTime, ForceMode.VelocityChange);
-            //    }
-            //    else
-            //    {
-            //        //one finger down
-            //        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            //        RaycastHit hitInfo;
-            //        if (Physics.Raycast(ray, out hitInfo, Mathf.Infinity))
-            //        {
-            //            dirToClickX = transform.position.x - hitInfo.point.x;
-            //            dirToClickY = transform.position.y - hitInfo.point.y;
-            //            normDirToClick = new Vector3(dirToClickX, dirToClickY, 0.0f).normalized;
-            //            float rotationInDegrees = Mathf.Atan2(dirToClickX, -dirToClickY) * Mathf.Rad2Deg;
-            //            trail.SetActive(true);
-            //            trail.transform.rotation = Quaternion.Euler(0.0f, 0.0f, rotationInDegrees);
-            //        }
-            //        myBody.AddForce(normDirToClick * MoveSpeed * Time.deltaTime, ForceMode.VelocityChange);
-            //    }
-            //}
-            //else
-            //{
-            //    trail.SetActive(false);
-            //}
-
-
-
+        
         }
 
         if(Input.GetKeyDown(KeyCode.O))
@@ -347,7 +296,6 @@ public class Movement : MonoBehaviour
             if(!chargeOnce)
             {
                 chargeOnce = true;
-                modelScript.ChangeModel(ModelSwitch.Models.Dash);
             }
         }
         else
@@ -355,7 +303,7 @@ public class Movement : MonoBehaviour
             if(chargeOnce)
             {
                 chargeOnce = false;
-                modelScript.ChangeModel(ModelSwitch.Models.Idol);
+                dashScript.DashModelTransition(false);
             }
         }
 
@@ -520,7 +468,7 @@ public class Movement : MonoBehaviour
                 {
                     if (modelScript)
                     {
-                        modelScript.ChangeModel(ModelSwitch.Models.Smash);
+                        modelScript.SwapMaterial(TextureSwap.PlutoState.Smash);
                     }
                     myBody.AddForce(c.contacts[0].normal * explosionBump, ForceMode.VelocityChange);
 
@@ -545,7 +493,7 @@ public class Movement : MonoBehaviour
             {
                 myBody.AddForce(c.contacts[0].normal * wallBump * 2, ForceMode.VelocityChange);
                 DamagePluto();
-                modelScript.ChangeModel(ModelSwitch.Models.Damaged);
+                modelScript.SwapMaterial(TextureSwap.PlutoState.Damaged);
             }
             else
             {
@@ -611,7 +559,7 @@ public class Movement : MonoBehaviour
     {
         if(modelScript)
         {
-            modelScript.ChangeModel(ModelSwitch.Models.PickUp);
+            modelScript.SwapMaterial(TextureSwap.PlutoState.Pickup);
         }
     }
     

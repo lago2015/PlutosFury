@@ -27,14 +27,14 @@ public class GameManager : MonoBehaviour
     private int BaseCount = 1;
     public float GameOverDelay = 5f;
 
-    ModelSwitch modelSwitch;
+    TextureSwap modelSwitch;
     AudioController audioCon;
 	AdManager adTest = new AdManager();
     ScoreManager ScoreManager;
     ExperienceManager ExpManager;
     void Awake()
     {
-        modelSwitch = pluto.GetComponent<ModelSwitch>();
+        modelSwitch = pluto.GetComponent<TextureSwap>();
         audioCon = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
         ExpManager = GetComponent<ExperienceManager>();
         ScoreManager = GetComponent<ScoreManager>();
@@ -63,7 +63,7 @@ public class GameManager : MonoBehaviour
         }
         
         yield return new WaitForSeconds(GameOverDelay);
-        modelSwitch.ChangeModel(ModelSwitch.Models.Lose);
+        modelSwitch.SwapMaterial(TextureSwap.PlutoState.Lose);
         GameEndedUI.SetActive(true);
         gameOverUI.SetActive(true);
         ScoreManager.SaveScore();
@@ -96,6 +96,7 @@ public class GameManager : MonoBehaviour
         youAreAStarNowUI.SetActive(true);
 
         pluto.GetComponent<Movement>().DisableMovement();
+        modelSwitch.SwapMaterial(TextureSwap.PlutoState.Win);
         int EndScore = ScoreManager.ReturnScore();
         int HighScore = ScoreManager.ReturnHighScore();
         int AsteroidsLeft = ExpManager.CurrentRequirement();
