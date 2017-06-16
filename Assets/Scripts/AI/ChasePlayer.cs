@@ -3,8 +3,6 @@ using System.Collections;
 
 public class ChasePlayer : MonoBehaviour
 {
-
-
     //Properties from player
     GameObject Player;
     FleeOrPursue DashScript;
@@ -83,5 +81,12 @@ public class ChasePlayer : MonoBehaviour
             }
         }
     }
+
+    public float CurrentMovement(float curForce)
+    {
+        force = curForce;
+        return force;
+    }
+        
     
 }

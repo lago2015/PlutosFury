@@ -184,24 +184,44 @@ public class Movement : MonoBehaviour
  
     }
 
-	// Update is called once per frame
-	void Update () 
-	{
+    void FixedUpdate()
+    {
         //capping velocity
-        if(myBody.velocity.x>=velocityCap || myBody.velocity.x<=velocityMin)
+        if (myBody.velocity.x >= velocityCap || myBody.velocity.x <= velocityMin)
         {
             newVelocity = myBody.velocity.normalized;
             newVelocity *= velocityCap;
             myBody.velocity = newVelocity;
         }
-        if(myBody.velocity.y>=velocityCap || myBody.velocity.y<=velocityMin)
+        if (myBody.velocity.y >= velocityCap || myBody.velocity.y <= velocityMin)
         {
             newVelocity = myBody.velocity.normalized;
             newVelocity *= velocityCap;
             myBody.velocity = newVelocity;
         }
 
+        //Checking for dash charge
+        if (DashChargeActive)
+        {
+            if (!chargeOnce)
+            {
+                chargeOnce = true;
+            }
+        }
+        else
+        {
+            if (chargeOnce)
+            {
+                chargeOnce = false;
+                dashScript.DashModelTransition(false);
+            }
+        }
+    }
 
+    // Update is mainly used for player controls
+    void Update () 
+	{
+        
         if(ChangeToKeyboard)
         {
             if(joystickscript && !isDead)
@@ -282,31 +302,11 @@ public class Movement : MonoBehaviour
             DashChargeActive = true;
         }
 
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            DamagePluto();
-        }
 
         if (Input.GetKey(KeyCode.A))
         {
             GetComponent<Shield>().ShieldPluto();
         }
-        if(DashChargeActive)
-        {
-            if(!chargeOnce)
-            {
-                chargeOnce = true;
-            }
-        }
-        else
-        {
-            if(chargeOnce)
-            {
-                chargeOnce = false;
-                dashScript.DashModelTransition(false);
-            }
-        }
-
     }
 
 
@@ -537,6 +537,11 @@ public class Movement : MonoBehaviour
                 audioScript.WallBounce();
             }
             myBody.AddForce(c.contacts[0].normal * mazeBump, ForceMode.VelocityChange);
+        }
+
+        else if(curTag=="NeptuneMoon" || curTag=="Neptune")
+        {
+            myBody.AddForce(c.contacts[0].normal * wallBump*2, ForceMode.VelocityChange);
         }
 
         else if(curTag == "Uranus")

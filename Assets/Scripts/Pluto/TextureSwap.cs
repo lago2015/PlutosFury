@@ -8,11 +8,11 @@ public class TextureSwap : MonoBehaviour {
 
     public Material[] materialArray;
     public float transitionDelay = 0.2f;
-
+    
 
     private bool doOnce;
     private MeshRenderer meshComp;
-
+    private Material curMaterial;
     private Shield shieldScript;
 
 
@@ -25,6 +25,7 @@ public class TextureSwap : MonoBehaviour {
         //referencing the mesh renderer 
         Transform baseObject = transform.GetChild(0);
         meshComp = baseObject.GetChild(0).GetComponent<MeshRenderer>();
+
         //initialize material
         SwapMaterial(PlutoState.Idol);
     }

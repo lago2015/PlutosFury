@@ -12,6 +12,10 @@ public class Inflation : MonoBehaviour {
     private AudioController audioCon;
     private bool isInflated;
     private bool currInflated;
+
+
+    public bool Inflate() { return isInflated = true; }
+
     void Awake()
     {
         audioCon = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
@@ -40,11 +44,8 @@ public class Inflation : MonoBehaviour {
                 currInflated = true;
                 StartCoroutine(InflateDuration());
             }
-
         }
-
     }
-    public bool Inflate() {  return isInflated=true; }
     IEnumerator InflateDuration()
     {
         yield return new WaitForSeconds(InflateTimeout);

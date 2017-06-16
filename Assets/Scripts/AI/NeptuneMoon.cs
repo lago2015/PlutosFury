@@ -204,7 +204,7 @@ public class NeptuneMoon : MonoBehaviour {
         MoonState = 2;
     }
 
-	void OnTriggerEnter(Collider col)
+	void OnCollisionEnter(Collision col)
 	{
         if(col.gameObject.tag==("Player"))
         {
@@ -215,13 +215,14 @@ public class NeptuneMoon : MonoBehaviour {
                 {
                     audioScript.NeptunesMoonHit(transform.position);
                 }
-                col.GetComponent<Movement>().DamagePluto();
+                col.gameObject.GetComponent<Movement>().DamagePluto();
+              
                 doOnce = true;
             }
         }
 	}
 
-    void OnTriggerExit(Collider col)
+    void OnCollisionExit(Collision col)
     {
         if(col.gameObject.tag=="Player")
         {

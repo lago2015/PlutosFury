@@ -3,6 +3,13 @@ using System.Collections;
 
 public class CollisionDetection : MonoBehaviour {
 
+    //chase script
+    public GameObject Pursuit;
+    ChasePlayer chaseScript;
+    private float defaultForce;
+
+    public float PlayerHitWait = 1.5f;
+    public float KnockbackTimer = 3;
     public float bumperSpeed = 5;
     public int Health=3;
 
@@ -11,8 +18,15 @@ public class CollisionDetection : MonoBehaviour {
     private Rigidbody myBody;
     private AudioController audioScript;
     private bool doOnce;
+
+
     void Awake()
     {
+        if(Pursuit)
+        {
+            chaseScript = Pursuit.GetComponent<ChasePlayer>();
+            defaultForce = chaseScript.force;
+        }
         myBody = GetComponent<Rigidbody>();
         audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
         managerScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<GameManager>();
@@ -52,19 +66,31 @@ public class CollisionDetection : MonoBehaviour {
                     GetComponent<DestroyMoons>().DestroyAllMoons();
                     Destroy(gameObject);
                 }
+                else
+                {
+                    StartCoroutine(KnockbackTransition());
+                }
             }     
             else
             {
-                Rigidbody playerBody = c.gameObject.GetComponent<Rigidbody>();
-                if (playerBody)
-                {
-                    playerBody.AddForce(c.contacts[0].normal * bumperSpeed * 2, ForceMode.VelocityChange);
-                }
                 c.gameObject.GetComponent<Movement>().DamagePluto();
+                StartCoroutine(PlayerHit());
             }
-            doOnce = false;       
+            doOnce = false;
         }
+    }
 
+    IEnumerator PlayerHit()
+    {
+        myBody.velocity = Vector3.zero;
+        chaseScript.CurrentMovement(0);
+        yield return new WaitForSeconds(PlayerHitWait);
+        chaseScript.CurrentMovement(defaultForce);
+    }
 
+    IEnumerator KnockbackTransition()
+    {
+        yield return new WaitForSeconds(KnockbackTimer);
+        myBody.velocity = Vector3.zero;
     }
 }

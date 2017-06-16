@@ -323,7 +323,6 @@ public class AudioController : MonoBehaviour {
         }
     }
 
-
     public void WormholeOpen(Vector3 MyPos)
     {
         if (timer_01 >= WorholeDelay)
@@ -371,8 +370,6 @@ public class AudioController : MonoBehaviour {
         }
     }
 
-
-
     public void MoonAcquiredSound(Vector3 pos)
     {
         if (timer_01 >= MoonAcquiredDelay)
@@ -403,6 +400,7 @@ public class AudioController : MonoBehaviour {
             }
         }
     }
+
     public void DestructionSmallEnvirObstacle(Vector3 pos)
     {
         if (timer_01 >= wallBounceDelay)
