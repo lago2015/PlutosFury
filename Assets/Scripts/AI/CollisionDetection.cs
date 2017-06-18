@@ -12,7 +12,7 @@ public class CollisionDetection : MonoBehaviour {
     public float KnockbackTimer = 3;
     public float bumperSpeed = 5;
     public int Health=3;
-
+    public bool debugNoHealth;
     GameManager managerScript;
 
     private Rigidbody myBody;
@@ -47,10 +47,13 @@ public class CollisionDetection : MonoBehaviour {
             bool isDashing = c.gameObject.GetComponent<Movement>().DashStatus();
             if(isDashing)
             {
-                Health--;
+                if(!debugNoHealth)
+                {
+                    Health--;
+                }
                 if (myBody)
                 {
-                    myBody.AddForce(c.contacts[0].normal * bumperSpeed, ForceMode.VelocityChange);
+                    myBody.AddForce(c.contacts[0].normal * bumperSpeed*2, ForceMode.VelocityChange);
                 }
                 if (audioScript)
                 {
@@ -60,7 +63,7 @@ public class CollisionDetection : MonoBehaviour {
                         doOnce = true;
                     }
                 }
-                if (Health <= 0)
+                if (Health <= 0 && !debugNoHealth)
                 {
                     managerScript.YouWin();
                     GetComponent<DestroyMoons>().DestroyAllMoons();

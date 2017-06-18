@@ -55,6 +55,10 @@ public class MoveAsteroidHack : MonoBehaviour
                     myBody.AddForce(forceOnMe);
                 }
 
+                if(distanceToPluto<=2.2f)
+                {
+                    pluto.GetComponent<Movement>().ReturnAsteroid(gameObject);
+                }
             }
             //ensure asteroids are on the zero axis
             curX = transform.position.x;

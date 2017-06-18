@@ -54,6 +54,7 @@ public class Movement : MonoBehaviour
     private VirtualJoystick joystickscript;
     private TextureSwap modelScript;
     private Dash dashScript;
+    private Touch curTouch;
     private ButtonIndicator dashButt;
     private AudioController audioScript;
     //Basic Movement
@@ -263,19 +264,20 @@ public class Movement : MonoBehaviour
                 {
                     Dash();
                 }
-                if (Input.GetTouch(i).phase == TouchPhase.Began || Input.GetTouch(i).phase == TouchPhase.Moved)
+                TouchPhase curPhase = Input.GetTouch(i).phase;
+                if (curPhase == TouchPhase.Began || curPhase == TouchPhase.Moved || curPhase==TouchPhase.Stationary)
                 {
                     //get first touch position
-                    Touch curTouch = Input.GetTouch(0);
+                    curTouch = Input.GetTouch(0);
                     //translate pluto position to pixel coordinates
                     Vector3 plutoPos = camera.WorldToScreenPoint(transform.position);
-
+                    
 
                     //grab distance from touch to player to get direction for trail
                     dirToClickX = plutoPos.x - curTouch.position.x;
                     dirToClickY = plutoPos.y - curTouch.position.y;
                     //normalize Vector
-                    normDirToClick = new Vector3(dirToClickX, dirToClickY, 0.0f).normalized;
+                    normDirToClick = new Vector3(dirToClickX, dirToClickY).normalized;
 
                     //calculate rotation
                     float rotationInDegrees = Mathf.Atan2(dirToClickX, -dirToClickY) * Mathf.Rad2Deg;
@@ -434,28 +436,28 @@ public class Movement : MonoBehaviour
         return DashChargeActive = false;
     }
     
+    public void ReturnAsteroid(GameObject curAsteroid)
+    {
+        spawnScript.ReturnPooledAsteroid(curAsteroid);
+        spawnScript.SpawnAsteroid();
+    }
+
     //Basic collision for BASIC PLUTO
     void OnCollisionEnter(Collision c)
 	{
         string curTag = c.gameObject.tag;
 		if (curTag == "Asteroid") 
 		{
+            
             if(!isDead)
             {
                 int curLevel = ExperienceMan.CurrentLevel() + 1;
                 score += 100 * curLevel;
                 ScoreManager.IncreaseScore(score);
             }
-            spawnScript.ReturnPooledAsteroid(c.gameObject);
-            spawnScript.SpawnAsteroid();
+            ReturnAsteroid(c.gameObject);
         }
-        else if(curTag == "Neptune")
-        {
-            if(ShouldDash)
-            {
 
-            }
-        }
 
         else if (curTag == "BigAsteroid")
         {
@@ -541,7 +543,14 @@ public class Movement : MonoBehaviour
 
         else if(curTag=="NeptuneMoon" || curTag=="Neptune")
         {
-            myBody.AddForce(c.contacts[0].normal * wallBump*2, ForceMode.VelocityChange);
+            if(ShouldDash)
+            {
+                myBody.AddForce(c.contacts[0].normal * wallBump * 4, ForceMode.VelocityChange);
+            }
+            else
+            {
+                myBody.AddForce(c.contacts[0].normal * wallBump * 2, ForceMode.VelocityChange);
+            }
         }
 
         else if(curTag == "Uranus")
