@@ -6,8 +6,6 @@ using UnityEngine.Events;
 
 public class Movement : MonoBehaviour 
 {
-    //Controller interface
-    public bool ChangeToKeyboard=true;
     
     //Check for shield
     bool Shielded;
@@ -51,7 +49,7 @@ public class Movement : MonoBehaviour
     private Camera camera;
     private CameraShake CamShake;
     private GameObject joystick;
-    private VirtualJoystick joystickscript;
+    private FloatingJoystick joystickscript;
     private TextureSwap modelScript;
     private Dash dashScript;
     private Touch curTouch;
@@ -92,7 +90,7 @@ public class Movement : MonoBehaviour
     private float curForce=7;
 
     bool ShieldStatus() { Shielded = GetComponent<Shield>().PlutoShieldStatus(); return Shielded; }
-    public bool DashKeyDown() { return DashChargeActive; }
+    public bool DashChargeStatus() { return DashChargeActive; }
     public bool ChargedUp(bool curCharge) { return isCharged = curCharge; }
     public float CurPowerDashTimeout() { return PowerDashTimeout; }
     public void isCharging() { Trail.startColor = o_Color; }
@@ -145,21 +143,12 @@ public class Movement : MonoBehaviour
         camera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
 
 
-        if (ChangeToKeyboard)
+        //Look if there is a joystick
+        if (!joystick)
         {
-            //Look for joystick
-            if (!joystick)
-            {
-                joystickscript = GameObject.FindGameObjectWithTag("GameController").GetComponent<VirtualJoystick>();
-                //Debug.Log("Joystick Assigned");
-            }
+            joystickscript = GameObject.FindGameObjectWithTag("GameController").GetComponent<FloatingJoystick>();
         }
-        else
-        {
-            GameObject.FindGameObjectWithTag("GameController").SetActive(false);
-            GameObject.FindGameObjectWithTag("DashButt").SetActive(false);
 
-        }
         //For collecting asteroids and returning them to the pool
         if (!asteroidSpawn)
         {
@@ -177,10 +166,6 @@ public class Movement : MonoBehaviour
             Debug.Log("Assign GameManager GameObject in scene");
         }
 
-        HealthBar = new Rect(Screen.width / 10, Screen.height / 6, Screen.width / 3, Screen.height / 50);
-        HealthTexture = new Texture2D(1, 1);
-        HealthTexture.SetPixel(0, 0, Color.white);
-        HealthTexture.Apply();
 
  
     }
@@ -222,95 +207,35 @@ public class Movement : MonoBehaviour
     // Update is mainly used for player controls
     void Update () 
 	{
-        
-        if(ChangeToKeyboard)
+        if (joystickscript && !isDead)
         {
-            if(joystickscript && !isDead)
+            //Joystick
+            Vector3 move = Vector3.zero;
+            move.x = joystickscript.horizontal();
+            move.y = joystickscript.vertial();
+
+            if (move.magnitude > 1)
             {
-                //Joystick
-                var move = Vector3.zero;
-                move.x = joystickscript.horizontal();
-                move.y = joystickscript.vertial();
-
-                if (move.magnitude > 1)
-                {
-                    move.Normalize();
-                }
-                myBody.AddForce(move * MoveSpeed * Time.deltaTime, ForceMode.VelocityChange);
-
-                if (trail)
-                {
-                    if (move == Vector3.zero)
-                    {
-                        trail.SetActive(false);
-                    }
-                    else
-                    {
-                        Quaternion tempRotation = joystickscript.rotation();
-                        trail.transform.rotation = tempRotation;
-                        trail.SetActive(true);
-                    }
-                }
+                move.Normalize();
             }
-        
-        }
-        else
-        {
-            
+            myBody.AddForce(move * MoveSpeed * Time.deltaTime, ForceMode.VelocityChange);
 
-            for (int i = 0; i < Input.touchCount; ++i)
+            if (trail)
             {
-                if (Input.touchCount == 2)
-                {
-                    Dash();
-                }
-                TouchPhase curPhase = Input.GetTouch(i).phase;
-                if (curPhase == TouchPhase.Began || curPhase == TouchPhase.Moved || curPhase==TouchPhase.Stationary)
-                {
-                    //get first touch position
-                    curTouch = Input.GetTouch(0);
-                    //translate pluto position to pixel coordinates
-                    Vector3 plutoPos = camera.WorldToScreenPoint(transform.position);
-                    
-
-                    //grab distance from touch to player to get direction for trail
-                    dirToClickX = plutoPos.x - curTouch.position.x;
-                    dirToClickY = plutoPos.y - curTouch.position.y;
-                    //normalize Vector
-                    normDirToClick = new Vector3(dirToClickX, dirToClickY).normalized;
-
-                    //calculate rotation
-                    float rotationInDegrees = Mathf.Atan2(dirToClickX, -dirToClickY) * Mathf.Rad2Deg;
-                    
-                    //Setting z axis rotation for trail
-                    trail.transform.rotation = Quaternion.Euler(0.0f, 0.0f, rotationInDegrees);
-                    //turn on trail
-                    trail.SetActive(true);
-                    //apply movement
-                    myBody.AddForce(normDirToClick * MoveSpeed * Time.deltaTime, ForceMode.VelocityChange);
-                }
-                //if theres no touch then turn off trail
-                if(Input.GetTouch(i).phase==TouchPhase.Ended|| Input.GetTouch(i).phase == TouchPhase.Canceled)
+                if (move == Vector3.zero)
                 {
                     trail.SetActive(false);
-
-                }    
+                }
+                else
+                {
+                    Quaternion tempRotation = joystickscript.rotation();
+                    trail.transform.rotation = tempRotation;
+                    trail.SetActive(true);
+                }
             }
-        
         }
 
-        if(Input.GetKeyDown(KeyCode.O))
-        {
-            DashChargeActive = true;
-        }
-
-
-        if (Input.GetKey(KeyCode.A))
-        {
-            GetComponent<Shield>().ShieldPluto();
-        }
     }
-
 
     public void Dash()
     {
@@ -379,8 +304,6 @@ public class Movement : MonoBehaviour
         //Change trail back
         Trail.startColor = b_Color;
         
-        //Reset values on button script
-        dashButt.ResetValues();
 
         //Start Slowdown/Cooldown
         StartCoroutine(DashCooldown());
@@ -504,14 +427,6 @@ public class Movement : MonoBehaviour
                     myBody.AddForce(c.contacts[0].normal * wallBump * 4, ForceMode.VelocityChange);
                 }
             }
-            //else
-            //{
-            //    AIHealth healthScipt = c.gameObject.GetComponent<AIHealth>();
-            //    if(healthScipt)
-            //    {
-            //        healthScipt.IncrementDamage();
-            //    }
-            //}
         }
 
         else if (curTag == "Wall") 
@@ -647,7 +562,9 @@ public class Movement : MonoBehaviour
         {
             //myBody.velocity = Vector3.zero;
             CanFreezePluto = true;
+            myBody.velocity = Vector3.zero;
             MoveSpeed = 0;
+            
         }
     }
     //Resume function when pluto is done being frozen or slowed
