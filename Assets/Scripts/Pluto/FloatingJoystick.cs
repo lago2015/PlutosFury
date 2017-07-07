@@ -104,7 +104,7 @@ public class FloatingJoystick : MonoBehaviour,IDragHandler,IPointerUpHandler,IPo
             else
             {
                 dashScript.changeChargeStatus(false);
-                dashScript.isActive = false;
+
             }
         }
     }
@@ -127,14 +127,9 @@ public class FloatingJoystick : MonoBehaviour,IDragHandler,IPointerUpHandler,IPo
     {
         if(Input.touchCount==1)
         {
-            doOnce = false;
             joystickStaysInFixedPosition = false;
             inputVector = Vector3.zero; // resets the inputVector so that output will no longer affect movement of the game object (example, a player character or any desired game object)
             joystickKnobImage.rectTransform.anchoredPosition = Vector3.zero; // resets the handle ("knob") of this joystick back to the center
-            dashScript.changeChargeStatus(false);
-        }
-        else
-        {
             dashScript.changeChargeStatus(false);
         }
 

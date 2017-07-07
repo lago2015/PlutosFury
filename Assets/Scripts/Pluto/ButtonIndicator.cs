@@ -14,6 +14,9 @@ public class ButtonIndicator : MonoBehaviour
     public bool isCharged;
     public bool doOnce;
     public bool isActive;
+    public bool isCharging;
+    private bool isExhausted;
+
     public bool changeChargeStatus(bool curStatus) { return isButtDown = curStatus; }
 
     void Start()
@@ -29,15 +32,8 @@ public class ButtonIndicator : MonoBehaviour
     //Check if player's power dash is active
     public bool isChargeActive()
     {
-        bool chargeActive = playerScript.DashChargeStatus();
-        if(chargeActive)
-        {
-            return isActive = true;
-        }
-        else
-        {
-            return isActive = false;
-        }
+        isActive = playerScript.DashChargeStatus();
+        return isActive; 
     }
 
     void Update()
@@ -45,59 +41,66 @@ public class ButtonIndicator : MonoBehaviour
         //Check if button or key is down
         if(isButtDown)
         {
-            if(!doOnce)
+            //ensure dash is activated once then a wait transition
+            //to reset the condition
+            doOnce = true;
+            isActive = isChargeActive();
+            //Check for Power Dash pick up obtained
+            if (isActive)
             {
-                //Check for Power Dash pick up obtained
-                if (isActive)
+                //Increment time
+                curTime += 1 * Time.deltaTime;
+                //check timer 
+                if (curTime >= PowerDashTimeout)
                 {
-                    //Increment time
-                    curTime += 1 * Time.deltaTime;
-                    //check timer 
-                    if (curTime >= PowerDashTimeout)
+                    //if successful start power dash
+                    curTime = 0;
+                    isCharged = true;
+
+                    //take away any charge indicators
+                    playerScript.ResumePluto();
+                    playerScript.cancelCharge();
+
+                    //start power dash
+                    playerScript.ChargedUp(true);
+                    playerScript.Dash();
+                    isExhausted = true;
+                    StartCoroutine(DashDelay());
+
+                }
+                //Show Charging up model
+                else
+                {
+                    if (!isExhausted)
                     {
-                        //if successful start power dash
-                        curTime = 0;
-                        isCharged = true;
-
-                        //take away any charge indicators
-                        playerScript.ResumePluto();
-                        playerScript.cancelCharge();
-
-                        //start power dash
-                        playerScript.ChargedUp(true);
-                        playerScript.Dash();
-                        doOnce = true;
-                        StartCoroutine(DashDelay());
-
-                    }
-                    //Show Charging up model
-                    else
-                    {
+                        isCharging = true;
+                        isExhausted = true;
                         //while charging player is halt
                         playerScript.FreezePluto();
                         playerScript.isCharging();
                     }
-
                 }
-                //if player doesnt have pick up then do normal dash
-                else
-                {
-                    curTime = 0;
-                    playerScript.ChargedUp(false);
-                    playerScript.Dash();
-                    doOnce = true;
-                    StartCoroutine(DashDelay());
-                }
-            }
-        }
+            } 
+       }
+        //if player doesnt have pick up then do normal dash
         else
         {
-            //reset dash timer
-            curTime = 0;
-            //resume player movement
-            playerScript.ResumePluto();
-            playerScript.cancelCharge();
+            if (doOnce)
+            {
 
+                //reset dash timer
+                curTime = 0;
+                //resume player movement
+                playerScript.ResetDrag();
+                //change variables and appearance for charging being false
+                playerScript.cancelCharge();
+                isCharging = false;
+                playerScript.ChargedUp(false);
+                //Dash and do it once
+                playerScript.Dash();
+                doOnce = false;
+                StartCoroutine(DashDelay());
+            }
         }
     }
 
@@ -105,6 +108,7 @@ public class ButtonIndicator : MonoBehaviour
     {
 
         yield return new WaitForSeconds(dashDelay);
-        doOnce = false;
+        isExhausted = false;
+        isCharged = false;
     }
 }

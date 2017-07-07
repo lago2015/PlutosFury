@@ -56,9 +56,7 @@ public class Movement : MonoBehaviour
     private ButtonIndicator dashButt;
     private AudioController audioScript;
     //Basic Movement
-    private float dirToClickX;
-    private float dirToClickY;
-    private Vector3 normDirToClick;
+
     private Vector3 newVelocity;
     public GameObject trail;
     public float wallBump = 20.0f;
@@ -67,8 +65,7 @@ public class Movement : MonoBehaviour
     public float explosionBump = 50f;
     private float velocityCap = 80;
     private float velocityMin = -80;
-    float DefaultSpeed;
-
+    private float DefaultSpeed;
     //buffs and debuffs
     bool isSuperPluto;
     bool CanFreezePluto;
@@ -82,10 +79,6 @@ public class Movement : MonoBehaviour
     bool DoOnce;
     
     //Pick up bar and Texture
-    Rect HealthBar;
-    Rect StamBar;
-    Texture2D HealthTexture;
-    Texture2D StaminaTexture;
     private float SuperDecrement;
     private float curForce=7;
 
@@ -560,8 +553,6 @@ public class Movement : MonoBehaviour
     {
         if(!CanFreezePluto)
         {
-            //myBody.velocity = Vector3.zero;
-            CanFreezePluto = true;
             myBody.velocity = Vector3.zero;
             MoveSpeed = 0;
             
@@ -571,9 +562,13 @@ public class Movement : MonoBehaviour
     public void ResumePluto()
     {
         MoveSpeed = DefaultSpeed;
-        myBody.drag = 0.25f;
+        myBody.drag = normalDrag;
     }
     
+    public void ResetDrag()
+    {
+        myBody.drag = normalDrag;
+    }
    
 
     //Getter for SuperBool
