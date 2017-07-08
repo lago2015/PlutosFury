@@ -151,7 +151,7 @@ public class Movement : MonoBehaviour
                 spawnScript = asteroidSpawn.GetComponent<AsteroidSpawner>();
                 gameManager = asteroidSpawn.GetComponent<GameManager>();
                 ScoreManager = asteroidSpawn.GetComponent<ScoreManager>();
-                ExperienceMan = asteroidSpawn.GetComponent<ExperienceManager>();
+                //ExperienceMan = asteroidSpawn.GetComponent<ExperienceManager>();
             }
         }
         else
@@ -367,8 +367,8 @@ public class Movement : MonoBehaviour
             
             if(!isDead)
             {
-                int curLevel = ExperienceMan.CurrentLevel() + 1;
-                score += 100 * curLevel;
+                //int curLevel = ExperienceMan.CurrentLevel() + 1;
+                score += 100;
                 ScoreManager.IncreaseScore(score);
             }
             ReturnAsteroid(c.gameObject);
@@ -388,7 +388,9 @@ public class Movement : MonoBehaviour
                     {
                         modelScript.SwapMaterial(TextureSwap.PlutoState.Smash);
                     }
-                    myBody.AddForce(c.contacts[0].normal * explosionBump, ForceMode.VelocityChange);
+                    if(!DashChargeActive)
+                        myBody.AddForce(c.contacts[0].normal * explosionBump, ForceMode.VelocityChange);
+
 
                 }
                 else
@@ -502,7 +504,7 @@ public class Movement : MonoBehaviour
             {
                 audioScript.PlutoHit(transform.position);
             }
-            ExperienceMan.DamageExperience();
+            //ExperienceMan.DamageExperience();
             ScoreManager.GotDamaged();
             CamShake.EnableCameraShake();
         }

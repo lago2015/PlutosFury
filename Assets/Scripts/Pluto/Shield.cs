@@ -3,6 +3,8 @@ using System.Collections;
 
 public class Shield : MonoBehaviour {
 
+    public float shieldRadius = 5f;
+    private float defaultRadius;
     public float shieldTimeout = 5f;
     public GameObject ShieldModel;
     bool isShielded;
@@ -19,6 +21,7 @@ public class Shield : MonoBehaviour {
         }
 
         MyCollider = GetComponent<SphereCollider>();
+        defaultRadius = MyCollider.radius;
     }
 
     public void ShieldPluto()
@@ -41,11 +44,11 @@ public class Shield : MonoBehaviour {
     {
         ShieldModel.SetActive(true);
         isShielded = true;
-        MyCollider.radius = 5.5f;
+        MyCollider.radius = shieldRadius;
         yield return new WaitForSeconds(shieldTimeout);
         ShieldModel.SetActive(false);
         isShielded = false;
-        MyCollider.radius = 1.9f;
+        MyCollider.radius = defaultRadius;
         doOnce = false;
     }
 }

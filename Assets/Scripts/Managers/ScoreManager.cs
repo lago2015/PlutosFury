@@ -6,15 +6,15 @@ public class ScoreManager : MonoBehaviour {
 
     public int highScore;
     public int score;
-    public int asteroidsLeft;
+    //public int asteroidsLeft;
     private int Level;
     public int exp;
     public Text ScoreText;
     public Text HighScoreText;
-    public Text LevelText;
-    public Text ExperienceText;
+    //public Text LevelText;
+    //public Text ExperienceText;
 
-    ExperienceManager expManager;
+    //ExperienceManager expManager;
     GameManager gameManager;
 	// Use this for initialization
 	void Start ()
@@ -23,10 +23,10 @@ public class ScoreManager : MonoBehaviour {
         PlayerPrefs.GetInt("scorePref");
         highScore= PlayerPrefs.GetInt("scorePref");
         gameManager = GetComponent<GameManager>();
-        expManager = GetComponent<ExperienceManager>();
-        asteroidsLeft = expManager.CurrentRequirement();
+        //expManager = GetComponent<ExperienceManager>();
+        //asteroidsLeft = expManager.CurrentRequirement();
         //exp = PlayerPrefs.GetInt("expPref");
-        Level = expManager.CurrentLevel();
+        //Level = expManager.CurrentLevel();
     }
 	
 	// Update is called once per frame
@@ -41,14 +41,14 @@ public class ScoreManager : MonoBehaviour {
         {
             HighScoreText.text = "High Score: " + highScore;
         }
-        if (LevelText.name == "LevelText")
-        {
-            LevelText.text = "Level " + Level;
-        }
-        if (ExperienceText.name== "ExpAcquired")
-        {
-            ExperienceText.text = "Exp: " + exp + " / " + asteroidsLeft;
-        }
+        //if (LevelText.name == "LevelText")
+        //{
+        //    LevelText.text = "Level " + Level;
+        //}
+        //if (ExperienceText.name== "ExpAcquired")
+        //{
+        //    ExperienceText.text = "Exp: " + exp + " / " + asteroidsLeft;
+        //}
 	}
     //run this function during game over
     public void SaveScore()
@@ -64,16 +64,16 @@ public class ScoreManager : MonoBehaviour {
     {
         
         
-        score = value;
-        expManager.ExpAcquired();
-        exp = expManager.CurrentExperience();
-        Level = expManager.CurrentLevel();
-        asteroidsLeft = expManager.CurrentRequirement();
-        return score;
+        
+        //expManager.ExpAcquired();
+        //exp = expManager.CurrentExperience();
+        //Level = expManager.CurrentLevel();
+        //asteroidsLeft = expManager.CurrentRequirement();
+        return score = value; 
     }
     public int GotDamaged()
     {
-        exp = expManager.CurrentExperience();
+        //exp = expManager.CurrentExperience();
 
         return exp;
     }
@@ -87,6 +87,6 @@ public class ScoreManager : MonoBehaviour {
     }
     public int ReturnAsteroidsLeft()
     {
-        return asteroidsLeft;
+        return 1;
     }
 }
