@@ -6,15 +6,15 @@ public class ButtonIndicator : MonoBehaviour
     {
 
     private Movement playerScript;
-    public float PowerDashTimeout;
+    private float PowerDashTimeout;
     private float dashDelay;
-    public float curTime;
-    public bool curStatus;
-    public bool isButtDown;
-    public bool isCharged;
+    private float curTime;
+    private bool curStatus;
+    private bool isButtDown;
+    private bool isCharged;
     public bool doOnce;
-    public bool isActive;
-    public bool isCharging;
+    private bool isActive;
+    private bool isCharging;
     private bool isExhausted;
 
     public bool changeChargeStatus(bool curStatus) { return isButtDown = curStatus; }
