@@ -505,6 +505,8 @@ public class Movement : MonoBehaviour
                 audioScript.PlutoHit(transform.position);
             }
             //ExperienceMan.DamageExperience();
+            Handheld.Vibrate();
+                
             ScoreManager.GotDamaged();
             CamShake.EnableCameraShake();
         }

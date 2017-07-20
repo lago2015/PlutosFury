@@ -6,7 +6,7 @@ public class AsteroidSpawner : MonoBehaviour
 {
 	public GameObject[] asteroids;
 	private List<GameObject> asteroidPool;
-
+    private bool Respawn;
     public float minX;
     public float maxX;
     public float minY;
@@ -22,15 +22,40 @@ public class AsteroidSpawner : MonoBehaviour
 			asteroid.SetActive (false);
 			asteroidPool.Add (asteroid);
 		}
-		for (int i = 0; i < asteroidPool.Count; i++) 
-		{
-			SpawnAsteroid();
-		}
         
 	}
+
+    void Start()
+    {
+        minX = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraStop>().minX;
+        maxX= GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraStop>().maxX;
+        for (int i = 0; i < asteroidPool.Count; i++)
+        {
+            SpawnAsteroid();
+        }
+    }
     public int AsteroidPool()
     {
         return asteroids.Length;
+    }
+
+    public void SpawnIntoNewSection(float newMin,float newMax)
+    {
+        minX = newMin;
+        maxX = newMax;
+
+        asteroidPool.Clear();
+        ////despawn asteroid
+        for (int i = 0; i < asteroids.Length; i++)
+        {
+            GameObject asteroid = asteroids[i];
+            asteroid.SetActive(false);
+            asteroidPool.Add(asteroid);
+        }
+        for (int i = 0; i < asteroidPool.Count; i++)
+        {
+            SpawnAsteroid();
+        }
     }
 
     public void SpawnAsteroid()
@@ -73,6 +98,7 @@ public class AsteroidSpawner : MonoBehaviour
                 return asteroidPool[i];
             }
         }
+
         return null;
         //asteroidPool.
         //int j = Random.Range(0, asteroids.Length);

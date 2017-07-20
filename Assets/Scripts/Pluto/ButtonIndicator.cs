@@ -57,7 +57,7 @@ public class ButtonIndicator : MonoBehaviour
                     curTime = 0;
                     isCharged = true;
 
-                    //take away any charge indicators
+                    //take away any charge indicators   
                     playerScript.ResumePluto();
                     playerScript.cancelCharge();
 

@@ -15,20 +15,22 @@ public class Door : MonoBehaviour {
     private int numKeyRequired=1;
     private GameManager gameScript;
     private AudioController audioScript;
+    private SectionManager sectionScript;
     void Awake()
     {
+        sectionScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<SectionManager>();
         gameScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<GameManager>();
         audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
-        isOpen = false;
+        isOpen = true;
     }
 
     public void OpenDoor(Vector3 curPosition)
     {
-    
-        if(keyObtained==numKeyRequired)
+        audioScript.WormholeOpen(curPosition);
+
+        if (keyObtained==numKeyRequired)
         {
             isOpen = true;
-            audioScript.WormholeOpen(curPosition);
         }
     }
 
@@ -40,7 +42,8 @@ public class Door : MonoBehaviour {
             {
                 //do something winning here
                 fadeDir = 1;
-                StartCoroutine(ChangeScene());
+                sectionScript.isChanging(true);
+                sectionScript.ChangeSection(gameObject);
             }
             else
             {
@@ -48,25 +51,38 @@ public class Door : MonoBehaviour {
             }
         }
     }
+
+    
+
 		// the direction to fade: in = -1 or out = 1
-    IEnumerator ChangeScene()
+    public IEnumerator ChangeScene(Vector3 moveToLocation)
     {
-        Vector3 moveToBoss = GameObject.FindGameObjectWithTag("Door2").transform.position;
         
         GameObject player = GameObject.FindGameObjectWithTag("Player");
-        GameObject camera = GameObject.FindGameObjectWithTag("MainCamera"); ;
+        GameObject camera = GameObject.FindGameObjectWithTag("MainCamera");
+
         //gameScript.YouWin();
         yield return new WaitForSeconds(fadeTime);
-        if (player && moveToBoss != Vector3.zero&&camera)
+        sectionScript.isChanging(false);
+
+        if (player && moveToLocation != Vector3.zero&&camera)
         {
+            //turn off player
             player.SetActive(false);
-            moveToBoss.z = camera.transform.position.z;
-            camera.transform.position = moveToBoss;
-            float zAxis = moveToBoss.z;
-            moveToBoss.z = 0;
+            //get z axis from camera
+            moveToLocation.z = camera.transform.position.z;
+            //get new move to location
+            camera.transform.position = moveToLocation;
+            //save camera z axis
+            float zAxis = moveToLocation.z;
+            //zero out z axis for player then apply new position
+            moveToLocation.z = 0;
+            player.transform.position = moveToLocation;
             Vector3 curPos = new Vector3(player.transform.position.x, player.transform.position.y, zAxis);
-            player.transform.position = moveToBoss;
+            
+            //apply camera position
             camera.GetComponent<CameraStop>().ChangeToBoss(curPos);
+            //turn on player
             player.SetActive(true);
             
         }
@@ -75,7 +91,6 @@ public class Door : MonoBehaviour {
             audioScript.BackgroundBossMusic();
         }
         fadeDir = -1;
-       
     }
 
     public void KeyAcquired(Vector3 curPosition)

@@ -18,38 +18,43 @@ public class CameraStop : MonoBehaviour {
 	public float dampTime = 0.15f;
 	private Vector3 velocity = Vector3.zero;
 	GameObject target;
-	//Rigidbody targetBody;
-	//private float targetMass;
-	//private float cachedMass;
+    //Rigidbody targetBody;
+    //private float targetMass;
+    //private float cachedMass;
 
+    public GameObject[] cameraStopLocations;
+    private float curMaxX;
+    private float curMinX;
+    private float OffsetX = 5f;
+    private int curSection;
+    private int maxNumSections;
 	private Vector3 cachedCameraPosition;
     private Vector3 BossPosition = new Vector3(583, 0, 0);
     private float CameraOffset;
-
+    private AsteroidSpawner spawnScript;
+    
 	// Use this for initialization
-	void Start () 
+	void Awake () 
 	{
         target = GameObject.FindGameObjectWithTag("Player");
-
+        spawnScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<AsteroidSpawner>();
         CameraOffset = transform.position.z;
         transform.position = new Vector3(target.transform.position.x, target.transform.position.y, CameraOffset);
 		cachedCameraPosition = transform.position;
-        
-
+        curSection = 0;
+        curMaxX = cameraStopLocations[curSection+1].transform.position.x - OffsetX;
+        curMinX = cameraStopLocations[curSection].transform.position.x + OffsetX;
+        maxX = curMaxX;
+        minX = curMinX;
+        maxNumSections = GameObject.FindGameObjectWithTag("Spawner").GetComponent<SectionManager>().NumOfSections();
 		//targetBody = target.GetComponent<Rigidbody> ();
 		//cachedMass = targetBody.mass;
 	}
 	
-
-
+ 
 	// Update is called once per frame
 	void FixedUpdate () 
 	{
-        if(bossChange)
-        {
-            minX = bossXMin;
-            maxX = bossXMax;
-        }
         if (target)
         {
             Vector3 point = GetComponent<Camera>().WorldToViewportPoint(target.transform.position);
@@ -89,10 +94,20 @@ public class CameraStop : MonoBehaviour {
     
     public void ChangeToBoss(Vector3 curPos)
     {
-        maxX = bossXMax;
-        minX = bossXMin;
-        cachedCameraPosition = curPos;
-        bossChange = true;
+        if(curSection<=maxNumSections)
+        {
+            //increment section numbe
+            curSection++;
+            //calculate new min and max for X axis for camera stop
+            curMaxX = cameraStopLocations[curSection + 1].transform.position.x - OffsetX;
+            curMinX = cameraStopLocations[curSection].transform.position.x + OffsetX;
+            //apply new min and max for X axis
+            maxX = curMaxX;
+            minX = curMinX;
+            spawnScript.SpawnIntoNewSection(minX, maxX);
+            cachedCameraPosition = curPos;
+            
 
+        }
     }
 }
