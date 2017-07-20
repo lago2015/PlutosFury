@@ -6,7 +6,15 @@ using UnityEngine.Events;
 
 public class Movement : MonoBehaviour 
 {
-    
+
+    //health properties
+    private int curHealth;
+    private int maxHealth=2;
+    public float smallSize=1f;
+    public float medSize=1.5f;
+    public GameObject maxSize;
+    private Vector3 smallScale;
+    private Vector3 medScale;
     //Check for shield
     bool Shielded;
 
@@ -92,6 +100,11 @@ public class Movement : MonoBehaviour
     // Use this for initialization
     void Awake () 
 	{
+        //assigning scale vector3 for health
+        smallScale = new Vector3(smallSize, smallSize, smallSize);
+        medScale = new Vector3(medSize, medSize, medSize);
+        curHealth = 0;
+        transform.localScale = smallScale;
         //setting colors
         r_Color = Color.red;
         y_Color = Color.yellow;
@@ -104,7 +117,10 @@ public class Movement : MonoBehaviour
         {
             hitEffect.SetActive(false);
         }
-
+        if(maxSize)
+        {
+            maxSize.SetActive(false);
+        }
         if(trail)
         {
             trail.SetActive(false);
@@ -495,11 +511,64 @@ public class Movement : MonoBehaviour
         isDead = true;
     }
 
+    public void HealthPickup()
+    {
+        curHealth++;
+        if (curHealth == 0)
+        {
+            transform.localScale = smallScale;
+            if (maxSize)
+            {
+                maxSize.SetActive(false);
+            }
+        }
+        //med size
+        else if (curHealth == 1)
+        {
+            transform.localScale = medScale;
+            if (maxSize)
+            {
+                maxSize.SetActive(false);
+            }
+        }
+        else if(curHealth==2)
+        {
+            if (maxSize)
+            {
+                maxSize.SetActive(true);
+            }
+        }
+    }
+
     //Resets plutos health to 0
     public void DamagePluto()
     {
         if (!ShieldStatus())
         {
+            curHealth--;
+            //run game over procedure
+            if (curHealth<0)
+            {
+                
+            }
+            //small size
+            else if (curHealth==0)
+            {
+                transform.localScale = smallScale;
+                if (maxSize)
+                {
+                    maxSize.SetActive(false);
+                }
+            }
+            //med size
+            else if(curHealth==1)
+            {
+                transform.localScale = medScale;
+                if(maxSize)
+                {
+                    maxSize.SetActive(false);
+                }
+            }
             if(audioScript)
             {
                 audioScript.PlutoHit(transform.position);
@@ -581,9 +650,5 @@ public class Movement : MonoBehaviour
         return isSuperPluto;
     }
     
-    public void MoveToBoss()
-    {
-        transform.position = new Vector3(583, 0, 0);
-        myBody.velocity = Vector3.zero;
-    }
+
 }

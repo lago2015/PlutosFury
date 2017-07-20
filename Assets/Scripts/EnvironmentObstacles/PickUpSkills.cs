@@ -3,7 +3,7 @@ using System.Collections;
 
 public class PickUpSkills : MonoBehaviour {
 
-    public enum Skills { DashCharge,Shield, Inflation}
+    public enum Skills { DashCharge,Shield, Inflation, Health}
     public Skills curSkill;
     //Script references
     private Dash DashScript;
@@ -26,6 +26,9 @@ public class PickUpSkills : MonoBehaviour {
                 break;
             case Skills.Inflation:
                 InflateScript = playerRef.GetComponent<Inflation>();
+                break;
+            case Skills.Health:
+                playerScript = playerRef.GetComponent<Movement>();
                 break;
         }
     }
@@ -56,6 +59,13 @@ public class PickUpSkills : MonoBehaviour {
                     {
                         InflateScript.Inflate();
                         InflateScript.InflatePluto();
+                        Destroy(gameObject);
+                    }
+                    break;
+                case Skills.Health:
+                    if(playerScript)
+                    {
+                        playerScript.HealthPickup();
                         Destroy(gameObject);
                     }
                     break;
