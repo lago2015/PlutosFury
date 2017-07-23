@@ -23,7 +23,6 @@ public class GameManager : MonoBehaviour
 	public Text highScoreText;
     public Text asertoidsLeftText;
     public float fadeTime;
-    public bool TestLevel;
     private int BaseCount = 1;
     public float GameOverDelay = 5f;
 
@@ -63,7 +62,7 @@ public class GameManager : MonoBehaviour
         }
         
         yield return new WaitForSeconds(GameOverDelay);
-        modelSwitch.SwapMaterial(TextureSwap.PlutoState.Lose);
+        //modelSwitch.SwapMaterial(TextureSwap.PlutoState.Lose);
         GameEndedUI.SetActive(true);
         gameOverUI.SetActive(true);
         ScoreManager.SaveScore();

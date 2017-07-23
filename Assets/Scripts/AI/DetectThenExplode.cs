@@ -61,17 +61,14 @@ public class DetectThenExplode : MonoBehaviour {
 
     void OnCollisionEnter(Collision col)
     {
-        if(col.gameObject.tag=="Player")
+        if (regularState && explosionState)
         {
-            if (regularState && explosionState)
+            if (!doOnce)
             {
-                if (!doOnce)
-                {
-                    GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>().DestructionSmall(transform.position);
-                    doOnce = true;
-                }
-                StartCoroutine(SwitchModels());
+                GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>().DestructionSmall(transform.position);
+                doOnce = true;
             }
+            StartCoroutine(SwitchModels());
         }
     }
 

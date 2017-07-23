@@ -551,7 +551,7 @@ public class Movement : MonoBehaviour
             {
                 DisableMovement();
                 modelScript.SwapMaterial(TextureSwap.PlutoState.Lose);
-                gameManager.GameOver();
+                gameManager.StartGameover();
             }
             //small size
             else if (curHealth==0)
