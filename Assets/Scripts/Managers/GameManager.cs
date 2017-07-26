@@ -70,8 +70,8 @@ public class GameManager : MonoBehaviour
         youAreAStarNowUI.SetActive(false);
         int EndScore = ScoreManager.ReturnScore();
         int HighScore = ScoreManager.ReturnHighScore();
-        int AsteroidsLeft = ExpManager.CurrentRequirement();
-        asertoidsLeftText.text = " Next Level:\n\n " + AsteroidsLeft;
+        //int AsteroidsLeft = ExpManager.CurrentRequirement();
+        //asertoidsLeftText.text = " Next Level:\n\n " + AsteroidsLeft;
         ScoreText.text = "Score:\n\n" + EndScore;
         highScoreText.text = "High Score:\n\n" + HighScore;
         

@@ -12,14 +12,15 @@ public class DamageOrPowerUp : MonoBehaviour {
     float SuperDrainInterval;
     float NormalDrain;
     float NormalInterval;
-    public float DrainAmount;
-    public float DrainApplyInterval;
+    private float DrainAmount;
+    private float DrainApplyInterval;
     //Super
-    public float PowerUpAmount;
-    public float PowerUpDuration;
-    public float PowerCooldown;
+    private float PowerUpAmount;
+    private float PowerUpDuration;
+    private float PowerCooldown;
     bool CanPowerUp;
-
+    public bool colliderTriggered = true;
+    public float DamageCooldown;
     float EffectTimer;
     //Rate of effect to apply
     //public float ApplyEffectRate;
@@ -29,12 +30,13 @@ public class DamageOrPowerUp : MonoBehaviour {
     float elapseTime;
     bool PlayerNear = false;
     Movement PlayerScript;
-    
+    FleeOrPursue dashScript;
     
     void Start()
     {
         CanPowerUp = true;
         PlayerScript = GameObject.FindGameObjectWithTag("Player").GetComponent<Movement>();
+        dashScript = gameObject.transform.GetChild(0).GetComponent<FleeOrPursue>();
         NormalInterval = DrainApplyInterval;
         NormalDrain = DrainAmount;
         SuperDrain = DrainAmount + DrainAmount;
@@ -104,16 +106,55 @@ public class DamageOrPowerUp : MonoBehaviour {
 
     }
 
+    void OnCollisionEnter(Collision col)
+    {
+        if(col.gameObject.tag=="Player")
+        {
+            if(CurrentEffect==EffectState.Damage)
+            {
+                if (!Damaged)
+                {
+                    bool RogueDashing = dashScript.isDashing();
+                    if(RogueDashing)
+                    {
+                        PlayerScript.DamagePluto();
+                        Damaged = true;
+                        StartCoroutine(DamageReset());
+                    }
+                    else
+                    {
+                        bool plutoDashing = PlayerScript.DashStatus();
+                        if(!plutoDashing)
+                        {
+                            PlayerScript.DamagePluto();
+                            Damaged = true;
+                            StartCoroutine(DamageReset());
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     void OnTriggerStay(Collider col)
     {
         if (col.gameObject.tag == ("Player"))
         {
-            if (!col.isTrigger)
+            if(colliderTriggered)
             {
-                PlayerNear = true;
+                if (!col.isTrigger)
+                {
+                    PlayerNear = true;
+                }
             }
                 
         }
+    }
+
+    IEnumerator DamageReset()
+    {
+        yield return new WaitForSeconds(DamageCooldown);
+        Damaged = false;
     }
 
     IEnumerator CoolDownEffect(float EffectTimer)
@@ -126,9 +167,12 @@ public class DamageOrPowerUp : MonoBehaviour {
     {
         if (col.gameObject.tag == ("Player"))
         {
-            if(!col.isTrigger)
+            if (colliderTriggered)
             {
-                PlayerNear = false;
+                if (!col.isTrigger)
+                {
+                    PlayerNear = false;
+                }
             }
         }
     }

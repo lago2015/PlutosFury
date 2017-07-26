@@ -7,7 +7,7 @@ public class ShatterPiece : MonoBehaviour {
     public GameObject landGameObject;
 
     //piece state
-    public int PieceState;
+    private int PieceState;
     //Markers to let the piece know where to go
     private Vector3 startMarker;
     private Vector3 landMarker;
@@ -17,7 +17,7 @@ public class ShatterPiece : MonoBehaviour {
     private AudioController audioScript;
     //getter for shatter manager
     public GameObject shatterParent;
-    public GameObject shatterModel;
+    private Rigidbody myBody;
     private ShatterPieceManager shatterManager; 
 
     //trigger bools
@@ -39,16 +39,20 @@ public class ShatterPiece : MonoBehaviour {
 
     void Awake()
     {
-        returnMarker = transform.localPosition;
+        returnMarker = Vector3.zero;
         //assign land marker position
         if(landGameObject)
         {
-            landMarker = landGameObject.transform.position;
+            landMarker = landGameObject.transform.localPosition;
         }
-        if(shatterModel)
+        if(!myBody)
+        {
+            myBody = gameObject.GetComponent<Rigidbody>();
+        }
+        if(!Collider)
         {
             //getter for collider
-            Collider = shatterModel.GetComponent<SphereCollider>();
+            Collider = gameObject.GetComponent<SphereCollider>();
         }
         //getter for audio script
         audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
@@ -103,7 +107,7 @@ public class ShatterPiece : MonoBehaviour {
         }
     }
 
-    void OnCollisionEnter(Collision col)
+    void OnTriggerEnter(Collider col)
     {
         if (col.gameObject.tag == ("Player"))
         {
@@ -129,12 +133,12 @@ public class ShatterPiece : MonoBehaviour {
             resetTime = true;
         }
 
-        startMarker = transform.position;
+        startMarker = transform.localPosition;
         returnTime = Vector3.Distance(startMarker, returnMarker);
         curTime = Time.time;
         float distCov = (curTime - startTime) * attackSpeed;
         float fracJour = distCov / returnTime;
-        transform.position = Vector3.Lerp(startMarker, returnMarker, fracJour);
+        transform.localPosition = Vector3.Lerp(startMarker, returnMarker, fracJour);
         CapturedLocation = false;
         shootOnce = false;
         if (returnTime <= 0.5f)
@@ -146,6 +150,7 @@ public class ShatterPiece : MonoBehaviour {
     }
      IEnumerator WaitToReturn()
     {
+        //myBody.velocity = Vector3.zero;
         yield return new WaitForSeconds(WaitTime);
         PieceState = 2;
     

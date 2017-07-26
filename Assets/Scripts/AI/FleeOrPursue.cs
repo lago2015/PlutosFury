@@ -4,6 +4,15 @@ using System.Collections;
 public class FleeOrPursue : MonoBehaviour {
 
 
+    //Shake properties
+    private float shake = 0.0f;
+    public float shakeAmount;
+    public float decreaseFactor;
+    private Vector3 startPosition;
+    private Vector3 shakeVector;
+    
+
+
     //Dash
     public float MoveSpeed;
     public float DashSpeed;
@@ -21,16 +30,15 @@ public class FleeOrPursue : MonoBehaviour {
     Transform Player;
     public GameObject myParent;
     private Rigidbody myBody;
-
+   
     public bool isTriggered;
     public bool ShouldPursue;// chase player or not
-    
-    private bool AmIMars;//Check if this is mars.
-
     private bool isCharging;
     private bool doOnce;
     private bool PlayerNear;
     private readonly int RotationSpeed=10;
+
+    public bool isDashing() { return ShouldDash; }
 
     // Use this for initialization
     void Awake()
@@ -58,7 +66,24 @@ public class FleeOrPursue : MonoBehaviour {
     // Update is called once per frame
     void FixedUpdate()
     {
-
+        if(isCharging)
+        {
+            if (shake > 0.0f)
+            {
+                startPosition = myParent.transform.localPosition;
+                shakeVector = startPosition + Random.insideUnitSphere * shakeAmount;
+                shakeVector.z = 0f;
+                myParent.transform.localPosition = shakeVector;
+                shake -= Time.deltaTime * decreaseFactor;
+            }
+            
+        }
+        else
+        {
+            shake = 0.0f;
+            startPosition = Vector3.zero;
+            shakeVector = Vector3.zero;
+        }
         transform.parent.position = new Vector3(transform.position.x, transform.position.y, 0);
         if(PlayerNear)
         {
@@ -75,10 +100,11 @@ public class FleeOrPursue : MonoBehaviour {
                     }
                     if (!isExhausted)
                     {
-                        if(!isCharging)
+                        if (!isCharging)
                         {
                             Dash();
                         }
+                      
                         transform.parent.position += transform.forward * MoveSpeed * Time.deltaTime;
                     }
                     else
@@ -111,6 +137,7 @@ public class FleeOrPursue : MonoBehaviour {
         //Check if exhausted dash
         if (!isExhausted)
         {
+            shake = chargeTime;
             StartCoroutine(ChargeDash());   //start charge
             
         }
@@ -118,8 +145,18 @@ public class FleeOrPursue : MonoBehaviour {
 
     IEnumerator ChargeDash()
     {
+        
+
         MoveSpeed = 0;
         isCharging = true;
+        //Time.timeScale = 0.0f;
+        //float EndShake = Time.realtimeSinceStartup + 0.1f;
+
+        //while (Time.realtimeSinceStartup < EndShake)
+        //{
+        //    yield return 0;
+        //}
+        //Time.timeScale = 1.0f;
         yield return new WaitForSeconds(chargeTime);
         StartCoroutine(DashTransition());   //Start dash
     }

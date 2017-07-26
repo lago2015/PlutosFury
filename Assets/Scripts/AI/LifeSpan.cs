@@ -9,31 +9,28 @@ public class LifeSpan : MonoBehaviour {
     bool DamagePlayer;
     public GameObject Explosion;
 
-
-    void Update()
+    void Start()
     {
-        if (CurrentHealth <= LifeDuration)
+        StartCoroutine(CountdownToLife());
+    }
+
+    IEnumerator CountdownToLife()
+    {
+        yield return new WaitForSeconds(LifeDuration);
+        if (Explosion)
         {
-            CurrentHealth += Time.deltaTime * IncrementTime;
+            Instantiate(Explosion, transform.position, transform.rotation);
+        }
+        if (gameObject.transform.parent.gameObject)
+        {
+            Destroy(gameObject.transform.parent.gameObject);
         }
         else
         {
-            if (Explosion)
-            {
-                Instantiate(Explosion, transform.position, transform.rotation);
-            }
-            if(gameObject.transform.parent.gameObject)
-            {
-                Destroy(gameObject.transform.parent.gameObject);
-            }
-            else
-            {
-                Destroy(gameObject);
-            }
+            Destroy(gameObject);
         }
-
-
     }
+    
 
  
 }

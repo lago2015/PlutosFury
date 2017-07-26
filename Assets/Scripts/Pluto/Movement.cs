@@ -24,7 +24,7 @@ public class Movement : MonoBehaviour
     public float DashCooldownTime = 0.5f;
     private bool isExhausted = false;
     private bool ObtainedWhileDash;
-    public bool chargeOnce;
+    private bool chargeOnce;
     public bool DashChargeActive;
     private bool isCharged;
     private bool ShouldDash;
@@ -71,6 +71,7 @@ public class Movement : MonoBehaviour
     public float mazeBump = 10f;
     public float dashAsteroidBump = 20f;
     public float explosionBump = 50f;
+    public float soccerKnockback = 50f;
     private float velocityCap = 80;
     private float velocityMin = -80;
     private float DefaultSpeed;
@@ -422,14 +423,18 @@ public class Movement : MonoBehaviour
 
         }
 
+        else if(curTag=="Soccerball")
+        {
+            myBody.AddForce(c.contacts[0].normal * soccerKnockback, ForceMode.VelocityChange);
+
+        }
+
         else if(curTag == "Planet")
         {
 
             if (ShouldDash == false)
             {
                 myBody.AddForce(c.contacts[0].normal * wallBump * 2, ForceMode.VelocityChange);
-                DamagePluto();
-                modelScript.SwapMaterial(TextureSwap.PlutoState.Damaged);
             }
             else
             {

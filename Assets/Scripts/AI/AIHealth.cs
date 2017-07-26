@@ -9,9 +9,14 @@ public class AIHealth : MonoBehaviour {
     public GameObject Model2;
     public float wallBump = 20;
     private Rigidbody myBody;
-
+    public bool Rogue=false;
+    private FleeOrPursue RogueScript;
     void Awake()
     {
+        if(Rogue)
+        {
+            RogueScript = gameObject.transform.GetChild(0).GetComponent<FleeOrPursue>();
+        }
         myBody = GetComponent<Rigidbody>();
         if(Explosion&&Model)
         {
@@ -56,24 +61,54 @@ public class AIHealth : MonoBehaviour {
             bool isDashing = col.gameObject.GetComponent<Movement>().DashStatus();
             if(isDashing)
             {
-                EnemyHealth--;
-                if (EnemyHealth <= 0)
+                if (Rogue)
                 {
-                    if(Explosion&&Model)
+                    bool RogueDashing = RogueScript.isDashing();
+                    if(!RogueDashing)
                     {
-                        Explosion.SetActive(true);
-                        Model.SetActive(false);
-                        if(Model2)
-                            Model2.SetActive(false);
-                    }
-                    else
-                    {
-                        Destroy(transform.parent.gameObject);
+                        EnemyHealth--;
+                        if (EnemyHealth <= 0)
+                        {
+                            if (Explosion && Model)
+                            {
+                                Explosion.SetActive(true);
+                                Model.SetActive(false);
+                                if (Model2)
+                                    Model2.SetActive(false);
+                            }
+                            else
+                            {
+                                Destroy(transform.parent.gameObject);
+                            }
+                        }
+                        if (myBody)
+                        {
+                            myBody.AddForce(col.contacts[0].normal * wallBump, ForceMode.VelocityChange);
+                        }
                     }
                 }
-                if(myBody)
+                else
                 {
-                    myBody.AddForce(col.contacts[0].normal * wallBump, ForceMode.VelocityChange);
+
+                    EnemyHealth--;
+                    if (EnemyHealth <= 0)
+                    {
+                        if (Explosion && Model)
+                        {
+                            Explosion.SetActive(true);
+                            Model.SetActive(false);
+                            if (Model2)
+                                Model2.SetActive(false);
+                        }
+                        else
+                        {
+                            Destroy(transform.parent.gameObject);
+                        }
+                    }
+                    if (myBody)
+                    {
+                        myBody.AddForce(col.contacts[0].normal * wallBump, ForceMode.VelocityChange);
+                    }
                 }
 
             }
