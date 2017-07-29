@@ -63,5 +63,11 @@ public class FloatingJoystickController : MonoBehaviour {
             }
             
         }
+        else
+        {
+            // makes the single joystick disappear or stay visible
+            singleJoystickBackgroundImage.enabled = singleJoyStickAlwaysVisible;
+            singleJoystickHandleImage.enabled = singleJoyStickAlwaysVisible;
+        }
     }
 }

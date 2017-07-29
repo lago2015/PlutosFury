@@ -31,12 +31,15 @@ public class DamageOrPowerUp : MonoBehaviour {
     bool PlayerNear = false;
     Movement PlayerScript;
     FleeOrPursue dashScript;
-    
+    public GameObject dashModel;
     void Start()
     {
         CanPowerUp = true;
         PlayerScript = GameObject.FindGameObjectWithTag("Player").GetComponent<Movement>();
-        dashScript = gameObject.transform.GetChild(0).GetComponent<FleeOrPursue>();
+        if(dashModel)
+        {
+            dashScript = dashModel.transform.GetComponent<FleeOrPursue>();
+        }
         NormalInterval = DrainApplyInterval;
         NormalDrain = DrainAmount;
         SuperDrain = DrainAmount + DrainAmount;
@@ -114,12 +117,15 @@ public class DamageOrPowerUp : MonoBehaviour {
             {
                 if (!Damaged)
                 {
-                    bool RogueDashing = dashScript.isDashing();
-                    if(RogueDashing)
+                    if(dashScript)
                     {
-                        PlayerScript.DamagePluto();
-                        Damaged = true;
-                        StartCoroutine(DamageReset());
+                        bool RogueDashing = dashScript.isDashing();
+                        if (RogueDashing)
+                        {
+                            PlayerScript.DamagePluto();
+                            Damaged = true;
+                            StartCoroutine(DamageReset());
+                        }
                     }
                     else
                     {

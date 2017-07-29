@@ -22,6 +22,7 @@ public class FleeOrPursue : MonoBehaviour {
     public float chargeTime = 0.5f;
     public bool isExhausted = false;
     public bool ShouldDash;
+    private bool firstEncounter=false;
     private float DefaultSpeed;
     private float normalDrag;
 
@@ -29,6 +30,7 @@ public class FleeOrPursue : MonoBehaviour {
     AudioController audioScript;
     Transform Player;
     public GameObject myParent;
+    public GameObject trailModel;
     private Rigidbody myBody;
    
     public bool isTriggered;
@@ -37,9 +39,9 @@ public class FleeOrPursue : MonoBehaviour {
     private bool doOnce;
     private bool PlayerNear;
     private readonly int RotationSpeed=10;
-
+    public bool isDead;
     public bool isDashing() { return ShouldDash; }
-
+    public bool yesDead() { return isDead = true; }
     // Use this for initialization
     void Awake()
     {
@@ -51,6 +53,11 @@ public class FleeOrPursue : MonoBehaviour {
         if (myBody)
         {
             normalDrag = myBody.drag;
+        }
+
+        if(trailModel)
+        {
+            trailModel.SetActive(false);
         }
 
         if (isTriggered)
@@ -85,38 +92,62 @@ public class FleeOrPursue : MonoBehaviour {
             shakeVector = Vector3.zero;
         }
         transform.parent.position = new Vector3(transform.position.x, transform.position.y, 0);
+        //when detection collider finds player than this is enabled
         if(PlayerNear)
         {
+            //should pursue is set by user not ingame condition
             if (ShouldPursue)
             {
-                
-                if (Player)
+                //add a delay before first attack
+                if (!firstEncounter)
                 {
-                    if (RotationSpeed > 0)
+                    firstEncounter = true;
+                    StartCoroutine(DashCooldown());
+                }
+                else
+                {
+                    if(trailModel)
                     {
-                        Quaternion rotation = Quaternion.LookRotation(Player.transform.position - transform.position);
-
-                        transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * RotationSpeed);
-                    }
-                    if (!isExhausted)
-                    {
-                        if (!isCharging)
+                        if(!isDead)
                         {
-                            Dash();
+
+                            trailModel.SetActive(true);
                         }
-                      
-                        transform.parent.position += transform.forward * MoveSpeed * Time.deltaTime;
                     }
-                    else
+                    if (Player)
                     {
-                        transform.parent.position += transform.forward * MoveSpeed * Time.deltaTime;
+
+                        if (RotationSpeed > 0)
+                        {
+                            Quaternion rotation = Quaternion.LookRotation(Player.transform.position - transform.position);
+
+                            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * RotationSpeed);
+                        }
+                        if (!isExhausted)
+                        {
+                            if (!isCharging)
+                            {
+                                Dash();
+                            }
+
+                            transform.parent.position += transform.forward * MoveSpeed * Time.deltaTime;
+                        }
+                        else
+                        {
+                            transform.parent.position += transform.forward * MoveSpeed * Time.deltaTime;
+                        }
                     }
-                        
-                    
                 }
             }
             else
             {
+                if (!isDead)
+                {
+                    if (trailModel)
+                    {
+                        trailModel.SetActive(true);
+                    }
+                }
                 if (Player)
                 {
                     if (RotationSpeed > 0)
@@ -128,6 +159,16 @@ public class FleeOrPursue : MonoBehaviour {
                     transform.parent.position -= transform.forward * MoveSpeed * Time.deltaTime;
                 }
 
+            }
+        }
+        else
+        {
+            if (!isDead)
+            {
+                if (trailModel)
+                {
+                    trailModel.SetActive(false);
+                }
             }
         }
     }

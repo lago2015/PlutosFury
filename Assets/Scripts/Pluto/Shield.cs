@@ -37,9 +37,22 @@ public class Shield : MonoBehaviour {
                     doOnce = true;
                 }
             }
-            StartCoroutine(ShieldDuration());
+            //StartCoroutine(ShieldDuration());
+            ShieldModel.SetActive(true);
+            isShielded = true;
+            MyCollider.radius = shieldRadius;
         }
     }
+
+    public void ShieldOff()
+    {
+        ShieldModel.SetActive(false);
+        isShielded = false;
+        MyCollider.radius = defaultRadius;
+        doOnce = false;
+    }
+
+    //Timer for shield
     IEnumerator ShieldDuration()
     {
         ShieldModel.SetActive(true);

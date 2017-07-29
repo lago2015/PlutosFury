@@ -7,6 +7,9 @@ public class AIHealth : MonoBehaviour {
     public GameObject Explosion;
     public GameObject Model;
     public GameObject Model2;
+    public GameObject Model3;
+
+    public GameObject pursuitModel;
     public float wallBump = 20;
     private Rigidbody myBody;
     public bool Rogue=false;
@@ -15,7 +18,10 @@ public class AIHealth : MonoBehaviour {
     {
         if(Rogue)
         {
-            RogueScript = gameObject.transform.GetChild(0).GetComponent<FleeOrPursue>();
+            if(pursuitModel)
+            {
+                RogueScript = pursuitModel.GetComponent<FleeOrPursue>();
+            }
         }
         myBody = GetComponent<Rigidbody>();
         if(Explosion&&Model)
@@ -28,6 +34,10 @@ public class AIHealth : MonoBehaviour {
         {
             Model2.SetActive(true);
         }
+        if (Model3)
+        {
+            Model3.SetActive(true);
+        }
     }
 
     public void IncrementDamage()
@@ -37,13 +47,26 @@ public class AIHealth : MonoBehaviour {
         {
             if (Explosion && Model)
             {
+                if(RogueScript)
+                {
+                    RogueScript.yesDead();
+                }
                 Explosion.SetActive(true);
                 Model.SetActive(false);
                 if(Model2)
                 {
-
+                    
                     Model2.SetActive(false);
                 }
+                if(Model3)
+                {
+                    Model3.SetActive(false);
+                }
+                if(pursuitModel)
+                {
+                    pursuitModel.SetActive(false);
+                }
+
             }
             else
             {
@@ -75,6 +98,13 @@ public class AIHealth : MonoBehaviour {
                                 Model.SetActive(false);
                                 if (Model2)
                                     Model2.SetActive(false);
+                                if (Model3)
+                                    Model3.SetActive(false);
+
+                                if (pursuitModel)
+                                {
+                                    pursuitModel.SetActive(false);
+                                }
                             }
                             else
                             {
@@ -99,6 +129,13 @@ public class AIHealth : MonoBehaviour {
                             Model.SetActive(false);
                             if (Model2)
                                 Model2.SetActive(false);
+                            if (Model3)
+                                Model3.SetActive(false);
+
+                            if (pursuitModel)
+                            {
+                                pursuitModel.SetActive(false);
+                            }
                         }
                         else
                         {

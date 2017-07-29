@@ -31,7 +31,7 @@ public class MoveAsteroidHack : MonoBehaviour
         transform.rotation = Random.rotation;
         if (myBody)
         {
-            myBody.AddForce(transform.up * force);
+            //myBody.AddForce(transform.up * force);
         }
         pluto = GameObject.FindWithTag ("Player");
 

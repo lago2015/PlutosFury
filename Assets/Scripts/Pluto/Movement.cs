@@ -60,6 +60,7 @@ public class Movement : MonoBehaviour
     private FloatingJoystick joystickscript;
     private TextureSwap modelScript;
     private Dash dashScript;
+    private Shield shieldScript;
     private Touch curTouch;
     private ButtonIndicator dashButt;
     private AudioController audioScript;
@@ -91,7 +92,7 @@ public class Movement : MonoBehaviour
     private float SuperDecrement;
     private float curForce=7;
 
-    bool ShieldStatus() { Shielded = GetComponent<Shield>().PlutoShieldStatus(); return Shielded; }
+    bool ShieldStatus() { Shielded = shieldScript.PlutoShieldStatus(); return Shielded; }
     public bool DashChargeStatus() { return DashChargeActive; }
     public bool ChargedUp(bool curCharge) { return isCharged = curCharge; }
     public float CurPowerDashTimeout() { return PowerDashTimeout; }
@@ -132,6 +133,8 @@ public class Movement : MonoBehaviour
         {
             Debug.Log("No Dash Button");
         }
+        //shield script
+        shieldScript = GetComponent<Shield>();
         //model change
         modelScript = GetComponent<TextureSwap>();
         //dash script
@@ -451,7 +454,15 @@ public class Movement : MonoBehaviour
             {
                 audioScript.WallBounce();
             }
-            myBody.AddForce (c.contacts[0].normal * wallBump, ForceMode.VelocityChange);
+            if (ShouldDash)
+            {
+                myBody.AddForce(c.contacts[0].normal * wallBump * 3, ForceMode.VelocityChange);
+
+            }
+            else
+            {
+                myBody.AddForce(c.contacts[0].normal * wallBump, ForceMode.VelocityChange);
+            }
 		}
         else if (curTag == "EnvironmentObstacle")
         {
@@ -588,6 +599,10 @@ public class Movement : MonoBehaviour
         }
         else
         {
+            if(shieldScript)
+            {
+                shieldScript.ShieldOff();
+            }
             if(audioScript)
             {
                 audioScript.ShieldDing(transform.position);
