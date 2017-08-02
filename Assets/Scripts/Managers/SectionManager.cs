@@ -12,9 +12,9 @@ public class SectionManager : MonoBehaviour {
     public int NumOfSections() { return sections.Length; }
     void Awake()
     {
-        for(int i=0;i<sections.Length;++i)
+        for (int i = 0; i < sections.Length; ++i)
         {
-            if(i==0)
+            if (i == 0)
             {
                 sections[i].SetActive(true);
 
@@ -25,6 +25,7 @@ public class SectionManager : MonoBehaviour {
             }
         }
     }
+    
 
     public void ChangeSection(GameObject curDoor)
     {

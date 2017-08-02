@@ -140,6 +140,7 @@ public class DamageOrPowerUp : MonoBehaviour {
                 }
             }
         }
+
     }
 
     void OnTriggerStay(Collider col)
@@ -154,6 +155,11 @@ public class DamageOrPowerUp : MonoBehaviour {
                 }
             }
                 
+        }
+        else if (col.gameObject.tag == "BigAsteroid")
+        {
+            col.gameObject.GetComponent<BigAsteroid>().AsteroidHit(5);
+
         }
     }
 

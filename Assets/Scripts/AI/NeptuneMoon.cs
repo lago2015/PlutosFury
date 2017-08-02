@@ -95,7 +95,7 @@ public class NeptuneMoon : MonoBehaviour {
 		{
 			this.gameObject.transform.RotateAround(RotateToGameObject.transform.position, gameObject.transform.right, RotateSpeed * Time.deltaTime);
 		}
-        if(!MoonReady)
+        if(MoonReady==false)
         {
             if (AttackTime >= AttackRate)
             {

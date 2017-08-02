@@ -15,6 +15,14 @@ public class DetectThenExplode : MonoBehaviour {
     public bool isHomingLandmine;
     void Awake()
     {
+        if (regularState)
+        {
+            regularState.SetActive(true);
+        }
+        if (explosionState)
+        {
+            explosionState.SetActive(false);
+        }
         moveScript = GetComponent<HomingProjectile>();
         TriggerCollider = GetComponent<SphereCollider>();
         if (isHomingLandmine)
@@ -35,14 +43,7 @@ public class DetectThenExplode : MonoBehaviour {
             collider = GetComponent<BoxCollider>();
             collider.enabled = true;
         }
-        if(regularState)
-        {
-            regularState.SetActive(true);
-        }
-        if(explosionState)
-        {
-            explosionState.SetActive(false);
-        }
+
     }
 
     void Start()
@@ -51,6 +52,7 @@ public class DetectThenExplode : MonoBehaviour {
         {
             StartCoroutine(LaunchTime());
         }
+
     }
 
     IEnumerator LaunchTime()
@@ -111,7 +113,7 @@ public class DetectThenExplode : MonoBehaviour {
         }
         else if(CurTag == "BigAsteroid")
         {
-            if(isRocket)
+            if(isRocket||isLandmine)
             {
                 if (regularState && explosionState)
                 {
@@ -120,12 +122,12 @@ public class DetectThenExplode : MonoBehaviour {
                         GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>().DestructionSmallEnvirObstacle(transform.position);
                         doOnce = true;
                     }
-                    col.gameObject.GetComponent<BigAsteroid>().AsteroidHit(1);
+                    col.gameObject.GetComponent<BigAsteroid>().AsteroidHit(5);
                     StartCoroutine(SwitchModels());
                 }
             }
         }
-        else if(CurTag=="EnvironmentObstacle"||CurTag=="Wall"||CurTag=="MazeWall")
+        else if(CurTag=="EnvironmentObstacle"||CurTag=="Soccerball")
         {
             if (isLandmine || isRocket)
             {
