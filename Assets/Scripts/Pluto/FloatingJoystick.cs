@@ -9,6 +9,7 @@ public class FloatingJoystick : MonoBehaviour,IDragHandler,IPointerUpHandler,IPo
     
     private bool joystickStaysInFixedPosition = false;
     private bool doOnce;
+    private bool scriptDoOnce;
     [Tooltip("Sets the maximum distance the handle (knob) stays away from the center of this joystick. If the joystick handle doesn't look or feel right you can change this value. Must be a whole number. Default value is 4.")]
     public int joystickHandleDistance = 4;
 
@@ -21,7 +22,6 @@ public class FloatingJoystick : MonoBehaviour,IDragHandler,IPointerUpHandler,IPo
     private PointerEventData beginTouch;
 
     private ButtonIndicator dashScript;
-    private Movement playerScript;
     private void Start()
     {
         if (GetComponent<Image>() == null)
@@ -33,7 +33,6 @@ public class FloatingJoystick : MonoBehaviour,IDragHandler,IPointerUpHandler,IPo
         {
             Debug.LogError("There is no joystick handle image attached to this script.");
         }
-        playerScript = GameObject.FindGameObjectWithTag("Player").GetComponent<Movement>();
         dashScript = GameObject.FindGameObjectWithTag("DashButt").GetComponent<ButtonIndicator>();
         if (GetComponent<Image>() != null && transform.GetChild(0).GetComponent<Image>() != null)
         {
@@ -92,19 +91,22 @@ public class FloatingJoystick : MonoBehaviour,IDragHandler,IPointerUpHandler,IPo
 
             if (Input.touchCount == 2)
             {
-                bool doOnce = dashScript.doOnce;
-                if (!doOnce)
+                if(!scriptDoOnce)
                 {
-                    //Check if power dash is active
-                    dashScript.isChargeActive();
-                    //activate dash mechanic 
-                    dashScript.changeChargeStatus(true);
+                    scriptDoOnce = true;
+                    bool doOnce = dashScript.doOnce;
+                    //if charge hasnt started than start now
+                    if (!doOnce)
+                    {
+                        //activate dash mechanic 
+                        dashScript.changeChargeStatus(true);
+                    }
                 }
             }
             else
             {
                 dashScript.changeChargeStatus(false);
-
+                scriptDoOnce = false;
             }
         }
     }
@@ -127,12 +129,14 @@ public class FloatingJoystick : MonoBehaviour,IDragHandler,IPointerUpHandler,IPo
     {
         if(Input.touchCount==1)
         {
-            joystickStaysInFixedPosition = false;
             inputVector = Vector3.zero; // resets the inputVector so that output will no longer affect movement of the game object (example, a player character or any desired game object)
             joystickKnobImage.rectTransform.anchoredPosition = Vector3.zero; // resets the handle ("knob") of this joystick back to the center
             dashScript.changeChargeStatus(false);
         }
-
+        else
+        {
+            joystickStaysInFixedPosition = false;
+        }
     }
 
     // ouputs the direction vector, use this public function from another script to control movement of a game object (such as a player character or any desired game object)

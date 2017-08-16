@@ -55,6 +55,27 @@ public class BigAsteroid : MonoBehaviour {
         Destroy(gameObject);
     }
 
+    void OnTriggerEnter(Collider col)
+    {
+        if(col.gameObject.tag=="Player")
+        {
+            Movement moveScript = col.gameObject.GetComponent<Movement>();
+            bool isCharged = moveScript.isCharged;
+            bool isDashing = moveScript.DashStatus();
+            //bool isPowerReady = moveScript.DashChargeStatus();
+
+            if(isDashing==true&isCharged==true)
+            {
+                if (!doOnce)
+                {
+                    GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>().AsteroidExplosion(transform.position);
+                    SpawnAsteroids();
+                    doOnce = true;
+                }
+            }
+        }
+    }
+
     public void AsteroidHit(int DamageAmount)
     {
         if(DamageAmount==0)

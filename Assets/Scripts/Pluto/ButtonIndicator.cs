@@ -6,19 +6,18 @@ public class ButtonIndicator : MonoBehaviour
     {
 
     private Movement playerScript;
-    private float PowerDashTimeout;
-    private float dashDelay;
-    private float curTime;
-    private bool curStatus;
-    private bool isButtDown;
-    private bool isCharged;
+    public float PowerDashTimeout;
+    public float dashDelay;
+    public float curTime;
+    public bool curStatus;
+    public bool isButtDown;
+    public bool isCharged;
     public bool doOnce;
-    private bool isActive;
-    private bool isCharging;
-    private bool isExhausted;
+    public bool isActive;
+    public bool isCharging;
+    public bool isExhausted;
 
     public bool changeChargeStatus(bool curStatus) { return isButtDown = curStatus; }
-
     void Start()
     {
         playerScript = GameObject.FindGameObjectWithTag("Player").GetComponent<Movement>();
@@ -34,6 +33,12 @@ public class ButtonIndicator : MonoBehaviour
     {
         isActive = playerScript.DashChargeStatus();
         return isActive; 
+    }
+
+    public float dashTimeout()
+    {
+        dashDelay = playerScript.DashTimeout;
+        return dashDelay;
     }
 
     void Update()
@@ -58,13 +63,13 @@ public class ButtonIndicator : MonoBehaviour
                     isCharged = true;
 
                     //take away any charge indicators   
-                    playerScript.ResumePluto();
                     playerScript.cancelCharge();
 
                     //start power dash
                     playerScript.ChargedUp(true);
                     playerScript.Dash();
                     isExhausted = true;
+                    dashDelay = dashTimeout();
                     StartCoroutine(DashDelay());
 
                 }
@@ -95,10 +100,11 @@ public class ButtonIndicator : MonoBehaviour
                 //change variables and appearance for charging being false
                 playerScript.cancelCharge();
                 isCharging = false;
-                playerScript.ChargedUp(false);
+                
                 //Dash and do it once
                 playerScript.Dash();
                 doOnce = false;
+                dashDelay = dashTimeout();
                 StartCoroutine(DashDelay());
             }
         }

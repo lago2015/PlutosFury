@@ -19,25 +19,29 @@ public class Movement : MonoBehaviour
     bool Shielded;
 
     //Dash
-    private float DashTime;
     public float DashTimeout = 2f;
     public float DashCooldownTime = 0.5f;
+    public float PowerCooldownTime = 0.75f;
+    private float curCooldownTime;
     private bool isExhausted = false;
     private bool ObtainedWhileDash;
     private bool chargeOnce;
     public bool DashChargeActive;
-    private bool isCharged;
+    public bool isCharged;
     private bool ShouldDash;
+    private bool dashOnce;
     public float MoveSpeed;
     public float DashSpeed;
     public float SuperDashSpeed = 100;
     public float PowerDashTimeout = 5;
+    private float defaultDashTimeout;
     //Dash Charges
 
     private float DefaultDashSpeed;
     private int DashDamage;
     //
     public float slowDownDrag;
+    public float powerDashDrag;
     private float normalDrag;
 
     //Components
@@ -77,7 +81,7 @@ public class Movement : MonoBehaviour
     private float velocityMin = -80;
     private float DefaultSpeed;
     //buffs and debuffs
-    bool isSuperPluto;
+    public bool isPowerDashing;
     bool CanFreezePluto;
     
     //Num of asteroids/Health
@@ -93,7 +97,7 @@ public class Movement : MonoBehaviour
     private float curForce=7;
 
     bool ShieldStatus() { Shielded = shieldScript.PlutoShieldStatus(); return Shielded; }
-    public bool DashChargeStatus() { return DashChargeActive; }
+    public bool DashChargeStatus() { return isPowerDashing; }
     public bool ChargedUp(bool curCharge) { return isCharged = curCharge; }
     public float CurPowerDashTimeout() { return PowerDashTimeout; }
     public void isCharging() { Trail.startColor = o_Color; }
@@ -102,6 +106,8 @@ public class Movement : MonoBehaviour
     // Use this for initialization
     void Awake () 
 	{
+        defaultDashTimeout = DashTimeout;
+
         //assigning scale vector3 for health
         smallScale = new Vector3(smallSize, smallSize, smallSize);
         medScale = new Vector3(medSize, medSize, medSize);
@@ -252,27 +258,46 @@ public class Movement : MonoBehaviour
 
     public void Dash()
     {
+        
         //Check if exhausted dash
         if(!isExhausted)
         {
             //Check if power pick up as been obtained
             //also if power dash is charged
-            if (DashChargeActive&&isCharged)
+            if (DashChargeActive)
             {
-                DashDamage = 20;
-                MoveSpeed = SuperDashSpeed;
+                if(isCharged)
+                {
+                    DashDamage = 20;
+                    MoveSpeed = SuperDashSpeed;
+                    DashTimeout = PowerDashTimeout;
+                    curCooldownTime = PowerCooldownTime;
+                }
+                else
+                {
+                    curCooldownTime = DashCooldownTime;
+                    DashDamage = 1;
+                    DashTimeout = defaultDashTimeout;
+                    MoveSpeed = DashSpeed;
+                }
+                isPowerDashing = true;
+                ShouldDash = true;  //Update dash status
             }
             //normal dash
             else
             {
+                curCooldownTime = DashCooldownTime;
                 DashDamage = 1;
+                DashTimeout = defaultDashTimeout;
                 MoveSpeed = DashSpeed;
+                ShouldDash = true;  //Update dash status
+
             }
             //audio
             if (audioScript)
             {
                 //audio for power and normal dash
-                if(DashChargeActive)
+                if(isPowerDashing)
                 {
                     audioScript.PlutoPowerDash(transform.position);
                 }
@@ -281,16 +306,18 @@ public class Movement : MonoBehaviour
                     audioScript.PlutoDash1(transform.position);
                 }
             }
-            
-            ShouldDash = true;  //Update dash status
-            StartCoroutine(DashTransition());   //Start dash
+            if(!dashOnce&&ShouldDash)
+            {
+                dashOnce = true;    //ensure dash gets called once per dash
+                StartCoroutine(DashTransition());   //Start dash
+            }
         }
     }
 
     IEnumerator DashTransition()
     {
         //Change Trail color according to Power Dash Status
-        if (DashChargeActive && Trail && isCharged)
+        if ( Trail && isCharged)
         {
             Trail.startColor = r_Color;
         }
@@ -301,27 +328,36 @@ public class Movement : MonoBehaviour
 
         yield return new WaitForSeconds(DashTimeout);
 
+
+        
         //Check if a dash pick up was obtained while dashing
-        if(!ObtainedWhileDash&&isCharged&&DashChargeActive)
+        if (isCharged)
         {
             DashChargeActive = false;
             isCharged = false;
-            
+            slowDownDrag = powerDashDrag;
+            isPowerDashing = false;
+            dashScript.DashModelTransition(false);
+        }
+        else
+        {
+            slowDownDrag = normalDrag;
         }
 
         //Reset Value
         ObtainedWhileDash = false;
         ShouldDash = false;
-        DashTime = 0;
+        ObtainedWhileDash = false;
 
+
+        MoveSpeed = DefaultSpeed;
         //Change trail back
         Trail.startColor = b_Color;
-        
 
         //Start Slowdown/Cooldown
         StartCoroutine(DashCooldown());
         StartCoroutine(SlowDown());
-        MoveSpeed = DefaultSpeed;
+        dashOnce = false;
     }
 
     //Cool down for exhaustion from dash
@@ -329,7 +365,7 @@ public class Movement : MonoBehaviour
     {
        
         isExhausted = true;
-        yield return new WaitForSeconds(DashCooldownTime);
+        yield return new WaitForSeconds(curCooldownTime);
         isExhausted = false;
     }
     
@@ -350,7 +386,7 @@ public class Movement : MonoBehaviour
         yield return new WaitForSeconds(0.3f);
         hitEffect.SetActive(false);
     }
-
+    
     public bool DashStatus()
     {
         return ShouldDash;
@@ -399,8 +435,13 @@ public class Movement : MonoBehaviour
         {
             if (ShouldDash)
             {
-                c.gameObject.GetComponent<BigAsteroid>().AsteroidHit(DashDamage);
+                c.gameObject.GetComponent<BigAsteroid>().AsteroidHit(1);
                 StartCoroutine(PlutoHit(c.contacts[0].point));
+                //ignore collision?
+                //Collider playerCollider = GetComponent<SphereCollider>();
+                //Collider asteroidCollider = c.gameObject.GetComponent<SphereCollider>();
+                //Physics.IgnoreCollision(playerCollider, asteroidCollider);
+
                 bool Smashed = c.gameObject.GetComponent<BigAsteroid>().RockStatus();
                 if (Smashed)
                 {
@@ -669,7 +710,7 @@ public class Movement : MonoBehaviour
     //Getter for SuperBool
     public bool SuperBool()
     {
-        return isSuperPluto;
+        return isPowerDashing;
     }
     
 
