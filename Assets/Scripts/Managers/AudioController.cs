@@ -84,9 +84,23 @@ public class AudioController : MonoBehaviour {
     public AudioSource moonAcquiredSource;
     public float MoonAcquiredDelay = 0.5f;
 
+    //*************Spike****************
+
+    [Header("SpikeHitPluto")]
+    public AudioSource SpikeHitPlutoSource;
+    public float SpikeHitPlutoDelay = 0.5f;
+
+    //*********Asteroids****************
+
     [Header("AsteroidExplosion")]
     public AudioSource asteroidExplosion;
     public float asteroidExplosionDelay = 0.5f;
+
+    [Header("AsteroidBounce")]
+    public AudioSource asteroidBounce;
+    public float asteroidBounceDelay = 0.5f;
+
+    //********UI**************
 
     [Header("GameOver")]
     public AudioSource GameOverSource;
@@ -364,6 +378,42 @@ public class AudioController : MonoBehaviour {
                 asteroidExplosion.minDistance = 20f;
                 asteroidExplosion.loop = false;
                 asteroidExplosion.Play();
+
+                timer_02 = 0f;
+            }
+        }
+    }
+
+    public void AsteroidBounce(Vector3 pos)
+    {
+        if (timer_02 >= asteroidBounceDelay)
+        {
+
+            if (asteroidBounce != null)
+            {
+                asteroidBounce.pitch = Random.Range(0.8f, 1f);
+                asteroidBounce.volume = Random.Range(0.8f, 1f);
+                asteroidBounce.minDistance = 20f;
+                asteroidBounce.loop = false;
+                asteroidBounce.Play();
+
+                timer_02 = 0f;
+            }
+        }
+    }
+
+    public void SpikeHitPluto(Vector3 pos)
+    {
+        if (timer_02 >= SpikeHitPlutoDelay)
+        {
+
+            if (SpikeHitPlutoSource != null)
+            {
+                SpikeHitPlutoSource.pitch = Random.Range(0.8f, 1f);
+                SpikeHitPlutoSource.volume = Random.Range(0.8f, 1f);
+                SpikeHitPlutoSource.minDistance = 20f;
+                SpikeHitPlutoSource.loop = false;
+                SpikeHitPlutoSource.Play();
 
                 timer_02 = 0f;
             }

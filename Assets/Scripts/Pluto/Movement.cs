@@ -8,7 +8,7 @@ public class Movement : MonoBehaviour
 {
 
     //health properties
-    private int curHealth;
+    public int curHealth;
     private int maxHealth=2;
     public float smallSize=1f;
     public float medSize=1.5f;
@@ -17,7 +17,8 @@ public class Movement : MonoBehaviour
     private Vector3 medScale;
     //Check for shield
     bool Shielded;
-
+    public bool isDamaged;
+    private float invincbleTimer=0.25f;
     //Dash
     public float DashTimeout = 2f;
     public float DashCooldownTime = 0.5f;
@@ -36,7 +37,7 @@ public class Movement : MonoBehaviour
     public float PowerDashTimeout = 5;
     private float defaultDashTimeout;
     //Dash Charges
-
+    public bool tightControls;
     private float DefaultDashSpeed;
     private int DashDamage;
     //
@@ -102,10 +103,13 @@ public class Movement : MonoBehaviour
     public float CurPowerDashTimeout() { return PowerDashTimeout; }
     public void isCharging() { Trail.startColor = o_Color; }
     public void cancelCharge() { Trail.startColor = b_Color; }
-    
+    public bool DamageStatus() { return isDamaged; }
     // Use this for initialization
     void Awake () 
 	{
+
+        
+
         defaultDashTimeout = DashTimeout;
 
         //assigning scale vector3 for health
@@ -147,16 +151,30 @@ public class Movement : MonoBehaviour
         dashScript = GetComponent<Dash>();
         //Audio Controller
         audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
-        //Ensure speed is saved for default settings
-        DefaultSpeed = MoveSpeed;
-        DefaultDashSpeed = DashSpeed;
+        
         //For physic things
         myBody = GetComponent<Rigidbody> ();
         if(myBody)
         {
+            if (tightControls)
+            {
+                myBody.drag = 2.5f;
+                
+                //myBody.velocity = myBody.velocity/1.5f;
+                //StartCoroutine(SlowDown());
+            }
+            else
+            {
+                myBody.drag = 5;
+                MoveSpeed = 130;
+                DashSpeed = 350;
+                SuperDashSpeed = 450;
+            }
             normalDrag = myBody.drag;
         }
-
+        //Ensure speed is saved for default settings
+        DefaultSpeed = MoveSpeed;
+        DefaultDashSpeed = DashSpeed;
         //For camera Shakes
         CamShake = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraShake>();
         camera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
@@ -186,7 +204,7 @@ public class Movement : MonoBehaviour
         }
 
 
- 
+
     }
 
     void FixedUpdate()
@@ -244,6 +262,7 @@ public class Movement : MonoBehaviour
                 if (move == Vector3.zero)
                 {
                     trail.SetActive(false);
+                   
                 }
                 else
                 {
@@ -272,6 +291,7 @@ public class Movement : MonoBehaviour
                     MoveSpeed = SuperDashSpeed;
                     DashTimeout = PowerDashTimeout;
                     curCooldownTime = PowerCooldownTime;
+
                 }
                 else
                 {
@@ -291,6 +311,7 @@ public class Movement : MonoBehaviour
                 DashTimeout = defaultDashTimeout;
                 MoveSpeed = DashSpeed;
                 ShouldDash = true;  //Update dash status
+
 
             }
             //audio
@@ -348,7 +369,7 @@ public class Movement : MonoBehaviour
         ObtainedWhileDash = false;
         ShouldDash = false;
         ObtainedWhileDash = false;
-
+        myBody.drag = normalDrag;
 
         MoveSpeed = DefaultSpeed;
         //Change trail back
@@ -363,7 +384,8 @@ public class Movement : MonoBehaviour
     //Cool down for exhaustion from dash
     IEnumerator DashCooldown()
     {
-       
+
+        //ensure no drifting after reaching high speeds.
         isExhausted = true;
         yield return new WaitForSeconds(curCooldownTime);
         isExhausted = false;
@@ -414,34 +436,40 @@ public class Movement : MonoBehaviour
         spawnScript.SpawnAsteroid();
     }
 
+    void OnTriggerStay(Collider col)
+    {
+        string curTag = col.gameObject.tag;
+        if (curTag == "Asteroid")
+        {
+
+            if (!isDead)
+            {
+                //int curLevel = ExperienceMan.CurrentLevel() + 1;
+                score += 100;
+                ////ignore collision?
+                //Collider playerCollider = GetComponent<SphereCollider>();
+                //Collider asteroidCollider = col.gameObject.GetComponent<SphereCollider>();
+                //Physics.IgnoreCollision(playerCollider, asteroidCollider);
+
+                ScoreManager.IncreaseScore(score);
+            }
+            ReturnAsteroid(col.gameObject);
+        }
+
+    }
+
     //Basic collision for BASIC PLUTO
     void OnCollisionEnter(Collision c)
 	{
         string curTag = c.gameObject.tag;
-		if (curTag == "Asteroid") 
-		{
-            
-            if(!isDead)
-            {
-                //int curLevel = ExperienceMan.CurrentLevel() + 1;
-                score += 100;
-                ScoreManager.IncreaseScore(score);
-            }
-            ReturnAsteroid(c.gameObject);
-        }
 
-
-        else if (curTag == "BigAsteroid")
+        if (curTag == "BigAsteroid")
         {
             if (ShouldDash)
             {
                 c.gameObject.GetComponent<BigAsteroid>().AsteroidHit(1);
                 StartCoroutine(PlutoHit(c.contacts[0].point));
-                //ignore collision?
-                //Collider playerCollider = GetComponent<SphereCollider>();
-                //Collider asteroidCollider = c.gameObject.GetComponent<SphereCollider>();
-                //Physics.IgnoreCollision(playerCollider, asteroidCollider);
-
+                
                 bool Smashed = c.gameObject.GetComponent<BigAsteroid>().RockStatus();
                 if (Smashed)
                 {
@@ -462,7 +490,10 @@ public class Movement : MonoBehaviour
             else
             {
                 myBody.AddForce(c.contacts[0].normal * wallBump, ForceMode.VelocityChange);
-
+                if(audioScript)
+                {
+                    audioScript.AsteroidBounce(transform.position);
+                }
             }
 
         }
@@ -600,58 +631,76 @@ public class Movement : MonoBehaviour
     //Resets plutos health to 0
     public void DamagePluto()
     {
-        if (!ShieldStatus())
+        //this is to prevent multiple damages during a frame
+        if (!isDamaged)
         {
-            curHealth--;
-            //run game over procedure
-            if (curHealth<0)
+            //ensure damaged once and wait for a few frames to enable damage.
+            isDamaged = true;
+            StartCoroutine(DamageTransition());
+
+            //check if player is shielded
+            if (!ShieldStatus())
             {
-                DisableMovement();
-                modelScript.SwapMaterial(TextureSwap.PlutoState.Lose);
-                gameManager.StartGameover();
-            }
-            //small size
-            else if (curHealth==0)
-            {
-                transform.localScale = smallScale;
-                if (maxSize)
+
+                //decrement health
+                curHealth--;
+
+                //run game over procedure
+                if (curHealth < 0)
                 {
-                    maxSize.SetActive(false);
+                    DisableMovement();
+                    modelScript.SwapMaterial(TextureSwap.PlutoState.Lose);
+                    gameManager.StartGameover();
+                }
+                //small size
+                else if (curHealth == 0)
+                {
+                    transform.localScale = smallScale;
+                    if (maxSize)
+                    {
+                        maxSize.SetActive(false);
+                    }
+                }
+                //med size
+                else if (curHealth == 1)
+                {
+                    transform.localScale = medScale;
+                    if (maxSize)
+                    {
+                        maxSize.SetActive(false);
+                    }
+                }
+                //audio cue for damage
+                if (audioScript)
+                {
+                    audioScript.PlutoHit(transform.position);
+                }
+                //feedback on damage
+                Handheld.Vibrate();
+                ScoreManager.GotDamaged();
+                CamShake.EnableCameraShake();
+
+
+            }
+
+            else
+            {
+                if (shieldScript)
+                {
+                    shieldScript.ShieldOff();
+                }
+                if (audioScript)
+                {
+                    audioScript.ShieldDing(transform.position);
                 }
             }
-            //med size
-            else if(curHealth==1)
-            {
-                transform.localScale = medScale;
-                if(maxSize)
-                {
-                    maxSize.SetActive(false);
-                }
-            }
-            if(audioScript)
-            {
-                audioScript.PlutoHit(transform.position);
-            }
-            //ExperienceMan.DamageExperience();
-            Handheld.Vibrate();
-                
-            ScoreManager.GotDamaged();
-            CamShake.EnableCameraShake();
-        }
-        else
-        {
-            if(shieldScript)
-            {
-                shieldScript.ShieldOff();
-            }
-            if(audioScript)
-            {
-                audioScript.ShieldDing(transform.position);
-            }
-        }
-            
+        }    
     }
-    
+    IEnumerator DamageTransition()
+    {
+        yield return new WaitForSeconds(invincbleTimer);
+        isDamaged = false;
+    }
 
     //Powers up player
     public void PowerUpPluto(float IncrementRate)

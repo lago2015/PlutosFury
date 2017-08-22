@@ -63,6 +63,7 @@ public class GameManager : MonoBehaviour
         
         yield return new WaitForSeconds(GameOverDelay);
         //modelSwitch.SwapMaterial(TextureSwap.PlutoState.Lose);
+        Time.timeScale = 0;
         GameEndedUI.SetActive(true);
         gameOverUI.SetActive(true);
         ScoreManager.SaveScore();

@@ -122,9 +122,13 @@ public class DamageOrPowerUp : MonoBehaviour {
                         bool RogueDashing = dashScript.isDashing();
                         if (RogueDashing)
                         {
-                            PlayerScript.DamagePluto();
-                            Damaged = true;
-                            StartCoroutine(DamageReset());
+                            bool playerDamaged = col.gameObject.GetComponent<Movement>().DamageStatus();
+                            if(!playerDamaged)
+                            {
+                                PlayerScript.DamagePluto();
+                                Damaged = true;
+                                StartCoroutine(DamageReset());
+                            }
                         }
                     }
                     else
@@ -132,9 +136,13 @@ public class DamageOrPowerUp : MonoBehaviour {
                         bool plutoDashing = PlayerScript.DashStatus();
                         if(!plutoDashing)
                         {
-                            PlayerScript.DamagePluto();
-                            Damaged = true;
-                            StartCoroutine(DamageReset());
+                            bool playerDamaged = col.gameObject.GetComponent<Movement>().DamageStatus();
+                            if (!playerDamaged)
+                            {
+                                PlayerScript.DamagePluto();
+                                Damaged = true;
+                                StartCoroutine(DamageReset());
+                            }
                         }
                     }
                 }

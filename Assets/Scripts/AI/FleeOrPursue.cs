@@ -10,7 +10,6 @@ public class FleeOrPursue : MonoBehaviour {
     public float decreaseFactor;
     private Vector3 startPosition;
     private Vector3 shakeVector;
-    
 
 
     //Dash
@@ -199,7 +198,17 @@ public class FleeOrPursue : MonoBehaviour {
         //}
         //Time.timeScale = 1.0f;
         yield return new WaitForSeconds(chargeTime);
-        StartCoroutine(DashTransition());   //Start dash
+        if(PlayerNear)
+        {
+            StartCoroutine(DashTransition());   //Start dash
+        }
+        else
+        {
+            //Reset Value
+            ShouldDash = false;
+            isCharging = false;
+            MoveSpeed = DefaultSpeed;
+        }
     }
 
     IEnumerator DashTransition()
@@ -218,11 +227,8 @@ public class FleeOrPursue : MonoBehaviour {
             }
         }
         yield return new WaitForSeconds(DashTimeout);
+
         
-        //Reset Value
-        ShouldDash = false;
-        
-        MoveSpeed = DefaultSpeed;
 
         //Start Slowdown/Cooldown
         StartCoroutine(DashCooldown());

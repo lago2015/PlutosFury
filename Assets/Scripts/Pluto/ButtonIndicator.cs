@@ -43,6 +43,15 @@ public class ButtonIndicator : MonoBehaviour
 
     void Update()
     {
+        if(Input.GetKeyDown(KeyCode.S))
+        {
+            isButtDown = true;
+        }
+        else if(Input.GetKeyUp(KeyCode.S))
+        {
+            isButtDown = false;
+        }
+
         //Check if button or key is down
         if(isButtDown)
         {

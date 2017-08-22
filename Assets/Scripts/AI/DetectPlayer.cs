@@ -5,7 +5,7 @@ public class DetectPlayer : MonoBehaviour {
 
     public GameObject ScriptModel;
     private ChasePlayer ChaseScript;
-    private FleeOrPursue dashScript;
+    private FleeOrPursue pursueScript;
 
     void Awake()
     {
@@ -15,7 +15,7 @@ public class DetectPlayer : MonoBehaviour {
             ChaseScript = ScriptModel.GetComponent<ChasePlayer>();
             if(!ChaseScript)
             {
-                dashScript = ScriptModel.GetComponent<FleeOrPursue>();
+                pursueScript = ScriptModel.GetComponent<FleeOrPursue>();
             }
         }
     }
@@ -30,9 +30,9 @@ public class DetectPlayer : MonoBehaviour {
             {
                 ChaseScript.PlayerIsNear();
             }
-            if (dashScript)
+            if (pursueScript)
             {
-                dashScript.PlayerIsNear();
+                pursueScript.PlayerIsNear();
             }
             
         }
@@ -49,9 +49,9 @@ public class DetectPlayer : MonoBehaviour {
             {
                 ChaseScript.PlayerNotNear();
             }
-            if(dashScript)
+            if(pursueScript)
             {
-                dashScript.PlayerNotNear();
+                pursueScript.PlayerNotNear();
             }
         }
 
