@@ -4,9 +4,11 @@ using System.IO;
 using System.Collections.Generic;
 using System.Runtime.Serialization.Formatters.Binary;
 
+[System.Serializable]
 public class SaveLoad : MonoBehaviour {
 
-    public Movement plutoClassSave;
+	public OptionsMenu OptionMenuClassSave;
+	OptionsMenu OptionsMenuCopy;
 
 	// Use this for initialization
 	void Start () {
@@ -19,14 +21,15 @@ public class SaveLoad : MonoBehaviour {
 
     public void LoadGame()
     {
-        Movement newSimpleClass = Serializer.Load<Movement>("save.txt");
-        Debug.Log(newSimpleClass);
+		OptionsMenu newSimpleClass = Serializer.Load<OptionsMenu>("save.txt");
+		Debug.Log(newSimpleClass);
     }
 
     public void SaveGame()
     {
-        Serializer.Save<Movement>("save.txt", plutoClassSave);
-        Debug.Log(plutoClassSave);
+		OptionsMenuCopy = OptionMenuClassSave;
+		Serializer.Save<OptionsMenu>("save.txt", OptionsMenuCopy);
+		Debug.Log(OptionsMenuCopy);
         Debug.Log("Saved");
     }
 }
