@@ -21,16 +21,19 @@ public class LookAtObject : MonoBehaviour {
         }
     }
 
-    // Update is called once per frame
-    void Update ()
+    
+    void RotateToObject()
     {
-        if(ObjectNear)
-        {
-            //calculate distrance for rotation
-            Quaternion rotation = Quaternion.LookRotation(Player.transform.position-transform.position);
-            //apply rotation
-            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * RotationSpeed);   
-        }
+
+        float rotY = transform.rotation.y;
+        //float rotZ = transform.rotation.z;
+        //calculate distrance for rotation
+        Quaternion rotation = Quaternion.LookRotation(Player.transform.position - transform.position);
+        rotation.y = rotY;
+        //rotation.z = rotZ;
+        //apply rotation
+        transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * RotationSpeed);
+        
         //ensure turret stays with base of turret
         if (AmITurret)
         {
@@ -46,19 +49,9 @@ public class LookAtObject : MonoBehaviour {
             if(AmITurret)
             {
                 Player = col.gameObject;
-                ObjectNear = true;
+                RotateToObject();
             }
         }
     }
-    //player out of range
-    void OnTriggerExit(Collider col)
-    {
-        if(col.gameObject== Player)
-        {
-            if(AmITurret)
-            {
-                ObjectNear = false;
-            }
-        }
-    }
+    
 }
