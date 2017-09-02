@@ -204,22 +204,19 @@ public class AudioController : MonoBehaviour {
 
     public void AsteroidAbsorbed(Vector3 pos)
     {
-        if (timer_02 >= absorbDelay)
+        if (asteroidAbsorbedSrc != null)
         {
-            if (asteroidAbsorbedSrc != null)
-            {
-                if(asteroidAbsorbedSrc.isPlaying)
-                {
-                    asteroidAbsorbedSrc.Stop();
-                }
+            //if (asteroidAbsorbedSrc.isPlaying)
+            //{
+            //    asteroidAbsorbedSrc.Stop();
+            //}
 
-                asteroidAbsorbedSrc.volume = 0.5f;
-                asteroidAbsorbedSrc.minDistance = 20f;
-                asteroidAbsorbedSrc.loop = false;
-                asteroidAbsorbedSrc.Play();
+            asteroidAbsorbedSrc.volume = 0.5f;
+            asteroidAbsorbedSrc.minDistance = 20f;
+            asteroidAbsorbedSrc.loop = false;
+            asteroidAbsorbedSrc.Play();
 
-                timer_02 = 0f;
-            }
+            timer_02 = 0f;
         }
     }
 

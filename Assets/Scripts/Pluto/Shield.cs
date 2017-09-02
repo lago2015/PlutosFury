@@ -12,7 +12,6 @@ public class Shield : MonoBehaviour {
     private SphereCollider MyCollider;
     public bool PlutoShieldStatus() { return isShielded; }
 
-
     void Awake()
     {
         if(ShieldModel)

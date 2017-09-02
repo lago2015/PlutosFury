@@ -5,9 +5,10 @@ public class WallGenManager : MonoBehaviour {
 
     public GameObject Models;
     public GameObject ExplosionArt;
-
+    private AudioController audioScript;
     void Awake()
     {
+        audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
         if(Models)
         {
             Models.SetActive(true);
@@ -27,6 +28,10 @@ public class WallGenManager : MonoBehaviour {
         if (ExplosionArt)
         {
             ExplosionArt.SetActive(true);
+        }
+        if(audioScript)
+        {
+            audioScript.DestructionSmall(transform.position);
         }
     }
 }

@@ -69,8 +69,9 @@ public class Movement : MonoBehaviour
     private Touch curTouch;
     private ButtonIndicator dashButt;
     private AudioController audioScript;
+    private SphereCollider asteroidCollider;
+    private float defaultRadius;
     //Basic Movement
-
     private Vector3 newVelocity;
     public GameObject trail;
     public float wallBump = 20.0f;
@@ -107,8 +108,15 @@ public class Movement : MonoBehaviour
     // Use this for initialization
     void Awake () 
 	{
+        foreach (SphereCollider col in GetComponents<SphereCollider>())
+        {
+            if (col.isTrigger)
+            {
+                asteroidCollider = col;
+                defaultRadius = asteroidCollider.radius;
+            }
+        }
 
-        
 
         defaultDashTimeout = DashTimeout;
 
@@ -156,20 +164,8 @@ public class Movement : MonoBehaviour
         myBody = GetComponent<Rigidbody> ();
         if(myBody)
         {
-            if (tightControls)
-            {
-                myBody.drag = 2.5f;
-                
-                //myBody.velocity = myBody.velocity/1.5f;
-                //StartCoroutine(SlowDown());
-            }
-            else
-            {
-                myBody.drag = 5;
-                MoveSpeed = 130;
-                DashSpeed = 350;
-                SuperDashSpeed = 450;
-            }
+            myBody.drag = 5;
+
             normalDrag = myBody.drag;
         }
         //Ensure speed is saved for default settings
@@ -508,21 +504,6 @@ public class Movement : MonoBehaviour
 
         }
 
-        else if(curTag == "Planet")
-        {
-
-            if (ShouldDash == false)
-            {
-                myBody.AddForce(c.contacts[0].normal * wallBump * 2, ForceMode.VelocityChange);
-            }
-            else
-            {
-                if(!DashChargeActive)
-                {
-                    myBody.AddForce(c.contacts[0].normal * wallBump * 4, ForceMode.VelocityChange);
-                }
-            }
-        }
 
         else if (curTag == "Wall") 
 		{
@@ -592,6 +573,10 @@ public class Movement : MonoBehaviour
         if(modelScript)
         {
             modelScript.SwapMaterial(TextureSwap.PlutoState.Pickup);
+        }
+        if(asteroidCollider)
+        {
+            asteroidCollider.radius = defaultRadius + 2;
         }
     }
     
@@ -690,6 +675,10 @@ public class Movement : MonoBehaviour
 
             else
             {
+                if(asteroidCollider)
+                {
+                    asteroidCollider.radius = defaultRadius;
+                }
                 if (shieldScript)
                 {
                     shieldScript.ShieldOff();
