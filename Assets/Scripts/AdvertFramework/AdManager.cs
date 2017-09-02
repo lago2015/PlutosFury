@@ -41,7 +41,7 @@ public class AdManager : MonoBehaviour
 		ShowOptions options = new ShowOptions ();
 		options.resultCallback = AdCallBackHandler;
 
-		if (Advertisement.isReady (zone))
+		if (Advertisement.IsReady (zone))
 			Advertisement.Show (zone, options);
 	}
 
