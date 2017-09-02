@@ -54,5 +54,9 @@ public class Inflation : MonoBehaviour {
         baseModel.SetActive(true);
         currInflated = false;
         myCollider.radius = NormalSize;
+        if(audioCon)
+        {
+            audioCon.Deflate(transform.position);
+        }
     }
 }

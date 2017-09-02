@@ -441,9 +441,13 @@ public class Movement : MonoBehaviour
         string curTag = col.gameObject.tag;
         if (curTag == "Asteroid")
         {
-
+            
             if (!isDead)
             {
+                if(audioScript)
+                {
+                    audioScript.AsteroidAbsorbed(transform.position);
+                }
                 //int curLevel = ExperienceMan.CurrentLevel() + 1;
                 score += 100;
                 ////ignore collision?
@@ -650,6 +654,7 @@ public class Movement : MonoBehaviour
                 {
                     DisableMovement();
                     modelScript.SwapMaterial(TextureSwap.PlutoState.Lose);
+                    audioScript.PlutoDeath(transform.position);
                     gameManager.StartGameover();
                 }
                 //small size

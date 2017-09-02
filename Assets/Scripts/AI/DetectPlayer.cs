@@ -6,10 +6,12 @@ public class DetectPlayer : MonoBehaviour {
     public GameObject ScriptModel;
     private ChasePlayer ChaseScript;
     private FleeOrPursue pursueScript;
-
+    private bool playOnce;
+    private AudioController audioScript;
     void Awake()
     {
-        
+        audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
+
         if (ScriptModel)
         {
             ChaseScript = ScriptModel.GetComponent<ChasePlayer>();
@@ -32,6 +34,11 @@ public class DetectPlayer : MonoBehaviour {
             }
             if (pursueScript)
             {
+                if(audioScript && !playOnce)
+                {
+                    audioScript.RogueSpotted(transform.position);
+                    playOnce = true;
+                }
                 pursueScript.PlayerIsNear();
             }
             

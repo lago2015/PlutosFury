@@ -14,8 +14,10 @@ public class AIHealth : MonoBehaviour {
     private Rigidbody myBody;
     public bool Rogue=false;
     private FleeOrPursue RogueScript;
+    private AudioController audioScript;
     void Awake()
     {
+        audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
         if(Rogue)
         {
             if(pursuitModel)
@@ -45,6 +47,7 @@ public class AIHealth : MonoBehaviour {
         EnemyHealth--;
         if(EnemyHealth<=0)
         {
+            
             if (Explosion && Model)
             {
                 if(RogueScript)
@@ -92,6 +95,10 @@ public class AIHealth : MonoBehaviour {
                         EnemyHealth--;
                         if (EnemyHealth <= 0)
                         {
+                            if (audioScript)
+                            {
+                                audioScript.RogueDeath(transform.position);
+                            }
                             if (Explosion && Model)
                             {
                                 Explosion.SetActive(true);

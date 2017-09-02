@@ -26,7 +26,6 @@ public class Door : MonoBehaviour {
 
     public void OpenDoor(Vector3 curPosition)
     {
-        audioScript.WormholeOpen(curPosition);
 
         if (keyObtained==numKeyRequired)
         {
@@ -43,6 +42,10 @@ public class Door : MonoBehaviour {
                 //do something winning here
                 fadeDir = 1;
                 sectionScript.isChanging(true);
+                if(audioScript)
+                {
+                    audioScript.WormholeEntered(transform.position);
+                }
                 sectionScript.ChangeSection(gameObject);
             }
             else

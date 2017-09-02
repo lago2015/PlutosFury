@@ -5,6 +5,7 @@ using UnityEngine.EventSystems; //required when using Event Data
 public class ButtonIndicator : MonoBehaviour
     {
 
+    private AudioController audioScript;
     private Movement playerScript;
     public float PowerDashTimeout;
     public float dashDelay;
@@ -16,10 +17,11 @@ public class ButtonIndicator : MonoBehaviour
     public bool isActive;
     public bool isCharging;
     public bool isExhausted;
-
+    private bool playOnce;
     public bool changeChargeStatus(bool curStatus) { return isButtDown = curStatus; }
     void Start()
     {
+        audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
         playerScript = GameObject.FindGameObjectWithTag("Player").GetComponent<Movement>();
         if(playerScript)
         {
@@ -55,6 +57,7 @@ public class ButtonIndicator : MonoBehaviour
         //Check if button or key is down
         if(isButtDown)
         {
+
             //ensure dash is activated once then a wait transition
             //to reset the condition
             doOnce = true;
@@ -87,6 +90,18 @@ public class ButtonIndicator : MonoBehaviour
                 {
                     if (!isExhausted)
                     {
+                        if(audioScript)
+                        {
+                            if (!playOnce)
+                            {
+                                audioScript.PlutoPowerChargeStart(playerScript.transform.position);
+                                playOnce = true;
+                            }
+                            else
+                            {
+                                audioScript.PlutoPowerCharging(playerScript.transform.position);
+                            }
+                        }
                         isCharging = true;
                         isExhausted = true;
                         //while charging player is halt
@@ -94,6 +109,7 @@ public class ButtonIndicator : MonoBehaviour
                         playerScript.isCharging();
                     }
                 }
+                
             } 
        }
         //if player doesnt have pick up then do normal dash
@@ -101,7 +117,11 @@ public class ButtonIndicator : MonoBehaviour
         {
             if (doOnce)
             {
-
+                if(audioScript)
+                {
+                    audioScript.PlutoPowerChargeCancel();
+                    playOnce = false;
+                }
                 //reset dash timer
                 curTime = 0;
                 //resume player movement
@@ -109,7 +129,7 @@ public class ButtonIndicator : MonoBehaviour
                 //change variables and appearance for charging being false
                 playerScript.cancelCharge();
                 isCharging = false;
-                
+                playOnce = false;
                 //Dash and do it once
                 playerScript.Dash();
                 doOnce = false;
