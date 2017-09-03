@@ -91,7 +91,7 @@ public class Movement : MonoBehaviour
     private float HealthCap;
     int score;
     //Death
-    bool isDead=false;
+    public bool isDead=false;
     bool DoOnce;
     
     //Pick up bar and Texture
@@ -99,7 +99,7 @@ public class Movement : MonoBehaviour
     private float curForce=7;
 
     bool ShieldStatus() { Shielded = shieldScript.PlutoShieldStatus(); return Shielded; }
-    public bool DashChargeStatus() { return isPowerDashing; }
+    public bool DashChargeStatus() { return DashChargeActive; }
     public bool ChargedUp(bool curCharge) { return isCharged = curCharge; }
     public float CurPowerDashTimeout() { return PowerDashTimeout; }
     public void isCharging() { Trail.startColor = o_Color; }
@@ -117,7 +117,7 @@ public class Movement : MonoBehaviour
             }
         }
 
-
+        isDead = false;
         defaultDashTimeout = DashTimeout;
 
         //assigning scale vector3 for health
@@ -164,8 +164,6 @@ public class Movement : MonoBehaviour
         myBody = GetComponent<Rigidbody> ();
         if(myBody)
         {
-            myBody.drag = 5;
-
             normalDrag = myBody.drag;
         }
         //Ensure speed is saved for default settings
@@ -310,21 +308,21 @@ public class Movement : MonoBehaviour
 
 
             }
-            //audio
-            if (audioScript)
-            {
-                //audio for power and normal dash
-                if(isPowerDashing)
-                {
-                    audioScript.PlutoPowerDash(transform.position);
-                }
-                else
-                {
-                    audioScript.PlutoDash1(transform.position);
-                }
-            }
             if(!dashOnce&&ShouldDash)
             {
+                //audio
+                if (audioScript)
+                {
+                    //audio for power and normal dash
+                    if (isPowerDashing)
+                    {
+                        audioScript.PlutoPowerDash(transform.position);
+                    }
+                    else
+                    {
+                        audioScript.PlutoDash1(transform.position);
+                    }
+                }
                 dashOnce = true;    //ensure dash gets called once per dash
                 StartCoroutine(DashTransition());   //Start dash
             }
@@ -576,7 +574,7 @@ public class Movement : MonoBehaviour
         }
         if(asteroidCollider)
         {
-            asteroidCollider.radius = defaultRadius + 2;
+            asteroidCollider.radius = 3.85f;
         }
     }
     
@@ -638,6 +636,7 @@ public class Movement : MonoBehaviour
                 if (curHealth < 0)
                 {
                     DisableMovement();
+                    isDead = true;
                     modelScript.SwapMaterial(TextureSwap.PlutoState.Lose);
                     audioScript.PlutoDeath(transform.position);
                     gameManager.StartGameover();

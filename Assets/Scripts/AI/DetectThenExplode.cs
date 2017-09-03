@@ -9,6 +9,8 @@ public class DetectThenExplode : MonoBehaviour {
     private BoxCollider collider;
     private SphereCollider TriggerCollider;
     private HomingProjectile moveScript;
+    private float startRadius;
+    private float lostSightRadius = 9.5f;
     private bool doOnce;
     public bool isRocket;
     public bool isLandmine;
@@ -30,6 +32,7 @@ public class DetectThenExplode : MonoBehaviour {
             collider = GetComponent<BoxCollider>();
             TriggerCollider.enabled = true;
             collider.isTrigger = false;
+            startRadius = TriggerCollider.radius;
         }
         else if(isLandmine)
         {
@@ -74,6 +77,15 @@ public class DetectThenExplode : MonoBehaviour {
         }
     }
 
+    void OnTriggerExit(Collider col)
+    {
+        if(isHomingLandmine)
+        {
+            moveScript.ShouldMove = false;
+            TriggerCollider.radius = startRadius;
+        }
+    }
+
     void OnTriggerEnter(Collider col)
     {
         string CurTag = col.gameObject.tag;
@@ -82,6 +94,7 @@ public class DetectThenExplode : MonoBehaviour {
             if(isHomingLandmine)
             {
                 moveScript.ShouldMove = true;
+                TriggerCollider.radius = lostSightRadius;
             }
             else if(isLandmine)
             {

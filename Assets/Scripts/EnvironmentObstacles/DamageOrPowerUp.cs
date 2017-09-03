@@ -123,18 +123,25 @@ public class DamageOrPowerUp : MonoBehaviour {
                         if (RogueDashing)
                         {
                             bool playerDamaged = col.gameObject.GetComponent<Movement>().DamageStatus();
-                            if(!playerDamaged)
+                            bool playerDead = col.gameObject.GetComponent<Movement>().isDead;
+                            if(!playerDamaged && !playerDead)
                             {
                                 PlayerScript.DamagePluto();
                                 Damaged = true;
                                 StartCoroutine(DamageReset());
+                            }
+                            else if(playerDead)
+                            {
+
                             }
                         }
                     }
                     else
                     {
                         bool plutoDashing = PlayerScript.DashStatus();
-                        if(!plutoDashing)
+                        bool playerDead = col.gameObject.GetComponent<Movement>().isDead;
+
+                        if (!plutoDashing && !playerDead)
                         {
                             bool playerDamaged = col.gameObject.GetComponent<Movement>().DamageStatus();
                             if (!playerDamaged)

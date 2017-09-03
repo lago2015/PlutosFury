@@ -288,9 +288,10 @@ public class AudioController : MonoBehaviour {
     }
     public void PlutoPowerChargeCancel()
     {
-        if(powerDashChargingSrc!=null)
+        if(powerDashChargingSrc!=null && powerChargeStartSrc != null)
         {
             powerDashChargingSrc.Stop();
+            powerChargeStartSrc.Stop();
         }
     }
     public void PlutoPowerDashReady(Vector3 pos)

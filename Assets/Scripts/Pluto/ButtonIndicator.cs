@@ -129,7 +129,6 @@ public class ButtonIndicator : MonoBehaviour
                 //change variables and appearance for charging being false
                 playerScript.cancelCharge();
                 isCharging = false;
-                playOnce = false;
                 //Dash and do it once
                 playerScript.Dash();
                 doOnce = false;

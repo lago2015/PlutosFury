@@ -31,7 +31,7 @@ public class FleeOrPursue : MonoBehaviour {
     public GameObject myParent;
     public GameObject trailModel;
     private Rigidbody myBody;
-   
+    private bool isAlive;
     public bool isTriggered;
     public bool ShouldPursue;// chase player or not
     private bool isCharging;
@@ -54,10 +54,7 @@ public class FleeOrPursue : MonoBehaviour {
             normalDrag = myBody.drag;
         }
 
-        if(trailModel)
-        {
-            trailModel.SetActive(false);
-        }
+     
 
         if (isTriggered)
         {
@@ -68,7 +65,13 @@ public class FleeOrPursue : MonoBehaviour {
             PlayerNear = true;
         }
     }
-
+    void Start()
+    {
+        if (trailModel)
+        {
+            trailModel.SetActive(false);
+        }
+    }
     // Update is called once per frame
     void FixedUpdate()
     {
@@ -91,6 +94,7 @@ public class FleeOrPursue : MonoBehaviour {
             shakeVector = Vector3.zero;
         }
         transform.parent.position = new Vector3(transform.position.x, transform.position.y, 0);
+        
         //when detection collider finds player than this is enabled
         if(PlayerNear)
         {
@@ -105,14 +109,7 @@ public class FleeOrPursue : MonoBehaviour {
                 }
                 else
                 {
-                    if(trailModel)
-                    {
-                        if(!isDead)
-                        {
-
-                            trailModel.SetActive(true);
-                        }
-                    }
+                    
                     if (Player)
                     {
 
@@ -140,13 +137,7 @@ public class FleeOrPursue : MonoBehaviour {
             }
             else
             {
-                if (!isDead)
-                {
-                    if (trailModel)
-                    {
-                        trailModel.SetActive(true);
-                    }
-                }
+                
                 if (Player)
                 {
                     if (RotationSpeed > 0)
@@ -158,16 +149,6 @@ public class FleeOrPursue : MonoBehaviour {
                     transform.parent.position -= transform.forward * MoveSpeed * Time.deltaTime;
                 }
 
-            }
-        }
-        else
-        {
-            if (!isDead)
-            {
-                if (trailModel)
-                {
-                    trailModel.SetActive(false);
-                }
             }
         }
     }
@@ -189,14 +170,7 @@ public class FleeOrPursue : MonoBehaviour {
 
         MoveSpeed = 0;
         isCharging = true;
-        //Time.timeScale = 0.0f;
-        //float EndShake = Time.realtimeSinceStartup + 0.1f;
-
-        //while (Time.realtimeSinceStartup < EndShake)
-        //{
-        //    yield return 0;
-        //}
-        //Time.timeScale = 1.0f;
+        
         yield return new WaitForSeconds(chargeTime);
         if(PlayerNear)
         {
@@ -213,7 +187,13 @@ public class FleeOrPursue : MonoBehaviour {
 
     IEnumerator DashTransition()
     {
-        
+        if (!isDead)
+        {
+            if (trailModel)
+            {
+                trailModel.SetActive(true);
+            }
+        }
         MoveSpeed = DashSpeed;
         ShouldDash = true;  //Update dash status
         //audio
@@ -241,6 +221,13 @@ public class FleeOrPursue : MonoBehaviour {
     {
 
         isExhausted = true;
+        if (!isDead)
+        {
+            if (trailModel)
+            {
+                trailModel.SetActive(false);
+            }
+        }
         yield return new WaitForSeconds(DashCooldownTime);
         isExhausted = false;
     }
@@ -252,8 +239,10 @@ public class FleeOrPursue : MonoBehaviour {
 
         yield return new WaitForSeconds(0.1f);
         doOnce = false;
+        MoveSpeed = DefaultSpeed;
         isCharging = false;
         myBody.drag = normalDrag;
+
     }
     public bool Flee()
     {
