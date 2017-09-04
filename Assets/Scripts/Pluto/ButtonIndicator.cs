@@ -80,6 +80,7 @@ public class ButtonIndicator : MonoBehaviour
                     //start power dash
                     playerScript.ChargedUp(true);
                     playerScript.Dash();
+                    
                     isExhausted = true;
                     dashDelay = dashTimeout();
                     StartCoroutine(DashDelay());
@@ -96,10 +97,6 @@ public class ButtonIndicator : MonoBehaviour
                             {
                                 audioScript.PlutoPowerChargeStart(playerScript.transform.position);
                                 playOnce = true;
-                            }
-                            else
-                            {
-                                audioScript.PlutoPowerCharging(playerScript.transform.position);
                             }
                         }
                         isCharging = true;

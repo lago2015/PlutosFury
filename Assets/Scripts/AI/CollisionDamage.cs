@@ -3,7 +3,7 @@ using System.Collections;
 
 public class CollisionDamage : MonoBehaviour {
 
-    public bool CheckDash;
+    public bool CheckDash=false;
 
     private AudioController audioScript;
 
@@ -18,11 +18,12 @@ public class CollisionDamage : MonoBehaviour {
         {
             if(!CheckDash)
             {
-                col.gameObject.GetComponent<Movement>().DamagePluto();
-                //if(audioScript)
-                //{
-                //    audioScript.SpikeHitPluto(col.contacts[0].normal);
-                //}
+                Movement moveScript = col.gameObject.GetComponent<Movement>();
+                moveScript.DamagePluto();
+                if (audioScript)
+                {
+                    audioScript.SpikeHitPluto(col.contacts[0].normal);
+                }
             }
         }
     }

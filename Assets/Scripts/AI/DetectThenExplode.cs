@@ -86,17 +86,25 @@ public class DetectThenExplode : MonoBehaviour {
         }
     }
 
+    void OnTriggerStay(Collider col)
+    {
+        string CurTag = col.gameObject.tag;
+        if (CurTag == "Player")
+        {
+            if (isHomingLandmine)
+            {
+                moveScript.ShouldMove = true;
+                TriggerCollider.radius = lostSightRadius;
+            }
+        }
+    }
+
     void OnTriggerEnter(Collider col)
     {
         string CurTag = col.gameObject.tag;
         if(CurTag == "Player")
         {
-            if(isHomingLandmine)
-            {
-                moveScript.ShouldMove = true;
-                TriggerCollider.radius = lostSightRadius;
-            }
-            else if(isLandmine)
+            if(isLandmine)
             {
                 if (regularState && explosionState)
                 {
@@ -108,7 +116,7 @@ public class DetectThenExplode : MonoBehaviour {
                     StartCoroutine(SwitchModels());
                 }
             }   
-            else
+            else if(isRocket)
             {
                 if (!col.isTrigger)
                 {

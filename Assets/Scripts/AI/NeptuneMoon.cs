@@ -4,10 +4,19 @@ using System.Collections;
 public class NeptuneMoon : MonoBehaviour {
 
 	public int MoonState;
-
+    public GameObject trailModel;
 	public GameObject RotateToGameObject;
 	public float RotateSpeed=50;
     //public Vector3 MoonOffset;
+
+    //Shake properties
+    private float shake = 0.0f;
+    public float shakeAmount;
+    public float decreaseFactor;
+    private Vector3 startPosition;
+    private Vector3 shakeVector;
+
+
 
     private AudioController audioScript;
     Transform Player;
@@ -30,6 +39,8 @@ public class NeptuneMoon : MonoBehaviour {
     public float WaitTime;
 
     //Attack Timers
+    bool isCharging;
+    float chargeTimer = 0.5f;
     bool LaunchReady=true;
     bool MoonReady;
     public float AttackRate;
@@ -55,7 +66,10 @@ public class NeptuneMoon : MonoBehaviour {
         {
             Player = GameObject.FindGameObjectWithTag("Player").transform;
         }
-		
+		if(trailModel)
+        {
+            trailModel.SetActive(false);
+        }
         if(!Neptune)
         {
             Neptune = GameObject.FindGameObjectWithTag("Neptune").gameObject;
@@ -78,14 +92,18 @@ public class NeptuneMoon : MonoBehaviour {
 		case 0:
 			RotateToNeptune ();
 			break;
-		//Launching at Pluto
+            //Charge up moon
 		case 1:
-			LaunchMoon ();
+                ChargeMoon();
 			break;
-		//Returning to Neptune to then rotate around
-		case 2:
-			RetractMoon ();
-			break;
+            //Launching at Pluto
+            case 2:
+                LaunchMoon();
+            break;
+            //Returning to Neptune to then rotate around
+            case 3:
+                RetractMoon();
+                break;
 		}
     }
 
@@ -121,12 +139,42 @@ public class NeptuneMoon : MonoBehaviour {
             
             if (MoonState == 0)
             {
-                MoonState = 1;
+                MoonState = 2;
             }
         }
     }
 
-	void LaunchMoon()
+    void ChargeMoon()
+    {
+        if(isCharging)
+        {
+            isCharging = true;
+            StartCoroutine(MoonCharging());
+        }
+        if (shake > 0.0f)
+        {
+            startPosition = transform.localPosition;
+            shakeVector = startPosition + Random.insideUnitSphere * shakeAmount;
+            shakeVector.z = 0f;
+            transform.localPosition = shakeVector;
+            shake -= Time.deltaTime * decreaseFactor;
+        }
+        transform.parent.position = new Vector3(transform.position.x, transform.position.y, 0);
+
+    }
+
+    IEnumerator MoonCharging()
+    {
+        yield return new WaitForSeconds(chargeTimer);
+
+        shake = 0.0f;
+        startPosition = Vector3.zero;
+        shakeVector = Vector3.zero;
+
+        MoonState = 2;
+    }
+
+    void LaunchMoon()
 	{
         if(LaunchReady)
         {
@@ -201,10 +249,10 @@ public class NeptuneMoon : MonoBehaviour {
     {
         yield return new WaitForSeconds(WaitTime);
         
-        MoonState = 2;
+        MoonState = 3;
     }
 
-	void OnCollisionEnter(Collision col)
+	void OnTriggerEnter(Collider col)
 	{
         if(col.gameObject.tag==("Player"))
         {
@@ -222,7 +270,7 @@ public class NeptuneMoon : MonoBehaviour {
         }
 	}
 
-    void OnCollisionExit(Collision col)
+    void OnTriggerExit(Collider col)
     {
         if(col.gameObject.tag=="Player")
         {

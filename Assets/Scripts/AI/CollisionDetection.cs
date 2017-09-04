@@ -65,7 +65,7 @@ public class CollisionDetection : MonoBehaviour {
                 }
                 if (Health <= 0 && !debugNoHealth)
                 {
-                    managerScript.YouWin();
+                    //managerScript.YouWin();
                     GetComponent<DestroyMoons>().DestroyAllMoons();
                     Destroy(gameObject);
                 }

@@ -126,11 +126,19 @@ public class FleeOrPursue : MonoBehaviour {
                                 Dash();
                             }
 
-                            transform.parent.position += transform.forward * MoveSpeed * Time.deltaTime;
+                            float curDistance = Vector3.Distance(transform.position, Player.transform.position);
+                            if (curDistance > 2f)
+                            {
+                                transform.parent.position += transform.forward * MoveSpeed * Time.deltaTime;
+                            }
                         }
                         else
                         {
-                            transform.parent.position += transform.forward * MoveSpeed * Time.deltaTime;
+                            float curDistance = Vector3.Distance(transform.position, Player.transform.position);
+                            if(curDistance>2f)
+                            {
+                                transform.parent.position += transform.forward * MoveSpeed * Time.deltaTime;
+                            }
                         }
                     }
                 }

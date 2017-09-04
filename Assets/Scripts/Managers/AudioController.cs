@@ -81,6 +81,11 @@ public class AudioController : MonoBehaviour {
     public AudioSource wallBounceSource;
     public float wallBounceDelay = 0.2f;
 
+
+    [Header("Lazer Bounce")]
+    public AudioSource LazerBounceSource;
+    
+
     [Header("DestructionSml")]
     public AudioSource DestrcSmllSource;
     public float DestructSmllDelay = 0.5f;
@@ -222,17 +227,14 @@ public class AudioController : MonoBehaviour {
 
     public void PlutoDash1(Vector3 pos)
     {
-        if(timer_01>=dash1Delay)
+        if (plutoDash1 != null)
         {
-            if(plutoDash1!=null)
-            {
-                plutoDash1.transform.position = pos;
-                plutoDash1.minDistance = 20f;
-                plutoDash1.loop = false;
-                plutoDash1.Play();
+            plutoDash1.transform.position = pos;
+            plutoDash1.minDistance = 20f;
+            plutoDash1.loop = false;
+            plutoDash1.Play();
 
-                timer_01 = 0f;
-            }
+         
         }
     }
 
@@ -267,25 +269,6 @@ public class AudioController : MonoBehaviour {
             }
         }
     }
-    public void PlutoPowerCharging(Vector3 pos)
-    {
-        if (timer_01 >= powerChargingDelay)
-        {
-            if (powerDashChargingSrc != null)
-            {
-                if(powerChargeStartSrc!=null)
-                {
-                    powerChargeStartSrc.Stop();
-                }
-                powerDashChargingSrc.transform.position = pos;
-                powerDashChargingSrc.minDistance = 20f;
-                powerDashChargingSrc.loop = true;
-                powerDashChargingSrc.Play();
-
-                timer_01 = 0f;
-            }
-        }
-    }
     public void PlutoPowerChargeCancel()
     {
         if(powerDashChargingSrc!=null && powerChargeStartSrc != null)
@@ -294,6 +277,7 @@ public class AudioController : MonoBehaviour {
             powerChargeStartSrc.Stop();
         }
     }
+
     public void PlutoPowerDashReady(Vector3 pos)
     {
         if (timer_02 >= dash3Delay)
@@ -494,6 +478,17 @@ public class AudioController : MonoBehaviour {
             }
         }
     }
+
+    public void LazerBounce()
+    {
+        if (LazerBounceSource != null)
+        {
+            LazerBounceSource.minDistance = 20f;
+            LazerBounceSource.loop = false;
+            LazerBounceSource.Play();
+        }
+    }
+
 
     public void AsteroidExplosion(Vector3 pos)
     {

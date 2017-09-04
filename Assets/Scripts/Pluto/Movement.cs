@@ -18,7 +18,7 @@ public class Movement : MonoBehaviour
     //Check for shield
     bool Shielded;
     public bool isDamaged;
-    private float invincbleTimer=0.25f;
+    private float invincbleTimer=0.5f;
     //Dash
     public float DashTimeout = 2f;
     public float DashCooldownTime = 0.5f;
@@ -52,7 +52,8 @@ public class Movement : MonoBehaviour
     private Color b_Color;
     private Color o_Color;
     private Color y_Color;
-    private Rigidbody myBody;
+    private Color w_Color;
+    public Rigidbody myBody;
     private GameObject asteroidSpawn;
     private AsteroidSpawner spawnScript;
     private PlanetSpawner planetScript;
@@ -70,6 +71,9 @@ public class Movement : MonoBehaviour
     private ButtonIndicator dashButt;
     private AudioController audioScript;
     private SphereCollider asteroidCollider;
+    private MeshRenderer meshComp;
+
+
     private float defaultRadius;
     //Basic Movement
     private Vector3 newVelocity;
@@ -108,6 +112,7 @@ public class Movement : MonoBehaviour
     // Use this for initialization
     void Awake () 
 	{
+        //get collider that is triggered to change radius during runtime
         foreach (SphereCollider col in GetComponents<SphereCollider>())
         {
             if (col.isTrigger)
@@ -116,8 +121,12 @@ public class Movement : MonoBehaviour
                 defaultRadius = asteroidCollider.radius;
             }
         }
-
+        //referencing the mesh renderer 
+        Transform baseObject = transform.GetChild(0);
+        meshComp = baseObject.GetChild(0).GetComponent<MeshRenderer>();
+        //set status of player
         isDead = false;
+        //grab default dash timeout
         defaultDashTimeout = DashTimeout;
 
         //assigning scale vector3 for health
@@ -129,6 +138,7 @@ public class Movement : MonoBehaviour
         r_Color = Color.red;
         y_Color = Color.yellow;
         o_Color = Color.red + Color.yellow+Color.blue;
+        w_Color = Color.white;
         if(Trail)
         {
             b_Color = Trail.startColor;
@@ -285,6 +295,7 @@ public class Movement : MonoBehaviour
                     MoveSpeed = SuperDashSpeed;
                     DashTimeout = PowerDashTimeout;
                     curCooldownTime = PowerCooldownTime;
+                    isPowerDashing = true;
 
                 }
                 else
@@ -294,7 +305,6 @@ public class Movement : MonoBehaviour
                     DashTimeout = defaultDashTimeout;
                     MoveSpeed = DashSpeed;
                 }
-                isPowerDashing = true;
                 ShouldDash = true;  //Update dash status
             }
             //normal dash
@@ -519,6 +529,22 @@ public class Movement : MonoBehaviour
                 myBody.AddForce(c.contacts[0].normal * wallBump, ForceMode.VelocityChange);
             }
 		}
+        else if(curTag=="LazerWall")
+        {
+            if (audioScript)
+            {
+                audioScript.LazerBounce();
+            }
+            if (ShouldDash)
+            {
+                myBody.AddForce(c.contacts[0].normal * wallBump * 3, ForceMode.VelocityChange);
+
+            }
+            else
+            {
+                myBody.AddForce(c.contacts[0].normal * wallBump, ForceMode.VelocityChange);
+            }
+        }
         else if (curTag == "EnvironmentObstacle")
         {
             if(!ShouldDash)
@@ -623,7 +649,6 @@ public class Movement : MonoBehaviour
         {
             //ensure damaged once and wait for a few frames to enable damage.
             isDamaged = true;
-            StartCoroutine(DamageTransition());
 
             //check if player is shielded
             if (!ShieldStatus())
@@ -631,7 +656,7 @@ public class Movement : MonoBehaviour
 
                 //decrement health
                 curHealth--;
-
+                StartCoroutine(DamageIndicator());
                 //run game over procedure
                 if (curHealth < 0)
                 {
@@ -644,6 +669,8 @@ public class Movement : MonoBehaviour
                 //small size
                 else if (curHealth == 0)
                 {
+                    StartCoroutine(DamageTransition());
+
                     transform.localScale = smallScale;
                     if (maxSize)
                     {
@@ -653,6 +680,8 @@ public class Movement : MonoBehaviour
                 //med size
                 else if (curHealth == 1)
                 {
+                    StartCoroutine(DamageTransition());
+
                     transform.localScale = medScale;
                     if (maxSize)
                     {
@@ -674,7 +703,9 @@ public class Movement : MonoBehaviour
 
             else
             {
-                if(asteroidCollider)
+                StartCoroutine(DamageTransition());
+
+                if (asteroidCollider)
                 {
                     asteroidCollider.radius = defaultRadius;
                 }
@@ -689,6 +720,20 @@ public class Movement : MonoBehaviour
             }
         }    
     }
+
+    IEnumerator DamageIndicator()
+    {
+        float dmgTimeout = invincbleTimer*2 / 4;
+        meshComp.material.color = r_Color;
+        yield return new WaitForSeconds(dmgTimeout);
+        meshComp.material.color = w_Color;
+        yield return new WaitForSeconds(dmgTimeout);
+        meshComp.material.color = r_Color;
+        yield return new WaitForSeconds(dmgTimeout);
+        meshComp.material.color = w_Color;
+        yield return new WaitForSeconds(dmgTimeout);
+    }
+
     IEnumerator DamageTransition()
     {
         yield return new WaitForSeconds(invincbleTimer);
