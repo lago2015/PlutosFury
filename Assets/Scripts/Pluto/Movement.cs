@@ -6,6 +6,8 @@ using UnityEngine.Events;
 
 public class Movement : MonoBehaviour 
 {
+    private bool vibrationHit;
+    private bool invertControls;
 
     //health properties
     public int curHealth;
@@ -139,10 +141,12 @@ public class Movement : MonoBehaviour
         y_Color = Color.yellow;
         o_Color = Color.red + Color.yellow+Color.blue;
         w_Color = Color.white;
+        //set trail color
         if(Trail)
         {
             b_Color = Trail.startColor;
         }
+        //setting components off
         if(hitEffect)
         {
             hitEffect.SetActive(false);
@@ -207,6 +211,25 @@ public class Movement : MonoBehaviour
             Debug.Log("Assign GameManager GameObject in scene");
         }
 
+        //setting option menu fields
+        //vibration enabled/disabled
+        if (PlayerPrefs.GetInt("VibrationHit") == 1)
+        {
+            vibrationHit = true;
+        }
+        else
+        {
+            vibrationHit = false;
+        }
+        //invert controls enabled/disabled
+        if (PlayerPrefs.GetInt("InvertControls") == 1)
+        {
+            invertControls = true;
+        }
+        else
+        {
+            invertControls = false;
+        }
 
 
     }
@@ -254,10 +277,14 @@ public class Movement : MonoBehaviour
             Vector3 move = Vector3.zero;
             move.x = joystickscript.horizontal();
             move.y = joystickscript.vertial();
-
+            
             if (move.magnitude > 1)
             {
                 move.Normalize();
+            }
+            if(invertControls)
+            {
+                move -= move;
             }
             myBody.AddForce(move * MoveSpeed * Time.deltaTime, ForceMode.VelocityChange);
 
@@ -694,7 +721,10 @@ public class Movement : MonoBehaviour
                     audioScript.PlutoHit(transform.position);
                 }
                 //feedback on damage
-                Handheld.Vibrate();
+                if(vibrationHit)
+                {
+                    Handheld.Vibrate();
+                }
                 ScoreManager.GotDamaged();
                 CamShake.EnableCameraShake();
 

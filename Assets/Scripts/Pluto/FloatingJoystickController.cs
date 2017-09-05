@@ -19,7 +19,7 @@ public class FloatingJoystickController : MonoBehaviour {
     }
 
 
-    void FixedUpdate()
+    void Update()
     {
         // if the screen has been touched
         if (Input.touchCount > 0)

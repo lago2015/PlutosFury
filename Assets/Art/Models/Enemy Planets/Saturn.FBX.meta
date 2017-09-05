@@ -1,0 +1,215 @@
+fileFormatVersion: 2
+guid: 132171ff23f5b4434af2a0440051691a
+timeCreated: 1439060193
+licenseType: Free
+ModelImporter:
+  serializedVersion: 18
+  fileIDToRecycleName:
+    100000: Birth 001
+    100002: Birth 002
+    100004: Birth 003
+    100006: Birth 004
+    100008: Birth 005
+    100010: Display 001
+    100012: Display 002
+    100014: Display 003
+    100016: Display 004
+    100018: Display 005
+    100020: Display 006
+    100022: Display 007
+    100024: Display 008
+    100026: Display 009
+    100028: Display 010
+    100030: earth
+    100032: Event 001
+    100034: Event 002
+    100036: Event 003
+    100038: Event 004
+    100040: Event 005
+    100042: Event 006
+    100044: Event 007
+    100046: Event 008
+    100048: Event 009
+    100050: Event 010
+    100052: Force 001
+    100054: Force 002
+    100056: Force 003
+    100058: Force 004
+    100060: Force 005
+    100062: Jupiter
+    100064: mars
+    100066: merc
+    100068: Neptune
+    100070: pluto
+    100072: Position Icon 001
+    100074: Position Icon 002
+    100076: Position Icon 003
+    100078: Position Object 001
+    100080: Position Object 002
+    100082: Render 001
+    100084: Render 002
+    100086: Render 003
+    100088: Render 004
+    100090: Render 005
+    100092: Rotation 001
+    100094: Rotation 002
+    100096: Rotation 003
+    100098: Rotation 004
+    100100: Rotation 005
+    100102: //RootNode
+    100104: Saturn
+    100106: Shape Instance 001
+    100108: Shape Instance 002
+    100110: Shape Instance 003
+    100112: Shape Instance 004
+    100114: Shape Instance 005
+    100116: Speed 001
+    100118: Uranus
+    100120: ven
+    400000: Birth 001
+    400002: Birth 002
+    400004: Birth 003
+    400006: Birth 004
+    400008: Birth 005
+    400010: Display 001
+    400012: Display 002
+    400014: Display 003
+    400016: Display 004
+    400018: Display 005
+    400020: Display 006
+    400022: Display 007
+    400024: Display 008
+    400026: Display 009
+    400028: Display 010
+    400030: earth
+    400032: Event 001
+    400034: Event 002
+    400036: Event 003
+    400038: Event 004
+    400040: Event 005
+    400042: Event 006
+    400044: Event 007
+    400046: Event 008
+    400048: Event 009
+    400050: Event 010
+    400052: Force 001
+    400054: Force 002
+    400056: Force 003
+    400058: Force 004
+    400060: Force 005
+    400062: Jupiter
+    400064: mars
+    400066: merc
+    400068: Neptune
+    400070: pluto
+    400072: Position Icon 001
+    400074: Position Icon 002
+    400076: Position Icon 003
+    400078: Position Object 001
+    400080: Position Object 002
+    400082: Render 001
+    400084: Render 002
+    400086: Render 003
+    400088: Render 004
+    400090: Render 005
+    400092: Rotation 001
+    400094: Rotation 002
+    400096: Rotation 003
+    400098: Rotation 004
+    400100: Rotation 005
+    400102: Saturn
+    400104: //RootNode
+    400106: Shape Instance 001
+    400108: Shape Instance 002
+    400110: Shape Instance 003
+    400112: Shape Instance 004
+    400114: Shape Instance 005
+    400116: Speed 001
+    400118: Uranus
+    400120: ven
+    2300000: earth
+    2300002: Jupiter
+    2300004: mars
+    2300006: merc
+    2300008: Neptune
+    2300010: pluto
+    2300012: Saturn
+    2300014: Uranus
+    2300016: ven
+    3300000: earth
+    3300002: Jupiter
+    3300004: mars
+    3300006: merc
+    3300008: Neptune
+    3300010: pluto
+    3300012: Saturn
+    3300014: Uranus
+    3300016: ven
+    4300000: pluto
+    4300002: merc
+    4300004: ven
+    4300006: earth
+    4300008: mars
+    4300010: Jupiter
+    4300012: Saturn
+    4300014: Uranus
+    4300016: Neptune
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

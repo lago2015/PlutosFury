@@ -6,7 +6,6 @@ public class CollisionDamage : MonoBehaviour {
     public bool CheckDash=false;
 
     private AudioController audioScript;
-
     void Awake()
     {
         audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
@@ -27,4 +26,5 @@ public class CollisionDamage : MonoBehaviour {
             }
         }
     }
+
 }

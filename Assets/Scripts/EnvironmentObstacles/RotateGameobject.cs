@@ -8,6 +8,8 @@ public class RotateGameobject : MonoBehaviour {
     public bool isZZero;
     Vector3 Rotation;
     public float DampRotation=5;
+    public float rotateTimeout=1;
+
 	// Use this for initialization
 	void Start ()
     {
@@ -24,16 +26,17 @@ public class RotateGameobject : MonoBehaviour {
         {
             Rotation.y = 220f;
         }
-
     }
 
     // Update is called once per frame
     void FixedUpdate ()
     {
-        transform.Rotate(Rotation*Time.deltaTime/ DampRotation);
-        if(isZZero)
+        transform.Rotate(Rotation * Time.deltaTime / DampRotation);
+
+        if (isZZero)
         {
             transform.position = new Vector3(transform.position.x, transform.position.y, 0);
         }
     }
+    
 }
