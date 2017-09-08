@@ -5,7 +5,7 @@ using UnityEngine.Advertisements;
 public class AdManager : MonoBehaviour
 {
     [SerializeField]
-    string gameID = "65011";
+    string gameID = "1531549";
 
     public void AdCallBackHandler(ShowResult result)
     {

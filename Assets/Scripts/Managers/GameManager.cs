@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.Advertisements;
 
 public class GameManager : MonoBehaviour
 {
@@ -26,17 +27,21 @@ public class GameManager : MonoBehaviour
     private int BaseCount = 1;
     public float GameOverDelay = 5f;
 
+    private bool willPlayAd;
+
     TextureSwap modelSwitch;
     AudioController audioCon;
-	AdManager adTest = new AdManager();
+    AdManager AdManager;
     ScoreManager ScoreManager;
     ExperienceManager ExpManager;
+
     void Awake()
     {
         modelSwitch = pluto.GetComponent<TextureSwap>();
         audioCon = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
         ExpManager = GetComponent<ExperienceManager>();
         ScoreManager = GetComponent<ScoreManager>();
+        AdManager = GetComponent<AdManager>();
     }
 	void Start ()
     {
@@ -50,9 +55,24 @@ public class GameManager : MonoBehaviour
 		asteroidsEaten = 0;
 
 	}
+    public void PlayAd()
+    {
+        int value = Random.Range(0, 10);
+
+        if (value < 2)
+        {
+            willPlayAd = true;
+        }
+        else
+        {
+            willPlayAd = false;
+        }
+    }
+
     public void StartGameover()
     {
         StartCoroutine(GameOver());
+        PlayAd();
     }
    public IEnumerator GameOver()
     {
@@ -60,7 +80,7 @@ public class GameManager : MonoBehaviour
         {
             audioCon.GameOver(pluto.transform.position);
         }
-        
+
         yield return new WaitForSeconds(GameOverDelay);
         //modelSwitch.SwapMaterial(TextureSwap.PlutoState.Lose);
         Time.timeScale = 0;
@@ -75,6 +95,11 @@ public class GameManager : MonoBehaviour
         //asertoidsLeftText.text = " Next Level:\n\n " + AsteroidsLeft;
         ScoreText.text = "Score:\n\n" + EndScore;
         highScoreText.text = "High Score:\n\n" + HighScore;
+
+        if (willPlayAd)
+        {
+            Advertisement.Show();
+        }
         
     }
     public void StartYouWin()
