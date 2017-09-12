@@ -27,6 +27,7 @@ public class Dash : MonoBehaviour {
         }
         DashModelTransition(true);
     }
+
     //turning power dash indicator on and off
     public void DashModelTransition(bool isActive)
     {

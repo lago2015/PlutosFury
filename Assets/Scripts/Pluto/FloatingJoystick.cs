@@ -43,6 +43,25 @@ public class FloatingJoystick : MonoBehaviour,IDragHandler,IPointerUpHandler,IPo
         }
     }
 
+    void Update()
+    {
+        //check if theres two fingers down for dash
+        if (Input.touchCount == 2)
+        {
+            bool doOnce = dashScript.doOnce;
+            //if charge hasnt started than start now
+            if (!doOnce)
+            {
+                //activate dash mechanic 
+                dashScript.changeChargeStatus(true);
+            }
+        }
+        else
+        {
+            dashScript.changeChargeStatus(false);
+        }
+    }
+
     // this event happens when there is a drag on screen
     public virtual void OnDrag(PointerEventData ped)
     {
@@ -89,25 +108,7 @@ public class FloatingJoystick : MonoBehaviour,IDragHandler,IPointerUpHandler,IPo
                 }
             }
 
-            if (Input.touchCount == 2)
-            {
-                if(!scriptDoOnce)
-                {
-                    scriptDoOnce = true;
-                    bool doOnce = dashScript.doOnce;
-                    //if charge hasnt started than start now
-                    if (!doOnce)
-                    {
-                        //activate dash mechanic 
-                        dashScript.changeChargeStatus(true);
-                    }
-                }
-            }
-            else
-            {
-                dashScript.changeChargeStatus(false);
-                scriptDoOnce = false;
-            }
+            
         }
     }
 
@@ -131,7 +132,6 @@ public class FloatingJoystick : MonoBehaviour,IDragHandler,IPointerUpHandler,IPo
         {
             inputVector = Vector3.zero; // resets the inputVector so that output will no longer affect movement of the game object (example, a player character or any desired game object)
             joystickKnobImage.rectTransform.anchoredPosition = Vector3.zero; // resets the handle ("knob") of this joystick back to the center
-            dashScript.changeChargeStatus(false);
         }
         else
         {
