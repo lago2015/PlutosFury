@@ -79,10 +79,7 @@ public class ButtonIndicator : MonoBehaviour
                     curTime = 0;
                     isCharged = true;
 
-                    //take away any charge indicators   
-                    playerScript.cancelCharge();
-
-                    
+                    playerScript.TrailChange(Movement.DashState.chargeComplete);
 
                 }
                 //Show Charging up model
@@ -115,6 +112,7 @@ public class ButtonIndicator : MonoBehaviour
             {
                 //start power dash
                 playerScript.ChargedUp(true);
+                playerScript.TrailChange(Movement.DashState.burst);
                 playerScript.Dash();
                 dashDelay = dashTimeout();
                 StartCoroutine(DashDelay());

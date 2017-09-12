@@ -33,6 +33,10 @@ public class Movement : MonoBehaviour
     public bool isDead = false;
 
     //Dash Variables
+    //Dash States
+    public enum DashState { idle,basicMove,dashMove,chargeStart,charging,chargeComplete,burst}
+    public DashState curState;
+
     /////Time outs
     public float DashTimeout = 2f;
     public float PowerDashTimeout = 5;
@@ -114,14 +118,24 @@ public class Movement : MonoBehaviour
 
     //functions for power dash
     public bool DashChargeStatus() { return DashChargeActive; }
-    public bool ChargedUp(bool curCharge) { return isCharged = curCharge; }
+    
     public float CurPowerDashTimeout() { return PowerDashTimeout; }
-    public void isCharging() { Trail.startColor = o_Color; }
+    public void isCharging() { TrailChange(DashState.chargeStart); }
     public void cancelCharge() { Trail.startColor = b_Color; }
 
     //functions to check damage
     bool ShieldStatus() { Shielded = shieldScript.PlutoShieldStatus(); return Shielded; }
     public bool DamageStatus() { return isDamaged; }
+
+    public void ChargedUp(bool curCharge)
+    {
+        if (curCharge)
+        {
+            TrailChange(DashState.chargeComplete);
+        }
+           
+    }
+
     // Use this for initialization
     void Awake () 
 	{
@@ -134,12 +148,9 @@ public class Movement : MonoBehaviour
                 defaultRadius = asteroidCollider.radius;
             }
         }
+        curState = DashState.basicMove;
 
-        foreach(GameObject col in trailContainer)
-        {
-            col.SetActive(false);
-        }
-
+        
         //referencing the mesh renderer 
         Transform baseObject = transform.GetChild(0);
         meshComp = baseObject.GetChild(0).GetComponent<MeshRenderer>();
@@ -158,11 +169,7 @@ public class Movement : MonoBehaviour
         y_Color = Color.yellow;
         o_Color = Color.red + Color.yellow+Color.blue;
         w_Color = Color.white;
-        //set trail color
-        if(Trail)
-        {
-            b_Color = Trail.startColor;
-        }
+        
         //setting appearance components off
         if(hitEffect)
         {
@@ -171,10 +178,6 @@ public class Movement : MonoBehaviour
         if(maxSize)
         {
             maxSize.SetActive(false);
-        }
-        if(trail)
-        {
-            trail.SetActive(false);
         }
         //Dash Button
         dashButt = GameObject.FindGameObjectWithTag("DashButt").GetComponent<ButtonIndicator>();
@@ -308,22 +311,54 @@ public class Movement : MonoBehaviour
             myBody.AddForce(move * MoveSpeed * Time.deltaTime, ForceMode.VelocityChange);
 
             //trail rotation and enabling
-            if (trail)
+            if (trailContainer.Length>0)
             {
                 if (move == Vector3.zero)
                 {
-                    trail.SetActive(false);
+                    TrailChange(DashState.idle);
                    
                 }
                 else
                 {
                     Quaternion tempRotation = joystickscript.rotation();
-                    trail.transform.rotation = tempRotation;
-                    trail.SetActive(true);
+                    trailContainer[0].transform.rotation = tempRotation;
+                    TrailChange(DashState.basicMove);
                 }
             }
         }
 
+    }
+
+    public void TrailChange(DashState nextState)
+    {
+        curState = nextState;
+        foreach (GameObject col in trailContainer)
+        {
+            col.SetActive(false);
+        }
+        switch (curState)
+        {
+            case DashState.idle:
+                break;
+            case DashState.basicMove:
+                trailContainer[0].SetActive(true);
+                break;
+            case DashState.dashMove:
+                trailContainer[1].SetActive(true);
+                break;
+            case DashState.chargeStart:
+                trailContainer[2].SetActive(true);
+                break;
+            case DashState.charging:
+                trailContainer[3].SetActive(true);
+                break;
+            case DashState.chargeComplete:
+                trailContainer[4].SetActive(true);
+                break;
+            case DashState.burst:
+                trailContainer[5].SetActive(true);
+                break;
+        }
     }
 
     public void Dash()
@@ -373,10 +408,12 @@ public class Movement : MonoBehaviour
                     //audio for power and normal dash
                     if (isPowerDashing)
                     {
+                        TrailChange(DashState.burst);
                         audioScript.PlutoPowerDash(transform.position);
                     }
                     else
                     {
+                        TrailChange(DashState.dashMove);
                         audioScript.PlutoDash1(transform.position);
                     }
                 }
@@ -391,11 +428,11 @@ public class Movement : MonoBehaviour
         //Change Trail color according to Power Dash Status
         if ( Trail && isCharged)
         {
-            Trail.startColor = r_Color;
+            TrailChange(DashState.burst);
         }
         else
         {
-            Trail.startColor = y_Color;
+            TrailChange(DashState.dashMove);
         }
 
         yield return new WaitForSeconds(DashTimeout);
@@ -409,6 +446,7 @@ public class Movement : MonoBehaviour
             isCharged = false;
             slowDownDrag = powerDashDrag;
             isPowerDashing = false;
+            //disable power dash halo indicator
             dashScript.DashModelTransition(false);
         }
         else
@@ -424,7 +462,7 @@ public class Movement : MonoBehaviour
 
         MoveSpeed = DefaultSpeed;
         //Change trail back
-        Trail.startColor = b_Color;
+        TrailChange(DashState.basicMove);
 
         //Start Slowdown/Cooldown
         StartCoroutine(DashCooldown());
@@ -655,7 +693,7 @@ public class Movement : MonoBehaviour
     {
         MoveSpeed = 0;
         myBody.velocity = Vector3.zero;
-        trail.SetActive(false);
+        TrailChange(DashState.idle);
         isDead = true;
     }
 
