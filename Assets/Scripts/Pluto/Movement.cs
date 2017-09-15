@@ -36,6 +36,9 @@ public class Movement : MonoBehaviour
     //Dash States
     public enum DashState { idle,basicMove,dashMove,chargeStart,charging,chargeComplete,burst}
     public DashState curState;
+    private GameObject curTrail;
+    //dash trail rotation
+    private Quaternion trailRot;
 
     /////Time outs
     public float DashTimeout = 2f;
@@ -46,13 +49,15 @@ public class Movement : MonoBehaviour
     public float PowerCooldownTime = 0.75f;
     private float curCooldownTime;
     /////checks
+    private bool playOnce;
     private bool isExhausted = false;
     private bool ObtainedWhileDash;
     private bool chargeOnce;
     public bool DashChargeActive;
     public bool isCharged;
-    private bool ShouldDash;
+    public bool ShouldDash;
     private bool dashOnce;
+    private bool Charging;
     /////Speeds
     public float MoveSpeed;
     public float DashSpeed;
@@ -89,7 +94,7 @@ public class Movement : MonoBehaviour
     [Tooltip("0=default, 1=dash, 2=chargeStart, 3=chargeComplete, 4=burst")]
     public GameObject[] trailContainer;
     public GameObject trail;
-    public ParticleSystem Trail;
+    private ParticleSystem Trail;
     public GameObject hitEffect;
     private MeshRenderer meshComp;
     private Color r_Color;
@@ -112,16 +117,12 @@ public class Movement : MonoBehaviour
     private float velocityMin = -80;
     private float DefaultSpeed;
 
-
     
-    
-
     //functions for power dash
     public bool DashChargeStatus() { return DashChargeActive; }
     
     public float CurPowerDashTimeout() { return PowerDashTimeout; }
-    public void isCharging() { TrailChange(DashState.chargeStart); }
-    public void cancelCharge() { Trail.startColor = b_Color; }
+    public void cancelCharge() { TrailChange(DashState.idle); }
 
     //functions to check damage
     bool ShieldStatus() { Shielded = shieldScript.PlutoShieldStatus(); return Shielded; }
@@ -133,7 +134,6 @@ public class Movement : MonoBehaviour
         {
             TrailChange(DashState.chargeComplete);
         }
-           
     }
 
     // Use this for initialization
@@ -149,7 +149,7 @@ public class Movement : MonoBehaviour
             }
         }
         curState = DashState.basicMove;
-
+        
         
         //referencing the mesh renderer 
         Transform baseObject = transform.GetChild(0);
@@ -320,9 +320,31 @@ public class Movement : MonoBehaviour
                 }
                 else
                 {
-                    Quaternion tempRotation = joystickscript.rotation();
-                    trailContainer[0].transform.rotation = tempRotation;
-                    TrailChange(DashState.basicMove);
+                    if(isCharged)
+                    {
+                        if(!playOnce)
+                        {
+                            playOnce = true;
+                            TrailChange(DashState.chargeComplete);
+                        }
+                    }
+                    else if(!ShouldDash && !Charging)
+                    {
+                        TrailChange(DashState.basicMove);
+                    }
+                    else if(Charging)
+                    {
+                        TrailChange(DashState.charging);
+                    }
+
+                }
+
+                //Get current rotation
+                trailRot = joystickscript.rotation();
+                if(curTrail)
+                {
+                    //apply rotation
+                    curTrail.transform.rotation = trailRot;
                 }
             }
         }
@@ -341,21 +363,36 @@ public class Movement : MonoBehaviour
             case DashState.idle:
                 break;
             case DashState.basicMove:
+                //cache gameobject 
+                curTrail = trailContainer[0];
+                //enable trail
                 trailContainer[0].SetActive(true);
                 break;
             case DashState.dashMove:
+                //cache gameobject 
+                curTrail = trailContainer[1];
                 trailContainer[1].SetActive(true);
                 break;
             case DashState.chargeStart:
+                //notify charging is active
+                Charging = true;
+                
                 trailContainer[2].SetActive(true);
                 break;
             case DashState.charging:
                 trailContainer[3].SetActive(true);
                 break;
             case DashState.chargeComplete:
+                //disable charging after completion
+                Charging = false;
+                isCharged = true;
+                //cache gameobject 
                 trailContainer[4].SetActive(true);
                 break;
             case DashState.burst:
+                //cache gameobject 
+                playOnce = false;
+                curTrail = trailContainer[5];
                 trailContainer[5].SetActive(true);
                 break;
         }
@@ -425,16 +462,7 @@ public class Movement : MonoBehaviour
 
     IEnumerator DashTransition()
     {
-        //Change Trail color according to Power Dash Status
-        if ( Trail && isCharged)
-        {
-            TrailChange(DashState.burst);
-        }
-        else
-        {
-            TrailChange(DashState.dashMove);
-        }
-
+        
         yield return new WaitForSeconds(DashTimeout);
 
 
@@ -459,7 +487,7 @@ public class Movement : MonoBehaviour
         ShouldDash = false;
         ObtainedWhileDash = false;
         myBody.drag = normalDrag;
-
+        Charging = false;
         MoveSpeed = DefaultSpeed;
         //Change trail back
         TrailChange(DashState.basicMove);
@@ -853,6 +881,11 @@ public class Movement : MonoBehaviour
         myBody.drag = 2;
 
     }
+    public void isCharging()
+    {
+        TrailChange(DashState.chargeStart);
+    }
+
     //increase speed of pluto
     public void SpeedUpPluto(float SpeedValue)
     {

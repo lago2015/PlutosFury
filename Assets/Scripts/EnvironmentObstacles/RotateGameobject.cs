@@ -5,6 +5,7 @@ public class RotateGameobject : MonoBehaviour {
 
     public bool SelectX=true;
     public bool SelectY;
+    public bool SelectZ;
     public bool isZZero;
     Vector3 Rotation;
     public float DampRotation=5;
@@ -25,6 +26,11 @@ public class RotateGameobject : MonoBehaviour {
         else if(SelectY)
         {
             Rotation.y = 220f;
+        }
+        else if(SelectZ)
+        {
+            Rotation.z = 220f;
+            isZZero = false;
         }
     }
 
