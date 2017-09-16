@@ -12,13 +12,14 @@ public class ButtonIndicator : MonoBehaviour
     public float curTime;
     public bool curStatus;
     public bool isButtDown;
+    private bool buttPressed;
     public bool isCharged;
     public bool doOnce;
     public bool isActive;
     public bool isCharging;
     public bool isExhausted;
     private bool playOnce;
-    public bool changeChargeStatus(bool curStatus) { return isButtDown = curStatus; }
+
     void Start()
     {
         audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
@@ -28,6 +29,10 @@ public class ButtonIndicator : MonoBehaviour
             dashDelay = playerScript.DashTimeout;
             PowerDashTimeout = playerScript.CurPowerDashTimeout();
         }
+    }
+    public bool changeChargeStatus(bool curStatus)
+    {
+        return isButtDown = curStatus;
     }
 
     //Check if player's power dash is active
@@ -62,8 +67,8 @@ public class ButtonIndicator : MonoBehaviour
             //to reset the condition
             doOnce = true;
             isActive = isChargeActive();
-            //Check for Power Dash pick up obtained
-            if (isActive)
+            //Check for Power Dash pick up obtained and if player has charged up yet
+            if (isActive &&!isCharged)
             {
                 //Increment time
                 curTime += 1 * Time.deltaTime;
@@ -74,16 +79,7 @@ public class ButtonIndicator : MonoBehaviour
                     curTime = 0;
                     isCharged = true;
 
-                    //take away any charge indicators   
-                    playerScript.cancelCharge();
-
-                    //start power dash
-                    playerScript.ChargedUp(true);
-                    playerScript.Dash();
-                    
-                    isExhausted = true;
-                    dashDelay = dashTimeout();
-                    StartCoroutine(DashDelay());
+                    playerScript.TrailChange(Movement.DashState.chargeComplete);
 
                 }
                 //Show Charging up model
@@ -109,28 +105,40 @@ public class ButtonIndicator : MonoBehaviour
                 
             } 
        }
-        //if player doesnt have pick up then do normal dash
+        //if player doesnt charge power dash then dash
         else
         {
-            if (doOnce)
+            if (isCharged)
             {
-                if(audioScript)
-                {
-                    audioScript.PlutoPowerChargeCancel();
-                    playOnce = false;
-                }
-                //reset dash timer
-                curTime = 0;
-                //resume player movement
-                playerScript.ResetDrag();
-                //change variables and appearance for charging being false
-                playerScript.cancelCharge();
-                isCharging = false;
-                //Dash and do it once
+                //start power dash
+                playerScript.ChargedUp(true);
+                playerScript.TrailChange(Movement.DashState.burst);
                 playerScript.Dash();
-                doOnce = false;
                 dashDelay = dashTimeout();
                 StartCoroutine(DashDelay());
+            }
+            else
+            {
+                if (doOnce)
+                {
+                    if (audioScript)
+                    {
+                        audioScript.PlutoPowerChargeCancel();
+                        playOnce = false;
+                    }
+                    //reset dash timer
+                    curTime = 0;
+                    //resume player movement
+                    playerScript.ResetDrag();
+                    //change variables and appearance for charging being false
+                    playerScript.cancelCharge();
+                    isCharging = false;
+                    //Dash and do it once
+                    playerScript.Dash();
+                    doOnce = false;
+                    dashDelay = dashTimeout();
+                    StartCoroutine(DashDelay());
+                }
             }
         }
     }

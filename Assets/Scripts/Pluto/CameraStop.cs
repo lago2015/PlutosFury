@@ -39,14 +39,21 @@ public class CameraStop : MonoBehaviour {
         target = GameObject.FindGameObjectWithTag("Player");
         spawnScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<AsteroidSpawner>();
         CameraOffset = transform.position.z;
-        transform.position = new Vector3(target.transform.position.x, target.transform.position.y, CameraOffset);
+        if(target)
+        {
+            transform.position = new Vector3(target.transform.position.x, target.transform.position.y, CameraOffset);
+        }
 		cachedCameraPosition = transform.position;
         curSection = 0;
-        curMaxX = cameraStopLocations[curSection+1].transform.position.x - OffsetX;
-        curMinX = cameraStopLocations[curSection].transform.position.x + OffsetX;
-        maxX = curMaxX;
-        minX = curMinX;
-        maxNumSections = GameObject.FindGameObjectWithTag("Spawner").GetComponent<SectionManager>().NumOfSections();
+        if(cameraStopLocations.Length>0)
+        {
+
+            curMaxX = cameraStopLocations[curSection + 1].transform.position.x - OffsetX;
+            curMinX = cameraStopLocations[curSection].transform.position.x + OffsetX;
+            maxX = curMaxX;
+            minX = curMinX;
+            maxNumSections = GameObject.FindGameObjectWithTag("Spawner").GetComponent<SectionManager>().NumOfSections();
+        }
 		//targetBody = target.GetComponent<Rigidbody> ();
 		//cachedMass = targetBody.mass;
 	}

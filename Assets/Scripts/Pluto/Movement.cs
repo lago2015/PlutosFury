@@ -6,6 +6,7 @@ using UnityEngine.Events;
 
 public class Movement : MonoBehaviour 
 {
+    //Player prefs
     private bool vibrationHit;
     private bool invertControls;
 
@@ -17,69 +18,96 @@ public class Movement : MonoBehaviour
     public GameObject maxSize;
     private Vector3 smallScale;
     private Vector3 medScale;
+
     //Check for shield
     bool Shielded;
     public bool isDamaged;
     private float invincbleTimer=0.5f;
-    //Dash
+    //buffs and debuffs
+    public bool isPowerDashing;
+    bool CanFreezePluto;
+
+    //Num of asteroids/Health
+    private float HealthCap;
+    int score;
+    public bool isDead = false;
+
+    //Dash Variables
+    //Dash States
+    public enum DashState { idle,basicMove,dashMove,chargeStart,charging,chargeComplete,burst}
+    public DashState curState;
+    private GameObject curTrail;
+    //dash trail rotation
+    private Quaternion trailRot;
+
+    /////Time outs
     public float DashTimeout = 2f;
+    public float PowerDashTimeout = 5;
+    private float defaultDashTimeout;
+    /////Cooldowns
     public float DashCooldownTime = 0.5f;
     public float PowerCooldownTime = 0.75f;
     private float curCooldownTime;
+    /////checks
+    private bool playOnce;
     private bool isExhausted = false;
     private bool ObtainedWhileDash;
     private bool chargeOnce;
     public bool DashChargeActive;
     public bool isCharged;
-    private bool ShouldDash;
+    public bool ShouldDash;
     private bool dashOnce;
+    private bool Charging;
+    /////Speeds
     public float MoveSpeed;
     public float DashSpeed;
     public float SuperDashSpeed = 100;
-    public float PowerDashTimeout = 5;
-    private float defaultDashTimeout;
-    //Dash Charges
-    public bool tightControls;
     private float DefaultDashSpeed;
     private int DashDamage;
-    //
+    //Rigidbody drag floats
     public float slowDownDrag;
     public float powerDashDrag;
     private float normalDrag;
 
     //Components
-    public ParticleSystem Trail;
+    private Touch curTouch;
+    private ButtonIndicator dashButt;
+    private AudioController audioScript;
+    private SphereCollider asteroidCollider;
+    public Rigidbody myBody;
+    private Camera camera;
+    private GameObject joystick;
+
+    //Scripts
+    private GameObject asteroidSpawn;
+    private AsteroidSpawner spawnScript;
+    private GameManager gameManager;
+    private ScoreManager ScoreManager;
+    private ExperienceManager ExperienceMan;
+    private CameraShake CamShake;
+    private FloatingJoystick joystickscript;
+    private TextureSwap modelScript;
+    private Dash dashScript;
+    private Shield shieldScript;
+
+    //Appearance Components
+    [Tooltip("0=default, 1=dash, 2=chargeStart, 3=chargeComplete, 4=burst")]
+    public GameObject[] trailContainer;
+    public GameObject trail;
+    private ParticleSystem Trail;
     public GameObject hitEffect;
+    private MeshRenderer meshComp;
     private Color r_Color;
     private Color b_Color;
     private Color o_Color;
     private Color y_Color;
     private Color w_Color;
-    public Rigidbody myBody;
-    private GameObject asteroidSpawn;
-    private AsteroidSpawner spawnScript;
-    private PlanetSpawner planetScript;
-    private GameManager gameManager;
-    private ScoreManager ScoreManager;
-    private ExperienceManager ExperienceMan;
-    private Camera camera;
-    private CameraShake CamShake;
-    private GameObject joystick;
-    private FloatingJoystick joystickscript;
-    private TextureSwap modelScript;
-    private Dash dashScript;
-    private Shield shieldScript;
-    private Touch curTouch;
-    private ButtonIndicator dashButt;
-    private AudioController audioScript;
-    private SphereCollider asteroidCollider;
-    private MeshRenderer meshComp;
 
-
+    //collider radius
     private float defaultRadius;
+
     //Basic Movement
     private Vector3 newVelocity;
-    public GameObject trail;
     public float wallBump = 20.0f;
     public float mazeBump = 10f;
     public float dashAsteroidBump = 20f;
@@ -88,29 +116,26 @@ public class Movement : MonoBehaviour
     private float velocityCap = 80;
     private float velocityMin = -80;
     private float DefaultSpeed;
-    //buffs and debuffs
-    public bool isPowerDashing;
-    bool CanFreezePluto;
-    
-    //Num of asteroids/Health
-    //int CurrentHealthEnergyAsteroids=25;
-    private float HealthCap;
-    int score;
-    //Death
-    public bool isDead=false;
-    bool DoOnce;
-    
-    //Pick up bar and Texture
-    private float SuperDecrement;
-    private float curForce=7;
 
-    bool ShieldStatus() { Shielded = shieldScript.PlutoShieldStatus(); return Shielded; }
+    
+    //functions for power dash
     public bool DashChargeStatus() { return DashChargeActive; }
-    public bool ChargedUp(bool curCharge) { return isCharged = curCharge; }
+    
     public float CurPowerDashTimeout() { return PowerDashTimeout; }
-    public void isCharging() { Trail.startColor = o_Color; }
-    public void cancelCharge() { Trail.startColor = b_Color; }
+    public void cancelCharge() { TrailChange(DashState.idle); }
+
+    //functions to check damage
+    bool ShieldStatus() { Shielded = shieldScript.PlutoShieldStatus(); return Shielded; }
     public bool DamageStatus() { return isDamaged; }
+
+    public void ChargedUp(bool curCharge)
+    {
+        if (curCharge)
+        {
+            TrailChange(DashState.chargeComplete);
+        }
+    }
+
     // Use this for initialization
     void Awake () 
 	{
@@ -123,6 +148,9 @@ public class Movement : MonoBehaviour
                 defaultRadius = asteroidCollider.radius;
             }
         }
+        curState = DashState.basicMove;
+        
+        
         //referencing the mesh renderer 
         Transform baseObject = transform.GetChild(0);
         meshComp = baseObject.GetChild(0).GetComponent<MeshRenderer>();
@@ -141,12 +169,8 @@ public class Movement : MonoBehaviour
         y_Color = Color.yellow;
         o_Color = Color.red + Color.yellow+Color.blue;
         w_Color = Color.white;
-        //set trail color
-        if(Trail)
-        {
-            b_Color = Trail.startColor;
-        }
-        //setting components off
+        
+        //setting appearance components off
         if(hitEffect)
         {
             hitEffect.SetActive(false);
@@ -154,10 +178,6 @@ public class Movement : MonoBehaviour
         if(maxSize)
         {
             maxSize.SetActive(false);
-        }
-        if(trail)
-        {
-            trail.SetActive(false);
         }
         //Dash Button
         dashButt = GameObject.FindGameObjectWithTag("DashButt").GetComponent<ButtonIndicator>();
@@ -182,7 +202,6 @@ public class Movement : MonoBehaviour
         }
         //Ensure speed is saved for default settings
         DefaultSpeed = MoveSpeed;
-        DefaultDashSpeed = DashSpeed;
         //For camera Shakes
         CamShake = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraShake>();
         camera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
@@ -273,37 +292,110 @@ public class Movement : MonoBehaviour
 	{
         if (joystickscript && !isDead)
         {
-            //Joystick
+            //Joystick input
             Vector3 move = Vector3.zero;
             move.x = joystickscript.horizontal();
             move.y = joystickscript.vertial();
             
+            //normalize input
             if (move.magnitude > 1)
             {
                 move.Normalize();
             }
+            //check if controls are inverted if so invert
             if(invertControls)
             {
                 move -= move;
             }
+            //move player
             myBody.AddForce(move * MoveSpeed * Time.deltaTime, ForceMode.VelocityChange);
 
-            if (trail)
+            //trail rotation and enabling
+            if (trailContainer.Length>0)
             {
                 if (move == Vector3.zero)
                 {
-                    trail.SetActive(false);
+                    TrailChange(DashState.idle);
                    
                 }
                 else
                 {
-                    Quaternion tempRotation = joystickscript.rotation();
-                    trail.transform.rotation = tempRotation;
-                    trail.SetActive(true);
+                    if(isCharged)
+                    {
+                        if(!playOnce)
+                        {
+                            playOnce = true;
+                            TrailChange(DashState.chargeComplete);
+                        }
+                    }
+                    else if(!ShouldDash && !Charging)
+                    {
+                        TrailChange(DashState.basicMove);
+                    }
+                    else if(Charging)
+                    {
+                        TrailChange(DashState.charging);
+                    }
+
+                }
+
+                //Get current rotation
+                trailRot = joystickscript.rotation();
+                if(curTrail)
+                {
+                    //apply rotation
+                    curTrail.transform.rotation = trailRot;
                 }
             }
         }
 
+    }
+
+    public void TrailChange(DashState nextState)
+    {
+        curState = nextState;
+        foreach (GameObject col in trailContainer)
+        {
+            col.SetActive(false);
+        }
+        switch (curState)
+        {
+            case DashState.idle:
+                break;
+            case DashState.basicMove:
+                //cache gameobject 
+                curTrail = trailContainer[0];
+                //enable trail
+                trailContainer[0].SetActive(true);
+                break;
+            case DashState.dashMove:
+                //cache gameobject 
+                curTrail = trailContainer[1];
+                trailContainer[1].SetActive(true);
+                break;
+            case DashState.chargeStart:
+                //notify charging is active
+                Charging = true;
+                
+                trailContainer[2].SetActive(true);
+                break;
+            case DashState.charging:
+                trailContainer[3].SetActive(true);
+                break;
+            case DashState.chargeComplete:
+                //disable charging after completion
+                Charging = false;
+                isCharged = true;
+                //cache gameobject 
+                trailContainer[4].SetActive(true);
+                break;
+            case DashState.burst:
+                //cache gameobject 
+                playOnce = false;
+                curTrail = trailContainer[5];
+                trailContainer[5].SetActive(true);
+                break;
+        }
     }
 
     public void Dash()
@@ -353,10 +445,12 @@ public class Movement : MonoBehaviour
                     //audio for power and normal dash
                     if (isPowerDashing)
                     {
+                        TrailChange(DashState.burst);
                         audioScript.PlutoPowerDash(transform.position);
                     }
                     else
                     {
+                        TrailChange(DashState.dashMove);
                         audioScript.PlutoDash1(transform.position);
                     }
                 }
@@ -368,16 +462,7 @@ public class Movement : MonoBehaviour
 
     IEnumerator DashTransition()
     {
-        //Change Trail color according to Power Dash Status
-        if ( Trail && isCharged)
-        {
-            Trail.startColor = r_Color;
-        }
-        else
-        {
-            Trail.startColor = y_Color;
-        }
-
+        
         yield return new WaitForSeconds(DashTimeout);
 
 
@@ -389,6 +474,7 @@ public class Movement : MonoBehaviour
             isCharged = false;
             slowDownDrag = powerDashDrag;
             isPowerDashing = false;
+            //disable power dash halo indicator
             dashScript.DashModelTransition(false);
         }
         else
@@ -401,10 +487,10 @@ public class Movement : MonoBehaviour
         ShouldDash = false;
         ObtainedWhileDash = false;
         myBody.drag = normalDrag;
-
+        Charging = false;
         MoveSpeed = DefaultSpeed;
         //Change trail back
-        Trail.startColor = b_Color;
+        TrailChange(DashState.basicMove);
 
         //Start Slowdown/Cooldown
         StartCoroutine(DashCooldown());
@@ -635,7 +721,7 @@ public class Movement : MonoBehaviour
     {
         MoveSpeed = 0;
         myBody.velocity = Vector3.zero;
-        trail.SetActive(false);
+        TrailChange(DashState.idle);
         isDead = true;
     }
 
@@ -795,6 +881,11 @@ public class Movement : MonoBehaviour
         myBody.drag = 2;
 
     }
+    public void isCharging()
+    {
+        TrailChange(DashState.chargeStart);
+    }
+
     //increase speed of pluto
     public void SpeedUpPluto(float SpeedValue)
     {
