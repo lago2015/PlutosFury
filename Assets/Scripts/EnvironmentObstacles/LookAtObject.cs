@@ -27,12 +27,13 @@ public class LookAtObject : MonoBehaviour {
 
         float rotY = transform.rotation.y;
         //float rotZ = transform.rotation.z;
-        //calculate distrance for rotation
-        Quaternion rotation = Quaternion.LookRotation(Player.transform.position - transform.position);
-        rotation.y = rotY;
-        //rotation.z = rotZ;
+        //calculate distance for rotation
+        Vector3 vectorToTarget = Player.transform.position - transform.position;
+        //calculate angle
+        float angle = Mathf.Atan2(vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg;
+        Quaternion q = Quaternion.AngleAxis(angle, Vector3.forward);
         //apply rotation
-        transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * RotationSpeed);
+        transform.rotation = Quaternion.Slerp(transform.rotation, q, Time.deltaTime * RotationSpeed);
         
         //ensure turret stays with base of turret
         if (AmITurret)

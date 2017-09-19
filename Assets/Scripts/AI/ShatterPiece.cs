@@ -43,7 +43,7 @@ public class ShatterPiece : MonoBehaviour {
         //assign land marker position
         if(landGameObject)
         {
-            landMarker = landGameObject.transform.localPosition;
+            landMarker = landGameObject.transform.position;
         }
         if(!myBody)
         {

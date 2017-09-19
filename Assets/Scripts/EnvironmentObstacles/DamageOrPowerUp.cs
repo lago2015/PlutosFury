@@ -124,15 +124,11 @@ public class DamageOrPowerUp : MonoBehaviour {
                         {
                             bool playerDamaged = col.gameObject.GetComponent<Movement>().DamageStatus();
                             bool playerDead = col.gameObject.GetComponent<Movement>().isDead;
-                            if(!playerDamaged && !playerDead)
+                            if(!playerDamaged)
                             {
                                 PlayerScript.DamagePluto();
                                 Damaged = true;
                                 StartCoroutine(DamageReset());
-                            }
-                            else if(playerDead)
-                            {
-
                             }
                         }
                     }

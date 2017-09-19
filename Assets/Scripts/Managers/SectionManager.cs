@@ -59,7 +59,7 @@ public class SectionManager : MonoBehaviour {
                 //if current section number is maxed according to array length
                 else if (currSectionNumber == sections.Length)
                 {
-                    //do nothing... da fuck?
+                    //you win!
                 }
             }
         }   

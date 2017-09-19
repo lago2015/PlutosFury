@@ -57,7 +57,7 @@ public class Movement : MonoBehaviour
     public bool isCharged;
     public bool ShouldDash;
     private bool dashOnce;
-    private bool Charging;
+    public bool Charging;
     /////Speeds
     public float MoveSpeed;
     public float DashSpeed;
@@ -93,8 +93,6 @@ public class Movement : MonoBehaviour
     //Appearance Components
     [Tooltip("0=default, 1=dash, 2=chargeStart, 3=chargeComplete, 4=burst")]
     public GameObject[] trailContainer;
-    public GameObject trail;
-    private ParticleSystem Trail;
     public GameObject hitEffect;
     private MeshRenderer meshComp;
     private Color r_Color;
@@ -158,7 +156,7 @@ public class Movement : MonoBehaviour
         isDead = false;
         //grab default dash timeout
         defaultDashTimeout = DashTimeout;
-
+        
         //assigning scale vector3 for health
         smallScale = new Vector3(smallSize, smallSize, smallSize);
         medScale = new Vector3(medSize, medSize, medSize);
@@ -189,6 +187,10 @@ public class Movement : MonoBehaviour
         shieldScript = GetComponent<Shield>();
         //model change
         modelScript = GetComponent<TextureSwap>();
+        if(modelScript)
+        {
+            modelScript.disableRenderTimer = PowerDashTimeout;
+        }
         //dash script
         dashScript = GetComponent<Dash>();
         //Audio Controller
@@ -249,7 +251,7 @@ public class Movement : MonoBehaviour
         {
             invertControls = false;
         }
-
+        
 
     }
 
@@ -268,7 +270,14 @@ public class Movement : MonoBehaviour
             newVelocity *= velocityCap;
             myBody.velocity = newVelocity;
         }
-
+        if(isDead)
+        {
+            if(modelScript)
+            {
+                modelScript.SwapMaterial(TextureSwap.PlutoState.Lose);
+                TrailChange(DashState.idle);
+            }
+        }
         //Checking for dash charge
         if (DashChargeActive)
         {
@@ -310,7 +319,7 @@ public class Movement : MonoBehaviour
             //move player
             myBody.AddForce(move * MoveSpeed * Time.deltaTime, ForceMode.VelocityChange);
 
-            //trail rotation and enabling
+            //trail rotation and enabling trails
             if (trailContainer.Length>0)
             {
                 if (move == Vector3.zero)
@@ -320,18 +329,28 @@ public class Movement : MonoBehaviour
                 }
                 else
                 {
-                    if(isCharged)
-                    {
-                        if(!playOnce)
-                        {
-                            playOnce = true;
-                            TrailChange(DashState.chargeComplete);
-                        }
-                    }
-                    else if(!ShouldDash && !Charging)
+                    //check if player is only moving
+                    if (!ShouldDash && !Charging)
                     {
                         TrailChange(DashState.basicMove);
                     }
+                    //check if player is done charging
+                    else if(isCharged&& !playOnce &&!ShouldDash)
+                    {
+                        playOnce = true;
+                        TrailChange(DashState.chargeComplete);
+                    }
+                    //check if player is dashing but isnt charged
+                    else if(ShouldDash && !isCharged)
+                    {
+                        TrailChange(DashState.dashMove);
+                    }
+                    //if player is fully charged to power dash
+                    else if(isCharged && ShouldDash)
+                    {
+                        TrailChange(DashState.burst);
+                    }
+                    //player is charging
                     else if(Charging)
                     {
                         TrailChange(DashState.charging);
@@ -361,6 +380,8 @@ public class Movement : MonoBehaviour
         switch (curState)
         {
             case DashState.idle:
+                ResumePluto();
+                Charging = false;
                 break;
             case DashState.basicMove:
                 //cache gameobject 
@@ -390,6 +411,8 @@ public class Movement : MonoBehaviour
                 trailContainer[4].SetActive(true);
                 break;
             case DashState.burst:
+                //disable render for burst
+                modelScript.DisableRender();
                 //cache gameobject 
                 playOnce = false;
                 curTrail = trailContainer[5];
@@ -404,6 +427,11 @@ public class Movement : MonoBehaviour
         //Check if exhausted dash
         if(!isExhausted)
         {
+            //model switch for dash
+            if (modelScript)
+            {
+                modelScript.SwapMaterial(TextureSwap.PlutoState.Smash);
+            }
             //Check if power pick up as been obtained
             //also if power dash is charged
             if (DashChargeActive)
@@ -445,15 +473,15 @@ public class Movement : MonoBehaviour
                     //audio for power and normal dash
                     if (isPowerDashing)
                     {
-                        TrailChange(DashState.burst);
+
                         audioScript.PlutoPowerDash(transform.position);
                     }
                     else
                     {
-                        TrailChange(DashState.dashMove);
                         audioScript.PlutoDash1(transform.position);
                     }
                 }
+                Charging = false;
                 dashOnce = true;    //ensure dash gets called once per dash
                 StartCoroutine(DashTransition());   //Start dash
             }
@@ -487,7 +515,7 @@ public class Movement : MonoBehaviour
         ShouldDash = false;
         ObtainedWhileDash = false;
         myBody.drag = normalDrag;
-        Charging = false;
+        
         MoveSpeed = DefaultSpeed;
         //Change trail back
         TrailChange(DashState.basicMove);
@@ -594,11 +622,8 @@ public class Movement : MonoBehaviour
                 bool Smashed = c.gameObject.GetComponent<BigAsteroid>().RockStatus();
                 if (Smashed)
                 {
-                    if (modelScript)
-                    {
-                        modelScript.SwapMaterial(TextureSwap.PlutoState.Smash);
-                    }
-                    if(!DashChargeActive)
+                    
+                    if(!isPowerDashing)
                         myBody.AddForce(c.contacts[0].normal * explosionBump, ForceMode.VelocityChange);
 
 

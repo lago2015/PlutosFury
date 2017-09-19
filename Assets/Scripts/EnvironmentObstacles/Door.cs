@@ -39,6 +39,7 @@ public class Door : MonoBehaviour {
         {
             if(isOpen)
             {
+                isOpen = false;
                 //do something winning here
                 fadeDir = 1;
                 sectionScript.isChanging(true);

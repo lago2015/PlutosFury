@@ -1,31 +1,23 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[RequireComponent(typeof(Rigidbody))]
-public class RotateGameobject : MonoBehaviour {
-    
-    public bool SelectX=true;
+public class RotateSpikes : MonoBehaviour {
+    public bool SelectX = true;
     public bool SelectY;
     public bool SelectZ;
     public bool isZZero;
     Vector3 Rotation;
-    public float rotatePower = 1;
-    public float rotateTimeout=1;
+    public float DampRotation = 1;
+    public float rotateTimeout = 1;
     private Rigidbody myBody;
-	
-    void Awake()
+
+    /*
+    enabled is a command that can be toggled on and off. On start make this false
+    on trigger enter make this true so that update function can be enabled
+    */
+    // Use this for initialization
+    void Start ()
     {
-        myBody = GetComponent<Rigidbody>();
-        if(myBody)
-        {
-            myBody.useGravity = false;
-            
-        }
-        else
-        {
-            myBody = gameObject.AddComponent(typeof(Rigidbody)) as Rigidbody;
-            myBody.useGravity = false;
-        }
         if (SelectX && SelectY)
         {
             Rotation.x = 220f;
@@ -44,26 +36,17 @@ public class RotateGameobject : MonoBehaviour {
             Rotation.z = 220f;
             isZZero = false;
         }
-        
+
     }
 
-    // Use this for initialization
-    //void Start ()
-    //   {
-    //       myBody.AddTorque(Rotation * rotatePower);
-    //   }
-
-
-
     // Update is called once per frame
-    void FixedUpdate()
+    void FixedUpdate ()
     {
-        transform.Rotate(Rotation * Time.deltaTime / rotatePower);
+        transform.Rotate(Rotation * Time.deltaTime / DampRotation);
 
         if (isZZero)
         {
             transform.position = new Vector3(transform.position.x, transform.position.y, 0);
         }
     }
-
 }
