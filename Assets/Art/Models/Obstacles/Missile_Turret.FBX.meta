@@ -1,21 +1,21 @@
 fileFormatVersion: 2
-guid: b9777c70d41bc7e4394e87d18abc85f1
-timeCreated: 1504573974
+guid: 3579af14bae577849ac40750042c6ccc
+timeCreated: 1505793800
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
     100000: //RootNode
-    100002: Object001
-    100004: Turret_Base
+    100002: Turret_Base
+    100004: Turret_Cannon
     400000: //RootNode
-    400002: Object001
-    400004: Turret_Base
-    2300000: Object001
-    2300002: Turret_Base
-    3300000: Object001
-    3300002: Turret_Base
-    4300000: Object001
+    400002: Turret_Base
+    400004: Turret_Cannon
+    2300000: Turret_Base
+    2300002: Turret_Cannon
+    3300000: Turret_Base
+    3300002: Turret_Cannon
+    4300000: Turret_Cannon
     4300002: Turret_Base
     9500000: //RootNode
   materials:

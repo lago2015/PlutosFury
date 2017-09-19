@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 65de82e4257d4d74dbde32f08885e478
-timeCreated: 1479614666
+guid: adc40622f94abd746b2dddefd4f851de
+timeCreated: 1505790930
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -9,7 +9,7 @@ ModelImporter:
     400000: //RootNode
     2300000: //RootNode
     3300000: //RootNode
-    4300000: BlackHole
+    4300000: GeneratorRing
     9500000: //RootNode
   materials:
     importMaterials: 1
