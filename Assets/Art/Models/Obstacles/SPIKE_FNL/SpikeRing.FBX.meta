@@ -1,22 +1,15 @@
 fileFormatVersion: 2
-guid: eed43a367dc53b7409675da2f5ccba2e
-timeCreated: 1489885755
+guid: 2dc890b7a2ea1a047ab57f9550c8aecc
+timeCreated: 1505792935
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
-    100000: Broken_Planet_2
-    100002: Mouth
-    100004: //RootNode
-    400000: Broken_Planet_2
-    400002: Mouth
-    400004: //RootNode
-    2300000: Broken_Planet_2
-    2300002: Mouth
-    3300000: Broken_Planet_2
-    3300002: Mouth
-    4300000: Broken_Planet_2
-    4300002: Mouth
+    100000: //RootNode
+    400000: //RootNode
+    2300000: //RootNode
+    3300000: //RootNode
+    4300000: SpikeRing
     9500000: //RootNode
   materials:
     importMaterials: 1
