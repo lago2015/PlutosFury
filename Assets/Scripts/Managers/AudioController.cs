@@ -515,6 +515,11 @@ public class AudioController : MonoBehaviour {
 
             if (asteroidBounce != null)
             {
+                if(asteroidBounce.isPlaying)
+                {
+                    asteroidBounce.Stop();
+                }
+
                 asteroidBounce.pitch = Random.Range(0.8f, 1f);
                 
                 asteroidBounce.minDistance = 20f;
