@@ -11,7 +11,7 @@ public class ProjectileMovement : MonoBehaviour {
         if(ShouldMove)
         {
             transform.position += moveSpeed * transform.forward * Time.deltaTime;
-            transform.position = new Vector3(transform.position.x, transform.position.y, 0);
+            //transform.position = new Vector3(transform.position.x, transform.position.y, 0);
         }
     }
 
