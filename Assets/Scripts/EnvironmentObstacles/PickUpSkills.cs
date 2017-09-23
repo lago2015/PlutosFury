@@ -3,10 +3,10 @@ using System.Collections;
 
 public class PickUpSkills : MonoBehaviour {
 
-    public enum Skills { DashCharge,Shield, Inflation, Health}
+    public enum Skills { DashCharge,Shield, Inflation, Health,Shockwave}
     public Skills curSkill;
     //Script references
-    private Dash DashScript;
+    private PowerUpManager PowerUpScript;
     private Movement playerScript;
     private Shield ShieldScript;
     private Inflation InflateScript;
@@ -18,7 +18,7 @@ public class PickUpSkills : MonoBehaviour {
         {
             
             case Skills.DashCharge:
-                DashScript = playerRef.GetComponent<Dash>();
+                PowerUpScript = playerRef.GetComponent<PowerUpManager>();
                 break;
             case Skills.Shield:
                 ShieldScript = playerRef.GetComponent<Shield>();
@@ -30,6 +30,9 @@ public class PickUpSkills : MonoBehaviour {
             case Skills.Health:
                 playerScript = playerRef.GetComponent<Movement>();
                 break;
+            case Skills.Shockwave:
+                PowerUpScript = playerRef.GetComponent<PowerUpManager>();
+                break;
         }
     }
 
@@ -40,9 +43,9 @@ public class PickUpSkills : MonoBehaviour {
             switch(curSkill)
             {
                 case Skills.DashCharge:
-                    if(DashScript)
+                    if(PowerUpScript)
                     {
-                        DashScript.DashPluto(transform.position);
+                        PowerUpScript.DashPluto(transform.position);
                         Destroy(gameObject);
                     }
                     break;
@@ -66,6 +69,13 @@ public class PickUpSkills : MonoBehaviour {
                     if(playerScript)
                     {
                         playerScript.HealthPickup();
+                        Destroy(gameObject);
+                    }
+                    break;
+                case Skills.Shockwave:
+                    if(PowerUpScript)
+                    {
+                        PowerUpScript.ShockPluto(transform.position);
                         Destroy(gameObject);
                     }
                     break;

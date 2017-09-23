@@ -165,6 +165,19 @@ public class DetectThenExplode : MonoBehaviour {
         }
     }
 
+    public void TriggeredExplosion()
+    {
+        if (regularState && explosionState)
+        {
+            if (!doOnce)
+            {
+                GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>().DestructionSmall(transform.position);
+                doOnce = true;
+            }
+            StartCoroutine(SwitchModels());
+        }
+    }
+
     IEnumerator SwitchModels()
     {
         regularState.SetActive(false);

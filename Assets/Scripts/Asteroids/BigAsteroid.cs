@@ -27,7 +27,7 @@ public class BigAsteroid : MonoBehaviour {
         doOnce = false;
     }
 
-    void SpawnAsteroids()
+    public void SpawnAsteroids()
     {
         for(int i=0;i<Asteroids.Length;i++)
         {

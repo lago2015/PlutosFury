@@ -32,7 +32,14 @@ public class Movement : MonoBehaviour
     int score;
     public bool isDead = false;
 
-    //Dash Variables
+    //******Shockwave Variables
+    //Shockwave radius
+    public float shockwaveRadius = 20f;
+    private float radius = 20f;
+    public float power = 50f;
+    //if player has pick up
+    public bool ShockChargeActive;
+    //******Dash Variables
     //Dash States
     public enum DashState { idle,basicMove,dashMove,chargeStart,charging,chargeComplete,burst}
     public DashState curState;
@@ -87,7 +94,7 @@ public class Movement : MonoBehaviour
     private CameraShake CamShake;
     private FloatingJoystick joystickscript;
     private TextureSwap modelScript;
-    private Dash dashScript;
+    private PowerUpManager PowerUpScript;
     private Shield shieldScript;
 
     //Appearance Components
@@ -118,7 +125,7 @@ public class Movement : MonoBehaviour
     
     //functions for power dash
     public bool DashChargeStatus() { return DashChargeActive; }
-    
+    public bool ShockChargeStatus() { return ShockChargeActive; }
     public float CurPowerDashTimeout() { return PowerDashTimeout; }
     public void cancelCharge() { TrailChange(DashState.idle); }
 
@@ -147,7 +154,7 @@ public class Movement : MonoBehaviour
             }
         }
         curState = DashState.basicMove;
-        
+
         
         //referencing the mesh renderer 
         Transform baseObject = transform.GetChild(0);
@@ -192,7 +199,7 @@ public class Movement : MonoBehaviour
             modelScript.disableRenderTimer = PowerDashTimeout;
         }
         //dash script
-        dashScript = GetComponent<Dash>();
+        PowerUpScript = GetComponent<PowerUpManager>();
         //Audio Controller
         audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
         
@@ -291,7 +298,7 @@ public class Movement : MonoBehaviour
             if (chargeOnce)
             {
                 chargeOnce = false;
-                dashScript.DashModelTransition(false);
+                PowerUpScript.DashModelTransition(false);
             }
         }
     }
@@ -421,6 +428,63 @@ public class Movement : MonoBehaviour
         }
     }
 
+    public bool ActivateShockCharge()
+    {
+       if(DashChargeActive)
+        {
+            DashChargeActive = false;
+        }
+        return ShockChargeActive = true;
+    }
+
+    public void Shockwave()
+    {
+        Vector3 curPosition = transform.position;
+
+        Collider[] colliders = Physics.OverlapSphere(curPosition, shockwaveRadius);
+
+        foreach (Collider col in colliders)
+        {
+
+            Rigidbody hitBody = col.GetComponent<Rigidbody>();
+            if (hitBody != null && hitBody != myBody)
+            {
+                Vector3 points = hitBody.position - transform.position;
+                float distance = points.magnitude;
+                Vector3 direction = points / distance;
+                hitBody.AddForce(direction * power);
+            }
+            DetectThenExplode explodeScript = col.GetComponent<DetectThenExplode>();
+            if (explodeScript)
+            {
+                explodeScript.TriggeredExplosion();
+
+            }
+            AIHealth enemyScript = col.GetComponent<AIHealth>();
+            if (enemyScript)
+            {
+                enemyScript.IncrementDamage();
+
+            }
+            BigAsteroid asteroidScript = col.GetComponent<BigAsteroid>();
+            if (asteroidScript)
+            {
+                asteroidScript.SpawnAsteroids();
+            }
+            if (col.gameObject.tag == "LazerWall")
+            {
+                WallGenManager wallScript = col.transform.parent.transform.parent.GetComponent<WallGenManager>();
+                if (wallScript)
+                {
+                    wallScript.WallDestroyed();
+
+
+                }
+            }
+            ShockChargeActive = false;
+        }
+    }
+
     public void Dash()
     {
         
@@ -503,7 +567,7 @@ public class Movement : MonoBehaviour
             slowDownDrag = powerDashDrag;
             isPowerDashing = false;
             //disable power dash halo indicator
-            dashScript.DashModelTransition(false);
+            PowerUpScript.DashModelTransition(false);
         }
         else
         {
@@ -566,6 +630,10 @@ public class Movement : MonoBehaviour
             ObtainedWhileDash = true;
         }
 
+        if(ShockChargeActive)
+        {
+            ShockChargeActive = false;
+        }
         return DashChargeActive = true;
     }
 
