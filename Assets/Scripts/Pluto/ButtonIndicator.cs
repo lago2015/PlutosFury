@@ -136,6 +136,7 @@ public class ButtonIndicator : MonoBehaviour
                 {
                     if(doOnce)
                     {
+                        doOnce = false;
                         //start power dash
                         playerScript.ChargedUp(true);
                         playerScript.TrailChange(Movement.DashState.burst);
@@ -210,6 +211,7 @@ public class ButtonIndicator : MonoBehaviour
     {
 
         yield return new WaitForSeconds(dashDelay);
+        playerScript.TrailChange(Movement.DashState.idle);
         isExhausted = false;
         isCharged = false;
     }
