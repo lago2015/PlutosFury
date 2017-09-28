@@ -60,10 +60,7 @@ public class MoveAsteroidHack : MonoBehaviour
                     pluto.GetComponent<Movement>().ReturnAsteroid(gameObject);
                 }
             }
-            //ensure asteroids are on the zero axis
-            curX = transform.position.x;
-            curY = transform.position.y;
-            transform.position = new Vector3(curX, curY, 0);
+            transform.position = new Vector3(transform.position.x, transform.position.y, 0);
         }
     }
     

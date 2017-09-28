@@ -49,10 +49,6 @@ public class TextureSwap : MonoBehaviour {
                     StartCoroutine(TransitionToBase());
                 }
                 break;
-            case PlutoState.Pickup:
-                meshComp.material = materialArray[2];
-                StartCoroutine(TransitionToBase());
-                break;
             case PlutoState.Smash:
                 meshComp.material = materialArray[3];
                 transitionDelay = 0.75f;
@@ -60,15 +56,15 @@ public class TextureSwap : MonoBehaviour {
                 break;
             case PlutoState.Win:
                 transitionDelay = 5f;
-                meshComp.material = materialArray[4];
-                break;
-            case PlutoState.Lose:
-                transitionDelay = 5f;
-                meshComp.material = materialArray[5];
+                meshComp.material = materialArray[2];
                 break;
         }
     }
-
+    public void StartRender()
+    {
+        StopCoroutine(RenderTimeout());
+        meshComp.enabled = true;
+    }
     public void DisableRender()
     {
         StartCoroutine(RenderTimeout());

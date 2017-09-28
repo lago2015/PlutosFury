@@ -15,39 +15,25 @@ public class ButtonIndicator : MonoBehaviour
     private bool buttPressed;
     public bool isCharged;
     public bool doOnce;
-    public bool isActive;
+    public bool isDashActive;
+    public bool isShockActive;
     public bool isCharging;
     public bool isExhausted;
     private bool playOnce;
 
     void Start()
     {
+        //getter for audio controller and player movement script
         audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
         playerScript = GameObject.FindGameObjectWithTag("Player").GetComponent<Movement>();
         if(playerScript)
         {
+            //Getter for delays and timeouts set by user in movement script
             dashDelay = playerScript.DashTimeout;
             PowerDashTimeout = playerScript.CurPowerDashTimeout();
         }
     }
-    public bool changeChargeStatus(bool curStatus)
-    {
-        return isButtDown = curStatus;
-    }
-
-    //Check if player's power dash is active
-    public bool isChargeActive()
-    {
-        isActive = playerScript.DashChargeStatus();
-        return isActive; 
-    }
-
-    public float dashTimeout()
-    {
-        dashDelay = playerScript.DashTimeout;
-        return dashDelay;
-    }
-
+    
     void Update()
     {
         if(Input.GetKeyDown(KeyCode.S))
@@ -66,9 +52,10 @@ public class ButtonIndicator : MonoBehaviour
             //ensure dash is activated once then a wait transition
             //to reset the condition
             doOnce = true;
-            isActive = isChargeActive();
+            isShockActive = isShockwaveActive();
+            isDashActive = isPowerDashActive();
             //Check for Power Dash pick up obtained and if player has charged up yet
-            if (isActive &&!isCharged)
+            if (isDashActive &&!isCharged)
             {
                 //Increment time
                 curTime += 1 * Time.deltaTime;
@@ -103,6 +90,41 @@ public class ButtonIndicator : MonoBehaviour
                     }
                 }
                 
+            }
+            else if(isShockActive &&!isCharged)
+            {
+                //Increment time
+                curTime += 1 * Time.deltaTime;
+                //check timer 
+                if (curTime >= PowerDashTimeout)
+                {
+                    //if successful start power dash
+                    curTime = 0;
+                    isCharged = true;
+
+                    playerScript.TrailChange(Movement.DashState.chargeComplete);
+
+                }
+                //Show Charging up model
+                else
+                {
+                    if (!isExhausted)
+                    {
+                        if (audioScript)
+                        {
+                            if (!playOnce)
+                            {
+                                audioScript.PlutoPowerChargeStart(playerScript.transform.position);
+                                playOnce = true;
+                            }
+                        }
+                        isCharging = true;
+                        isExhausted = true;
+                        //while charging player is halt
+                        playerScript.FreezePluto();
+                        playerScript.isCharging();
+                    }
+                }
             } 
        }
         //if player doesnt charge power dash then dash
@@ -110,12 +132,29 @@ public class ButtonIndicator : MonoBehaviour
         {
             if (isCharged)
             {
-                //start power dash
-                playerScript.ChargedUp(true);
-                playerScript.TrailChange(Movement.DashState.burst);
-                playerScript.Dash();
-                dashDelay = dashTimeout();
-                StartCoroutine(DashDelay());
+                if(isDashActive)
+                {
+                    if(doOnce)
+                    {
+                        doOnce = false;
+                        //start power dash
+                        playerScript.ChargedUp(true);
+                        playerScript.TrailChange(Movement.DashState.burst);
+                        playerScript.Dash();
+                        dashDelay = dashTimeout();
+                        StartCoroutine(DashDelay());
+                    }
+                }
+                else if(isShockActive)
+                {
+                    if(doOnce)
+                    {                    
+                        playerScript.Shockwave();
+                        doOnce = false;
+                        StartCoroutine(DashDelay());
+                    }
+                }
+
             }
             else
             {
@@ -142,11 +181,37 @@ public class ButtonIndicator : MonoBehaviour
             }
         }
     }
+    //Monitors if both finger touch is down
+    public bool changeChargeStatus(bool curStatus)
+    {
+        return isButtDown = curStatus;
+    }
+
+    //Check if player's power dash is active
+    bool isPowerDashActive()
+    {
+        isDashActive = playerScript.DashChargeStatus();
+        return isDashActive;
+    }
+    //check for players shock wave status
+    bool isShockwaveActive()
+    {
+        isShockActive = playerScript.ShockChargeStatus();
+        return isShockActive;
+    }
+
+    //Get current dash time out
+    public float dashTimeout()
+    {
+        dashDelay = playerScript.DashTimeout;
+        return dashDelay;
+    }
 
     IEnumerator DashDelay()
     {
 
         yield return new WaitForSeconds(dashDelay);
+        playerScript.TrailChange(Movement.DashState.idle);
         isExhausted = false;
         isCharged = false;
     }

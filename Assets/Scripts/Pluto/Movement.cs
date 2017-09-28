@@ -32,9 +32,15 @@ public class Movement : MonoBehaviour
     int score;
     public bool isDead = false;
 
-    //Dash Variables
+    //******Shockwave Variables
+    //Shockwave radius
+    private float shockwaveRadius = 20f;
+    private float power = 50f;
+    //if player has pick up
+    private bool ShockChargeActive;
+    //******Dash Variables
     //Dash States
-    public enum DashState { idle,basicMove,dashMove,chargeStart,charging,chargeComplete,burst}
+    public enum DashState { idle,basicMove,dashMove,chargeStart,chargeComplete,burst}
     public DashState curState;
     private GameObject curTrail;
     //dash trail rotation
@@ -42,22 +48,24 @@ public class Movement : MonoBehaviour
 
     /////Time outs
     public float DashTimeout = 2f;
-    public float PowerDashTimeout = 5;
+    public float PowerDashTimeout = 1.5f;
+    public float chargeTime = 2f;
     private float defaultDashTimeout;
     /////Cooldowns
-    public float DashCooldownTime = 0.5f;
-    public float PowerCooldownTime = 0.75f;
+    private float DashCooldownTime = 0.5f;
+    private float PowerCooldownTime = 0.75f;
     private float curCooldownTime;
     /////checks
     private bool playOnce;
     private bool isExhausted = false;
     private bool ObtainedWhileDash;
     private bool chargeOnce;
-    public bool DashChargeActive;
+    private bool startOnce;
+    private bool DashChargeActive;
     public bool isCharged;
-    public bool ShouldDash;
+    private bool ShouldDash;
     private bool dashOnce;
-    public bool Charging;
+    private bool Charging;
     /////Speeds
     public float MoveSpeed;
     public float DashSpeed;
@@ -87,8 +95,9 @@ public class Movement : MonoBehaviour
     private CameraShake CamShake;
     private FloatingJoystick joystickscript;
     private TextureSwap modelScript;
-    private Dash dashScript;
+    private PowerUpManager PowerUpScript;
     private Shield shieldScript;
+    private ButtonIndicator buttonScript;
 
     //Appearance Components
     [Tooltip("0=default, 1=dash, 2=chargeStart, 3=chargeComplete, 4=burst")]
@@ -118,8 +127,8 @@ public class Movement : MonoBehaviour
     
     //functions for power dash
     public bool DashChargeStatus() { return DashChargeActive; }
-    
-    public float CurPowerDashTimeout() { return PowerDashTimeout; }
+    public bool ShockChargeStatus() { return ShockChargeActive; }
+    public float CurPowerDashTimeout() { return chargeTime; }
     public void cancelCharge() { TrailChange(DashState.idle); }
 
     //functions to check damage
@@ -137,6 +146,7 @@ public class Movement : MonoBehaviour
     // Use this for initialization
     void Awake () 
 	{
+        buttonScript = GameObject.FindGameObjectWithTag("DashButt").GetComponent<ButtonIndicator>();
         //get collider that is triggered to change radius during runtime
         foreach (SphereCollider col in GetComponents<SphereCollider>())
         {
@@ -147,7 +157,7 @@ public class Movement : MonoBehaviour
             }
         }
         curState = DashState.basicMove;
-        
+
         
         //referencing the mesh renderer 
         Transform baseObject = transform.GetChild(0);
@@ -192,7 +202,7 @@ public class Movement : MonoBehaviour
             modelScript.disableRenderTimer = PowerDashTimeout;
         }
         //dash script
-        dashScript = GetComponent<Dash>();
+        PowerUpScript = GetComponent<PowerUpManager>();
         //Audio Controller
         audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
         
@@ -291,7 +301,7 @@ public class Movement : MonoBehaviour
             if (chargeOnce)
             {
                 chargeOnce = false;
-                dashScript.DashModelTransition(false);
+                PowerUpScript.DashModelTransition(false);
             }
         }
     }
@@ -329,8 +339,13 @@ public class Movement : MonoBehaviour
                 }
                 else
                 {
+                    //Player not moving but dash is fully charged
+                    if(move==Vector3.zero && isCharged)
+                    {
+                        TrailChange(DashState.idle);
+                    }
                     //check if player is only moving
-                    if (!ShouldDash && !Charging)
+                    else if (!ShouldDash && !Charging)
                     {
                         TrailChange(DashState.basicMove);
                     }
@@ -353,7 +368,11 @@ public class Movement : MonoBehaviour
                     //player is charging
                     else if(Charging)
                     {
-                        TrailChange(DashState.charging);
+                        if (!startOnce)
+                        {
+                            TrailChange(DashState.chargeStart);
+                            startOnce = true;
+                        }
                     }
 
                 }
@@ -381,6 +400,16 @@ public class Movement : MonoBehaviour
         {
             case DashState.idle:
                 ResumePluto();
+                modelScript.StartRender();
+                ShouldDash = false;
+                isPowerDashing = false;
+                isCharged = false;  
+                startOnce = false;
+                PowerUpScript.DashModelTransition(false);
+                if(buttonScript)
+                {
+                    buttonScript.isCharged = false;
+                }
                 Charging = false;
                 break;
             case DashState.basicMove:
@@ -396,28 +425,81 @@ public class Movement : MonoBehaviour
                 break;
             case DashState.chargeStart:
                 //notify charging is active
-                Charging = true;
-                
                 trailContainer[2].SetActive(true);
-                break;
-            case DashState.charging:
-                trailContainer[3].SetActive(true);
                 break;
             case DashState.chargeComplete:
                 //disable charging after completion
                 Charging = false;
+                startOnce = false;
                 isCharged = true;
                 //cache gameobject 
-                trailContainer[4].SetActive(true);
+                trailContainer[3].SetActive(true);
                 break;
             case DashState.burst:
                 //disable render for burst
                 modelScript.DisableRender();
                 //cache gameobject 
                 playOnce = false;
-                curTrail = trailContainer[5];
-                trailContainer[5].SetActive(true);
+                curTrail = trailContainer[4];
+                trailContainer[4].SetActive(true);
                 break;
+        }
+    }
+
+    public bool ActivateShockCharge()
+    {
+       if(DashChargeActive)
+        {
+            DashChargeActive = false;
+        }
+        return ShockChargeActive = true;
+    }
+
+    public void Shockwave()
+    {
+        Vector3 curPosition = transform.position;
+
+        Collider[] colliders = Physics.OverlapSphere(curPosition, shockwaveRadius);
+
+        foreach (Collider col in colliders)
+        {
+
+            Rigidbody hitBody = col.GetComponent<Rigidbody>();
+            if (hitBody != null && hitBody != myBody)
+            {
+                Vector3 points = hitBody.position - transform.position;
+                float distance = points.magnitude;
+                Vector3 direction = points / distance;
+                hitBody.AddForce(direction * power);
+            }
+            DetectThenExplode explodeScript = col.GetComponent<DetectThenExplode>();
+            if (explodeScript)
+            {
+                explodeScript.TriggeredExplosion();
+
+            }
+            AIHealth enemyScript = col.GetComponent<AIHealth>();
+            if (enemyScript)
+            {
+                enemyScript.IncrementDamage();
+
+            }
+            BigAsteroid asteroidScript = col.GetComponent<BigAsteroid>();
+            if (asteroidScript)
+            {
+                asteroidScript.SpawnAsteroids();
+            }
+            if (col.gameObject.tag == "LazerWall")
+            {
+                WallGenManager wallScript = col.transform.parent.transform.parent.GetComponent<WallGenManager>();
+                if (wallScript)
+                {
+                    wallScript.WallDestroyed();
+
+
+                }
+            }
+            ShockChargeActive = false;
         }
     }
 
@@ -490,11 +572,7 @@ public class Movement : MonoBehaviour
 
     IEnumerator DashTransition()
     {
-        
         yield return new WaitForSeconds(DashTimeout);
-
-
-        
         //Check if a dash pick up was obtained while dashing
         if (isCharged)
         {
@@ -503,7 +581,7 @@ public class Movement : MonoBehaviour
             slowDownDrag = powerDashDrag;
             isPowerDashing = false;
             //disable power dash halo indicator
-            dashScript.DashModelTransition(false);
+            PowerUpScript.DashModelTransition(false);
         }
         else
         {
@@ -566,6 +644,10 @@ public class Movement : MonoBehaviour
             ObtainedWhileDash = true;
         }
 
+        if(ShockChargeActive)
+        {
+            ShockChargeActive = false;
+        }
         return DashChargeActive = true;
     }
 
@@ -649,8 +731,7 @@ public class Movement : MonoBehaviour
             myBody.AddForce(c.contacts[0].normal * soccerKnockback, ForceMode.VelocityChange);
 
         }
-
-
+        
         else if (curTag == "Wall") 
 		{
             if(audioScript)
@@ -908,7 +989,11 @@ public class Movement : MonoBehaviour
     }
     public void isCharging()
     {
-        TrailChange(DashState.chargeStart);
+        if(!Charging)
+        {
+            Charging = true;
+            TrailChange(DashState.chargeStart);
+        }
     }
 
     //increase speed of pluto
