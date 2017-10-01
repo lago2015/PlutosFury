@@ -10,6 +10,9 @@ public class Movement : MonoBehaviour
     private bool vibrationHit;
     private bool invertControls;
 
+    //Buster States
+    public enum BusterStates { Pickup,Shockwave,Death}
+    public BusterStates busterState;
     //health properties
     public int curHealth;
     private int maxHealth=2;
@@ -41,7 +44,7 @@ public class Movement : MonoBehaviour
     //******Dash Variables
     //Dash States
     public enum DashState { idle,basicMove,dashMove,chargeStart,chargeComplete,burst}
-    public DashState curState;
+    public DashState trailState;
     private GameObject curTrail;
     //dash trail rotation
     private Quaternion trailRot;
@@ -52,7 +55,7 @@ public class Movement : MonoBehaviour
     public float chargeTime = 2f;
     private float defaultDashTimeout;
     /////Cooldowns
-    private float DashCooldownTime = 0.5f;
+    private float DashCooldownTime = 0.2f;
     private float PowerCooldownTime = 0.75f;
     private float curCooldownTime;
     /////checks
@@ -65,7 +68,7 @@ public class Movement : MonoBehaviour
     public bool isCharged;
     private bool ShouldDash;
     private bool dashOnce;
-    private bool Charging;
+    public bool Charging;
     /////Speeds
     public float MoveSpeed;
     public float DashSpeed;
@@ -102,6 +105,8 @@ public class Movement : MonoBehaviour
     //Appearance Components
     [Tooltip("0=default, 1=dash, 2=chargeStart, 3=chargeComplete, 4=burst")]
     public GameObject[] trailContainer;
+    [Tooltip("0=Pickup, 1=ShockwaveBurst, 2=Death")]
+    public GameObject[] busterStates;
     public GameObject hitEffect;
     private MeshRenderer meshComp;
     private Color r_Color;
@@ -156,8 +161,11 @@ public class Movement : MonoBehaviour
                 defaultRadius = asteroidCollider.radius;
             }
         }
-        curState = DashState.basicMove;
-
+        trailState = DashState.basicMove;
+        foreach(GameObject prefab in busterStates)
+        {
+            prefab.SetActive(false);
+        }
         
         //referencing the mesh renderer 
         Transform baseObject = transform.GetChild(0);
@@ -329,6 +337,8 @@ public class Movement : MonoBehaviour
             //move player
             myBody.AddForce(move * MoveSpeed * Time.deltaTime, ForceMode.VelocityChange);
 
+            
+
             //trail rotation and enabling trails
             if (trailContainer.Length>0)
             {
@@ -389,14 +399,63 @@ public class Movement : MonoBehaviour
 
     }
 
+    //function for changing buster states depending on overload
+    public void BusterChange(BusterStates nextState)
+    {
+        busterState = nextState;
+        
+
+        switch(busterState)
+        {
+            //share delay with shockwave
+            case BusterStates.Pickup:
+                if(busterStates[0])
+                {
+                    busterStates[0].SetActive(true);
+                    StartCoroutine(BusterTransition(busterStates[0]));
+                }
+                break;
+                //turn off after shockwave so delay
+            case BusterStates.Shockwave:
+                if (busterStates[1])
+                {
+                    busterStates[1].SetActive(true);
+                    StartCoroutine(BusterTransition(busterStates[1]));
+                }
+                break;
+                //doesnt turn off
+            case BusterStates.Death:
+                if(busterStates[2])
+                {
+                    DisableMovement();
+                    modelScript.DeathToRender();
+                    foreach (SphereCollider col in GetComponents<SphereCollider>())
+                    {
+                        if (!col.isTrigger)
+                        {
+                            col.isTrigger = true;
+                        }
+                    }
+                    busterStates[2].SetActive(true);
+                }
+                break;
+        }
+    }
+    
+    IEnumerator BusterTransition(GameObject curObject)
+    {
+        yield return new WaitForSeconds(1f);
+        curObject.SetActive(false);
+    }
+    //Function for changing trails depending on overload
     public void TrailChange(DashState nextState)
     {
-        curState = nextState;
+        trailState = nextState;
         foreach (GameObject col in trailContainer)
         {
             col.SetActive(false);
         }
-        switch (curState)
+        switch (trailState)
         {
             case DashState.idle:
                 ResumePluto();
@@ -457,6 +516,8 @@ public class Movement : MonoBehaviour
 
     public void Shockwave()
     {
+        BusterChange(BusterStates.Shockwave);
+
         Vector3 curPosition = transform.position;
 
         Collider[] colliders = Physics.OverlapSphere(curPosition, shockwaveRadius);
@@ -879,9 +940,9 @@ public class Movement : MonoBehaviour
                 //run game over procedure
                 if (curHealth < 0)
                 {
-                    DisableMovement();
+                    
                     isDead = true;
-                    modelScript.SwapMaterial(TextureSwap.PlutoState.Lose);
+                    BusterChange(BusterStates.Death);
                     audioScript.PlutoDeath(transform.position);
                     gameManager.StartGameover();
                 }

@@ -8,7 +8,13 @@ public class BurstBehavior : MonoBehaviour {
     private float BurstTimeout = 2;
     private float TimeIncrement = 1;
     public bool ShouldBurst=false;
+    private Rigidbody myBody;
     
+    void Awake()
+    {
+        myBody = GetComponent<Rigidbody>();
+    }
+
     void LateStart()
     {
         StartCoroutine(StartBurst());
@@ -38,6 +44,13 @@ public class BurstBehavior : MonoBehaviour {
             
         }
         
+    }
+    public void ResetVelocity()
+    {
+        if (myBody)
+        {
+            myBody.velocity = Vector3.zero;
+        }
     }
     public bool GoBurst()
     {

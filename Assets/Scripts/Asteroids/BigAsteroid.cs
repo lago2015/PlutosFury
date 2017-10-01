@@ -14,8 +14,13 @@ public class BigAsteroid : MonoBehaviour {
     private float DestroyTimeout=2;
     private bool doOnce;
     private bool isDestroyed;
-
+    AsteroidCollector collecterScript;
     public bool RockStatus() { return isDestroyed; }
+
+    void Awake()
+    {
+        collecterScript = GameObject.FindGameObjectWithTag("GravityWell").GetComponent<AsteroidCollector>();
+    }
 
     void Start()
     {
@@ -37,7 +42,7 @@ public class BigAsteroid : MonoBehaviour {
             Object Asteroid=Instantiate(Asteroids[i], SpawnPoint, Quaternion.identity);
             GameObject ConAsteroid = (GameObject)Asteroid;
             ConAsteroid.GetComponent<BurstBehavior>().GoBurst();
-            ConAsteroid.GetComponent<MoveAsteroidHack>().newSpawnedAsteroid();
+            collecterScript.newSpawnedAsteroid();
         }
         if(AsteroidModel&&Explosion)
         {

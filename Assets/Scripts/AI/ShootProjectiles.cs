@@ -6,10 +6,19 @@ public class ShootProjectiles : MonoBehaviour {
 
     public GameObject[] ProjectilePos;
     public GameObject Projectile;
+    public GameObject Muzzle;
     public float FireRate;
     float elapseTime;
     bool isReloading = false;
     bool PlayerNear;
+    
+    void Awake()
+    {
+        if(Muzzle)
+        {
+            Muzzle.SetActive(false);
+        }
+    }
 
     void FixedUpdate()
     {
@@ -29,6 +38,8 @@ public class ShootProjectiles : MonoBehaviour {
                     if (!isReloading)
                     {
                         Instantiate(Projectile, ProjectilePos[i].transform.position, ProjectilePos[i].transform.rotation);
+                        Muzzle.SetActive(true);
+                        StartCoroutine(MuzzleShot()); 
                     }
                 }
                 isReloading = true;
@@ -37,9 +48,16 @@ public class ShootProjectiles : MonoBehaviour {
             }
             else
             {
+                
                 isReloading = false;
             }
         }
+    }
+
+    IEnumerator MuzzleShot()
+    {
+        yield return new WaitForSeconds(0.2f);
+        Muzzle.SetActive(false);
     }
 
     void OnTriggerStay(Collider col)

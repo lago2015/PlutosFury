@@ -10,7 +10,7 @@ public class TextureSwap : MonoBehaviour {
     private float defaultDelay;
     public float transitionDelay = 0.2f;
     public float disableRenderTimer = 0.7f;
-
+    private bool isDead;
     private bool doOnce;
     private MeshRenderer meshComp;
     private Material curMaterial;
@@ -62,19 +62,30 @@ public class TextureSwap : MonoBehaviour {
     }
     public void StartRender()
     {
-        StopCoroutine(RenderTimeout());
-        meshComp.enabled = true;
+        if(!isDead)
+        {
+            StopCoroutine(RenderTimeout());
+            meshComp.enabled = true;
+        }
     }
     public void DisableRender()
     {
         StartCoroutine(RenderTimeout());
     }
 
+    public void DeathToRender()
+    {
+        isDead = true;
+        meshComp.enabled = false;
+    }
     IEnumerator RenderTimeout()
     {
         meshComp.enabled = false;
         yield return new WaitForSeconds(disableRenderTimer);
-        meshComp.enabled = true;
+        if(!isDead)
+        {
+            meshComp.enabled = true;
+        }
     }
 
     IEnumerator TransitionToBase()

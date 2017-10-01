@@ -15,13 +15,11 @@ public class MoveAsteroidHack : MonoBehaviour
 	private Rigidbody myBody;
     private float curX;
     private float curY;
-	GameObject pluto;
     private bool isNewAsteroid;
     public bool isConsumable;
     float AttractionStrength = 5f;
+    GameObject pluto;
 
-    public bool newSpawnedAsteroid() { return isNewAsteroid = true; }
-    public bool asteroidStatus() { return isNewAsteroid; }
 
     void Start()
     {
@@ -64,11 +62,5 @@ public class MoveAsteroidHack : MonoBehaviour
         }
     }
     
-    public void ResetVelocity()
-    {
-        if(myBody)
-        {
-            myBody.velocity = Vector3.zero;
-        }
-    }
+
 }

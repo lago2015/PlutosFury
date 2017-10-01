@@ -19,6 +19,7 @@ public class PickUpSkills : MonoBehaviour {
             
             case Skills.DashCharge:
                 PowerUpScript = playerRef.GetComponent<PowerUpManager>();
+                playerScript = playerRef.GetComponent<Movement>();
                 break;
             case Skills.Shield:
                 ShieldScript = playerRef.GetComponent<Shield>();
@@ -26,12 +27,15 @@ public class PickUpSkills : MonoBehaviour {
                 break;
             case Skills.Inflation:
                 InflateScript = playerRef.GetComponent<Inflation>();
+                playerScript = playerRef.GetComponent<Movement>();
                 break;
             case Skills.Health:
+                playerScript = playerRef.GetComponent<Movement>();
                 playerScript = playerRef.GetComponent<Movement>();
                 break;
             case Skills.Shockwave:
                 PowerUpScript = playerRef.GetComponent<PowerUpManager>();
+                playerScript = playerRef.GetComponent<Movement>();
                 break;
         }
     }
@@ -40,6 +44,7 @@ public class PickUpSkills : MonoBehaviour {
     {
         if(col.gameObject.tag=="Player")
         {
+            playerScript.BusterChange(Movement.BusterStates.Pickup);
             switch(curSkill)
             {
                 case Skills.DashCharge:

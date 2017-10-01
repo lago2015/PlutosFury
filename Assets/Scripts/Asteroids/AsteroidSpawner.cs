@@ -11,9 +11,10 @@ public class AsteroidSpawner : MonoBehaviour
     public float maxX;
     public float minY;
     public float maxY;
-
+    AsteroidCollector collecterScript;
 	void Awake()
 	{
+        collecterScript = GameObject.FindGameObjectWithTag("GravityWell").GetComponent<AsteroidCollector>();
 		// Populate the list with various asteroids
 		asteroidPool = new List<GameObject>();
 		for (int i = 0; i < asteroids.Length; ++i) 
@@ -73,7 +74,7 @@ public class AsteroidSpawner : MonoBehaviour
 		asteroid.transform.position = new Vector3 (x, y, 0.0f);
 		asteroid.transform.rotation = Quaternion.Euler (0.0f, 0.0f, roll);
 		asteroid.SetActive (true);
-        asteroid.GetComponent<MoveAsteroidHack>().ResetVelocity();
+        asteroid.GetComponent<BurstBehavior>().ResetVelocity();
     }
 
     public void SpawnAsteroidHere(Vector3 spawnPoint)
@@ -84,7 +85,7 @@ public class AsteroidSpawner : MonoBehaviour
             return;
         }
         asteroid.SetActive(true);
-        asteroid.GetComponent<MoveAsteroidHack>().ResetVelocity();
+        asteroid.GetComponent<BurstBehavior>().ResetVelocity();
 
     }
 
@@ -111,7 +112,7 @@ public class AsteroidSpawner : MonoBehaviour
 	{
         // Return asteroid to the list
 
-        bool isNew = asteroid.GetComponent<MoveAsteroidHack>().asteroidStatus();
+        bool isNew = collecterScript.asteroidStatus();
         if(isNew)
         {
             Destroy(asteroid);

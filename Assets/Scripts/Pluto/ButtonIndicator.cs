@@ -20,7 +20,10 @@ public class ButtonIndicator : MonoBehaviour
     public bool isCharging;
     public bool isExhausted;
     private bool playOnce;
+    private bool playerCharging;
 
+    public float delayChargeTimeout=0.25f;
+    public float delayTimer;
     void Start()
     {
         //getter for audio controller and player movement script
@@ -57,39 +60,46 @@ public class ButtonIndicator : MonoBehaviour
             //Check for Power Dash pick up obtained and if player has charged up yet
             if (isDashActive &&!isCharged)
             {
-                //Increment time
-                curTime += 1 * Time.deltaTime;
-                //check timer 
-                if (curTime >= PowerDashTimeout)
+                if (delayTimer >= delayChargeTimeout)
                 {
-                    //if successful start power dash
-                    curTime = 0;
-                    isCharged = true;
-
-                    playerScript.TrailChange(Movement.DashState.chargeComplete);
-
-                }
-                //Show Charging up model
-                else
-                {
-                    if (!isExhausted)
+                    delayTimer = 0;
+                    //Increment time
+                    curTime += 1 * Time.deltaTime;
+                    //check timer 
+                    if (curTime >= PowerDashTimeout)
                     {
-                        if(audioScript)
+                        //if successful start power dash
+                        curTime = 0;
+                        isCharged = true;
+
+                        playerScript.TrailChange(Movement.DashState.chargeComplete);
+
+                    }
+                    //Show Charging up model
+                    else
+                    {
+                        if (!isExhausted)
                         {
-                            if (!playOnce)
+                            if (audioScript)
                             {
-                                audioScript.PlutoPowerChargeStart(playerScript.transform.position);
-                                playOnce = true;
+                                if (!playOnce)
+                                {
+                                    audioScript.PlutoPowerChargeStart(playerScript.transform.position);
+                                    playOnce = true;
+                                }
                             }
+                            isCharging = true;
+                            isExhausted = true;
+                            //while charging player is halt
+                            playerScript.FreezePluto();
+                            playerScript.isCharging();
                         }
-                        isCharging = true;
-                        isExhausted = true;
-                        //while charging player is halt
-                        playerScript.FreezePluto();
-                        playerScript.isCharging();
                     }
                 }
-                
+                else
+                {
+                    delayTimer += 1f * Time.deltaTime;
+                }
             }
             else if(isShockActive &&!isCharged)
             {
@@ -158,12 +168,14 @@ public class ButtonIndicator : MonoBehaviour
             }
             else
             {
-                if (doOnce)
+                if(doOnce)
                 {
+
                     if (audioScript)
                     {
                         audioScript.PlutoPowerChargeCancel();
                         playOnce = false;
+
                     }
                     //reset dash timer
                     curTime = 0;
@@ -178,6 +190,7 @@ public class ButtonIndicator : MonoBehaviour
                     dashDelay = dashTimeout();
                     StartCoroutine(DashDelay());
                 }
+
             }
         }
     }
