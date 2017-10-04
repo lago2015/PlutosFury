@@ -10,6 +10,7 @@ public class LookAtObject : MonoBehaviour {
     private Vector3 startPosition;
     void Start()
     {
+        enabled = false;
         if (gameObject.name.Contains("Turret"))
         {
             Player = GameObject.FindGameObjectWithTag("Player");
@@ -21,6 +22,10 @@ public class LookAtObject : MonoBehaviour {
         }
     }
 
+    void FixedUpdate()
+    {
+        RotateToObject();
+    }
     
     void RotateToObject()
     {
@@ -43,14 +48,25 @@ public class LookAtObject : MonoBehaviour {
     }
 
     //Discovered player
-    void OnTriggerStay(Collider col)
+    void OnTriggerEnter(Collider col)
     {
         if(col.gameObject.tag=="Player")
         {
             if(AmITurret)
             {
-                Player = col.gameObject;
-                RotateToObject();
+                
+                enabled = true;
+            }
+        }
+    }
+    
+    void OnTriggerExit(Collider col)
+    {
+        if(col.gameObject.tag=="Player")
+        {
+            if(AmITurret)
+            {
+                enabled = false;
             }
         }
     }
