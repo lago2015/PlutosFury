@@ -48,7 +48,10 @@ public class Movement : MonoBehaviour
     private GameObject curTrail;
     //dash trail rotation
     private Quaternion trailRot;
-
+    //trail checks
+    private bool moveOn;
+    private bool dashOn;
+    private bool burstOn;
     /////Time outs
     public float DashTimeout = 2f;
     public float PowerDashTimeout = 1.5f;
@@ -350,30 +353,41 @@ public class Movement : MonoBehaviour
                 else
                 {
                     //Player not moving but dash is fully charged
-                    if(move==Vector3.zero && isCharged)
+                    if (move == Vector3.zero && isCharged)
                     {
                         TrailChange(DashState.idle);
                     }
                     //check if player is only moving
                     else if (!ShouldDash && !Charging)
                     {
-                        TrailChange(DashState.basicMove);
+                        if (!moveOn)
+                        {
+                            TrailChange(DashState.basicMove);
+                        }
                     }
                     //check if player is done charging
-                    else if(isCharged&& !playOnce &&!ShouldDash)
+                    else if (isCharged && !playOnce && !ShouldDash)
                     {
                         playOnce = true;
                         TrailChange(DashState.chargeComplete);
                     }
                     //check if player is dashing but isnt charged
-                    else if(ShouldDash && !isCharged)
+                    else if (ShouldDash && !isCharged)
                     {
-                        TrailChange(DashState.dashMove);
+                        if (!dashOn)
+                        {
+                            TrailChange(DashState.dashMove);
+                        }
+
                     }
                     //if player is fully charged to power dash
-                    else if(isCharged && ShouldDash)
+                    else if (isCharged && ShouldDash)
                     {
-                        TrailChange(DashState.burst);
+                        if (!burstOn)
+                        {
+                            TrailChange(DashState.burst);
+                        }
+                        
                     }
                     //player is charging
                     else if(Charging)
@@ -462,25 +476,40 @@ public class Movement : MonoBehaviour
                 modelScript.StartRender();
                 ShouldDash = false;
                 isPowerDashing = false;
-                isCharged = false;  
+                isCharged = false;
                 startOnce = false;
+                moveOn = false;
+                burstOn = false;
+                dashOn = false;
                 PowerUpScript.DashModelTransition(false);
-                if(buttonScript)
+                if (buttonScript)
                 {
                     buttonScript.isCharged = false;
                 }
                 Charging = false;
                 break;
             case DashState.basicMove:
-                //cache gameobject 
-                curTrail = trailContainer[0];
-                //enable trail
-                trailContainer[0].SetActive(true);
+                
+                    moveOn = true;
+                    burstOn = false;
+                    dashOn = false;
+                    //cache gameobject 
+                    curTrail = trailContainer[0];
+                    //enable trail
+                    trailContainer[0].SetActive(true);
+                
                 break;
             case DashState.dashMove:
-                //cache gameobject 
-                curTrail = trailContainer[1];
-                trailContainer[1].SetActive(true);
+                if (!dashOn)
+                {
+                    moveOn = false;
+                    burstOn = false;
+                    dashOn = true;
+                    //cache gameobject 
+                    curTrail = trailContainer[1];
+                    trailContainer[1].SetActive(true);
+                }
+                
                 break;
             case DashState.chargeStart:
                 //notify charging is active
@@ -495,12 +524,20 @@ public class Movement : MonoBehaviour
                 trailContainer[3].SetActive(true);
                 break;
             case DashState.burst:
-                //disable render for burst
-                modelScript.DisableRender();
-                //cache gameobject 
-                playOnce = false;
-                curTrail = trailContainer[4];
-                trailContainer[4].SetActive(true);
+                if(!burstOn)
+                {
+
+                    moveOn = false;
+                    burstOn = true;
+                    dashOn = false;
+
+                    //disable render for burst
+                    modelScript.DisableRender();
+                    //cache gameobject 
+                    playOnce = false;
+                    curTrail = trailContainer[4];
+                    trailContainer[4].SetActive(true);
+                }
                 break;
         }
     }
