@@ -96,7 +96,11 @@ public class AsteroidSpawner : MonoBehaviour
         {
             if (!asteroidPool[i].activeInHierarchy)
             {
-                return asteroidPool[i];
+                if(asteroidPool[i]!=null)
+                {
+
+                    return asteroidPool[i];
+                }
             }
         }
 
@@ -112,7 +116,7 @@ public class AsteroidSpawner : MonoBehaviour
 	{
         // Return asteroid to the list
 
-        bool isNew = collecterScript.asteroidStatus();
+        bool isNew = asteroid.GetComponent<BurstBehavior>().asteroidStatus();
         if(isNew)
         {
             Destroy(asteroid);

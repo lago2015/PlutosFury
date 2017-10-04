@@ -17,11 +17,9 @@ public class AsteroidCollector : MonoBehaviour {
     private Rigidbody myBody;
     private float curX;
     private float curY;
-    private bool isNewAsteroid;
     public bool isConsumable;
     float AttractionStrength = 5f;
-    public bool newSpawnedAsteroid() { return isNewAsteroid = true; }
-    public bool asteroidStatus() { return isNewAsteroid; }
+    
     void Awake()
     {
         

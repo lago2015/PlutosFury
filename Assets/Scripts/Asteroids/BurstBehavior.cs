@@ -9,7 +9,10 @@ public class BurstBehavior : MonoBehaviour {
     private float TimeIncrement = 1;
     public bool ShouldBurst=false;
     private Rigidbody myBody;
-    
+    private bool isNewAsteroid;
+
+    public bool newSpawnedAsteroid() { return isNewAsteroid = true; }
+    public bool asteroidStatus() { return isNewAsteroid; }
     void Awake()
     {
         myBody = GetComponent<Rigidbody>();

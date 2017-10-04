@@ -42,7 +42,7 @@ public class BigAsteroid : MonoBehaviour {
             Object Asteroid=Instantiate(Asteroids[i], SpawnPoint, Quaternion.identity);
             GameObject ConAsteroid = (GameObject)Asteroid;
             ConAsteroid.GetComponent<BurstBehavior>().GoBurst();
-            collecterScript.newSpawnedAsteroid();
+            ConAsteroid.GetComponent<BurstBehavior>().newSpawnedAsteroid();
         }
         if(AsteroidModel&&Explosion)
         {
