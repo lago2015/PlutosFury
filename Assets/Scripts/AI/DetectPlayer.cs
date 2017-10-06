@@ -23,7 +23,7 @@ public class DetectPlayer : MonoBehaviour {
     }
 
     /* This is meant for Boss Planet Detection*/
-    void OnTriggerStay(Collider col)
+    void OnTriggerEnter(Collider col)
     {
         string CurTag = col.gameObject.tag;
         if (CurTag == ("Player"))

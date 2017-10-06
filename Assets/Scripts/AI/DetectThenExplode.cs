@@ -86,18 +86,6 @@ public class DetectThenExplode : MonoBehaviour {
         }
     }
 
-    void OnTriggerStay(Collider col)
-    {
-        string CurTag = col.gameObject.tag;
-        if (CurTag == "Player")
-        {
-            if (isHomingLandmine)
-            {
-                moveScript.ShouldMove = true;
-                TriggerCollider.radius = lostSightRadius;
-            }
-        }
-    }
 
     void OnTriggerEnter(Collider col)
     {
@@ -130,6 +118,11 @@ public class DetectThenExplode : MonoBehaviour {
                         StartCoroutine(SwitchModels());
                     }
                 }
+            }
+            else if (isHomingLandmine)
+            {
+                moveScript.ShouldMove = true;
+                TriggerCollider.radius = lostSightRadius;
             }
         }
         else if(CurTag == "BigAsteroid")

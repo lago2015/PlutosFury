@@ -47,11 +47,13 @@ public class ChasePlayer : MonoBehaviour
         {
             NeptuneMoon1.GetComponent<NeptuneMoon>().ActivateMoon();
         }
+        enabled = true;
         return PlayerNear = true;
     }
 
     public bool PlayerNotNear()
     {
+        enabled = false;
         return PlayerNear = false;
     }
 

@@ -47,23 +47,24 @@ public class RotateGameobject : MonoBehaviour {
         
     }
 
-    // Use this for initialization
-    //void Start ()
-    //   {
-    //       myBody.AddTorque(Rotation * rotatePower);
-    //   }
+    //Use this for initialization
 
-
-
-    // Update is called once per frame
-    void FixedUpdate()
+   void Start ()
     {
-        transform.Rotate(Rotation * Time.deltaTime / rotatePower);
-
-        if (isZZero)
-        {
-            transform.position = new Vector3(transform.position.x, transform.position.y, 0);
-        }
+        myBody.AddTorque(Rotation * rotatePower);
     }
 
-}
+
+
+    //////Update is called once per frame
+    ////void FixedUpdate()
+    ////{
+    ////    transform.Rotate(Rotation * Time.deltaTime / rotatePower);
+
+    ////    if (isZZero)
+    ////    {
+    ////        transform.position = new Vector3(transform.position.x, transform.position.y, 0);
+    ////    }
+    ////}
+
+    }

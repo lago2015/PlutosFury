@@ -4,7 +4,6 @@ using System.Collections;
 public class PowerUpManager : MonoBehaviour {
 
     public GameObject dashModel;
-    public GameObject shockModel;
     bool chargeOnce;
     private AudioController audioScript;
     private Movement moveScript;
@@ -38,16 +37,8 @@ public class PowerUpManager : MonoBehaviour {
         {
             moveScript.ActivateShockCharge();
         }
-        ShockModelTransition(true);
     }
 
-    public void ShockModelTransition(bool isActive)
-    {
-        if(shockModel)
-        {
-            shockModel.SetActive(isActive);
-        }
-    }
 
     //turning power dash indicator on and off
     public void DashModelTransition(bool isActive)

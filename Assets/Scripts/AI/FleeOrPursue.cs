@@ -216,8 +216,8 @@ public class FleeOrPursue : MonoBehaviour {
         }
         yield return new WaitForSeconds(DashTimeout);
 
-        
 
+        ShouldDash = false;
         //Start Slowdown/Cooldown
         StartCoroutine(DashCooldown());
         StartCoroutine(SlowDown());

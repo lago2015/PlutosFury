@@ -340,7 +340,6 @@ public class Movement : MonoBehaviour
             //move player
             myBody.AddForce(move * MoveSpeed * Time.deltaTime, ForceMode.VelocityChange);
 
-            
 
             //trail rotation and enabling trails
             if (trailContainer.Length>0)
@@ -480,6 +479,7 @@ public class Movement : MonoBehaviour
                 startOnce = false;
                 moveOn = false;
                 burstOn = false;
+                ShouldDash = false;
                 dashOn = false;
                 PowerUpScript.DashModelTransition(false);
                 if (buttonScript)
@@ -489,8 +489,8 @@ public class Movement : MonoBehaviour
                 Charging = false;
                 break;
             case DashState.basicMove:
-                
-                    moveOn = true;
+                ShouldDash = false;
+                moveOn = true;
                     burstOn = false;
                     dashOn = false;
                     //cache gameobject 
@@ -517,6 +517,7 @@ public class Movement : MonoBehaviour
                 break;
             case DashState.chargeComplete:
                 //disable charging after completion
+                ShouldDash = false;
                 Charging = false;
                 startOnce = false;
                 isCharged = true;
@@ -688,8 +689,6 @@ public class Movement : MonoBehaviour
 
         //Reset Value
         ObtainedWhileDash = false;
-        ShouldDash = false;
-        ObtainedWhileDash = false;
         myBody.drag = normalDrag;
         
         MoveSpeed = DefaultSpeed;
@@ -709,6 +708,8 @@ public class Movement : MonoBehaviour
         //ensure no drifting after reaching high speeds.
         isExhausted = true;
         yield return new WaitForSeconds(curCooldownTime);
+        ShouldDash = false;
+
         isExhausted = false;
     }
     
@@ -761,7 +762,7 @@ public class Movement : MonoBehaviour
         spawnScript.SpawnAsteroid();
     }
 
-    void OnTriggerStay(Collider col)
+    void OnTriggerEnter(Collider col)
     {
         string curTag = col.gameObject.tag;
         if (curTag == "Asteroid")
