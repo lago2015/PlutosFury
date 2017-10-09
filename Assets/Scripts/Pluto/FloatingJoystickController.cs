@@ -30,7 +30,7 @@ public class FloatingJoystickController : MonoBehaviour {
             for (int i = 0; i < Input.touchCount; i++)
             {
                 //check if theres a touch
-                if (myTouches[i].phase == TouchPhase.Began && Input.touchCount==1)
+                if (myTouches[i].phase == TouchPhase.Began && Input.touchCount == 1)
                 {
                     singleSideFingerID = myTouches[i].fingerId; // stores the unique id for this touch that happened on the left-side half of the screen
 

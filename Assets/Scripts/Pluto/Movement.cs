@@ -906,6 +906,10 @@ public class Movement : MonoBehaviour
                 myBody.AddForce(c.contacts[0].normal * wallBump, ForceMode.VelocityChange);
             }
         }
+        else if(curTag=="Planet")
+        {
+            myBody.AddForce(c.contacts[0].normal * wallBump*3, ForceMode.VelocityChange);
+        }
         
 	}
 
@@ -965,12 +969,11 @@ public class Movement : MonoBehaviour
         //this is to prevent multiple damages during a frame
         if (!isDamaged)
         {
-            //ensure damaged once and wait for a few frames to enable damage.
-            isDamaged = true;
-
             //check if player is shielded
             if (!ShieldStatus())
             {
+                //ensure damaged once and wait for a few frames to enable damage.
+                isDamaged = true;
 
                 //decrement health
                 curHealth--;
@@ -1024,8 +1027,6 @@ public class Movement : MonoBehaviour
 
             else
             {
-                StartCoroutine(DamageTransition());
-
                 if (asteroidCollider)
                 {
                     asteroidCollider.radius = defaultRadius;
@@ -1038,6 +1039,8 @@ public class Movement : MonoBehaviour
                 {
                     audioScript.ShieldDing(transform.position);
                 }
+                StartCoroutine(DamageTransition());
+
             }
         }    
     }

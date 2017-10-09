@@ -6,7 +6,7 @@ public class CameraStop : MonoBehaviour {
 	private Vector3 topRight;
 	private Vector3 botLeft;
 	private Vector3 botRight;
-
+    public float CameraSpeed=1;
 	public float maxX;
 	public float maxY;
 	public float minX;
@@ -14,7 +14,7 @@ public class CameraStop : MonoBehaviour {
     bool bossChange;
     public float bossXMax = 2360;
     public float bossXMin = 1590;
-
+    
 	public float dampTime = 0.15f;
 	private Vector3 velocity = Vector3.zero;
 	GameObject target;
@@ -54,23 +54,34 @@ public class CameraStop : MonoBehaviour {
             minX = curMinX;
             maxNumSections = GameObject.FindGameObjectWithTag("Spawner").GetComponent<SectionManager>().NumOfSections();
         }
-		//targetBody = target.GetComponent<Rigidbody> ();
-		//cachedMass = targetBody.mass;
+        //targetBody = target.GetComponent<Rigidbody> ();
+        //cachedMass = targetBody.mass;
+        enabled = false;
 	}
 	
  
 	// Update is called once per frame
 	void FixedUpdate () 
 	{
-        if (target)
-        {
-            Vector3 point = GetComponent<Camera>().WorldToViewportPoint(target.transform.position);
+        ////Follws player
+        //if (target)
+        //{
+        //    Vector3 point = GetComponent<Camera>().WorldToViewportPoint(target.transform.position);
 
-            Vector3 delta = target.transform.position - GetComponent<Camera>().ViewportToWorldPoint(new Vector3(0.5f, 0.5f, point.z));
-            Vector3 destination = transform.position + delta;
-            transform.position = Vector3.SmoothDamp(transform.position, destination, ref velocity, dampTime);
-        }
+        //    Vector3 delta = target.transform.position - GetComponent<Camera>().ViewportToWorldPoint(new Vector3(0.5f, 0.5f, point.z));
+        //    Vector3 destination = transform.position + delta;
+        //    transform.position = Vector3.SmoothDamp(transform.position, destination, ref velocity, dampTime);
+        //}
 
+
+        Vector3 point = GetComponent<Camera>().WorldToViewportPoint(transform.position);
+
+        Vector3 delta = Vector3.zero; //GetComponent<Camera>().ViewportToWorldPoint(new Vector3(0.5f, 0.5f, point.z));
+        delta.x += CameraSpeed*Time.deltaTime;
+        Vector3 destination = transform.position + delta;
+        transform.position = Vector3.SmoothDamp(transform.position, destination, ref velocity, dampTime);
+
+        //Camera fitting to viewport
         topLeft = Camera.main.ViewportToWorldPoint(new Vector3(0, 1, -Camera.main.transform.position.z));
         topRight = Camera.main.ViewportToWorldPoint(new Vector3(1, 1, -Camera.main.transform.position.z));
         botLeft = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, -Camera.main.transform.position.z));
@@ -98,7 +109,11 @@ public class CameraStop : MonoBehaviour {
         }
             cachedCameraPosition = transform.position;
     }
-    
+ 
+    public void EnableCamera()
+    {
+        enabled = true;
+    }   
     public void ChangeToBoss(Vector3 curPos)
     {
         if(curSection<=maxNumSections)

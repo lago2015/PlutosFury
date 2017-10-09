@@ -32,6 +32,8 @@ public class DamageOrPowerUp : MonoBehaviour {
     Movement PlayerScript;
     FleeOrPursue dashScript;
     public GameObject dashModel;
+
+   
     void Start()
     {
         CanPowerUp = true;
@@ -119,25 +121,21 @@ public class DamageOrPowerUp : MonoBehaviour {
                 {
                     if(dashScript)
                     {
-                        bool RogueDashing = dashScript.isDashing();
-                        if (RogueDashing)
+                        bool playerDamaged = col.gameObject.GetComponent<Movement>().DamageStatus();
+                        bool plutoDashing = PlayerScript.DashStatus();
+
+                        if (!playerDamaged && !plutoDashing)
                         {
-                            bool playerDamaged = col.gameObject.GetComponent<Movement>().DamageStatus();
-                            bool playerDead = col.gameObject.GetComponent<Movement>().isDead;
-                            if(!playerDamaged)
-                            {
-                                PlayerScript.DamagePluto();
-                                Damaged = true;
-                                StartCoroutine(DamageReset());
-                            }
+                            PlayerScript.DamagePluto();
+                            Damaged = true;
+                            StartCoroutine(DamageReset());
                         }
                     }
                     else
                     {
                         bool plutoDashing = PlayerScript.DashStatus();
-                        bool playerDead = col.gameObject.GetComponent<Movement>().isDead;
 
-                        if (!plutoDashing && !playerDead)
+                        if (!plutoDashing)
                         {
                             bool playerDamaged = col.gameObject.GetComponent<Movement>().DamageStatus();
                             if (!playerDamaged)

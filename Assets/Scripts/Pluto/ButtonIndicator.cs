@@ -62,16 +62,16 @@ public class ButtonIndicator : MonoBehaviour
             {
                 if (delayTimer >= delayChargeTimeout)
                 {
-                    delayTimer = 0;
+                    
                     //Increment time
-                    curTime += 1 * Time.deltaTime;
+                    curTime += 1* Time.deltaTime;
                     //check timer 
                     if (curTime >= PowerDashTimeout)
                     {
                         //if successful start power dash
                         curTime = 0;
                         isCharged = true;
-
+                        delayTimer = 0;
                         playerScript.TrailChange(Movement.DashState.chargeComplete);
 
                     }
@@ -179,6 +179,7 @@ public class ButtonIndicator : MonoBehaviour
                     }
                     //reset dash timer
                     curTime = 0;
+                    delayTimer = 0;
                     //resume player movement
                     playerScript.ResetDrag();
                     //change variables and appearance for charging being false

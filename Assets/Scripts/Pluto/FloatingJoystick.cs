@@ -45,8 +45,14 @@ public class FloatingJoystick : MonoBehaviour,IDragHandler,IPointerUpHandler,IPo
 
     void Update()
     {
+        if (Input.touchCount == 0)
+        {
+            joystickStaysInFixedPosition = false;
+            inputVector = Vector3.zero; // resets the inputVector so that output will no longer affect movement of the game object (example, a player character or any desired game object)
+            joystickKnobImage.rectTransform.anchoredPosition = Vector3.zero; // resets the handle ("knob") of this joystick back to the center
+        }
         //check if theres two fingers down for dash
-        if (Input.touchCount == 2)
+        else if (Input.touchCount == 2)
         {
             bool doOnce = dashScript.doOnce;
             //if charge hasnt started than start now
@@ -60,6 +66,7 @@ public class FloatingJoystick : MonoBehaviour,IDragHandler,IPointerUpHandler,IPo
         {
             dashScript.changeChargeStatus(false);
         }
+        
     }
 
     // this event happens when there is a drag on screen
