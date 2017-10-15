@@ -18,10 +18,14 @@ public class CameraColliderCollecter : MonoBehaviour {
             spawnScript.ReturnPooledAsteroid(col.gameObject);
             spawnScript.SpawnAsteroid();
         }
-        else
+        
+        else 
         {
+            if(curTag!="Player"&&curTag!="Wall")
+            {
 
-            Destroy(col.gameObject);
+                Destroy(col.gameObject);
+            }
         }
     }
 }
