@@ -14,6 +14,8 @@ public class OptionsMenu : MonoBehaviour {
 	public Slider SFX;
 	public Toggle vHit;
 	public Toggle iControls;
+    public Sprite onImage;
+    public Sprite offImage;
 
 	// Use this for initialization
 	void Start () {
@@ -23,7 +25,7 @@ public class OptionsMenu : MonoBehaviour {
 			vHit.isOn = true;
 		} else {
 			vHit.isOn = false;
-		}
+        }
 		if (PlayerPrefs.GetInt ("InvertControls") == 1) {
 			iControls.isOn = true;
 		} else {
@@ -33,7 +35,6 @@ public class OptionsMenu : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
 	}
 
 	public void UpdateValues() {
@@ -45,9 +46,9 @@ public class OptionsMenu : MonoBehaviour {
 
 		if (vHit.isOn) {
 			VibrationHit = 1;
-		} else {
+        } else {
 			VibrationHit = 0;
-		}
+        }
 
 		if (iControls.isOn) {
 			InvertControls = 1;
