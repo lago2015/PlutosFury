@@ -276,7 +276,7 @@ public class Movement : MonoBehaviour
 
     }
 
-    void FixedUpdate()
+    void LateUpdate()
     {
         //capping velocity
         if (myBody.velocity.x >= velocityCap || myBody.velocity.x <= velocityMin)
@@ -831,7 +831,7 @@ public class Movement : MonoBehaviour
 
         }
         
-        else if (curTag == "Wall") 
+        else if (curTag == "Wall"||curTag=="LevelWall") 
 		{
             if(audioScript)
             {

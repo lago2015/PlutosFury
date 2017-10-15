@@ -3,10 +3,11 @@ using System.Collections;
 
 public class StartCameraTrigger : MonoBehaviour {
 
+    private LevelWall wallScript;
     private CameraStop cameraScript;
-
     void Awake()
     {
+        wallScript = GameObject.FindGameObjectWithTag("LevelWall").GetComponent<LevelWall>();
         cameraScript = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraStop>();
     }
 
@@ -14,7 +15,8 @@ public class StartCameraTrigger : MonoBehaviour {
     {
         if(col.gameObject.tag=="Player")
         {
-            cameraScript.EnableCamera();
+            wallScript.EnableWall();
+            cameraScript.EnableCamera();    
         }
     }
 }

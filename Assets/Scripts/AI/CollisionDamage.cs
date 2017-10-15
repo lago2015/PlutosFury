@@ -11,11 +11,11 @@ public class CollisionDamage : MonoBehaviour {
         audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
     }
 
-	void OnCollisionEnter(Collision col)
+    void OnCollisionEnter(Collision col)
     {
-        if(col.gameObject.tag=="Player")
+        if (col.gameObject.tag == "Player")
         {
-            if(!CheckDash)
+            if (!CheckDash)
             {
                 Movement moveScript = col.gameObject.GetComponent<Movement>();
                 moveScript.DamagePluto();

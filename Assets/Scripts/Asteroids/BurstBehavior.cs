@@ -30,24 +30,7 @@ public class BurstBehavior : MonoBehaviour {
         yield return new WaitForSeconds(BurstTimeout);
     }
 
-	// Update is called once per frame
-	void FixedUpdate ()
-    {
-        if(ShouldBurst)
-        {
-            if(BurstTime<=BurstTimeout)
-            {
-                BurstTime += Time.deltaTime * TimeIncrement;
-                
-            }
-            else
-            {
-                ShouldBurst = false;
-            }
-            
-        }
-        
-    }
+
     public void ResetVelocity()
     {
         if (myBody)
