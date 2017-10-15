@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: ea05521daaa1a66438ad404fcca114ff
-timeCreated: 1508037001
+guid: 7c400716def99174eaaf304ea2b00aef
+timeCreated: 1508027467
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -9,7 +9,7 @@ ModelImporter:
     400000: //RootNode
     2300000: //RootNode
     3300000: //RootNode
-    4300000: SpikeRing
+    4300000: Wall_Block_1
   materials:
     importMaterials: 1
     materialName: 0
