@@ -52,6 +52,11 @@ public class Shatter : MonoBehaviour
         }
     }
 
+    public void OnDeath()
+    {
+        Destroy(this.gameObject);
+    }
+
     void DetachOrRetract(bool detach)
     {
         if (detach)

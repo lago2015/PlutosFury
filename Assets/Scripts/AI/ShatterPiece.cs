@@ -18,7 +18,11 @@ public class ShatterPiece : MonoBehaviour
     {
         if(collision.tag == "Player")
         {
-            Debug.Log("HIT!");
+            Movement playerMovement = collision.GetComponent<Movement>();
+            if(playerMovement)
+            {
+                playerMovement.DamagePluto();
+            }
         }
     }
 }

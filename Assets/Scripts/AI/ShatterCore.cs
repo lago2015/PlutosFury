@@ -20,7 +20,14 @@ public class ShatterCore : MonoBehaviour
     {
         if(collision.tag == "Player")
         {
-            Debug.Log("Destroy!");
+            Movement playerMovement = collision.GetComponent<Movement>();
+            if(playerMovement)
+            {
+                if (playerMovement.DashStatus())
+                {
+                    transform.parent.GetComponent<Shatter>().OnDeath();
+                }
+            }
         }
     }
 }
