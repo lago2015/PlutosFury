@@ -38,8 +38,9 @@ public class LoadingScreenManager : MonoBehaviour {
 	public static int sceneToLoad = -1;
 	// IMPORTANT! This is the build index of your loading scene. You need to change this to match your actual scene index
 	static int loadingSceneIndex = 3;
+    private bool screenTapped = false;
 
-	public static void LoadScene(int levelNum) {				
+    public static void LoadScene(int levelNum) {				
 		Application.backgroundLoadingPriority = ThreadPriority.High;
 		sceneToLoad = levelNum;
 		SceneManager.LoadScene(loadingSceneIndex);
@@ -54,7 +55,18 @@ public class LoadingScreenManager : MonoBehaviour {
 		StartCoroutine(LoadAsync(sceneToLoad));
 	}
 
-	private IEnumerator LoadAsync(int levelNum) {
+    void Update()
+    {
+        if (loadingDoneIcon.IsActive())
+        {
+            if (Input.touchCount > 0)
+            {
+                screenTapped = true;
+            }
+        }
+    }
+
+    private IEnumerator LoadAsync(int levelNum) {
 		ShowLoadingVisuals();
 
 		yield return null; 
@@ -74,22 +86,25 @@ public class LoadingScreenManager : MonoBehaviour {
 			}
 		}
 
-		if (loadSceneMode == LoadSceneMode.Additive)
-			audioListener.enabled = false;
+        
+        if (loadSceneMode == LoadSceneMode.Additive)
+            audioListener.enabled = false;
 
-		ShowCompletionVisuals();
+        ShowCompletionVisuals();
 
-		yield return new WaitForSeconds(waitOnLoadEnd);
+        yield return new WaitUntil(()=> screenTapped == true);
+        yield return new WaitForSeconds(waitOnLoadEnd);
 
-		FadeOut();
+        FadeOut();
 
-		yield return new WaitForSeconds(fadeDuration);
+        yield return new WaitForSeconds(fadeDuration);
 
-		if (loadSceneMode == LoadSceneMode.Additive)
-			SceneManager.UnloadScene(currentScene.name);
-		else
-			operation.allowSceneActivation = true;
-	}
+        if (loadSceneMode == LoadSceneMode.Additive)
+           SceneManager.UnloadScene(currentScene.name);
+        else
+           operation.allowSceneActivation = true;
+    }
+
 
 	private void StartOperation(int levelNum) {
 		Application.backgroundLoadingPriority = loadThreadPriority;
@@ -125,7 +140,6 @@ public class LoadingScreenManager : MonoBehaviour {
 		loadingDoneIcon.gameObject.SetActive(true);
 
 		progressBar.fillAmount = 1f;
-		loadingText.text = "LOADING DONE";
+		loadingText.text = "TAP ANYWHERE ON THE SCREEN TO CONTINUE";
 	}
-
 }
