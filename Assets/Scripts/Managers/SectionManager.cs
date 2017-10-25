@@ -5,6 +5,8 @@ public class SectionManager : MonoBehaviour {
 
     public GameObject[] sections;
     public GameObject[] sectionExitLocations;
+    private CanvasFade fadeScript;
+
 
     private bool currentlyChanging;
     public int currSectionNumber;
@@ -24,8 +26,10 @@ public class SectionManager : MonoBehaviour {
                 sections[i].SetActive(false);
             }
         }
+        fadeScript = GameObject.FindGameObjectWithTag("Finish").GetComponent<CanvasFade>();
+
     }
-    
+
 
     public void ChangeSection(GameObject curDoor)
     {
@@ -66,4 +70,8 @@ public class SectionManager : MonoBehaviour {
             
     }
     
+    IEnumerator SectionTransition()
+    {
+        yield return new WaitForSeconds(4f);
+    }
 }

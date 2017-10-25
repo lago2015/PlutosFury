@@ -35,8 +35,7 @@ public class CameraStop : MonoBehaviour {
     public Vector3 delta;
     private AsteroidSpawner spawnScript;
     private Camera myCamera;
-    public GameObject CameraWall;
-    public GameObject CameraTrigger;
+
 	// Use this for initialization
 	void Awake () 
 	{
@@ -61,7 +60,6 @@ public class CameraStop : MonoBehaviour {
         }
         //targetBody = target.GetComponent<Rigidbody> ();
         //cachedMass = targetBody.mass;
-        OffsetX = 23f;
 	}
 	
  
@@ -74,25 +72,18 @@ public class CameraStop : MonoBehaviour {
             Vector3 delta1 = target.transform.position - GetComponent<Camera>().ViewportToWorldPoint(new Vector3(0.5f, 0.5f, point.z));
             Vector3 destination = transform.position + delta1;
             transform.position = Vector3.SmoothDamp(transform.position, destination, ref velocity, dampTime);
-
-            //wallTransform = CameraWall.transform.position;
-            //if (wallTransform.x > minX)
-            //{
-            //    Vector3 point = GetComponent<Camera>().WorldToViewportPoint(transform.position);
-            //    Vector3 destination = transform.position + delta;
-            //    transform.position = Vector3.SmoothDamp(transform.position, destination, ref velocity, dampTime);
-            //}
-            //else
-            //{
-
-            //}
-
         }
         //Camera fitting to viewport
         topLeft = Camera.main.ScreenToWorldPoint(new Vector3(0, 1, -Camera.main.transform.position.z));
         topRight = Camera.main.ScreenToWorldPoint(new Vector3(1, 1, -Camera.main.transform.position.z));
         botLeft = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, -Camera.main.transform.position.z));
         botRight = Camera.main.ScreenToWorldPoint(new Vector3(1, 0, -Camera.main.transform.position.z));
+        if (topRight.x > maxX || botRight.x > maxX)
+        {
+            //Clamp Camera along the X axis
+            transform.position = new Vector3(cachedCameraPosition.x, transform.position.y, transform.position.z);
+        }
+
 
         if (topLeft.y > maxY || topRight.y > maxY)
         {
@@ -103,11 +94,7 @@ public class CameraStop : MonoBehaviour {
         { 
             transform.position = new Vector3(minX+OffsetX, transform.position.y, transform.position.z);
         }
-        if (topRight.x > maxX || botRight.x > maxX)
-        {
-            //Clamp Camera along the X axis
-            transform.position = new Vector3(cachedCameraPosition.x, transform.position.y, transform.position.z);
-        }
+
         if (botLeft.y < minY || botRight.y < minY)
         {
             //Clamp Camera along the Y axis

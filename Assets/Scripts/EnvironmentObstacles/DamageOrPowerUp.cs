@@ -32,7 +32,7 @@ public class DamageOrPowerUp : MonoBehaviour {
     Movement PlayerScript;
     FleeOrPursue dashScript;
     public GameObject dashModel;
-
+    private SphereCollider damageCollider;
    
     void Start()
     {
@@ -42,10 +42,12 @@ public class DamageOrPowerUp : MonoBehaviour {
         {
             dashScript = dashModel.transform.GetComponent<FleeOrPursue>();
         }
+        damageCollider = GetComponent<SphereCollider>();
         NormalInterval = DrainApplyInterval;
         NormalDrain = DrainAmount;
         SuperDrain = DrainAmount + DrainAmount;
         SuperDrainInterval = 0.25f;
+        enabled = false;
     }
 
     // Update is called once per frame
@@ -60,6 +62,10 @@ public class DamageOrPowerUp : MonoBehaviour {
                     {
                         PlayerScript.DamagePluto();
                         Damaged = true;
+                        if(damageCollider)
+                        {
+                            damageCollider.enabled = false;
+                        }
                     }
 
                     //if (!gameObject.name.Contains("Explosion"))
@@ -128,6 +134,10 @@ public class DamageOrPowerUp : MonoBehaviour {
                         {
                             PlayerScript.DamagePluto();
                             Damaged = true;
+                            if (damageCollider)
+                            {
+                                damageCollider.enabled = false;
+                            }
                             StartCoroutine(DamageReset());
                         }
                     }
@@ -142,6 +152,10 @@ public class DamageOrPowerUp : MonoBehaviour {
                             {
                                 PlayerScript.DamagePluto();
                                 Damaged = true;
+                                if (damageCollider)
+                                {
+                                    damageCollider.enabled = false;
+                                }
                                 StartCoroutine(DamageReset());
                             }
                         }
@@ -160,6 +174,7 @@ public class DamageOrPowerUp : MonoBehaviour {
             {
                 if (!col.isTrigger)
                 {
+                    enabled = true;
                     PlayerNear = true;
                 }
             }
@@ -175,6 +190,10 @@ public class DamageOrPowerUp : MonoBehaviour {
     IEnumerator DamageReset()
     {
         yield return new WaitForSeconds(DamageCooldown);
+        if (damageCollider)
+        {
+            damageCollider.enabled = true;
+        }
         Damaged = false;
     }
 
@@ -192,6 +211,7 @@ public class DamageOrPowerUp : MonoBehaviour {
             {
                 if (!col.isTrigger)
                 {
+                    enabled = false;
                     PlayerNear = false;
                 }
             }

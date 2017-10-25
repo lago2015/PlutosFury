@@ -785,6 +785,13 @@ public class Movement : MonoBehaviour
             }
             ReturnAsteroid(col.gameObject);
         }
+        else if (curTag == "EnvironmentObstacle")
+        {
+            Vector3 knockBackDirection = col.transform.position - transform.position;
+            knockBackDirection = knockBackDirection.normalized;
+            myBody.AddForce(-knockBackDirection*wallBump*2);
+            
+        }
 
     }
 
@@ -865,12 +872,9 @@ public class Movement : MonoBehaviour
         }
         else if (curTag == "EnvironmentObstacle")
         {
-            if(!ShouldDash)
-            {
-                
-                myBody.AddForce(c.contacts[0].normal * wallBump, ForceMode.VelocityChange);
-            }
-            
+            myBody.AddForce(c.contacts[0].normal * wallBump * 3, ForceMode.VelocityChange);
+
+
         }
 
         else if (curTag == "MazeWall")
@@ -999,7 +1003,7 @@ public class Movement : MonoBehaviour
                     }
                 }
                 //med size
-                else if (curHealth == 1)
+                else if (curHealth >= 1)
                 {
                     StartCoroutine(DamageTransition());
 

@@ -11,7 +11,8 @@ public class CollisionDamage : MonoBehaviour {
         audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
     }
 
-    void OnCollisionEnter(Collision col)
+
+    void OnTriggerEnter(Collider col)
     {
         if (col.gameObject.tag == "Player")
         {
@@ -21,7 +22,7 @@ public class CollisionDamage : MonoBehaviour {
                 moveScript.DamagePluto();
                 if (audioScript)
                 {
-                    audioScript.SpikeHitPluto(col.contacts[0].normal);
+                    audioScript.SpikeHitPluto(transform.position);
                 }
             }
         }

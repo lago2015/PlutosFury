@@ -19,10 +19,10 @@ public class GameManager : MonoBehaviour
 	private int asteroidsEaten;
     public int AsteroidGoal;
     private GameObject Wormhole;
+
 	// Game Over UI
 	public Text ScoreText;
 	public Text highScoreText;
-    public Text asertoidsLeftText;
     public float fadeTime;
     private int BaseCount = 1;
     public float GameOverDelay = 5f;
@@ -124,8 +124,6 @@ public class GameManager : MonoBehaviour
         modelSwitch.SwapMaterial(TextureSwap.PlutoState.Win);
         int EndScore = ScoreManager.ReturnScore();
         int HighScore = ScoreManager.ReturnHighScore();
-        int AsteroidsLeft = ExpManager.CurrentRequirement();
-        asertoidsLeftText.text = " Next Level:\n\n " + AsteroidsLeft;
         ScoreText.text = "Score:\n\n" + EndScore;
         highScoreText.text = "High Score:\n\n" + HighScore;
 

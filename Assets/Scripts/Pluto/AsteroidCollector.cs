@@ -14,17 +14,17 @@ public class AsteroidCollector : MonoBehaviour {
     public float maxDistanceForGravity = 50;
     public float minForce = 25f;
     public float maxForce = 50f;
-    private Rigidbody myBody;
+    private Rigidbody CurBody;
     private float curX;
     private float curY;
     public bool isConsumable;
     float AttractionStrength = 5f;
-    
+    private AsteroidSpawner spawnScript;
+
     void Awake()
     {
-        
+        spawnScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<AsteroidSpawner>();    
         player = GameObject.FindGameObjectWithTag("Player");
-        myBody = GetComponent<Rigidbody>();
     }
 
     void FixedUpdate()
@@ -37,18 +37,28 @@ public class AsteroidCollector : MonoBehaviour {
         string curTag = col.gameObject.tag;
         if(curTag=="Asteroid")
         {
-            directionToPluto = (player.transform.position - transform.position).normalized;
-            distanceToPluto = Vector3.Distance(transform.position, player.transform.position);
-
-            if (distanceToPluto <= maxDistanceForGravity)
+            GameObject curAsteroid = col.gameObject;
+            CurBody = curAsteroid.GetComponent<Rigidbody>();
+            directionToPluto = (curAsteroid.transform.position - transform.position).normalized;
+            distanceToPluto = Vector3.Distance(transform.position, curAsteroid.transform.position);
+            if(distanceToPluto<maxDistanceForGravity)
             {
+                if(spawnScript)
+                {
+                    spawnScript.ReturnPooledAsteroid(curAsteroid);
+                }
+            }
+            else
+            {
+
                 double strength = plutoG * GravityStrength / distanceToPluto * distanceToPluto;
                 Vector3 forceOnMe = directionToPluto * (float)strength;
                 if (!float.IsNaN(forceOnMe.x) ||
                     !float.IsNaN(forceOnMe.y) ||
                     !float.IsNaN(forceOnMe.z))
                 {
-                    myBody.AddForce(forceOnMe);
+                    CurBody.AddForce(-forceOnMe);
+                    curAsteroid.transform.position = new Vector3(curAsteroid.transform.position.x, curAsteroid.transform.position.y, 0);
                 }
             }
         }

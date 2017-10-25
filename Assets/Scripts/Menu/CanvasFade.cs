@@ -11,10 +11,9 @@ public class CanvasFade : MonoBehaviour {
     private float alpha = 1.0f;			// the texture's alpha value between 0 and 1
     public int fadeDir = -1;
 
-
-    void Start()
+    void Awake()
     {
-        if(fadeImage)
+        if (fadeImage)
         {
 
             fadeImage.CrossFadeAlpha(alpha, fadeSpeed, false);
@@ -23,6 +22,12 @@ public class CanvasFade : MonoBehaviour {
         }
         myGroup = GetComponent<CanvasGroup>();
 
+        myGroup.alpha = 1;
+    }
+
+    void Start()
+    {
+        
         StartCoroutine(EnableFade());
     }
 

@@ -101,6 +101,7 @@ public class DetectThenExplode : MonoBehaviour {
                         GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>().DestructionSmall(transform.position);
                         doOnce = true;
                     }
+                    TriggerCollider.enabled = false;
                     StartCoroutine(SwitchModels());
                 }
             }   
@@ -115,6 +116,7 @@ public class DetectThenExplode : MonoBehaviour {
                             GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>().DestructionSmall(transform.position);
                             doOnce = true;
                         }
+
                         StartCoroutine(SwitchModels());
                     }
                 }
@@ -122,6 +124,8 @@ public class DetectThenExplode : MonoBehaviour {
             else if (isHomingLandmine)
             {
                 moveScript.ShouldMove = true;
+                TriggerCollider.enabled = false;
+
                 TriggerCollider.radius = lostSightRadius;
             }
         }
