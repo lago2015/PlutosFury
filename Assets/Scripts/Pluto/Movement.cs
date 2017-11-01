@@ -440,7 +440,7 @@ public class Movement : MonoBehaviour
             case BusterStates.Death:
                 if(busterStates[2])
                 {
-                    DisableMovement();
+                    DisableMovement(true);
                     modelScript.DeathToRender();
                     foreach (SphereCollider col in GetComponents<SphereCollider>())
                     {
@@ -930,12 +930,12 @@ public class Movement : MonoBehaviour
         }
     }
     
-    public void DisableMovement()
+    public void DisableMovement(bool isPlayerDead)
     {
         MoveSpeed = 0;
         myBody.velocity = Vector3.zero;
         TrailChange(DashState.idle);
-        isDead = true;
+        isDead = isPlayerDead;
     }
 
     public void HealthPickup()

@@ -146,7 +146,7 @@ public class ExperienceManager : MonoBehaviour
         if (curExpPoints <= 0)
         {
             //Disable player movement
-            GameObject.FindGameObjectWithTag("Player").GetComponent<Movement>().DisableMovement();
+            GameObject.FindGameObjectWithTag("Player").GetComponent<Movement>().DisableMovement(true);
             //Apply model switch to display lose 
             modelScript.SwapMaterial(TextureSwap.PlutoState.Lose);
             //freeze time

@@ -37,6 +37,7 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
+        Application.targetFrameRate = 600;      //60 fps set rate
         modelSwitch = pluto.GetComponent<TextureSwap>();
         audioCon = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
         ExpManager = GetComponent<ExperienceManager>();
@@ -120,7 +121,7 @@ public class GameManager : MonoBehaviour
         gameOverUI.SetActive(false);
         youAreAStarNowUI.SetActive(true);
 
-        pluto.GetComponent<Movement>().DisableMovement();
+        pluto.GetComponent<Movement>().DisableMovement(true);
         modelSwitch.SwapMaterial(TextureSwap.PlutoState.Win);
         int EndScore = ScoreManager.ReturnScore();
         int HighScore = ScoreManager.ReturnHighScore();

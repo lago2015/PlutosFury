@@ -26,7 +26,7 @@ public class CameraStop : MonoBehaviour {
     private float curMaxX;
     private float curMinX;
     public float OffsetX;
-    private int curSection;
+    public int curSection;
     private int maxNumSections;
 	private Vector3 cachedCameraPosition;
     private Vector3 wallTransform;
@@ -110,22 +110,23 @@ public class CameraStop : MonoBehaviour {
     {
         OffsetX = 50;
     }   
-    public void ChangeToBoss(Vector3 curPos)
+    
+    public float incrementCurSection()
     {
-        if(curSection<=maxNumSections)
-        {
-            //increment section numbe
-            curSection++;
-            //calculate new min and max for X axis for camera stop
-            curMaxX = cameraStopLocations[curSection + 1].transform.position.x - OffsetX;
-            curMinX = cameraStopLocations[curSection].transform.position.x + OffsetX;
-            //apply new min and max for X axis
-            maxX = curMaxX;
-            minX = curMinX;
-            spawnScript.SpawnIntoNewSection(minX, maxX);
-            cachedCameraPosition = curPos;
-            
-
-        }
+        curSection++;
+        
+        return curSection;
     }
+
+    public float ChangeCamMin()
+    {
+        return minX = cameraStopLocations[curSection].transform.position.x + OffsetX;
+
+    }
+    public float ChangeCamMax()
+    {
+        return maxX = cameraStopLocations[curSection + 1].transform.position.x - OffsetX;
+
+    }
+
 }

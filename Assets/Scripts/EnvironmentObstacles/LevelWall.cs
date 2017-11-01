@@ -28,6 +28,10 @@ public class LevelWall : MonoBehaviour {
     {
         enabled = true;
     }
+    public void DisableWall()
+    {
+        enabled = false;
+    }
 
     void LateUpdate()
     {

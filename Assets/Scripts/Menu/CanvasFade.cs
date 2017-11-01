@@ -56,10 +56,10 @@ public class CanvasFade : MonoBehaviour {
 
         while (myGroup.alpha< 1)
         {
-            myGroup.alpha += Time.deltaTime / 2;
+            myGroup.alpha += Time.deltaTime * fadeSpeed;
             yield return null;
         }
-        myGroup.interactable = false;
+        
         yield return null;
     }
 
@@ -67,10 +67,10 @@ public class CanvasFade : MonoBehaviour {
     {
         while(myGroup.alpha>0)
         {
-            myGroup.alpha -= Time.deltaTime / 2;
+            myGroup.alpha -= Time.deltaTime * fadeSpeed;
             yield return null;
         }
-        myGroup.interactable = false;
+        
         yield return null;
     }
 }
