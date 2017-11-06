@@ -18,27 +18,35 @@ public class MoonBall : MonoBehaviour
 	
 	}
 
-    private void OnTriggerEnter(Collider collision)
+    private void OnTriggerEnter(Collider col)
     {
-        if (collision.tag == "Player")
+        if (col.tag == "Player")
         {
-            Debug.Log("Hit!");
-            Movement playerMovement = collision.gameObject.GetComponent<Movement>();
+            Movement playerMovement = col.gameObject.GetComponent<Movement>();
             if (playerMovement)
             {
                 if (playerMovement.DashStatus())
                 {
-
-                    Debug.Log("HitDash!");
-                    Rigidbody playerRb = collision.gameObject.GetComponent<Rigidbody>();
+                    Rigidbody playerRb = col.gameObject.GetComponent<Rigidbody>();
 
                     Vector3 playerdirection = Vector3.Normalize(playerRb.velocity);
 
                     rb.velocity = playerdirection * hitSpeed;
-
-                    //playerRb.velocity = new Vector3(0.0f, 0.0f, 0.0f);
                 }
             }
+        }
+
+        if(col.tag == "Wall")
+        {
+            GetComponent<SphereCollider>().isTrigger = false;
+        }
+    }
+
+    private void OnTriggerExit(Collider col)
+    {
+        if (col.tag == "Wall")
+        {
+            GetComponent<SphereCollider>().isTrigger = true;
         }
     }
 
