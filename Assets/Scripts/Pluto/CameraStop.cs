@@ -120,13 +120,19 @@ public class CameraStop : MonoBehaviour {
 
     public float ChangeCamMin()
     {
-        return minX = cameraStopLocations[curSection].transform.position.x + OffsetX;
-
+        //get Min X from the left wall
+        minX = cameraStopLocations[curSection].transform.position.x + OffsetX;
+        //update orbs where to spawn
+        spawnScript.newMinX(minX);
+        return minX;
     }
     public float ChangeCamMax()
     {
-        return maxX = cameraStopLocations[curSection + 1].transform.position.x - OffsetX;
-
+        //get max X from the right wall
+        maxX = cameraStopLocations[curSection + 1].transform.position.x - OffsetX;
+        //update orbs where to spawn
+        spawnScript.newMaxX(maxX);
+        return maxX;
     }
 
 }

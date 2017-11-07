@@ -27,14 +27,15 @@ public class DetectThenExplode : MonoBehaviour {
         }
         moveScript = GetComponent<HomingProjectile>();
         TriggerCollider = GetComponent<SphereCollider>();
-        if (isHomingLandmine)
-        {
-            collider = GetComponent<BoxCollider>();
-            TriggerCollider.enabled = true;
-            collider.isTrigger = false;
-            startRadius = TriggerCollider.radius;
-        }
-        else if(isLandmine)
+        //if (isHomingLandmine)
+        //{
+        //    collider = GetComponent<BoxCollider>();
+        //    TriggerCollider.enabled = true;
+        //    collider.isTrigger = false;
+        //    startRadius = TriggerCollider.radius;
+        //}
+        //else 
+        if(isLandmine)
         {
             if(TriggerCollider)
             {
@@ -123,10 +124,10 @@ public class DetectThenExplode : MonoBehaviour {
             }
             else if (isHomingLandmine)
             {
-                moveScript.ShouldMove = true;
-                TriggerCollider.enabled = false;
+                moveScript.activateMovement();
+                //TriggerCollider.enabled = false;
 
-                TriggerCollider.radius = lostSightRadius;
+                //TriggerCollider.radius = lostSightRadius;
             }
         }
         else if(CurTag == "BigAsteroid")

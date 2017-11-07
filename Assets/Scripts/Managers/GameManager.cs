@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour
 	private int asteroidsEaten;
     public int AsteroidGoal;
     private GameObject Wormhole;
-
+    private int curScene;
 	// Game Over UI
 	public Text ScoreText;
 	public Text highScoreText;
@@ -43,6 +43,8 @@ public class GameManager : MonoBehaviour
         ExpManager = GetComponent<ExperienceManager>();
         ScoreManager = GetComponent<ScoreManager>();
         AdManager = GetComponent<AdManager>();
+
+        curScene = Application.loadedLevel;
     }
 	void Start ()
     {
@@ -128,6 +130,11 @@ public class GameManager : MonoBehaviour
         ScoreText.text = "Score:\n\n" + EndScore;
         highScoreText.text = "High Score:\n\n" + HighScore;
 
+    }
+
+    public void NextLevel()
+    {
+        
     }
     public void AsteroidEaten(float curEaten)
     {

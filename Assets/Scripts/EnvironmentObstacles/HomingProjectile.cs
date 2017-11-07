@@ -8,10 +8,40 @@ public class HomingProjectile : MonoBehaviour {
 
     private float rotationSpeed = 5;
     private GameObject Player;
+    private BoxCollider collider;
+
+    private SphereCollider TriggerCollider;
+    private float startRadius;
+    private float lostSightRadius = 10f;
+
+    public bool activateMovement()
+    {
+        enabled = true;
+        if(TriggerCollider)
+        {
+            TriggerCollider.radius = lostSightRadius;
+            
+        }
+        return ShouldMove = true;
+    }
 
     void Awake()
     {
         Player = GameObject.FindGameObjectWithTag("Player");
+        enabled = false;
+        TriggerCollider = GetComponent<SphereCollider>();
+        collider = GetComponent<BoxCollider>();
+        if(TriggerCollider)
+        {
+            TriggerCollider.enabled = true;
+            startRadius = TriggerCollider.radius;
+        }
+        if(collider)
+        {
+            collider.isTrigger = false;
+        }
+        
+        
     }
 
     void FixedUpdate()

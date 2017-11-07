@@ -12,6 +12,9 @@ public class AsteroidSpawner : MonoBehaviour
     public float minY;
     public float maxY;
     AsteroidCollector collecterScript;
+
+    public float newMinX(float newMin) { return minX = newMin; }
+    public float newMaxX(float newMax) { return maxX = newMax; }
 	void Awake()
 	{
         collecterScript = GameObject.FindGameObjectWithTag("GravityWell").GetComponent<AsteroidCollector>();
@@ -20,9 +23,12 @@ public class AsteroidSpawner : MonoBehaviour
 		for (int i = 0; i < asteroids.Length; ++i) 
 		{
             GameObject asteroid = asteroids[i];
-			asteroid.SetActive (false);
-			asteroidPool.Add (asteroid);
-		}
+            if(asteroid)
+            {
+                asteroid.SetActive(false);
+                asteroidPool.Add(asteroid);
+            }
+        }
 	}
 
     void Start()

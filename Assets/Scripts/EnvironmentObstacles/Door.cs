@@ -9,7 +9,7 @@ public class Door : MonoBehaviour {
     private CanvasFade fadeScript;
 
 
-
+    public bool isFinalDoor;
     bool isOpen;
     public float fadeTime = 2;
     private int keyObtained;
