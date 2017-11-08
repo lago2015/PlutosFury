@@ -6,6 +6,8 @@ public class MoonBall : MonoBehaviour
     public float hitSpeed;
     private Rigidbody rb;
 
+    private bool attackMode = false;
+
     // Use this for initialization
 	void Start ()
     {
@@ -15,23 +17,44 @@ public class MoonBall : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
-	
+	    if(attackMode)
+        {
+            if (rb.velocity.magnitude < 10)
+            {
+                attackMode = false;
+
+                transform.FindChild("Sprite").GetComponent<SpriteRenderer>().color = Color.white;
+
+            }
+        }
 	}
+
+    public bool getAttackMode()
+    {
+        return attackMode;
+    }
 
     private void OnTriggerEnter(Collider col)
     {
         if (col.tag == "Player")
         {
-            Movement playerMovement = col.gameObject.GetComponent<Movement>();
-            if (playerMovement)
+            if (!attackMode)
             {
-                if (playerMovement.DashStatus())
+                Movement playerMovement = col.gameObject.GetComponent<Movement>();
+                if (playerMovement)
                 {
-                    Rigidbody playerRb = col.gameObject.GetComponent<Rigidbody>();
+                    if (playerMovement.DashStatus())
+                    {
+                        Rigidbody playerRb = col.gameObject.GetComponent<Rigidbody>();
 
-                    Vector3 playerdirection = Vector3.Normalize(playerRb.velocity);
+                        Vector3 playerdirection = Vector3.Normalize(playerRb.velocity);
 
-                    rb.velocity = playerdirection * hitSpeed;
+                        rb.velocity = playerdirection * hitSpeed;
+
+                        attackMode = true;
+
+                        transform.FindChild("Sprite").GetComponent<SpriteRenderer>().color = Color.green;
+                    }
                 }
             }
         }
@@ -39,6 +62,11 @@ public class MoonBall : MonoBehaviour
         if(col.tag == "Wall")
         {
             GetComponent<SphereCollider>().isTrigger = false;
+        }
+
+        if(col.tag == "BigAsteroid")
+        {
+
         }
     }
 

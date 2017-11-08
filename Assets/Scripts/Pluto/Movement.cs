@@ -785,7 +785,7 @@ public class Movement : MonoBehaviour
             }
             ReturnAsteroid(col.gameObject);
         }
-        else if (curTag == "EnvironmentObstacle")
+        else if (curTag == "EnvironmentObstacle" || curTag == "MoonBall")
         {
             Vector3 knockBackDirection = col.transform.position - transform.position;
             knockBackDirection = knockBackDirection.normalized;
