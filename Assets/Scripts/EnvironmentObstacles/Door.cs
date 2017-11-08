@@ -1,13 +1,12 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
-
 public class Door : MonoBehaviour {
     
 
     private GameManager gameScript;
     private CanvasFade fadeScript;
-
+    private LoadTargetSceneButton loadScript;
 
     public bool isFinalDoor;
     bool isOpen;
@@ -24,6 +23,10 @@ public class Door : MonoBehaviour {
         sectionScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<SectionManager>();
         gameScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<GameManager>();
         audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
+        if(isFinalDoor)
+        {
+            loadScript = GameObject.FindGameObjectWithTag("MenuManager").GetComponent<LoadTargetSceneButton>();
+        }
         isOpen = true;
     }
 
@@ -40,12 +43,12 @@ public class Door : MonoBehaviour {
     {
         if(col.gameObject.tag=="Player")
         {
-            if(isOpen)
+            if(!isFinalDoor && !doorActive)
             {
-                isOpen = false;
+                doorActive = true;
                 //do something winning here
                 sectionScript.isChanging(true);
-                if(audioScript)
+                if (audioScript)
                 {
                     audioScript.WormholeEntered(transform.position);
                 }
@@ -53,7 +56,10 @@ public class Door : MonoBehaviour {
             }
             else
             {
-                audioScript.WormholeLock(transform.position);
+                if(loadScript)
+                {
+                    loadScript.LoadNextLevel();
+                }
             }
         }
     }
