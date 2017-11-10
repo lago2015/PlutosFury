@@ -9,6 +9,7 @@ public class DetectThenExplode : MonoBehaviour {
     private BoxCollider collider;
     private SphereCollider TriggerCollider;
     private HomingProjectile moveScript;
+    private Rigidbody mybody;
     private float startRadius;
     private float lostSightRadius = 9.5f;
     private bool doOnce;
@@ -46,6 +47,7 @@ public class DetectThenExplode : MonoBehaviour {
         {
             collider = GetComponent<BoxCollider>();
             collider.enabled = true;
+            mybody = GetComponent<Rigidbody>();
         }
 
     }
@@ -62,6 +64,7 @@ public class DetectThenExplode : MonoBehaviour {
     IEnumerator LaunchTime()
     {
         yield return new WaitForSeconds(2);
+        mybody.velocity = Vector3.zero;
         StartCoroutine(SwitchModels());
     }
 

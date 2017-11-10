@@ -67,20 +67,23 @@ public class AsteroidSpawner : MonoBehaviour
 
     public void SpawnAsteroid()
 	{
-		// Grab the pooled asteroid
-		GameObject asteroid = GetPooledAsteroid ();
-		if (asteroid == null)
-			return;
+        if(asteroids.Length>0)
+        {
+            // Grab the pooled asteroid
+            GameObject asteroid = GetPooledAsteroid();
+            if (asteroid == null)
+                return;
 
-		// Place asteroid in a random location
-		// Play area is from (-100, -100) to (100, 100)???
-		float x = Random.Range (minX, maxX);
-		float y = Random.Range (minY, maxY);
-		float roll = Random.Range (0, 359);
-		asteroid.transform.position = new Vector3 (x, y, 0.0f);
-		asteroid.transform.rotation = Quaternion.Euler (0.0f, 0.0f, roll);
-		asteroid.SetActive (true);
-        asteroid.GetComponent<BurstBehavior>().ResetVelocity();
+            // Place asteroid in a random location
+            float x = Random.Range(minX, maxX);
+            float y = Random.Range(minY, maxY);
+            float roll = Random.Range(0, 359);
+            asteroid.transform.position = new Vector3(x, y, 0.0f);
+            asteroid.transform.rotation = Quaternion.Euler(0.0f, 0.0f, roll);
+            asteroid.SetActive(true);
+            asteroid.GetComponent<BurstBehavior>().newSpawnedAsteroid(false);
+            asteroid.GetComponent<BurstBehavior>().ResetVelocity();
+        }
     }
 
     public void SpawnAsteroidHere(Vector3 spawnPoint)
@@ -111,26 +114,25 @@ public class AsteroidSpawner : MonoBehaviour
         }
 
         return null;
-        //asteroidPool.
-        //int j = Random.Range(0, asteroids.Length);
-        //GameObject asteroid = (GameObject)Instantiate(asteroids[j]);
-        //asteroid.SetActive(false);
-        //asteroidPool.Add(asteroid);
-        //return asteroid;
+
     }
     public void ReturnPooledAsteroid(GameObject asteroid)
 	{
-        // Return asteroid to the list
-        bool isNew = asteroid.GetComponent<BurstBehavior>().asteroidStatus();
-        if(isNew)
+        if(asteroids.Length>=0)
         {
-            Destroy(asteroid);
-        }
-        else
-        {
-            asteroid.SetActive(false);
-            int asteroidIndex=asteroidPool.IndexOf(asteroid);
-            asteroidPool.Insert(asteroidIndex, asteroid);
+
+            // Return asteroid to the list
+            bool isNew = asteroid.GetComponent<BurstBehavior>().asteroidStatus();
+            if (isNew)
+            {
+                Destroy(asteroid);
+            }
+            else
+            {
+                asteroid.SetActive(false);
+                int asteroidIndex = asteroidPool.IndexOf(asteroid);
+                asteroidPool.Insert(asteroidIndex, asteroid);
+            }
         }
 	}
 

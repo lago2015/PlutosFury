@@ -4,10 +4,17 @@ using System.Collections;
 public class LookAtObject : MonoBehaviour {
 
     GameObject Player;
+    private SphereCollider TrigCollider;
     bool ObjectNear;
     public bool AmITurret;
-    public float RotationSpeed=5;
+    public float RotationSpeed = 5;
     private Vector3 startPosition;
+
+    void Awake()
+    {
+        TrigCollider = GetComponent<SphereCollider>();
+    }
+
     void Start()
     {
         enabled = false;
@@ -54,7 +61,6 @@ public class LookAtObject : MonoBehaviour {
         {
             if(AmITurret)
             {
-                
                 enabled = true;
             }
         }

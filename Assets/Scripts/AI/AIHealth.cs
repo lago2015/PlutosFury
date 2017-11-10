@@ -8,7 +8,7 @@ public class AIHealth : MonoBehaviour {
     public GameObject Model;
     public GameObject Model2;
     public GameObject Model3;
-
+    private Collider myCollider;
     public GameObject pursuitModel;
     public float wallBump = 20;
     private Rigidbody myBody;
@@ -25,6 +25,7 @@ public class AIHealth : MonoBehaviour {
                 RogueScript = pursuitModel.GetComponent<FleeOrPursue>();
             }
         }
+        myCollider = GetComponent<Collider>();
         myBody = GetComponent<Rigidbody>();
         if(Explosion&&Model)
         {
@@ -50,6 +51,7 @@ public class AIHealth : MonoBehaviour {
             
             if (Explosion && Model)
             {
+                myCollider.enabled = false;
                 if(RogueScript)
                 {
                     RogueScript.yesDead();
@@ -99,6 +101,8 @@ public class AIHealth : MonoBehaviour {
                             {
                                 audioScript.RogueDeath(transform.position);
                             }
+                            myCollider.enabled = false;
+
                             if (Explosion && Model)
                             {
                                 Explosion.SetActive(true);
@@ -132,6 +136,8 @@ public class AIHealth : MonoBehaviour {
                     {
                         if (Explosion && Model)
                         {
+                            myCollider.enabled = false;
+
                             Explosion.SetActive(true);
                             Model.SetActive(false);
                             if (Model2)

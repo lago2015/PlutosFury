@@ -25,7 +25,11 @@ public class Door : MonoBehaviour {
         audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
         if(isFinalDoor)
         {
-            loadScript = GameObject.FindGameObjectWithTag("MenuManager").GetComponent<LoadTargetSceneButton>();
+            GameObject loadObject = GameObject.FindGameObjectWithTag("MenuManager");
+            if(loadObject)
+            {
+                loadScript =loadObject.GetComponent<LoadTargetSceneButton>();
+            }
         }
         isOpen = true;
     }
