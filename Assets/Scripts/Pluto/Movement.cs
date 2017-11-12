@@ -838,7 +838,7 @@ public class Movement : MonoBehaviour
 
         }
         
-        else if (curTag == "Wall"||curTag=="LevelWall") 
+        else if (curTag == "Wall"||curTag=="LevelWall"||curTag=="DamageWall") 
 		{
             if(audioScript)
             {
@@ -852,6 +852,10 @@ public class Movement : MonoBehaviour
             else
             {
                 myBody.AddForce(c.contacts[0].normal * wallBump, ForceMode.VelocityChange);
+            }
+            if(curTag=="DamageWall")
+            {
+                DamagePluto();
             }
 		}
         else if(curTag=="LazerWall")

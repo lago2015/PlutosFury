@@ -10,7 +10,7 @@ public class PickUpSkills : MonoBehaviour {
     private Movement playerScript;
     private Shield ShieldScript;
     private Inflation InflateScript;
-
+    private bool pickupObtained;
     void Awake()
     {
         GameObject playerRef = GameObject.FindGameObjectWithTag("Player");
@@ -48,38 +48,42 @@ public class PickUpSkills : MonoBehaviour {
             switch(curSkill)
             {
                 case Skills.DashCharge:
-                    if(PowerUpScript)
+                    if(PowerUpScript && !pickupObtained)
                     {
                         PowerUpScript.DashPluto(transform.position);
                         Destroy(gameObject);
                     }
                     break;
                 case Skills.Shield:
-                    if(ShieldScript&&playerScript)
+                    if(ShieldScript&&playerScript && !pickupObtained)
                     {
+                        pickupObtained = true;
                         playerScript.IndicatePickup();
                         ShieldScript.ShieldPluto();
                         Destroy(gameObject);
                     }
                     break;
                 case Skills.Inflation:
-                    if(InflateScript)
+                    if(InflateScript && !pickupObtained)
                     {
+                        pickupObtained = true;
                         InflateScript.Inflate();
                         InflateScript.InflatePluto();
                         Destroy(gameObject);
                     }
                     break;
                 case Skills.Health:
-                    if(playerScript)
+                    if(playerScript && !pickupObtained)
                     {
+                        pickupObtained = true;
                         playerScript.HealthPickup();
                         Destroy(gameObject);
                     }
                     break;
                 case Skills.Shockwave:
-                    if(PowerUpScript)
+                    if(PowerUpScript && !pickupObtained)
                     {
+                        pickupObtained = true;
                         PowerUpScript.ShockPluto(transform.position);
                         Destroy(gameObject);
                     }

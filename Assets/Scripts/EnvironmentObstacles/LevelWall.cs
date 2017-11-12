@@ -3,12 +3,6 @@ using System.Collections;
 
 public class LevelWall : MonoBehaviour {
 
-    //Dear future Franco
-    //Make this shit move forward and tell the camera whats good
-    //Destroy any gameobjects that come into contact
-    //Have exposed variable for wall speed
-    //
-
     public float MoveSpeed = 1;
     private float curMinX;
     private Vector3 delta;

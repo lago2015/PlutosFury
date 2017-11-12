@@ -134,28 +134,27 @@ public class SectionManager : MonoBehaviour {
         yield return new WaitForSeconds(fadeTime);
         if(levelWall&&gameStartTrig)
         {
-            if (player && SectionLocation != Vector3.zero && camera)
-            {
-                //turn off player
-                player.SetActive(false);//save camera z axis
-                
-
-                //zero out z axis for player then apply new position
-                SectionLocation.z = 0;
-                player.transform.position = SectionLocation;
-                //get new move to location
-                camera.transform.position = new Vector3(SectionLocation.x, SectionLocation.y, camZAxis);
-                
-                //turn on player
-                player.SetActive(true);
-
-            }
+            
             //place game start trigger to new section
             gameStartTrig.transform.position = SectionLocation;
             SectionLocation.x -= offSet*2;
             //place level wall to new position
             levelWall.transform.position = new Vector3(SectionLocation.x,defaultVector.y,defaultVector.z);
+        }
+        if (player && SectionLocation != Vector3.zero && camera)
+        {
+            //turn off player
+            player.SetActive(false);//save camera z axis
 
+
+            //zero out z axis for player then apply new position
+            SectionLocation.z = 0;
+            player.transform.position = SectionLocation;
+            //get new move to location
+            camera.transform.position = new Vector3(SectionLocation.x, SectionLocation.y, camZAxis);
+
+            //turn on player
+            player.SetActive(true);
 
         }
         //give player movement again

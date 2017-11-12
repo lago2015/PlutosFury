@@ -21,7 +21,7 @@ public class ButtonIndicator : MonoBehaviour
     public bool isExhausted;
     private bool playOnce;
     private bool playerCharging;
-
+    public bool isDashing;
     public float delayChargeTimeout=0.25f;
     public float delayTimer;
     void Start()
@@ -47,7 +47,7 @@ public class ButtonIndicator : MonoBehaviour
         {
             isButtDown = false;
         }
-
+        
         //Check if button or key is down
         if(isButtDown)
         {
@@ -55,6 +55,7 @@ public class ButtonIndicator : MonoBehaviour
             //ensure dash is activated once then a wait transition
             //to reset the condition
             doOnce = true;
+            isDashing = playerScript.DashStatus();
             isShockActive = isShockwaveActive();
             isDashActive = isPowerDashActive();
             //Check for Power Dash pick up obtained and if player has charged up yet
@@ -137,7 +138,6 @@ public class ButtonIndicator : MonoBehaviour
                 }
             } 
        }
-        //if player doesnt charge power dash then dash
         else
         {
             if (isCharged)
@@ -166,7 +166,8 @@ public class ButtonIndicator : MonoBehaviour
                 }
 
             }
-            else
+             
+            else 
             {
                 if(doOnce)
                 {

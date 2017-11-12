@@ -1,19 +1,32 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
-
 public class fpsCounter : MonoBehaviour {
-    int m_frameCounter = 0;
-    float m_timeCounter = 0.0f;
-    float m_lastFramerate = 0.0f;
-    public float m_refreshTime = 0.5f;
+    const float fpsMeasurePeriod = 0.5f;
+    private int m_FpsAccumulator = 0;
+    private float m_FpsNextPeriod = 0;
+    private int m_CurrentFps;
+    const string display = "{0} FPS";
+    private GUIText m_GuiText;
     public Text fpsText;
-    void Update()
+
+
+    private void Start()
     {
-        
-        if(fpsText && fpsText.name == "fpsText")
+        m_FpsNextPeriod = Time.realtimeSinceStartup + fpsMeasurePeriod;
+    }
+
+
+    private void Update()
+    {
+        // measure average frames per second
+        m_FpsAccumulator++;
+        if (Time.realtimeSinceStartup > m_FpsNextPeriod)
         {
-            fpsText.text="FPS: " + 1/Time.deltaTime;
+            m_CurrentFps = (int)(m_FpsAccumulator / fpsMeasurePeriod);
+            m_FpsAccumulator = 0;
+            m_FpsNextPeriod += fpsMeasurePeriod;
+            fpsText.text = string.Format(display, m_CurrentFps);
         }
     }
 }

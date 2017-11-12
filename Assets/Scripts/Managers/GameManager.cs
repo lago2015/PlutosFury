@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
     public float fadeTime;
     private int BaseCount = 1;
     public float GameOverDelay = 5f;
-
+    public bool levelWallActive;
     private bool willPlayAd;
 
     TextureSwap modelSwitch;
@@ -34,16 +34,29 @@ public class GameManager : MonoBehaviour
     AdManager AdManager;
     ScoreManager ScoreManager;
     ExperienceManager ExpManager;
+    private GameObject startCamTrigger;
+    private GameObject levelWall;
+
 
     void Awake()
     {
-        Application.targetFrameRate = 600;      //60 fps set rate
+        //Application.targetFrameRate = 600;      //60 fps set rate
         modelSwitch = pluto.GetComponent<TextureSwap>();
         audioCon = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
         ExpManager = GetComponent<ExperienceManager>();
         ScoreManager = GetComponent<ScoreManager>();
         AdManager = GetComponent<AdManager>();
-
+        startCamTrigger = GameObject.FindGameObjectWithTag("Respawn");
+        levelWall = GameObject.FindGameObjectWithTag("LevelWall");
+        if(startCamTrigger&&levelWall)
+        {
+            levelWall.SetActive(levelWallActive);
+            startCamTrigger.SetActive(levelWallActive);
+        }
+        else
+        {
+            Debug.Log("Need Game Start Trigger and Level wall within world");
+        }
         curScene = Application.loadedLevel;
     }
 	void Start ()
