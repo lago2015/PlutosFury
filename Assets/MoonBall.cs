@@ -4,6 +4,7 @@ using System.Collections;
 public class MoonBall : MonoBehaviour
 {
     public float hitSpeed;
+    public float knockbackSpeed;
     private Rigidbody rb;
 
     private bool attackMode = false;
@@ -64,10 +65,10 @@ public class MoonBall : MonoBehaviour
             GetComponent<SphereCollider>().isTrigger = false;
         }
 
-        if(col.tag == "BigAsteroid")
-        {
-
-        }
+       if(col.gameObject.name == "Spikes")
+       {
+           KnockBack(col.gameObject);
+       }
     }
 
     private void OnTriggerExit(Collider col)
@@ -76,6 +77,13 @@ public class MoonBall : MonoBehaviour
         {
             GetComponent<SphereCollider>().isTrigger = true;
         }
+    }
+
+    void KnockBack(GameObject target)
+    {
+        Vector3 knockBackDirection = target.transform.position - transform.position;
+        knockBackDirection = knockBackDirection.normalized;
+        rb.AddForce(-knockBackDirection * knockbackSpeed * 2, ForceMode.Impulse);
     }
 
 }
