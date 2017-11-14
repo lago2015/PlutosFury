@@ -172,66 +172,79 @@ public class AIHealth : MonoBehaviour {
 
     void OnTriggerEnter(Collider col)
     {
-        if (Rogue)
+        if(col.gameObject.tag=="Player")
         {
-            bool RogueDashing = RogueScript.isDashing();
-            if (!RogueDashing)
+            Movement playerScript = col.GetComponent<Movement>();
+            if(playerScript)
             {
-                EnemyHealth--;
-                if (EnemyHealth <= 0)
+                bool isPlayerDashing = playerScript.DashStatus();
+
+                if(isPlayerDashing)
                 {
-                    if (audioScript)
-                    {
-                        audioScript.RogueDeath(transform.position);
-                    }
-                    myCollider.enabled = false;
 
-                    if (Explosion && Model)
+                    if (Rogue)
                     {
-                        Explosion.SetActive(true);
-                        Model.SetActive(false);
-                        if (Model2)
-                            Model2.SetActive(false);
-                        if (Model3)
-                            Model3.SetActive(false);
-
-                        if (pursuitModel)
+                        bool RogueDashing = RogueScript.isDashing();
+                        if (!RogueDashing)
                         {
-                            pursuitModel.SetActive(false);
+                            EnemyHealth--;
+                            if (EnemyHealth <= 0)
+                            {
+                                if (audioScript)
+                                {
+                                    audioScript.RogueDeath(transform.position);
+                                }
+                                myCollider.enabled = false;
+
+                                if (Explosion && Model)
+                                {
+                                    Explosion.SetActive(true);
+                                    Model.SetActive(false);
+                                    if (Model2)
+                                        Model2.SetActive(false);
+                                    if (Model3)
+                                        Model3.SetActive(false);
+
+                                    if (pursuitModel)
+                                    {
+                                        pursuitModel.SetActive(false);
+                                    }
+                                }
+                                else
+                                {
+                                    Destroy(transform.parent.gameObject);
+                                }
+                            }
                         }
                     }
                     else
                     {
-                        Destroy(transform.parent.gameObject);
+
+                        EnemyHealth--;
+                        if (EnemyHealth <= 0)
+                        {
+                            if (Explosion && Model)
+                            {
+                                myCollider.enabled = false;
+
+                                Explosion.SetActive(true);
+                                Model.SetActive(false);
+                                if (Model2)
+                                    Model2.SetActive(false);
+                                if (Model3)
+                                    Model3.SetActive(false);
+
+                                if (pursuitModel)
+                                {
+                                    pursuitModel.SetActive(false);
+                                }
+                            }
+                            else
+                            {
+                                Destroy(transform.parent.gameObject);
+                            }
+                        }
                     }
-                }
-            }
-        }
-        else
-        {
-
-            EnemyHealth--;
-            if (EnemyHealth <= 0)
-            {
-                if (Explosion && Model)
-                {
-                    myCollider.enabled = false;
-
-                    Explosion.SetActive(true);
-                    Model.SetActive(false);
-                    if (Model2)
-                        Model2.SetActive(false);
-                    if (Model3)
-                        Model3.SetActive(false);
-
-                    if (pursuitModel)
-                    {
-                        pursuitModel.SetActive(false);
-                    }
-                }
-                else
-                {
-                    Destroy(transform.parent.gameObject);
                 }
             }
         }
