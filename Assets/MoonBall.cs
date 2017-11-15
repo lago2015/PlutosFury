@@ -24,7 +24,7 @@ public class MoonBall : MonoBehaviour
             {
                 attackMode = false;
 
-                transform.FindChild("Sprite").GetComponent<SpriteRenderer>().color = Color.white;
+              //  transform.FindChild("Sprite").GetComponent<SpriteRenderer>().color = Color.white;
 
             }
         }
@@ -54,7 +54,7 @@ public class MoonBall : MonoBehaviour
 
                         attackMode = true;
 
-                        transform.FindChild("Sprite").GetComponent<SpriteRenderer>().color = Color.green;
+                       // transform.FindChild("Sprite").GetComponent<SpriteRenderer>().color = Color.green;
                     }
                 }
             }
@@ -63,12 +63,15 @@ public class MoonBall : MonoBehaviour
         if(col.tag == "Wall")
         {
             GetComponent<SphereCollider>().isTrigger = false;
+            Debug.Log("HIT WALL");
         }
 
-       if(col.gameObject.name == "Spikes")
+       if(col.gameObject.name == "Spikes" || col.tag =="ShatterPiece" || col.tag == "LazerWall")
        {
            KnockBack(col.gameObject);
-       }
+
+            Debug.Log("Hit Lazer Wall Trigger");
+        }
     }
 
     private void OnTriggerExit(Collider col)
@@ -76,6 +79,16 @@ public class MoonBall : MonoBehaviour
         if (col.tag == "Wall")
         {
             GetComponent<SphereCollider>().isTrigger = true;
+        }
+    }
+
+    private void OnCollisionEnter(Collision col)
+    {
+        if(col.gameObject.tag == "LazerWall")
+        {
+            KnockBack(col.gameObject);
+
+            Debug.Log("Hit Lazer Wall");
         }
     }
 
