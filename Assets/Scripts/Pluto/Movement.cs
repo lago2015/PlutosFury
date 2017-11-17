@@ -12,10 +12,11 @@ public class Movement : MonoBehaviour
 
     //Buster States
     public enum BusterStates { Pickup,Shockwave,Death}
-    public BusterStates busterState;
+    private BusterStates busterState;
+    public bool startAtBeginning;
     //health properties
     public int curHealth;
-    private int maxHealth=2;
+    private int maxHealth=10;
     public float smallSize=1f;
     public float medSize=1.5f;
     public GameObject maxSize;
@@ -27,7 +28,7 @@ public class Movement : MonoBehaviour
     public bool isDamaged;
     private float invincbleTimer=0.5f;
     //buffs and debuffs
-    public bool isPowerDashing;
+    private bool isPowerDashing;
     bool CanFreezePluto;
 
     //Num of asteroids/Health
@@ -44,7 +45,7 @@ public class Movement : MonoBehaviour
     //******Dash Variables
     //Dash States
     public enum DashState { idle,basicMove,dashMove,chargeStart,chargeComplete,burst}
-    public DashState trailState;
+    private DashState trailState;
     private GameObject curTrail;
     //dash trail rotation
     private Quaternion trailRot;
@@ -138,10 +139,11 @@ public class Movement : MonoBehaviour
     public bool ShockChargeStatus() { return ShockChargeActive; }
     public float CurPowerDashTimeout() { return chargeTime; }
     public void cancelCharge() { TrailChange(DashState.idle); }
+    public bool DamageStatus() { return isDamaged; }
 
     //functions to check damage
     bool ShieldStatus() { Shielded = shieldScript.PlutoShieldStatus(); return Shielded; }
-    public bool DamageStatus() { return isDamaged; }
+    
 
     public void ChargedUp(bool curCharge)
     {
@@ -169,7 +171,12 @@ public class Movement : MonoBehaviour
         {
             prefab.SetActive(false);
         }
-        
+        if(startAtBeginning)
+        {
+            GameObject startTrigger = GameObject.FindGameObjectWithTag("Respawn");
+            Vector3 startLocation = startTrigger.transform.position;
+            transform.position = startLocation;
+        }
         //referencing the mesh renderer 
         Transform baseObject = transform.GetChild(0);
         meshComp = baseObject.GetChild(0).GetComponent<MeshRenderer>();
