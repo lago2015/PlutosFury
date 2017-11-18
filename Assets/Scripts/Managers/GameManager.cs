@@ -6,9 +6,6 @@ using UnityEngine.Advertisements;
 
 public class GameManager : MonoBehaviour
 {
-	// Keep track of Pluto's Mass
-	// Keep track of the number of asteroids eaten
-	// Print out the name of the planet that kills you
 
 	public GameObject pluto;
 	private float plutoMass;
@@ -52,6 +49,7 @@ public class GameManager : MonoBehaviour
         {
             levelWall.SetActive(levelWallActive);
             startCamTrigger.SetActive(levelWallActive);
+            
         }
         else
         {
@@ -71,6 +69,15 @@ public class GameManager : MonoBehaviour
 		asteroidsEaten = 0;
 
 	}
+
+    void LateStart()
+    {
+        if(levelWallActive)
+        {
+            CameraStop camScript = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraStop>();
+            camScript.minX -= 10;
+        }
+    }
     public void PlayAd()
     {
         int value = Random.Range(0, 10);

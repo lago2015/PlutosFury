@@ -21,8 +21,9 @@ public class CanvasFade : MonoBehaviour {
             //StartCoroutine(EnableFade());
         }
         myGroup = GetComponent<CanvasGroup>();
-
+        
         myGroup.alpha = 1;
+
     }
 
     void Start()

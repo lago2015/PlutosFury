@@ -132,15 +132,7 @@ public class SectionManager : MonoBehaviour {
             camScript.ChangeCamMax();
         }
         yield return new WaitForSeconds(fadeTime);
-        if(levelWall&&gameStartTrig)
-        {
-            
-            //place game start trigger to new section
-            gameStartTrig.transform.position = SectionLocation;
-            SectionLocation.x -= offSet*2;
-            //place level wall to new position
-            levelWall.transform.position = new Vector3(SectionLocation.x,defaultVector.y,defaultVector.z);
-        }
+
         if (player && SectionLocation != Vector3.zero && camera)
         {
             //turn off player
@@ -156,6 +148,15 @@ public class SectionManager : MonoBehaviour {
             //turn on player
             player.SetActive(true);
 
+        }
+        if (levelWall&&gameStartTrig)
+        {
+            
+            //place game start trigger to new section
+            gameStartTrig.transform.position = SectionLocation;
+            SectionLocation.x -= offSet*2;
+            //place level wall to new position
+            levelWall.transform.position = new Vector3(SectionLocation.x,defaultVector.y,defaultVector.z);
         }
         //give player movement again
         playerScript.ResumePluto();

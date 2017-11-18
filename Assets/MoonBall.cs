@@ -4,6 +4,7 @@ using System.Collections;
 public class MoonBall : MonoBehaviour
 {
     public float hitSpeed;
+    public float knockbackSpeed;
     private Rigidbody rb;
 
     private bool attackMode = false;
@@ -23,7 +24,7 @@ public class MoonBall : MonoBehaviour
             {
                 attackMode = false;
 
-                transform.FindChild("Sprite").GetComponent<SpriteRenderer>().color = Color.white;
+              //  transform.FindChild("Sprite").GetComponent<SpriteRenderer>().color = Color.white;
 
             }
         }
@@ -53,7 +54,7 @@ public class MoonBall : MonoBehaviour
 
                         attackMode = true;
 
-                        transform.FindChild("Sprite").GetComponent<SpriteRenderer>().color = Color.green;
+                       // transform.FindChild("Sprite").GetComponent<SpriteRenderer>().color = Color.green;
                     }
                 }
             }
@@ -62,11 +63,14 @@ public class MoonBall : MonoBehaviour
         if(col.tag == "Wall")
         {
             GetComponent<SphereCollider>().isTrigger = false;
+            Debug.Log("HIT WALL");
         }
 
-        if(col.tag == "BigAsteroid")
-        {
+       if(col.gameObject.name == "Spikes" || col.tag =="ShatterPiece" || col.tag == "LazerWall")
+       {
+           KnockBack(col.gameObject);
 
+            Debug.Log("Hit Lazer Wall Trigger");
         }
     }
 
@@ -76,6 +80,23 @@ public class MoonBall : MonoBehaviour
         {
             GetComponent<SphereCollider>().isTrigger = true;
         }
+    }
+
+    private void OnCollisionEnter(Collision col)
+    {
+        if(col.gameObject.tag == "LazerWall")
+        {
+            KnockBack(col.gameObject);
+
+            Debug.Log("Hit Lazer Wall");
+        }
+    }
+
+    void KnockBack(GameObject target)
+    {
+        Vector3 knockBackDirection = target.transform.position - transform.position;
+        knockBackDirection = knockBackDirection.normalized;
+        rb.AddForce(-knockBackDirection * knockbackSpeed * 2, ForceMode.Impulse);
     }
 
 }
