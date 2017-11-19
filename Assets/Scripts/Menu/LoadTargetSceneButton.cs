@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 
 public class LoadTargetSceneButton : MonoBehaviour {
     private Scene curScene;
+    public GameObject Menu;
 
     void Awake()
     {
@@ -20,6 +21,7 @@ public class LoadTargetSceneButton : MonoBehaviour {
             Debug.Log("Scene not loaded properly");
             return;
         }
+        Menu.SetActive(false);
         LoadingScreenManager.LoadScene(num);
     }
 
@@ -30,6 +32,7 @@ public class LoadTargetSceneButton : MonoBehaviour {
 			Debug.Log ("Scene not loaded properly");
 			return;
 		}
-		LoadingScreenManager.LoadScene (num);
+        Menu.SetActive(false);
+        LoadingScreenManager.LoadScene (num);
 	}
 }
