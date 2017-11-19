@@ -3,6 +3,8 @@ using System.Collections;
 
 public class DetectPlayer : MonoBehaviour {
 
+    //***For Rogue Enemy
+
     public GameObject ScriptModel;
     private ChasePlayer ChaseScript;
     private FleeOrPursue pursueScript;

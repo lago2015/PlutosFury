@@ -3,6 +3,9 @@ using System.Collections;
 
 public class PowerUpManager : MonoBehaviour {
 
+    //This script is used for pick ups that apply to the player
+
+
     public GameObject dashModel;
     bool chargeOnce;
     private AudioController audioScript;
