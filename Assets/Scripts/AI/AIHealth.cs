@@ -37,6 +37,7 @@ public class AIHealth : MonoBehaviour {
 
     public void IncrementDamage()
     {
+       
         EnemyHealth--;
         if(EnemyHealth<=0)
         {
@@ -70,26 +71,8 @@ public class AIHealth : MonoBehaviour {
             bool isDashing = col.gameObject.GetComponent<Movement>().DashStatus();
             if(isDashing)
             {
-                EnemyHealth--;
-                if (EnemyHealth <= 0)
-                {
-                    if (Explosion && Model)
-                    {
-                        myCollider.enabled = false;
+                IncrementDamage();
 
-                        Explosion.SetActive(true);
-                        Model.SetActive(false);
-                        if (Model2)
-                            Model2.SetActive(false);
-                        
-
-                        
-                    }
-                    else
-                    {
-                        Destroy(transform.parent.gameObject);
-                    }
-                }
                 if (myBody)
                 {
                     myBody.AddForce(col.contacts[0].normal * wallBump, ForceMode.VelocityChange);
@@ -115,26 +98,24 @@ public class AIHealth : MonoBehaviour {
 
                 if(isPlayerDashing)
                 {
-                    EnemyHealth--;
-                    if (EnemyHealth <= 0)
-                    {
-                        if (Explosion && Model)
-                        {
-                            myCollider.enabled = false;
-
-                            Explosion.SetActive(true);
-                            Model.SetActive(false);
-                            if (Model2)
-                                Model2.SetActive(false);
-                            
-                            
-                        }
-                        else
-                        {
-                            Destroy(transform.parent.gameObject);
-                        }
-                    }
+                    IncrementDamage();
                 }
+            }
+        }
+
+        if(col.gameObject.tag == "MoonBall")
+        {
+            Debug.Log("MOONBALL HIT!");
+
+            MoonBall moonBall = col.GetComponent<MoonBall>();
+
+            if(moonBall.getAttackMode())
+            {
+                IncrementDamage();
+            }
+            else
+            {
+                moonBall.KnockBack(this.gameObject);
             }
         }
     }

@@ -105,4 +105,58 @@ public class RogueCollision : MonoBehaviour {
         }
     }
 
+    void OnTriggerEnter(Collider col)
+    {
+        if(col.tag == "MoonBall")
+        {
+            MoonBall moonBall = col.GetComponent<MoonBall>();
+
+            if (moonBall.getAttackMode())
+            {
+                bool RogueDashing = rogueMoveScript.isDashing();
+                if (!RogueDashing)
+                {
+                    EnemyHealth--;
+                    if (EnemyHealth <= 0)
+                    {
+                        if (audioScript)
+                        {
+                            audioScript.RogueDeath(transform.position);
+                        }
+                        myCollider.enabled = false;
+
+                        if (Explosion && Model)
+                        {
+                            myCollider.enabled = false;
+                            Explosion.SetActive(true);
+                            Model.SetActive(false);
+
+                            if (rogueMoveScript)
+                            {
+                                rogueMoveScript.yesDead();
+                            }
+                            if (Model2)
+                            {
+                                Model2.SetActive(false);
+                            }
+                            if (pursueModel)
+                            {
+                                pursueModel.SetActive(false);
+                            }
+                            if (Model3)
+                            {
+                                Model3.SetActive(false);
+                            }
+
+                        }
+                        else
+                        {
+                            Destroy(transform.parent.gameObject);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 }

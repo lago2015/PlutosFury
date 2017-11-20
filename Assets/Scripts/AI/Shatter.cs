@@ -17,13 +17,10 @@ public class Shatter : MonoBehaviour
 	
     void OnTriggerEnter(Collider collision)
     {
-        Debug.Log("ENTER");
-
+       
         if (collision.tag == "Player")
         {
             playerInRange = true;
-
-            Debug.Log("Entered");
 
             DetachOrRetract(true);
         }

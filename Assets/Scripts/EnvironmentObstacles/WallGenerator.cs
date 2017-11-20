@@ -26,4 +26,17 @@ public class WallGenerator : MonoBehaviour {
             }
         }
     }
+
+    void OnTriggerEnter(Collider col)
+    {
+        if(col.gameObject.tag == "MoonBall")
+        {
+            MoonBall moonBall = col.GetComponent<MoonBall>();
+
+            if (moonBall.getAttackMode())
+            {
+                managerScript.WallDestroyed();
+            }
+        }
+    }
 }
