@@ -52,6 +52,8 @@ public class MoonBall : MonoBehaviour
 
                         rb.velocity = playerdirection * hitSpeed;
 
+                        rb.AddTorque(playerdirection * hitSpeed);
+
                         attackMode = true;
 
                        // transform.FindChild("Sprite").GetComponent<SpriteRenderer>().color = Color.green;
@@ -94,9 +96,11 @@ public class MoonBall : MonoBehaviour
 
     public void KnockBack(GameObject target)
     {
-        Vector3 knockBackDirection = target.transform.position - transform.position;
+         Vector3 knockBackDirection = target.transform.position - transform.position;
         knockBackDirection = knockBackDirection.normalized;
-        rb.AddForce(-knockBackDirection * knockbackSpeed * 2, ForceMode.Impulse);
+        // rb.AddForce(-knockBackDirection * knockbackSpeed * 2, ForceMode.Impulse);
+
+        rb.AddForce(-rb.velocity * 1.5f , ForceMode.Impulse);
     }
 
 }
