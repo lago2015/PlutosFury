@@ -54,7 +54,6 @@ public class MoonBall : MonoBehaviour
 
                         attackMode = true;
 
-                        rb.AddTorque(playerdirection * hitSpeed);
                        // transform.FindChild("Sprite").GetComponent<SpriteRenderer>().color = Color.green;
                     }
                 }
@@ -64,9 +63,10 @@ public class MoonBall : MonoBehaviour
         if(col.tag == "Wall")
         {
             GetComponent<SphereCollider>().isTrigger = false;
+            Debug.Log("HIT WALL");
         }
 
-       if(col.gameObject.name == "Spikes" || col.tag =="ShatterPiece" || col.name == "LaserWall")
+       if(col.gameObject.name == "Spikes" || col.tag =="ShatterPiece" || col.tag == "LazerWall")
        {
            KnockBack(col.gameObject);
 
@@ -94,11 +94,9 @@ public class MoonBall : MonoBehaviour
 
     public void KnockBack(GameObject target)
     {
-        // Vector3 knockBackDirection = target.transform.position - transform.position;
-        // knockBackDirection = knockBackDirection.normalized;
-        //rb.AddForce(-knockBackDirection * knockbackSpeed * 2, ForceMode.Impulse);
-
-        rb.AddForce(-rb.velocity * 1.5f, ForceMode.Impulse);
+        Vector3 knockBackDirection = target.transform.position - transform.position;
+        knockBackDirection = knockBackDirection.normalized;
+        rb.AddForce(-knockBackDirection * knockbackSpeed * 2, ForceMode.Impulse);
     }
 
 }

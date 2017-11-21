@@ -13,7 +13,7 @@ public class AIHealth : MonoBehaviour {
     public GameObject Model;
     public GameObject Model2;
     private Collider myCollider;
-    
+    public bool ToCollidedWith=true;
     public float wallBump = 20;
     private Rigidbody myBody;
     private FleeOrPursue RogueScript;
@@ -64,59 +64,67 @@ public class AIHealth : MonoBehaviour {
 
     void OnCollisionEnter(Collision col)
     {
-        string CurTag = col.gameObject.tag;
-
-        if(CurTag == "Player")
+        if(ToCollidedWith)
         {
-            bool isDashing = col.gameObject.GetComponent<Movement>().DashStatus();
-            if(isDashing)
+            string CurTag = col.gameObject.tag;
+
+            if (CurTag == "Player")
             {
-                IncrementDamage();
-
-                if (myBody)
+                bool isDashing = col.gameObject.GetComponent<Movement>().DashStatus();
+                if (isDashing)
                 {
-                    myBody.AddForce(col.contacts[0].normal * wallBump, ForceMode.VelocityChange);
+                    IncrementDamage();
+
+                    if (myBody)
+                    {
+                        myBody.AddForce(col.contacts[0].normal * wallBump, ForceMode.VelocityChange);
+                    }
+
                 }
-
             }
-        }
-        else if(CurTag=="RogueWall"||CurTag=="Wall"||CurTag=="MazeWall")
-        {
+            else if (CurTag == "RogueWall" || CurTag == "Wall" || CurTag == "MazeWall")
+            {
 
-            myBody.AddForce(col.contacts[0].normal * wallBump, ForceMode.VelocityChange);
+                myBody.AddForce(col.contacts[0].normal * wallBump, ForceMode.VelocityChange);
+            }
         }
     }
 
     void OnTriggerEnter(Collider col)
     {
-        if(col.gameObject.tag=="Player")
+        if(ToCollidedWith)
         {
-            Movement playerScript = col.GetComponent<Movement>();
-            if(playerScript)
-            {
-                bool isPlayerDashing = playerScript.DashStatus();
 
-                if(isPlayerDashing)
+            if (col.gameObject.tag == "Player")
+            {
+                Movement playerScript = col.GetComponent<Movement>();
+                if (playerScript)
+                {
+                    bool isPlayerDashing = playerScript.DashStatus();
+
+                    if (isPlayerDashing)
+                    {
+                        IncrementDamage();
+                    }
+                }
+            }
+
+            if (col.gameObject.tag == "MoonBall")
+            {
+                Debug.Log("MOONBALL HIT!");
+
+                MoonBall moonBall = col.GetComponent<MoonBall>();
+
+                if (moonBall.getAttackMode())
                 {
                     IncrementDamage();
                 }
-            }
-        }
-
-        if(col.gameObject.tag == "MoonBall")
-        {
-            Debug.Log("MOONBALL HIT!");
-
-            MoonBall moonBall = col.GetComponent<MoonBall>();
-
-            if(moonBall.getAttackMode())
-            {
-                IncrementDamage();
-            }
-            else
-            {
-                moonBall.KnockBack(this.gameObject);
+                else
+                {
+                    moonBall.KnockBack(this.gameObject);
+                }
             }
         }
     }
 }
+

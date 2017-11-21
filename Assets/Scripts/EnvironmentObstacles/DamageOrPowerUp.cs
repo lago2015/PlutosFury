@@ -25,7 +25,7 @@ public class DamageOrPowerUp : MonoBehaviour {
     //Rate of effect to apply
     //public float ApplyEffectRate;
     public float IncrementTimeRate;
-    bool Damaged;
+    public bool Damaged;
     bool SuperPluto;
     float elapseTime;
     bool PlayerNear = false;
@@ -34,6 +34,8 @@ public class DamageOrPowerUp : MonoBehaviour {
     public GameObject dashModel;
     private SphereCollider damageCollider;
    
+    public bool didDamage() { return Damaged = true; }
+
     void Start()
     {
         CanPowerUp = true;
@@ -162,6 +164,11 @@ public class DamageOrPowerUp : MonoBehaviour {
                     }
                 }
             }
+        }
+        else
+        {
+            Damaged = true;
+
         }
 
     }

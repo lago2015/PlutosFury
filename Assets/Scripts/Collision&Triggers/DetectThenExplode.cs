@@ -9,6 +9,7 @@ public class DetectThenExplode : MonoBehaviour {
     private BoxCollider collider;
     private SphereCollider TriggerCollider;
     private HomingProjectile moveScript;
+    private DamageOrPowerUp damageScript;
     private Rigidbody mybody;
     private float startRadius;
     private float lostSightRadius = 9.5f;
@@ -24,6 +25,10 @@ public class DetectThenExplode : MonoBehaviour {
         }
         if (explosionState)
         {
+            if(isRocket)
+            {
+                damageScript = explosionState.GetComponent<DamageOrPowerUp>();
+            }
             explosionState.SetActive(false);
         }
         moveScript = GetComponent<HomingProjectile>();
@@ -144,6 +149,7 @@ public class DetectThenExplode : MonoBehaviour {
                         GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>().DestructionSmallEnvirObstacle(transform.position);
                         doOnce = true;
                     }
+                    damageScript.didDamage();
                     col.gameObject.GetComponent<BigAsteroid>().AsteroidHit(5);
                     StartCoroutine(SwitchModels());
                 }

@@ -865,6 +865,19 @@ public class Movement : MonoBehaviour
                 DamagePluto();
             }
 		}
+        else if(curTag=="BreakableWall")
+        {
+            if(ShouldDash)
+            {
+                AIHealth healthScript = c.gameObject.GetComponent<AIHealth>();
+                if(healthScript)
+                {
+                    healthScript.IncrementDamage();
+                }
+            }
+            myBody.AddForce(c.contacts[0].normal * wallBump, ForceMode.VelocityChange);
+
+        }
         else if(curTag=="LazerWall")
         {
             if (audioScript)
