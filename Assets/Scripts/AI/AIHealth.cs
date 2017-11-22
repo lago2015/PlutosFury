@@ -20,7 +20,10 @@ public class AIHealth : MonoBehaviour {
     void Awake()
     {
 
-
+        if(gameObject.tag=="BreakableWall")
+        {
+            ToCollidedWith = false;
+        }
         myCollider = GetComponent<Collider>();
         myBody = GetComponent<Rigidbody>();
         if(Explosion&&Model)
@@ -71,6 +74,7 @@ public class AIHealth : MonoBehaviour {
             if (CurTag == "Player")
             {
                 bool isDashing = col.gameObject.GetComponent<Movement>().DashStatus();
+                Debug.Log(col.collider);
                 if (isDashing)
                 {
                     IncrementDamage();
@@ -78,6 +82,14 @@ public class AIHealth : MonoBehaviour {
                     if (myBody)
                     {
                         myBody.AddForce(col.contacts[0].normal * wallBump, ForceMode.VelocityChange);
+                    }
+                    else
+                    {
+                        Rigidbody colBody = col.gameObject.GetComponent<Movement>().myBody;
+                        if(colBody)
+                        {
+                            colBody.AddForce(col.contacts[0].normal * wallBump, ForceMode.VelocityChange);
+                        }
                     }
 
                 }

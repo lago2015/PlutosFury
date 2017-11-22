@@ -37,7 +37,7 @@ public class LoadingScreenManager : MonoBehaviour {
 
 	public static int sceneToLoad = -1;
 	// IMPORTANT! This is the build index of your loading scene. You need to change this to match your actual scene index
-	static int loadingSceneIndex = 2;
+	static int loadingSceneIndex = 1;
     private bool screenTapped = false;
 
     public static void LoadScene(int levelNum) {				

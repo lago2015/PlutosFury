@@ -174,8 +174,11 @@ public class Movement : MonoBehaviour
         if(startAtBeginning)
         {
             GameObject startTrigger = GameObject.FindGameObjectWithTag("Respawn");
-            Vector3 startLocation = startTrigger.transform.position;
-            transform.position = startLocation;
+            if(startTrigger)
+            {
+                Vector3 startLocation = startTrigger.transform.position;
+                transform.position = startLocation;
+            }
         }
         //referencing the mesh renderer 
         Transform baseObject = transform.GetChild(0);
@@ -838,12 +841,7 @@ public class Movement : MonoBehaviour
             }
 
         }
-
-        else if(curTag=="Soccerball")
-        {
-            myBody.AddForce(c.contacts[0].normal * soccerKnockback, ForceMode.VelocityChange);
-
-        }
+        
         
         else if (curTag == "Wall"||curTag=="LevelWall"||curTag=="DamageWall") 
 		{

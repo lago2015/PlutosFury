@@ -35,7 +35,8 @@ public class CameraStop : MonoBehaviour {
     public Vector3 delta;
     private AsteroidSpawner spawnScript;
     private Camera myCamera;
-
+    private bool levelWallActive;
+    public bool isWallActive(bool isActive) { return levelWallActive = isActive; }
 	// Use this for initialization
 	void Awake () 
 	{
@@ -91,8 +92,15 @@ public class CameraStop : MonoBehaviour {
             transform.position = new Vector3(transform.position.x, cachedCameraPosition.y, transform.position.z);
         }
         if (topLeft.x < minX || botLeft.x < minX )
-        { 
-            transform.position = new Vector3(minX+OffsetX, transform.position.y, transform.position.z);
+        {
+            if (levelWallActive)
+            {
+                transform.position = new Vector3(minX + OffsetX, transform.position.y, transform.position.z);
+            }
+            else
+            {
+                transform.position = new Vector3(cachedCameraPosition.x, transform.position.y, transform.position.z);
+            }
         }
 
         if (botLeft.y < minY || botRight.y < minY)
