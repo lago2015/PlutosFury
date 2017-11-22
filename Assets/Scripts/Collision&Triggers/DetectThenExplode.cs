@@ -155,7 +155,7 @@ public class DetectThenExplode : MonoBehaviour {
                 }
             }
         }
-        else if(CurTag=="EnvironmentObstacle"||CurTag=="Soccerball")
+        else if(CurTag=="EnvironmentObstacle")
         {
             if (isLandmine || isRocket)
             {
@@ -167,6 +167,27 @@ public class DetectThenExplode : MonoBehaviour {
                         doOnce = true;
                     }
                     StartCoroutine(SwitchModels());
+                }
+            }
+        }
+        else if(CurTag == "MoonBall")
+        {
+
+            if (regularState && explosionState)
+            {
+                if (!doOnce)
+                {
+                    GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>().DestructionSmall(transform.position);
+                    doOnce = true;
+                }
+                TriggerCollider.enabled = false;
+                StartCoroutine(SwitchModels());
+
+                MoonBall moonBall = col.gameObject.GetComponent<MoonBall>();
+
+                if (moonBall)
+                {
+                    moonBall.KnockBack(this.gameObject);
                 }
             }
         }
