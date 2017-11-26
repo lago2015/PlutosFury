@@ -1,12 +1,4 @@
-﻿// LoadingScreenManager
-// --------------------------------
-// built by Martin Nerurkar (http://www.martin.nerurkar.de)
-// for Nowhere Prophet (http://www.noprophet.com)
-//
-// Licensed under GNU General Public License v3.0
-// http://www.gnu.org/licenses/gpl-3.0.txt
-
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.SceneManagement;
@@ -16,7 +8,8 @@ public class LoadingScreenManager : MonoBehaviour {
 	[Header("Loading Visuals")]
 	public Image loadingIcon;
 	public Image loadingDoneIcon;
-	public Text loadingText;
+    public RawImage tapToContinue;
+    public Text percentageText;
 	public Image progressBar;
 	public Image fadeOverlay;
 
@@ -82,11 +75,13 @@ public class LoadingScreenManager : MonoBehaviour {
 
 			if (Mathf.Approximately(operation.progress, lastProgress) == false) {
 				progressBar.fillAmount = operation.progress;
+                percentageText.text = Mathf.RoundToInt(progressBar.fillAmount * 100)  + "%";
 				lastProgress = operation.progress;
 			}
 		}
 
-        
+        percentageText.text = "100%";
+
         if (loadSceneMode == LoadSceneMode.Additive)
             audioListener.enabled = false;
 
@@ -132,7 +127,6 @@ public class LoadingScreenManager : MonoBehaviour {
 		loadingDoneIcon.gameObject.SetActive(false);
 
 		progressBar.fillAmount = 0f;
-		loadingText.text = "LOADING...";
 	}
 
 	void ShowCompletionVisuals() {
@@ -140,6 +134,6 @@ public class LoadingScreenManager : MonoBehaviour {
 		loadingDoneIcon.gameObject.SetActive(true);
 
 		progressBar.fillAmount = 1f;
-		loadingText.text = "TAP ANYWHERE ON THE SCREEN TO CONTINUE";
+        tapToContinue.gameObject.SetActive(true);
 	}
 }
