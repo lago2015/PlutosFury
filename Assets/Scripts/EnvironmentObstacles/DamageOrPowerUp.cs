@@ -33,7 +33,7 @@ public class DamageOrPowerUp : MonoBehaviour {
     FleeOrPursue dashScript;
     public GameObject dashModel;
     private SphereCollider damageCollider;
-   
+    private BoxCollider otherDamageCollider;
     public bool didDamage() { return Damaged = true; }
 
     void Start()
@@ -45,80 +45,79 @@ public class DamageOrPowerUp : MonoBehaviour {
             dashScript = dashModel.transform.GetComponent<FleeOrPursue>();
         }
         damageCollider = GetComponent<SphereCollider>();
+        if(damageCollider==null)
+        {
+            otherDamageCollider = GetComponent<BoxCollider>();
+        }
         NormalInterval = DrainApplyInterval;
         NormalDrain = DrainAmount;
         SuperDrain = DrainAmount + DrainAmount;
         SuperDrainInterval = 0.25f;
-        enabled = false;
     }
 
-    // Update is called once per frame
-    void Update()
+
+    public void ApplyEffect()
     {
-        if (PlayerNear)
+        switch (CurrentEffect)
         {
-            switch (CurrentEffect)
-            {
-                case EffectState.Damage:
-                    if (!Damaged)
+            case EffectState.Damage:
+                if (!Damaged)
+                {
+                    PlayerScript.DamagePluto();
+                    Damaged = true;
+                    if (damageCollider)
                     {
-                        PlayerScript.DamagePluto();
-                        Damaged = true;
-                        if(damageCollider)
-                        {
-                            damageCollider.enabled = false;
-                        }
+                        damageCollider.enabled = false;
                     }
+                }
 
-                    //if (!gameObject.name.Contains("Explosion"))
-                    //{
-                    //    Destroy(gameObject);
-                    //}
-                    break;
-                case EffectState.Drain:
-                    //SuperPluto = PlayerScript.SuperBool();
-                    if(SuperPluto)
+                //if (!gameObject.name.Contains("Explosion"))
+                //{
+                //    Destroy(gameObject);
+                //}
+                break;
+            case EffectState.Drain:
+                //SuperPluto = PlayerScript.SuperBool();
+                if (SuperPluto)
+                {
+                    DrainAmount = SuperDrain;
+                    DrainApplyInterval = SuperDrainInterval;
+                }
+                else
+                {
+                    DrainAmount = NormalDrain;
+                    DrainApplyInterval = NormalInterval;
+                }
+                if (EffectTimer >= DrainApplyInterval)
+                {
+                    PlayerScript.DrainPluto(DrainAmount);
+                    EffectTimer = 0;
+                }
+                else
+                {
+                    EffectTimer += Time.deltaTime * IncrementTimeRate;
+                }
+                break;
+            case EffectState.PowerUp:
+                if (CanPowerUp)
+                {
+                    if (EffectTimer <= PowerUpDuration)
                     {
-                        DrainAmount = SuperDrain;
-                        DrainApplyInterval = SuperDrainInterval;
-                    }
-                    else
-                    {
-                        DrainAmount = NormalDrain;
-                        DrainApplyInterval = NormalInterval;
-                    }
-                    if(EffectTimer>=DrainApplyInterval)
-                    {
-                        PlayerScript.DrainPluto(DrainAmount);
-                        EffectTimer = 0;
-                    }
-                    else
-                    {
+                        PlayerScript.PowerUpPluto(PowerUpAmount);
                         EffectTimer += Time.deltaTime * IncrementTimeRate;
+                        CanPowerUp = false;
+                        StartCoroutine(CoolDownEffect(PowerCooldown));
                     }
-                    break;
-                case EffectState.PowerUp:
-                    if(CanPowerUp)
+                    else
                     {
-                        if (EffectTimer <= PowerUpDuration)
-                        {
-                            PlayerScript.PowerUpPluto(PowerUpAmount);
-                            EffectTimer += Time.deltaTime * IncrementTimeRate;
-                            CanPowerUp = false;
-                            StartCoroutine(CoolDownEffect(PowerCooldown));
-                        }
-                        else
-                        {
-                            Destroy(gameObject);
-                        }
+                        Destroy(gameObject);
                     }
-                    
-                    break;
-            }
+                }
+
+                break;
         }
-
     }
-
+   
     void OnCollisionEnter(Collision col)
     {
         if(col.gameObject.tag=="Player")
@@ -165,11 +164,6 @@ public class DamageOrPowerUp : MonoBehaviour {
                 }
             }
         }
-        else
-        {
-            Damaged = true;
-
-        }
 
     }
 
@@ -181,8 +175,7 @@ public class DamageOrPowerUp : MonoBehaviour {
             {
                 if (!col.isTrigger)
                 {
-                    enabled = true;
-                    PlayerNear = true;
+                    ApplyEffect();
                 }
             }
                 
@@ -210,18 +203,5 @@ public class DamageOrPowerUp : MonoBehaviour {
         CanPowerUp = true;
     }
 
-    void OnTriggerExit(Collider col)
-    {
-        if (col.gameObject.tag == ("Player"))
-        {
-            if (colliderTriggered)
-            {
-                if (!col.isTrigger)
-                {
-                    enabled = false;
-                    PlayerNear = false;
-                }
-            }
-        }
-    }
+    
 }

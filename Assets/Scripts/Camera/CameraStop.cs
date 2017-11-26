@@ -75,15 +75,10 @@ public class CameraStop : MonoBehaviour {
             transform.position = Vector3.SmoothDamp(transform.position, destination, ref velocity, dampTime);
         }
         //Camera fitting to viewport
-        topLeft = Camera.main.ScreenToWorldPoint(new Vector3(0, 1, -Camera.main.transform.position.z));
-        topRight = Camera.main.ScreenToWorldPoint(new Vector3(1, 1, -Camera.main.transform.position.z));
-        botLeft = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, -Camera.main.transform.position.z));
-        botRight = Camera.main.ScreenToWorldPoint(new Vector3(1, 0, -Camera.main.transform.position.z));
-        if (topRight.x > maxX || botRight.x > maxX)
-        {
-            //Clamp Camera along the X axis
-            transform.position = new Vector3(cachedCameraPosition.x, transform.position.y, transform.position.z);
-        }
+        topLeft = Camera.main.ViewportToWorldPoint(new Vector3(0, 1, -Camera.main.transform.position.z));
+        topRight = Camera.main.ViewportToWorldPoint(new Vector3(1, 1, -Camera.main.transform.position.z));
+        botLeft = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, -Camera.main.transform.position.z));
+        botRight = Camera.main.ViewportToWorldPoint(new Vector3(1, 0, -Camera.main.transform.position.z));
 
 
         if (topLeft.y > maxY || topRight.y > maxY)
@@ -91,7 +86,12 @@ public class CameraStop : MonoBehaviour {
             //Clamp Camera along the Y axis
             transform.position = new Vector3(transform.position.x, cachedCameraPosition.y, transform.position.z);
         }
-        if (topLeft.x < minX || botLeft.x < minX )
+        if (topRight.x > maxX+OffsetX || botRight.x > maxX+OffsetX)
+        {
+            //Clamp Camera along the X axis
+            transform.position = new Vector3(cachedCameraPosition.x, transform.position.y, transform.position.z);
+        }
+        if (topLeft.x < minX-OffsetX || botLeft.x < minX - OffsetX)
         {
             if (levelWallActive)
             {
@@ -125,17 +125,23 @@ public class CameraStop : MonoBehaviour {
         
         return curSection;
     }
-
+    public void MoveCamera(Vector3 curPosition)
+    {
+        transform.position = new Vector3(curPosition.x, curPosition.y, CameraOffset);
+    }
     public float ChangeCamMin()
     {
         //get Min X from the left wall
         minX = cameraStopLocations[curSection].transform.position.x + OffsetX;
+        //update cache camera position
+        cachedCameraPosition.x = minX;
         //update orbs where to spawn
         spawnScript.newMinX(minX);
         return minX;
     }
     public float ChangeCamMax()
     {
+
         //get max X from the right wall
         maxX = cameraStopLocations[curSection + 1].transform.position.x - OffsetX;
         //update orbs where to spawn

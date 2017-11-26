@@ -77,6 +77,11 @@ public class GameManager : MonoBehaviour
             CameraStop camScript = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraStop>();
             camScript.minX -= 10;
         }
+        else
+        {
+            GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraStop>().isWallActive(levelWallActive);
+            GameObject.FindGameObjectWithTag("Spawner").GetComponent<SectionManager>().isWallActive(levelWallActive);
+        }
     }
     public void PlayAd()
     {
@@ -119,10 +124,10 @@ public class GameManager : MonoBehaviour
         ScoreText.text = "Score:\n\n" + EndScore;
         highScoreText.text = "High Score:\n\n" + HighScore;
 
-        if (willPlayAd)
-        {
-            Advertisement.Show();
-        }
+        //if (willPlayAd)
+        //{
+        //    Advertisement.Show();
+        //}
         
     }
     public void StartYouWin()

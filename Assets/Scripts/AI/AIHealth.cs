@@ -74,7 +74,6 @@ public class AIHealth : MonoBehaviour {
             if (CurTag == "Player")
             {
                 bool isDashing = col.gameObject.GetComponent<Movement>().DashStatus();
-                Debug.Log(col.collider);
                 if (isDashing)
                 {
                     IncrementDamage();

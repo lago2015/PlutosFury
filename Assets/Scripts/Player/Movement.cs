@@ -171,15 +171,15 @@ public class Movement : MonoBehaviour
         {
             prefab.SetActive(false);
         }
-        if(startAtBeginning)
-        {
-            GameObject startTrigger = GameObject.FindGameObjectWithTag("Respawn");
-            if(startTrigger)
-            {
-                Vector3 startLocation = startTrigger.transform.position;
-                transform.position = startLocation;
-            }
-        }
+        //if(startAtBeginning)
+        //{
+        //    GameObject startTrigger = GameObject.FindGameObjectWithTag("Respawn");
+        //    if(startTrigger)
+        //    {
+        //        Vector3 startLocation = startTrigger.transform.position;
+        //        transform.position = startLocation;
+        //    }
+        //}
         //referencing the mesh renderer 
         Transform baseObject = transform.GetChild(0);
         meshComp = baseObject.GetChild(0).GetComponent<MeshRenderer>();

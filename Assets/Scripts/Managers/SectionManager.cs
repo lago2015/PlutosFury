@@ -16,7 +16,8 @@ public class SectionManager : MonoBehaviour {
     private GameObject player;
     private Movement playerScript;
     private GameObject camera;
-
+    private bool levelWallActive;
+    public bool isWallActive(bool isActive) { return levelWallActive = isActive; }
 
     private float curCamMin;
     private float curCamMax;
@@ -84,19 +85,10 @@ public class SectionManager : MonoBehaviour {
                 //check what section the player is in
                 if (sections[currSectionNumber])
                 {
-                    //turn off recently completed section
-                    sections[currSectionNumber].SetActive(false);
-                    //increment section number
-                    currSectionNumber++;
+
                     //start placing player specific components for new section
                     StartCoroutine(SectionTransition(nextLocation));
                     
-                    //turn section specific gameobjects in new section
-                    if (sections[currSectionNumber])
-                    {
-                        sections[currSectionNumber].SetActive(true);
-
-                    }
                 }
             }
             //if current section number is maxed according to array length
@@ -121,8 +113,14 @@ public class SectionManager : MonoBehaviour {
         {
             playerScript.DisableMovement(false);
         }
+
+        yield return new WaitForSeconds(fadeTime);
+
+        //turn off recently completed section
+        sections[currSectionNumber].SetActive(false);
+
         //placing new min and max for X axis for camera
-        if(camScript)
+        if (camScript)
         {
             //update what section player is in
             camScript.incrementCurSection();
@@ -130,33 +128,43 @@ public class SectionManager : MonoBehaviour {
             camScript.ChangeCamMin();
             //update max for x axis
             camScript.ChangeCamMax();
-        }
-        yield return new WaitForSeconds(fadeTime);
 
+        }
         if (player && SectionLocation != Vector3.zero && camera)
         {
             //turn off player
-            player.SetActive(false);//save camera z axis
-
+            player.SetActive(false);
 
             //zero out z axis for player then apply new position
             SectionLocation.z = 0;
             player.transform.position = SectionLocation;
-            //get new move to location
-            camera.transform.position = new Vector3(SectionLocation.x, SectionLocation.y, camZAxis);
-
+            //if(camScript)
+            //{
+            //    //move camera to new position
+            //    camScript.MoveCamera(player.transform.position);
+            //}
             //turn on player
             player.SetActive(true);
 
         }
-        if (levelWall&&gameStartTrig)
+        if (levelWall&&gameStartTrig&&levelWallActive)
         {
             
             //place game start trigger to new section
             gameStartTrig.transform.position = SectionLocation;
-            SectionLocation.x -= offSet*2;
+            SectionLocation.x -= offSet * 2;
+
             //place level wall to new position
             levelWall.transform.position = new Vector3(SectionLocation.x,defaultVector.y,defaultVector.z);
+        }
+        //increment section number
+        currSectionNumber++;
+
+        //turn section specific gameobjects in new section
+        if (sections[currSectionNumber])
+        {
+            sections[currSectionNumber].SetActive(true);
+
         }
         //give player movement again
         playerScript.ResumePluto();
