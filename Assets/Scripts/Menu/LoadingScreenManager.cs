@@ -9,6 +9,7 @@ public class LoadingScreenManager : MonoBehaviour {
 	public Image loadingIcon;
 	public Image loadingDoneIcon;
     public RawImage tapToContinue;
+    public RawImage nowLoading;
     public Text percentageText;
 	public Image progressBar;
 	public Image fadeOverlay;
@@ -134,6 +135,7 @@ public class LoadingScreenManager : MonoBehaviour {
 		loadingDoneIcon.gameObject.SetActive(true);
 
 		progressBar.fillAmount = 1f;
+        nowLoading.gameObject.SetActive(false);
         tapToContinue.gameObject.SetActive(true);
 	}
 }
