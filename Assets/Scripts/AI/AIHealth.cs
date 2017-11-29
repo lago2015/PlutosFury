@@ -13,17 +13,14 @@ public class AIHealth : MonoBehaviour {
     public GameObject Model;
     public GameObject Model2;
     private Collider myCollider;
-    public bool ToCollidedWith=true;
+   
     public float wallBump = 20;
     private Rigidbody myBody;
     private FleeOrPursue RogueScript;
     void Awake()
     {
 
-        if(gameObject.tag=="BreakableWall")
-        {
-            ToCollidedWith = false;
-        }
+        
         myCollider = GetComponent<Collider>();
         myBody = GetComponent<Rigidbody>();
         if(Explosion&&Model)
@@ -44,13 +41,27 @@ public class AIHealth : MonoBehaviour {
         EnemyHealth--;
         if(EnemyHealth<=0)
         {
-            
+
             if (Explosion && Model)
             {
-                myCollider.enabled = false;
-                
+              // myCollider.enabled = false;
+
                 Explosion.SetActive(true);
-                Model.SetActive(false);
+                Explosion.transform.parent = null;
+
+                Destroy(Explosion, Explosion.GetComponent<ParticleSystem>().main.duration);
+
+                if (transform.parent != null)
+                {
+                    Destroy(transform.parent.gameObject);
+                }
+                else
+                {
+                    Destroy(this.gameObject);
+                }
+
+            }
+              /*  Model.SetActive(false);
                 if(Model2)
                 {
                     
@@ -62,13 +73,13 @@ public class AIHealth : MonoBehaviour {
             {
                 Destroy(transform.parent.gameObject);
             }
+            */
         }
     }
 
     void OnCollisionEnter(Collision col)
     {
-        if(ToCollidedWith)
-        {
+        
             string CurTag = col.gameObject.tag;
 
             if (CurTag == "Player")
@@ -98,14 +109,12 @@ public class AIHealth : MonoBehaviour {
 
                 myBody.AddForce(col.contacts[0].normal * wallBump, ForceMode.VelocityChange);
             }
-        }
+        
     }
 
     void OnTriggerEnter(Collider col)
     {
-        if(ToCollidedWith)
-        {
-
+      
             if (col.gameObject.tag == "Player")
             {
                 Movement playerScript = col.GetComponent<Movement>();
@@ -129,13 +138,13 @@ public class AIHealth : MonoBehaviour {
                 if (moonBall.getAttackMode())
                 {
                     IncrementDamage();
+                    moonBall.KnockBack(this.gameObject);
                 }
                 else
                 {
                     moonBall.KnockBack(this.gameObject);
                 }
-            }
-        }
+            } 
     }
 }
 
