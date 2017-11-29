@@ -8,7 +8,6 @@ public class DetectThenExplode : MonoBehaviour {
     public GameObject explosionState;
     private BoxCollider collider;
     private SphereCollider TriggerCollider;
-    private HomingProjectile moveScript;
     private DamageOrPowerUp damageScript;
     private Rigidbody mybody;
     private float startRadius;
@@ -31,16 +30,8 @@ public class DetectThenExplode : MonoBehaviour {
             }
             explosionState.SetActive(false);
         }
-        moveScript = GetComponent<HomingProjectile>();
         TriggerCollider = GetComponent<SphereCollider>();
-        //if (isHomingLandmine)
-        //{
-        //    collider = GetComponent<BoxCollider>();
-        //    TriggerCollider.enabled = true;
-        //    collider.isTrigger = false;
-        //    startRadius = TriggerCollider.radius;
-        //}
-        //else 
+
         if(isLandmine)
         {
             if(TriggerCollider)
@@ -86,14 +77,7 @@ public class DetectThenExplode : MonoBehaviour {
         }
     }
 
-    void OnTriggerExit(Collider col)
-    {
-        if(isHomingLandmine)
-        {
-            moveScript.ShouldMove = false;
-            TriggerCollider.radius = startRadius;
-        }
-    }
+
 
 
     void OnTriggerEnter(Collider col)
@@ -129,13 +113,6 @@ public class DetectThenExplode : MonoBehaviour {
                         StartCoroutine(SwitchModels());
                     }
                 }
-            }
-            else if (isHomingLandmine)
-            {
-                moveScript.activateMovement();
-                //TriggerCollider.enabled = false;
-
-                //TriggerCollider.radius = lostSightRadius;
             }
         }
         else if(CurTag == "BigAsteroid")

@@ -52,8 +52,8 @@ public class HomingProjectile : MonoBehaviour {
 
             transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * rotationSpeed);
 
-            transform.position += moveSpeed * transform.forward * Time.deltaTime;
-            transform.position = new Vector3(transform.position.x, transform.position.y, 0);
+            transform.parent.position += moveSpeed * transform.forward * Time.deltaTime;
+            transform.parent.position = new Vector3(transform.position.x, transform.position.y, 0);
         }
     }
 
