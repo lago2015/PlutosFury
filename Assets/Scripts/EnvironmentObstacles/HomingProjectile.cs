@@ -14,15 +14,15 @@ public class HomingProjectile : MonoBehaviour {
     private float startRadius;
     private float lostSightRadius = 10f;
 
-    public bool activateMovement()
+    public bool activateMovement(bool isActive)
     {
-        enabled = true;
+        enabled = isActive;
         if(TriggerCollider)
         {
             TriggerCollider.radius = lostSightRadius;
             
         }
-        return ShouldMove = true;
+        return ShouldMove = isActive;
     }
 
     void Awake()

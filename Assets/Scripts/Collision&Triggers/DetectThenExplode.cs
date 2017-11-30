@@ -30,12 +30,12 @@ public class DetectThenExplode : MonoBehaviour {
             }
             explosionState.SetActive(false);
         }
-        TriggerCollider = GetComponent<SphereCollider>();
 
         if(isLandmine)
         {
             if(TriggerCollider)
             {
+                TriggerCollider = GetComponent<SphereCollider>();
                 TriggerCollider.enabled = true;
             }
         }
@@ -100,18 +100,15 @@ public class DetectThenExplode : MonoBehaviour {
             }   
             else if(isRocket)
             {
-                if (!col.isTrigger)
+                if (regularState && explosionState)
                 {
-                    if (regularState && explosionState)
+                    if (!doOnce)
                     {
-                        if (!doOnce)
-                        {
-                            GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>().DestructionSmall(transform.position);
-                            doOnce = true;
-                        }
-
-                        StartCoroutine(SwitchModels());
+                        GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>().DestructionSmall(transform.position);
+                        doOnce = true;
                     }
+
+                    StartCoroutine(SwitchModels());
                 }
             }
         }
@@ -157,7 +154,11 @@ public class DetectThenExplode : MonoBehaviour {
                     GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>().DestructionSmall(transform.position);
                     doOnce = true;
                 }
-                TriggerCollider.enabled = false;
+                if(TriggerCollider)
+                {
+                    TriggerCollider.enabled = false;
+                }
+                
                 StartCoroutine(SwitchModels());
 
                 MoonBall moonBall = col.gameObject.GetComponent<MoonBall>();
