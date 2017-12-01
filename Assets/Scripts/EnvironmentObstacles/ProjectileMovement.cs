@@ -14,7 +14,11 @@ public class ProjectileMovement : MonoBehaviour {
             //transform.position = new Vector3(transform.position.x, transform.position.y, 0);
         }
     }
-
-
+    //upon impact call this to stop movement for explosion to spawn
+    public bool StopMovement()
+    {
+        ShouldMove = false;
+        return enabled = false;
+    }
 
 }

@@ -3,30 +3,34 @@ using System.Collections;
 
 public class DetectThenExplode : MonoBehaviour {
 
+    //Script is meant for Stationary Landmine and Rocket
     
     public GameObject regularState;
     public GameObject explosionState;
-    private BoxCollider collider;
     private SphereCollider TriggerCollider;
     private DamageOrPowerUp damageScript;
     private Rigidbody mybody;
-    private float startRadius;
-    private float lostSightRadius = 9.5f;
+    private ProjectileMovement rocketScript;
     private bool doOnce;
     public bool isRocket;
     public bool isLandmine;
     public bool isHomingLandmine;
     void Awake()
     {
+        //model gameobject
         if (regularState)
         {
+            //ensure model is on at start
             regularState.SetActive(true);
         }
+        //explosion gameobject
         if (explosionState)
         {
             if(isRocket)
             {
+                //Getting damage script to notify if damage has been applied
                 damageScript = explosionState.GetComponent<DamageOrPowerUp>();
+                
             }
             explosionState.SetActive(false);
         }
@@ -41,13 +45,13 @@ public class DetectThenExplode : MonoBehaviour {
         }
         else if(isRocket)
         {
-            collider = GetComponent<BoxCollider>();
-            collider.enabled = true;
             mybody = GetComponent<Rigidbody>();
+            //Getter to stop movement upon impact
+            rocketScript = GetComponent<ProjectileMovement>();
         }
 
     }
-
+    //Start rockets life span
     void Start()
     {
         if(isRocket)
@@ -57,144 +61,103 @@ public class DetectThenExplode : MonoBehaviour {
 
     }
 
+    //duration of rockets life span
     IEnumerator LaunchTime()
     {
+        
         yield return new WaitForSeconds(2);
-        mybody.velocity = Vector3.zero;
-        StartCoroutine(SwitchModels());
+
+        TriggeredExplosion();
     }
-
-    void OnCollisionEnter(Collision col)
-    {
-        if (regularState && explosionState)
-        {
-            if (!doOnce)
-            {
-                GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>().DestructionSmall(transform.position);
-                doOnce = true;
-            }
-            StartCoroutine(SwitchModels());
-        }
-    }
-
-
-
 
     void OnTriggerEnter(Collider col)
     {
         string CurTag = col.gameObject.tag;
         if(CurTag == "Player")
         {
-            if(isLandmine)
-            {
-                if (regularState && explosionState)
-                {
-                    if (!doOnce)
-                    {
-                        GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>().DestructionSmall(transform.position);
-                        doOnce = true;
-                    }
-                    TriggerCollider.enabled = false;
-                    StartCoroutine(SwitchModels());
-                }
-            }   
-            else if(isRocket)
-            {
-                if (regularState && explosionState)
-                {
-                    if (!doOnce)
-                    {
-                        GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>().DestructionSmall(transform.position);
-                        doOnce = true;
-                    }
-
-                    StartCoroutine(SwitchModels());
-                }
-            }
+          
+            //Start Explosion
+            TriggeredExplosion();
         }
         else if(CurTag == "BigAsteroid")
         {
-            if(isRocket||isLandmine)
+            //start explosion
+            TriggeredExplosion();
+            //notify damage script that damage is dealt to asteroid
+            if(damageScript)
             {
-                if (regularState && explosionState)
-                {
-                    if (!doOnce)
-                    {
-                        GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>().DestructionSmallEnvirObstacle(transform.position);
-                        doOnce = true;
-                    }
-                    damageScript.didDamage();
-                    col.gameObject.GetComponent<BigAsteroid>().AsteroidHit(5);
-                    StartCoroutine(SwitchModels());
-                }
+                damageScript.didDamage();
             }
+            //apply damage to asteroid
+            col.gameObject.GetComponent<BigAsteroid>().AsteroidHit(5);
         }
         else if(CurTag=="EnvironmentObstacle")
         {
-            if (isLandmine || isRocket)
-            {
-                if (regularState && explosionState)
-                {
-                    if (!doOnce)
-                    {
-                        GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>().DestructionSmallEnvirObstacle(transform.position);
-                        doOnce = true;
-                    }
-                    StartCoroutine(SwitchModels());
-                }
-            }
+            //start explosion
+            TriggeredExplosion();
         }
         else if(CurTag == "MoonBall")
         {
 
-            if (regularState && explosionState)
+            //start explosion
+            TriggeredExplosion();
+            
+            //Get moonball script
+            MoonBall moonBall = col.gameObject.GetComponent<MoonBall>();
+            //apply knockback
+            if (moonBall)
             {
-                if (!doOnce)
-                {
-                    GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>().DestructionSmall(transform.position);
-                    doOnce = true;
-                }
-                if(TriggerCollider)
-                {
-                    TriggerCollider.enabled = false;
-                }
-                
-                StartCoroutine(SwitchModels());
-
-                MoonBall moonBall = col.gameObject.GetComponent<MoonBall>();
-
-                if (moonBall)
-                {
-                    moonBall.KnockBack(this.gameObject);
-                }
+                moonBall.KnockBack(this.gameObject);
             }
         }
     }
 
+    
     public void TriggeredExplosion()
     {
+        //turn off collider to ensure nothing gets called twice
+        if (TriggerCollider)
+        {
+            TriggerCollider.enabled = false;
+        }
+
+        //check if theres a model and explosion
         if (regularState && explosionState)
         {
+            //ensure audio gets played once
             if (!doOnce)
             {
+                //get audio controller and play audio
                 GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>().DestructionSmall(transform.position);
                 doOnce = true;
             }
+            //begin switching models from Normal model to Explosion model
             StartCoroutine(SwitchModels());
         }
     }
 
     IEnumerator SwitchModels()
     {
+        //turn off model gameobject
         regularState.SetActive(false);
+        //update movement to stop moving.
+        if (rocketScript)
+        {
+            rocketScript.StopMovement();
+        }
+        //Make sure the explosion stops in place by zeroing velocity
+        if (mybody)
+        {
+            mybody.velocity = Vector3.zero;
+        }
+
         yield return new WaitForSeconds(0.05f);
-        if(explosionState)
+        
+     
+        //activate explosion gameobject
+        if (explosionState)
         {
             explosionState.SetActive(true);
-        }
-        else
-        {
-            Destroy(gameObject);
         }
     }
 }
