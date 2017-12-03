@@ -83,12 +83,14 @@ public class Movement : MonoBehaviour
     public float slowDownDrag;
     public float powerDashDrag;
     private float normalDrag;
-
+    //radius of power dash collider
+    private float powerDashRadius=3;
     //Components
     private Touch curTouch;
     private ButtonIndicator dashButt;
     private AudioController audioScript;
     private SphereCollider asteroidCollider;
+    private SphereCollider solidCollider;
     public Rigidbody myBody;
     private Camera camera;
     private GameObject joystick;
@@ -164,6 +166,10 @@ public class Movement : MonoBehaviour
             {
                 asteroidCollider = col;
                 defaultRadius = asteroidCollider.radius;
+            }
+            else
+            {
+                solidCollider = col;
             }
         }
         trailState = DashState.basicMove;
@@ -414,8 +420,15 @@ public class Movement : MonoBehaviour
                 trailRot = joystickscript.rotation();
                 if(curTrail)
                 {
-                    //apply rotation
-                    curTrail.transform.rotation = trailRot;
+                    if(isPowerDashing)
+                    {
+                        //curTrail.transform.rotation = new Quaternion(curTrail.transform.rotation.x, curTrail.transform.rotation.y, trailRot.z,trailRot.z);
+                    }
+                    else
+                    {
+                        //apply rotation
+                        curTrail.transform.rotation = trailRot;
+                    }
                 }
             }
         }
@@ -572,15 +585,19 @@ public class Movement : MonoBehaviour
 
         foreach (Collider col in colliders)
         {
-
+            //Get collied gameobject's rigidbody
             Rigidbody hitBody = col.GetComponent<Rigidbody>();
             if (hitBody != null && hitBody != myBody)
             {
+                //getting distance from current point and collided object
                 Vector3 points = hitBody.position - transform.position;
+                //Get distance from the two points
                 float distance = points.magnitude;
+                
                 Vector3 direction = points / distance;
                 hitBody.AddForce(direction * power);
             }
+            
             DetectThenExplode explodeScript = col.GetComponent<DetectThenExplode>();
             if (explodeScript)
             {
@@ -612,6 +629,14 @@ public class Movement : MonoBehaviour
         }
     }
 
+    //function to turn on and off the collider if trigger is applying damage while in power dash mode
+    IEnumerator colliderTimeout()
+    {
+        solidCollider.enabled = false;
+        yield return new WaitForSeconds(0.2f);
+        solidCollider.enabled = true;
+    }
+
     public void Dash()
     {
         
@@ -633,6 +658,7 @@ public class Movement : MonoBehaviour
                     MoveSpeed = SuperDashSpeed;
                     DashTimeout = PowerDashTimeout;
                     curCooldownTime = PowerCooldownTime;
+                    asteroidCollider.radius = powerDashRadius;
                     isPowerDashing = true;
 
                 }
@@ -691,6 +717,7 @@ public class Movement : MonoBehaviour
             isPowerDashing = false;
             //disable power dash halo indicator
             PowerUpScript.DashModelTransition(false);
+            asteroidCollider.radius = defaultRadius;
         }
         else
         {
@@ -733,6 +760,7 @@ public class Movement : MonoBehaviour
         myBody.drag = normalDrag;
     }
 
+    //Activating hit particle on contact
     IEnumerator PlutoHit(Vector3 pos)
     {
         hitEffect.transform.position = pos;
@@ -802,6 +830,31 @@ public class Movement : MonoBehaviour
             myBody.AddForce(-knockBackDirection*wallBump*2);
             
         }
+        if(isPowerDashing)
+        {
+            
+            WallHealth healthScript = col.gameObject.GetComponent<WallHealth>();
+            if (healthScript)
+            {
+                healthScript.IncrementDamage();
+                if(solidCollider)
+                {
+                    StartCoroutine(colliderTimeout());
+                }
+                return;
+
+            }
+            BigAsteroid bigOrbScript = col.gameObject.GetComponent<BigAsteroid>();
+            if(bigOrbScript)
+            {
+                bigOrbScript.AsteroidHit(3);
+                if(solidCollider)
+                {
+                    StartCoroutine(colliderTimeout());
+                }
+                return;
+            }
+        }
 
     }
 
@@ -843,7 +896,7 @@ public class Movement : MonoBehaviour
         }
         
         
-        else if (curTag == "Wall"||curTag=="LevelWall"||curTag=="DamageWall") 
+        else if (curTag == "Wall"||curTag=="LevelWall") 
 		{
             if(audioScript)
             {
@@ -858,16 +911,13 @@ public class Movement : MonoBehaviour
             {
                 myBody.AddForce(c.contacts[0].normal * wallBump, ForceMode.VelocityChange);
             }
-            if(curTag=="DamageWall")
-            {
-                DamagePluto();
-            }
 		}
         else if(curTag=="BreakableWall")
         {
             if(ShouldDash)
             {
-                AIHealth healthScript = c.gameObject.GetComponent<AIHealth>();
+                
+                WallHealth healthScript = c.gameObject.GetComponent<WallHealth>();
                 if(healthScript)
                 {
                     healthScript.IncrementDamage();
@@ -956,35 +1006,40 @@ public class Movement : MonoBehaviour
     {
         MoveSpeed = 0;
         myBody.velocity = Vector3.zero;
+        myBody.drag = 100;
         TrailChange(DashState.idle);
         isDead = isPlayerDead;
     }
 
     public void HealthPickup()
     {
-        curHealth++;
-        if (curHealth == 0)
+        if(curHealth<2)
         {
-            transform.localScale = smallScale;
-            if (maxSize)
+            curHealth++;
+
+            if (curHealth == 0)
             {
-                maxSize.SetActive(false);
+                transform.localScale = smallScale;
+                if (maxSize)
+                {
+                    maxSize.SetActive(false);
+                }
             }
-        }
-        //med size
-        else if (curHealth == 1)
-        {
-            transform.localScale = medScale;
-            if (maxSize)
+            //med size
+            else if (curHealth == 1)
             {
-                maxSize.SetActive(false);
+                transform.localScale = medScale;
+                if (maxSize)
+                {
+                    maxSize.SetActive(false);
+                }
             }
-        }
-        else if(curHealth==2)
-        {
-            if (maxSize)
+            else if (curHealth >= 2)
             {
-                maxSize.SetActive(true);
+                if (maxSize)
+                {
+                    maxSize.SetActive(true);
+                }
             }
         }
     }

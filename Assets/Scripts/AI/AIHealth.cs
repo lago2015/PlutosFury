@@ -61,19 +61,7 @@ public class AIHealth : MonoBehaviour {
                 }
 
             }
-              /*  Model.SetActive(false);
-                if(Model2)
-                {
-                    
-                    Model2.SetActive(false);
-                }
 
-            }
-            else
-            {
-                Destroy(transform.parent.gameObject);
-            }
-            */
         }
     }
 

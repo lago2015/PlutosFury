@@ -37,7 +37,7 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
-        Application.targetFrameRate = 600;      //60 fps set rate
+        Application.targetFrameRate = 60;      //60 fps set rate
         modelSwitch = pluto.GetComponent<TextureSwap>();
         audioCon = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
         ExpManager = GetComponent<ExperienceManager>();
