@@ -88,6 +88,12 @@ public class MoonBall : MonoBehaviour
 
             Debug.Log("Hit Lazer Wall Trigger");
         }
+
+       if(col.gameObject.tag == "BreakableWall")
+        {
+            col.gameObject.GetComponent<WallHealth>().IncrementDamage();
+            KnockBack(col.gameObject);
+        }
     }
 
     private void OnTriggerExit(Collider col)
