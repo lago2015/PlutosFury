@@ -107,6 +107,7 @@ public class Movement : MonoBehaviour
     private PowerUpManager PowerUpScript;
     private Shield shieldScript;
     private ButtonIndicator buttonScript;
+    private HUDManager hudScript;
 
     //Appearance Components
     [Tooltip("0=default, 1=dash, 2=chargeStart, 3=chargeComplete, 4=burst")]
@@ -158,6 +159,7 @@ public class Movement : MonoBehaviour
     // Use this for initialization
     void Awake () 
 	{
+        hudScript= GameObject.FindGameObjectWithTag("HUDManager").GetComponent<HUDManager>();
         buttonScript = GameObject.FindGameObjectWithTag("DashButt").GetComponent<ButtonIndicator>();
         //get collider that is triggered to change radius during runtime
         foreach (SphereCollider col in GetComponents<SphereCollider>())
@@ -198,7 +200,7 @@ public class Movement : MonoBehaviour
         smallScale = new Vector3(smallSize, smallSize, smallSize);
         medScale = new Vector3(medSize, medSize, medSize);
         curHealth = 0;
-        transform.localScale = smallScale;
+        transform.localScale = medScale;
         //setting colors
         r_Color = Color.red;
         y_Color = Color.yellow;
@@ -292,6 +294,14 @@ public class Movement : MonoBehaviour
 
     }
 
+    void Start()
+    {
+        //Update hud of current health
+        if(hudScript)
+        {
+            hudScript.UpdateHealth(curHealth);
+        }
+    }
     void LateUpdate()
     {
         //capping velocity
@@ -822,6 +832,7 @@ public class Movement : MonoBehaviour
                 ScoreManager.IncreaseScore(score);
             }
             ReturnAsteroid(col.gameObject);
+            
         }
         else if (curTag == "EnvironmentObstacle" || curTag == "MoonBall")
         {
@@ -1016,10 +1027,10 @@ public class Movement : MonoBehaviour
         if(curHealth<2)
         {
             curHealth++;
-
+            
             if (curHealth == 0)
             {
-                transform.localScale = smallScale;
+                //transform.localScale = smallScale;
                 if (maxSize)
                 {
                     maxSize.SetActive(false);
@@ -1028,7 +1039,7 @@ public class Movement : MonoBehaviour
             //med size
             else if (curHealth == 1)
             {
-                transform.localScale = medScale;
+                //transform.localScale = medScale;
                 if (maxSize)
                 {
                     maxSize.SetActive(false);
@@ -1036,10 +1047,15 @@ public class Movement : MonoBehaviour
             }
             else if (curHealth >= 2)
             {
+                curHealth = 2;
                 if (maxSize)
                 {
                     maxSize.SetActive(true);
                 }
+            }
+            if (hudScript)
+            {
+                hudScript.UpdateHealth(curHealth);
             }
         }
     }
@@ -1058,11 +1074,12 @@ public class Movement : MonoBehaviour
 
                 //decrement health
                 curHealth--;
+                
                 StartCoroutine(DamageIndicator());
                 //run game over procedure
                 if (curHealth < 0)
                 {
-                    
+                    curHealth = 0;
                     isDead = true;
                     BusterChange(BusterStates.Death);
                     audioScript.PlutoDeath(transform.position);
@@ -1073,7 +1090,7 @@ public class Movement : MonoBehaviour
                 {
                     StartCoroutine(DamageTransition());
 
-                    transform.localScale = smallScale;
+                    //transform.localScale = smallScale;
                     if (maxSize)
                     {
                         maxSize.SetActive(false);
@@ -1084,11 +1101,15 @@ public class Movement : MonoBehaviour
                 {
                     StartCoroutine(DamageTransition());
 
-                    transform.localScale = medScale;
+                    //transform.localScale = medScale;
                     if (maxSize)
                     {
                         maxSize.SetActive(false);
                     }
+                }
+                if (hudScript)
+                {
+                    hudScript.UpdateHealth(curHealth);
                 }
                 //audio cue for damage
                 if (audioScript)

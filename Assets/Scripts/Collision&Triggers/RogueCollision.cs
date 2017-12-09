@@ -108,14 +108,11 @@ public class RogueCollision : MonoBehaviour {
             bool RogueDashing = rogueMoveScript.isDashing();
             if (!RogueDashing)
             {
-                col.gameObject.GetComponent<WallHealth>().IncrementDamage();
-            }
-            else
-            {
                 if (myBody)
                 {
                     myBody.AddForce(col.contacts[0].normal * wallBump, ForceMode.VelocityChange);
                 }
+                
             }
         }
 
@@ -176,7 +173,7 @@ public class RogueCollision : MonoBehaviour {
         else if (col.tag == "BreakableWall")
         {
             bool RogueDashing = rogueMoveScript.isDashing();
-            if (!RogueDashing)
+            if (RogueDashing)
             {
                 col.gameObject.GetComponent<WallHealth>().IncrementDamage();
             }
