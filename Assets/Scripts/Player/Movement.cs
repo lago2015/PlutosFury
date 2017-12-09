@@ -467,6 +467,7 @@ public class Movement : MonoBehaviour
                 {
                     busterStates[1].SetActive(true);
                     StartCoroutine(BusterTransition(busterStates[1]));
+                    hudScript.isShockwaveActive(false);
                 }
                 break;
                 //doesnt turn off
@@ -581,6 +582,7 @@ public class Movement : MonoBehaviour
        if(DashChargeActive)
         {
             DashChargeActive = false;
+            
         }
         return ShockChargeActive = true;
     }
@@ -728,6 +730,11 @@ public class Movement : MonoBehaviour
             //disable power dash halo indicator
             PowerUpScript.DashModelTransition(false);
             asteroidCollider.radius = defaultRadius;
+
+            if (hudScript)
+            {
+                hudScript.isPowerDashActive(false);
+            }
         }
         else
         {
@@ -793,6 +800,7 @@ public class Movement : MonoBehaviour
 
         if(ShockChargeActive)
         {
+            hudScript.isShockwaveActive(false);
             ShockChargeActive = false;
         }
         return DashChargeActive = true;
@@ -1136,6 +1144,10 @@ public class Movement : MonoBehaviour
                 if (shieldScript)
                 {
                     shieldScript.ShieldOff();
+                }
+                if(hudScript)
+                {
+                    hudScript.isShieldActive(false);
                 }
                 if (audioScript)
                 {

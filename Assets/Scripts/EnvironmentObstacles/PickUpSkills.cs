@@ -10,9 +10,12 @@ public class PickUpSkills : MonoBehaviour {
     private Movement playerScript;
     private Shield ShieldScript;
     private Inflation InflateScript;
+    private HUDManager hudScript;
     private bool pickupObtained;
+
     void Awake()
     {
+        hudScript = GameObject.FindGameObjectWithTag("HUDManager").GetComponent<HUDManager>();
         GameObject playerRef = GameObject.FindGameObjectWithTag("Player");
         switch(curSkill)
         {
@@ -48,15 +51,18 @@ public class PickUpSkills : MonoBehaviour {
             switch(curSkill)
             {
                 case Skills.DashCharge:
-                    if(PowerUpScript && !pickupObtained)
+                    if (PowerUpScript && !pickupObtained && hudScript)
                     {
                         PowerUpScript.DashPluto(transform.position);
+                        hudScript.isPowerDashActive(true);
+                        hudScript.isShockwaveActive(false);
                         Destroy(gameObject);
                     }
                     break;
                 case Skills.Shield:
-                    if(ShieldScript&&playerScript && !pickupObtained)
+                    if(ShieldScript&&playerScript && !pickupObtained&&hudScript)
                     {
+                        hudScript.isShieldActive(true);
                         pickupObtained = true;
                         playerScript.IndicatePickup();
                         ShieldScript.ShieldPluto();
@@ -81,8 +87,10 @@ public class PickUpSkills : MonoBehaviour {
                     }
                     break;
                 case Skills.Shockwave:
-                    if(PowerUpScript && !pickupObtained)
+                    if(PowerUpScript && !pickupObtained&&hudScript)
                     {
+                        hudScript.isShockwaveActive(true);
+                        hudScript.isPowerDashActive(false);
                         pickupObtained = true;
                         PowerUpScript.ShockPluto(transform.position);
                         Destroy(gameObject);

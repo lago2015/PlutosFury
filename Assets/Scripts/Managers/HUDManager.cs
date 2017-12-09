@@ -4,6 +4,10 @@ using UnityEngine;
 using UnityEngine.UI;
 public class HUDManager : MonoBehaviour {
 
+    //images for powerups for hud
+    public Image powerDashSprite;
+    public Image shieldSprite;
+    public Image shockwaveSprite;
 
     //Script References for hud
     private CountDownStage timerScript;
@@ -12,7 +16,7 @@ public class HUDManager : MonoBehaviour {
     public Text scoreText;
     public Text healthText;
     public Text timerText;
-    //local variables for hud
+    //local variables for hudarrow
     private int currentScore;
     private float currentTime;
     // Use this for initialization
@@ -20,6 +24,10 @@ public class HUDManager : MonoBehaviour {
     {
         timerScript = GetComponent<CountDownStage>();
         scoreScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<ScoreManager>();
+        isPowerDashActive(false);
+        isShieldActive(false);
+        isShockwaveActive(false);
+
     }
     
     //Called from players movement script to update text
@@ -30,6 +38,30 @@ public class HUDManager : MonoBehaviour {
             healthText.text = ("Health: " + newHealth);
         }
         
+    }
+    //called from pick up script to enable or disable image
+    public void isPowerDashActive(bool isActive)
+    {
+        if(powerDashSprite)
+        {
+            powerDashSprite.enabled = isActive;
+        }
+    }
+    //called from pick up script to enable or disable image
+    public void isShieldActive(bool isActive)
+    {
+        if(shieldSprite)
+        {
+            shieldSprite.enabled = isActive;
+        }
+    }
+    //called from pick up script to enable or disable image
+    public void isShockwaveActive(bool isActive)
+    {
+        if(shockwaveSprite)
+        {
+            shockwaveSprite.enabled = isActive;
+        }
     }
 
     // Update is called once per frame
