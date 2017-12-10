@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviour
     public bool levelWallActive;
     private bool willPlayAd;
 
+    Movement playerScript;
     TextureSwap modelSwitch;
     AudioController audioCon;
     AdManager AdManager;
@@ -38,7 +39,13 @@ public class GameManager : MonoBehaviour
     void Awake()
     {
         Application.targetFrameRate = 60;      //60 fps set rate
-        modelSwitch = pluto.GetComponent<TextureSwap>();
+
+        if(pluto)
+        {
+            modelSwitch = pluto.GetComponent<TextureSwap>();
+            playerScript = pluto.GetComponent<Movement>();
+        }
+        
         audioCon = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
         ExpManager = GetComponent<ExperienceManager>();
         ScoreManager = GetComponent<ScoreManager>();
@@ -94,6 +101,16 @@ public class GameManager : MonoBehaviour
         else
         {
             willPlayAd = false;
+        }
+    }
+
+    public void CountDownFinished()
+    {
+        if(playerScript)
+        {
+            playerScript.curHealth = 0;
+            playerScript.DamagePluto();
+            StartGameover();
         }
     }
 

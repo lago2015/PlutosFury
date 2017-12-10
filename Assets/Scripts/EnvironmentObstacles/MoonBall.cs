@@ -75,43 +75,34 @@ public class MoonBall : MonoBehaviour
             }
         }
 
-        if(col.tag == "Wall")
-        {
-            // WORK AROUND: for wall, switch the moon ball's collider to solid to apply bounce physics on outer walls
-            GetComponent<SphereCollider>().isTrigger = false;
-            Debug.Log("HIT WALL");
-        }
 
        if(col.gameObject.name == "Spikes" || col.tag =="ShatterPiece" || col.gameObject.name == "LaserWall")
        {
-           KnockBack(col.gameObject);
+          // KnockBack(col.gameObject);
 
             Debug.Log("Hit Lazer Wall Trigger");
-        }
+       }
+
     }
 
-    private void OnTriggerExit(Collider col)
-    {
-        // WORK AROUND: for wall, switches back collider to trigger after exits the outer wall to apply normal collision logic
-        if (col.tag == "Wall")
-        {
-            GetComponent<SphereCollider>().isTrigger = true;
-        }
-    }
-
+   
     private void OnCollisionEnter(Collision col)
     {
-        // Dont think this is needed at all, but will leave for now
+        // Dont think this is needed at all, but will leave for now. Possibly need if implement some logic when ball hits the lazer wall.
         if(col.gameObject.name == "LazerWall")
         {
-            KnockBack(col.gameObject);
+          
+        }
 
-            Debug.Log("Hit Lazer Wall");
+        if (col.gameObject.tag == "BreakableWall")
+        {
+            col.gameObject.GetComponent<WallHealth>().IncrementDamage();
         }
     }
 
     public void KnockBack(GameObject target)
     {
+        // OUTDATED, Might use function later but need to change logic.
         // Knockback for now: simply just reverses the direction of the ball and applies a certain speed
          Vector3 knockBackDirection = target.transform.position - transform.position;
          knockBackDirection = knockBackDirection.normalized;

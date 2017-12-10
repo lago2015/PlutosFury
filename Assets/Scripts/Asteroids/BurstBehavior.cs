@@ -4,13 +4,11 @@ using System.Collections;
 public class BurstBehavior : MonoBehaviour {
 
     private float moveSpeed = 5;
-    private float BurstTime;
-    private float BurstTimeout = 2;
-    private float TimeIncrement = 1;
+    private float BurstTimeout = 1;
     public bool ShouldBurst=false;
     private Rigidbody myBody;
     private bool isNewAsteroid=true;
-
+    public bool ReadyToConsume;
     public bool newSpawnedAsteroid(bool isNew) { return isNewAsteroid = isNew; }
     public bool asteroidStatus() { return isNewAsteroid; }
     void Awake()
@@ -18,7 +16,7 @@ public class BurstBehavior : MonoBehaviour {
         myBody = GetComponent<Rigidbody>();
     }
 
-    void LateStart()
+    void Start()
     {
         StartCoroutine(StartBurst());
     }
@@ -28,8 +26,13 @@ public class BurstBehavior : MonoBehaviour {
         transform.position += moveSpeed * transform.forward * Time.deltaTime;
         transform.position = new Vector3(transform.position.x, transform.position.y, 0);
         yield return new WaitForSeconds(BurstTimeout);
+        ChangeTag();
     }
 
+    void ChangeTag()
+    {
+        gameObject.tag = "Asteroid";
+    }
 
     public void ResetVelocity()
     {
@@ -38,6 +41,7 @@ public class BurstBehavior : MonoBehaviour {
             myBody.velocity = Vector3.zero;
         }
     }
+
     public bool GoBurst()
     {
         return ShouldBurst = true;

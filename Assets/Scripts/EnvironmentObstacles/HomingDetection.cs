@@ -36,6 +36,7 @@ public class HomingDetection : MonoBehaviour
                 moveScript.activateMovement(true);
                 if(TriggerCollider)
                 {
+                    TriggerCollider.enabled = false;
                     TriggerCollider.radius = lostInterestRadius;
                 }
             }

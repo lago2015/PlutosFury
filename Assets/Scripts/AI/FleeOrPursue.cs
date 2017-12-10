@@ -100,156 +100,64 @@ public class FleeOrPursue : MonoBehaviour {
         //when detection collider finds player than this is enabled
        if(PlayerNear)
         {
-            
-            if(!isCharging)
+
+            if (!isCharging || ShouldDash)
             {
-                ObstacleCheck();
-                
+                //calculate distance between player and rogue
+                float curDistance = Vector3.Distance(transform.position, Player.transform.position);
+                if (curDistance > 2f)
+                {
+                    //move rogue forward if hes not charging
+                    transform.parent.position += transform.forward * MoveSpeed * Time.deltaTime;
+                    transform.parent.position = new Vector3(transform.position.x, transform.position.y, 0);
+                }
             }
             PursuePlayer();
 
-
-        }
-    }
-    //using a collision avoidance behavior
-    void ObstacleCheck()
-    {
-        
-        //Get direction to know where to cast the raycast towards which is our forward vector
-        Vector3 direction = transform.forward;
-        //create raycast
-        RaycastHit rayHit;
-        //check if raycast hit anything
-        if (Physics.Raycast(transform.position, direction, out rayHit, maxDistAvoidance,9)) 
-        {
-            //check for tag
-            string curTag = rayHit.collider.gameObject.tag;
-            if (curTag == "BreakableWall")
-            {
-
-                if (!isExhausted)
-                {
-                    if (!isCharging)
-                    {
-                        Dash();
-                    }
-                }
-
-                //  //calculating our direction and how far we want the gameobject so see before avoiding
-                //Vector3 ahead = transform.position + direction.normalized * maxDistAvoidance;
-                ////The rayCollision vector is calculated exactly like ahead, but its length is cut in half
-                ////used to calculate collision that is infront of ahead variable
-                //Vector3 rayCollision = transform.position + direction.normalized * maxDistAvoidance * 0.5f;
-                ////get collied wall to get position for avoidance force
-                //GameObject collidedWall = rayHit.collider.gameObject;
-                ////get distance from wall and ahead variable
-                //float distance1 = Vector3.Distance(collidedWall.transform.position, ahead);
-                ////get distance from wall and rayCollision variable
-                //float distance2 = Vector3.Distance(collidedWall.transform.position, rayCollision);
-
-                ////get size of collider
-                //float colliderSize = 10f;
-                //if (distance1<= colliderSize)
-                //{
-                //    Vector3 avoidanceForce = ahead - collidedWall.transform.position;
-                //    //normalize avoidanceforce
-                //    avoidanceForce = avoidanceForce.normalized * maxAvoidForce;
-                //    Quaternion newRotation = Quaternion.LookRotation(CollisionAvoidance(direction, collidedWall.transform.position));
-                //    transform.rotation = Quaternion.Slerp(transform.rotation, newRotation, Time.deltaTime * RotationSpeed);
-                //}
-                ////if nothing caught then rotate to player
-                //else
-                //{
-                //    Quaternion rotation = Quaternion.LookRotation(Player.transform.position - transform.position);
-
-                //    transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * RotationSpeed);
-                //}
-            }
-
-        }
-        //if nothing caught then rotate to player
-        else
-        {
-            Quaternion rotation = Quaternion.LookRotation(Player.transform.position - transform.position);
-
-            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * RotationSpeed);
         }
     }
 
-    Vector3 CollisionAvoidance(Vector3 direction,Vector3 collidedObject)
-    {
-        //calculating our direction and how far we want the gameobject so see before avoiding
-        Vector3 ahead = transform.position + direction.normalized * maxDistAvoidance;
-        //The rayCollision vector is calculated exactly like ahead, but its length is cut in half
-        //used to calculate collision that is infront of ahead variable
-        Vector3 rayCollision = transform.position + direction.normalized * maxDistAvoidance * 0.5f;
-
-        if(collidedObject!=null)
-        {
-            avoidance.x = ahead.x - collidedObject.x;
-            avoidance.y = ahead.y - collidedObject.y;
-
-            avoidance = avoidance.normalized;
-            avoidance *= maxDistAvoidance;
-        }
-        else
-        {
-            avoidance = Vector3.zero;
-        }
-        return avoidance;
-    }
 
     void PursuePlayer()
     {
-        
-            //should pursue is set by user not ingame condition
-            if (ShouldPursue)
+
+        //should pursue is set by user not ingame condition
+        if (ShouldPursue)
+        {
+           
+            //add a delay before first attack
+            if (!firstEncounter)
             {
-                //add a delay before first attack
-                if (!firstEncounter)
+                firstEncounter = true;
+                StartCoroutine(DashCooldown());
+            }
+            else
+            {
+                if (Player)
                 {
-                    firstEncounter = true;
-                    StartCoroutine(DashCooldown());
-                }
-                else
-                {
-
-                    if (Player)
+                    if (!isExhausted)
                     {
-                        if (!isExhausted)
+                        if (!isCharging)
                         {
-                            if (!isCharging)
-                            {
-                                Dash();
-                            }
-
-                            float curDistance = Vector3.Distance(transform.position, Player.transform.position);
-                            if (curDistance > 2f)
-                            {
-                                transform.parent.position += transform.forward * MoveSpeed * Time.deltaTime;
-                            }
+                            Dash();
                         }
                     }
                 }
             }
-            else
-            {
 
-                if (Player)
-                {
-                    //if (RotationSpeed > 0)
-                    ////{
-                    ////    Quaternion rotation = Quaternion.LookRotation(Player.transform.position - transform.position);
-
-                    ////    transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * RotationSpeed);
-                    //}
-                    transform.parent.position -= transform.forward * MoveSpeed * Time.deltaTime;
-                }
-
-            }
-        
+        }
+    }
+    //Called from avoidance script
+    public void ActivateDash()
+    {
+        if (Player && !isCharging)
+        {
+            MoveSpeed = 0;
+            Dash();
+        }
     }
 
+    //Start dash
     public void Dash()
     {
         //Check if exhausted dash
@@ -261,10 +169,9 @@ public class FleeOrPursue : MonoBehaviour {
         }
     }
 
+    //Transition between charging and burst models
     IEnumerator ChargeDash()
     {
-        
-
         MoveSpeed = 0;
         isCharging = true;
         
@@ -275,13 +182,13 @@ public class FleeOrPursue : MonoBehaviour {
         }
         else
         {
-            //Reset Value
+            //Reset Values
             ShouldDash = false;
             isCharging = false;
             MoveSpeed = DefaultSpeed;
         }
     }
-
+    //Dash function with model switch
     IEnumerator DashTransition()
     {
         if (!isDead)
@@ -312,7 +219,7 @@ public class FleeOrPursue : MonoBehaviour {
         StartCoroutine(SlowDown());
         
     }
-
+    
     //Cool down for exhaustion from dash
     IEnumerator DashCooldown()
     {

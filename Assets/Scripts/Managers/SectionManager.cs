@@ -8,6 +8,7 @@ public class SectionManager : MonoBehaviour {
     public GameObject[] sectionExitLocations;
     private CanvasFade fadeScript;
     private CameraStop camScript;
+    private CountDownStage counterScript;
     private GameObject levelWall;
     private LevelWall wallScript;
     private GameObject gameStartTrig;
@@ -31,6 +32,7 @@ public class SectionManager : MonoBehaviour {
     private float camZAxis;
     void Awake()
     {
+        counterScript = GameObject.FindGameObjectWithTag("HUDManager").GetComponent<CountDownStage>();
         levelWall = GameObject.FindGameObjectWithTag("LevelWall");
         gameStartTrig = GameObject.FindGameObjectWithTag("Respawn");
         if(levelWall)
@@ -119,6 +121,11 @@ public class SectionManager : MonoBehaviour {
         //turn off recently completed section
         sections[currSectionNumber].SetActive(false);
 
+        //reset timer
+        if(counterScript)
+        {
+            counterScript.Begin();
+        }
         //placing new min and max for X axis for camera
         if (camScript)
         {
