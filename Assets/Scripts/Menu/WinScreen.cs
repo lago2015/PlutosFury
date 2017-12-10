@@ -31,7 +31,7 @@ public class WinScreen : MonoBehaviour {
         AsteroidsCollected = Temp;
     }
 
-    public void setTime(float Temp)
+    public void SetTime(float Temp)
     {
         Timer = Temp;
     }

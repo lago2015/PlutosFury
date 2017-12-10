@@ -96,7 +96,7 @@ public class LoadingScreenManager : MonoBehaviour {
         yield return new WaitForSeconds(fadeDuration);
 
         if (loadSceneMode == LoadSceneMode.Additive)
-           SceneManager.UnloadScene(currentScene.name);
+           SceneManager.UnloadSceneAsync(currentScene.name);
         else
            operation.allowSceneActivation = true;
     }
@@ -127,15 +127,18 @@ public class LoadingScreenManager : MonoBehaviour {
 		loadingIcon.gameObject.SetActive(true);
 		loadingDoneIcon.gameObject.SetActive(false);
 
-		progressBar.fillAmount = 0f;
+        nowLoading.gameObject.SetActive(true);
+        tapToContinue.gameObject.SetActive(false);
+
+        progressBar.fillAmount = 0f;
 	}
 
 	void ShowCompletionVisuals() {
 		loadingIcon.gameObject.SetActive(false);
 		loadingDoneIcon.gameObject.SetActive(true);
-
-		progressBar.fillAmount = 1f;
         nowLoading.gameObject.SetActive(false);
         tapToContinue.gameObject.SetActive(true);
+
+        progressBar.fillAmount = 1f;
 	}
 }
