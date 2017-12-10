@@ -126,7 +126,7 @@ public class AIHealth : MonoBehaviour {
                 if (moonBall.getAttackMode())
                 {
                     IncrementDamage();
-                    moonBall.KnockBack(this.gameObject);
+                  //  moonBall.KnockBack(this.gameObject);
                 }
                 else
                 {
