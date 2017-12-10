@@ -69,6 +69,11 @@ public class DamageOrPowerUp : MonoBehaviour {
                     {
                         damageCollider.enabled = false;
                     }
+
+                    if (otherDamageCollider)
+                    {
+                        otherDamageCollider.enabled = false;
+                    }
                 }
 
                 //if (!gameObject.name.Contains("Explosion"))
@@ -120,7 +125,8 @@ public class DamageOrPowerUp : MonoBehaviour {
    
     void OnCollisionEnter(Collision col)
     {
-        if(col.gameObject.tag=="Player")
+        string curString = col.gameObject.tag;
+        if(curString=="Player")
         {
             if(CurrentEffect==EffectState.Damage)
             {
@@ -138,6 +144,11 @@ public class DamageOrPowerUp : MonoBehaviour {
                             if (damageCollider)
                             {
                                 damageCollider.enabled = false;
+                            }
+
+                            if (otherDamageCollider)
+                            {
+                                otherDamageCollider.enabled = false;
                             }
                             StartCoroutine(DamageReset());
                         }
@@ -157,6 +168,10 @@ public class DamageOrPowerUp : MonoBehaviour {
                                 {
                                     damageCollider.enabled = false;
                                 }
+                                if(otherDamageCollider)
+                                {
+                                    otherDamageCollider.enabled = false;
+                                }
                                 StartCoroutine(DamageReset());
                             }
                         }
@@ -169,7 +184,8 @@ public class DamageOrPowerUp : MonoBehaviour {
 
     void OnTriggerEnter(Collider col)
     {
-        if (col.gameObject.tag == ("Player"))
+        string curString = col.gameObject.tag;
+        if (curString == ("Player"))
         {
             if(colliderTriggered)
             {
@@ -180,10 +196,15 @@ public class DamageOrPowerUp : MonoBehaviour {
             }
                 
         }
-        else if (col.gameObject.tag == "BigAsteroid")
+        else if (curString == "BigAsteroid")
         {
             col.gameObject.GetComponent<BigAsteroid>().AsteroidHit(5);
 
+        }
+
+        else if (curString == "BreakableWall")
+        {
+            col.gameObject.GetComponent<WallHealth>().IncrementDamage();
         }
     }
 

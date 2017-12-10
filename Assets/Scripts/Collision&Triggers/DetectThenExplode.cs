@@ -14,7 +14,6 @@ public class DetectThenExplode : MonoBehaviour {
     private bool doOnce;
     public bool isRocket;
     public bool isLandmine;
-    public bool isHomingLandmine;
     void Awake()
     {
         //model gameobject
@@ -121,6 +120,7 @@ public class DetectThenExplode : MonoBehaviour {
             TriggerCollider.enabled = false;
         }
 
+        
         //check if theres a model and explosion
         if (regularState && explosionState)
         {

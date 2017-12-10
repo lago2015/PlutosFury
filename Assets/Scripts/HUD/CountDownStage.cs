@@ -17,11 +17,22 @@ public class CountDownStage : MonoBehaviour {
     public float CurrentTimeRemain() { return timeRemaining; }
     public bool isGameCountingDown() { return isCountingDown; }
 
+    //reference to stop the game
+    private GameManager gameManScript;
+
+    //getter for game manager
+    private void Awake()
+    {
+        gameManScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<GameManager>();
+    }
+
+    //Start count down
     private void Start()
     {
         Begin();
     }
 
+    //Restarting counter
     public void Begin()
     {
         if (!isCountingDown)
@@ -34,15 +45,23 @@ public class CountDownStage : MonoBehaviour {
         }
     }
 
+    //Ticking the countdown
     private void tick()
     {
         timeRemaining--;
+        //time is still remaining
         if (timeRemaining > 0)
         {
+            //loop to continue ticking until finished
             Invoke("tick", 1f);
         }
+        //counter is done, start game over
         else
         {
+            if(gameManScript)
+            {
+                gameManScript.CountDownFinished();
+            }
             isCountingDown = false;
         }
     }

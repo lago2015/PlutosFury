@@ -476,6 +476,7 @@ public class Movement : MonoBehaviour
                 {
                     DisableMovement(true);
                     modelScript.DeathToRender();
+                    maxSize.SetActive(false);
                     foreach (SphereCollider col in GetComponents<SphereCollider>())
                     {
                         if (!col.isTrigger)
@@ -988,12 +989,7 @@ public class Movement : MonoBehaviour
                 myBody.AddForce(c.contacts[0].normal * wallBump * 2, ForceMode.VelocityChange);
             }
         }
-
-        else if(curTag == "Uranus")
-        {
-            c.gameObject.GetComponent<DestroyMoons>().DestroyAllMoons();
-            Destroy(c.gameObject);
-        }
+        
         else if(curTag == "GravityWell")
         {
             if(!ShouldDash)

@@ -16,9 +16,11 @@ public class HUDManager : MonoBehaviour {
     public Text scoreText;
     public Text healthText;
     public Text timerText;
-    //local variables for hudarrow
+
+    //local variables for hud 
     private int currentScore;
     private float currentTime;
+
     // Use this for initialization
     void Awake()
     {
@@ -37,8 +39,8 @@ public class HUDManager : MonoBehaviour {
         {
             healthText.text = ("Health: " + newHealth);
         }
-        
     }
+
     //called from pick up script to enable or disable image
     public void isPowerDashActive(bool isActive)
     {
@@ -47,6 +49,7 @@ public class HUDManager : MonoBehaviour {
             powerDashSprite.enabled = isActive;
         }
     }
+
     //called from pick up script to enable or disable image
     public void isShieldActive(bool isActive)
     {
@@ -55,6 +58,7 @@ public class HUDManager : MonoBehaviour {
             shieldSprite.enabled = isActive;
         }
     }
+
     //called from pick up script to enable or disable image
     public void isShockwaveActive(bool isActive)
     {

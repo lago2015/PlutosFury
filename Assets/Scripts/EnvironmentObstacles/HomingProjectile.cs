@@ -44,6 +44,7 @@ public class HomingProjectile : MonoBehaviour {
         
     }
 
+    //move towards the plaey
     void FixedUpdate()
     {
         if (ShouldMove)
@@ -54,6 +55,16 @@ public class HomingProjectile : MonoBehaviour {
 
             transform.parent.position += moveSpeed * transform.forward * Time.deltaTime;
             transform.parent.position = new Vector3(transform.position.x, transform.position.y, 0);
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        //disable movement if player is near
+        string curString = other.gameObject.tag;
+        if (curString == "Player"||curString == "BreakableWall"||curString=="EnvironmentObstacle"||curString=="BigAsteroid")
+        {
+            activateMovement(false);
         }
     }
 
