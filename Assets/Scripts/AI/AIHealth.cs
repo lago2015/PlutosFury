@@ -61,78 +61,72 @@ public class AIHealth : MonoBehaviour {
                 }
 
             }
-
         }
     }
 
     void OnCollisionEnter(Collision col)
     {
         
-            string CurTag = col.gameObject.tag;
+        string CurTag = col.gameObject.tag;
 
-            if (CurTag == "Player")
+        if (CurTag == "Player")
+        {
+            bool isDashing = col.gameObject.GetComponent<Movement>().DashStatus();
+            if (isDashing)
             {
-                bool isDashing = col.gameObject.GetComponent<Movement>().DashStatus();
-                if (isDashing)
+                IncrementDamage();
+
+                if (myBody)
                 {
-                    IncrementDamage();
-
-                    if (myBody)
-                    {
-                        myBody.AddForce(col.contacts[0].normal * wallBump, ForceMode.VelocityChange);
-                    }
-                    else
-                    {
-                        Rigidbody colBody = col.gameObject.GetComponent<Movement>().myBody;
-                        if(colBody)
-                        {
-                            colBody.AddForce(col.contacts[0].normal * wallBump, ForceMode.VelocityChange);
-                        }
-                    }
-
+                    myBody.AddForce(col.contacts[0].normal * wallBump, ForceMode.VelocityChange);
                 }
-            }
-            else if (CurTag == "RogueWall" || CurTag == "Wall" || CurTag == "MazeWall")
-            {
+                else
+                {
+                    Rigidbody colBody = col.gameObject.GetComponent<Movement>().myBody;
+                    if(colBody)
+                    {
+                        colBody.AddForce(col.contacts[0].normal * wallBump, ForceMode.VelocityChange);
+                    }
+                }
 
-                myBody.AddForce(col.contacts[0].normal * wallBump, ForceMode.VelocityChange);
             }
-        
+        }
+        else if (CurTag == "RogueWall" || CurTag == "Wall" || CurTag == "MazeWall")
+        {
+
+            myBody.AddForce(col.contacts[0].normal * wallBump, ForceMode.VelocityChange);
+        }
     }
 
     void OnTriggerEnter(Collider col)
     {
       
-            if (col.gameObject.tag == "Player")
+        if (col.gameObject.tag == "Player")
+        {
+            Movement playerScript = col.GetComponent<Movement>();
+            if (playerScript)
             {
-                Movement playerScript = col.GetComponent<Movement>();
-                if (playerScript)
-                {
-                    bool isPlayerDashing = playerScript.DashStatus();
+                bool isPlayerDashing = playerScript.DashStatus();
 
-                    if (isPlayerDashing)
-                    {
-                        IncrementDamage();
-                    }
-                }
-            }
-
-            if (col.gameObject.tag == "MoonBall")
-            {
-                Debug.Log("MOONBALL HIT!");
-
-                MoonBall moonBall = col.GetComponent<MoonBall>();
-
-                if (moonBall.getAttackMode())
+                if (isPlayerDashing)
                 {
                     IncrementDamage();
-                  //  moonBall.KnockBack(this.gameObject);
                 }
-                else
-                {
-                    moonBall.KnockBack(this.gameObject);
-                }
+            }
+        }
+
+        if (col.gameObject.tag == "MoonBall")
+        {
+            Debug.Log("MOONBALL HIT!");
+
+            MoonBall moonBall = col.GetComponent<MoonBall>();
+
+            if (moonBall.getAttackMode())
+            {
+                IncrementDamage();
+                 
             } 
+        } 
     }
 }
 

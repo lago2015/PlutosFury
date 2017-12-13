@@ -97,17 +97,21 @@ public class DetectThenExplode : MonoBehaviour {
         }
         else if(CurTag == "MoonBall")
         {
+         
+            if (isRocket)
+            {
+                Vector3 forwardVec = transform.forward.normalized;
+
+                //Get moonball script
+                MoonBall moonBall = col.gameObject.GetComponent<MoonBall>();
+                    if (moonBall)
+                    {
+                        moonBall.rocketHit(forwardVec);
+                    }
+            }
 
             //start explosion
-            TriggeredExplosion();
-            
-            //Get moonball script
-            MoonBall moonBall = col.gameObject.GetComponent<MoonBall>();
-            //apply knockback
-            if (moonBall)
-            {
-                moonBall.KnockBack(this.gameObject);
-            }
+            TriggeredExplosion(); 
         }
     }
 

@@ -4,9 +4,15 @@ using System.Collections;
 public class MoonBall : MonoBehaviour
 {
     public float hitSpeed;
+    public float wallBounce;
     public float knockbackSpeed;
     public float idleSpeed = 10.0f;
+    public float velocityCap;
+    public float velocityMin;
+
+
     private Rigidbody rb;
+    private Vector3 newVelocity;
 
     private bool attackMode = false;
     private bool canHit = true;
@@ -21,8 +27,23 @@ public class MoonBall : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
+        // CLAMPING VELOCITY ON X AND Y
+        if (rb.velocity.x >= velocityCap || rb.velocity.x <= velocityMin)
+        {
+            newVelocity = rb.velocity.normalized;
+            newVelocity *= velocityCap;
+            rb.velocity = newVelocity;
+        }
+
+        if (rb.velocity.y >= velocityCap || rb.velocity.y <= velocityMin)
+        {
+            newVelocity = rb.velocity.normalized;
+            newVelocity *= velocityCap;
+            rb.velocity = newVelocity;
+        }
+
         // IF ball is in attack mode, switch it back to idle mode when velocity goes under a specific speed
-	    if(attackMode)
+        if (attackMode)
         {
             if (rb.velocity.magnitude < idleSpeed)
             {
@@ -75,39 +96,48 @@ public class MoonBall : MonoBehaviour
             }
         }
 
-
-       if(col.gameObject.name == "Spikes" || col.tag =="ShatterPiece" || col.gameObject.name == "LaserWall")
+       if(col.gameObject.tag == "Spike")
        {
-          // KnockBack(col.gameObject);
+            // get direction from ball to spike
+            Vector3 direction = col.transform.position - transform.position;
 
-            Debug.Log("Hit Lazer Wall Trigger");
-       }
-
+            // reverse direction and apply force to it to simulate bounce
+            rb.AddForce(-direction.normalized * 20.0f, ForceMode.VelocityChange);
+        }
     }
 
    
     private void OnCollisionEnter(Collision col)
     {
-        // Dont think this is needed at all, but will leave for now. Possibly need if implement some logic when ball hits the lazer wall.
-        if(col.gameObject.name == "LazerWall")
+        // APPLYING BOUNCE BACK TO CERTAIN OBJECTS
+        if(col.gameObject.name == "LaserWall")
         {
-          
+            Debug.Log("LAAAAZER!");
+            rb.AddForce(col.contacts[0].normal * wallBounce, ForceMode.VelocityChange);
         }
 
         if (col.gameObject.tag == "BreakableWall")
         {
             col.gameObject.GetComponent<WallHealth>().IncrementDamage();
+            rb.AddForce(col.contacts[0].normal * knockbackSpeed, ForceMode.VelocityChange);
+        }
+
+        if (col.gameObject.tag == "Wall")
+        {
+            rb.AddForce(col.contacts[0].normal * wallBounce, ForceMode.VelocityChange);
+        }
+
+        if(col.gameObject.GetComponent<AIHealth>())
+        {
+            rb.AddForce(col.contacts[0].normal * knockbackSpeed, ForceMode.VelocityChange);
         }
     }
 
-    public void KnockBack(GameObject target)
+    public void rocketHit(Vector3 Direction)
     {
-        // OUTDATED, Might use function later but need to change logic.
-        // Knockback for now: simply just reverses the direction of the ball and applies a certain speed
-         Vector3 knockBackDirection = target.transform.position - transform.position;
-         knockBackDirection = knockBackDirection.normalized;
-       
-        rb.AddForce(-rb.velocity * 1.5f , ForceMode.Impulse);
+        // Apply force and rotation to knock back from rocket explosion
+        rb.AddForce(Direction * knockbackSpeed, ForceMode.VelocityChange);
+        rb.AddTorque(Direction * hitSpeed);
     }
 
     IEnumerator HitBreak()
