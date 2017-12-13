@@ -9,6 +9,8 @@ public class Door : MonoBehaviour {
     private LoadTargetSceneButton loadScript;
 
     public bool isFinalDoor;
+    public GameObject winScreen;
+    private WinScreen winScreenScript;
     bool isOpen;
     public float fadeTime = 2;
     private int keyObtained;
@@ -23,6 +25,8 @@ public class Door : MonoBehaviour {
         sectionScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<SectionManager>();
         gameScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<GameManager>();
         audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
+        winScreenScript = winScreen.GetComponent<WinScreen>();
+
         if(isFinalDoor)
         {
             GameObject loadObject = GameObject.FindGameObjectWithTag("MenuManager");
@@ -51,6 +55,11 @@ public class Door : MonoBehaviour {
             {
                 doorActive = true;
                 //do something winning here
+                winScreen.SetActive(true);
+                winScreenScript.SetAsteroidsCollected(100);
+                winScreenScript.SetTime(0.0f);
+                
+
                 sectionScript.isChanging(true);
                 if (audioScript)
                 {
