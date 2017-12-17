@@ -4,21 +4,29 @@ using System.Collections;
 
 public class WinScreen : MonoBehaviour {
 
+    //asteroid counter
     int AsteroidsCollected;
+    //timer score counter
     float Timer;
+    //total score counter
     int TotalScore;
+
+    //is it final door
     public bool finalDoor;
-    private bool checkFinalDoor;
+
     //GameObject curDoor;
+
+    //section manager
     private SectionManager sectionScript;
+    //audio script
     private AudioController audioScript;
+
     private LoadTargetSceneButton targetSceneButton;
     public GameObject curDoor;
     public Text timeDisplay;
     public Text scoreDisplay;
     public Text totalDisplay;
 
-    public Button nextLevel;
     public Button nextSection;
 
     public Image fadeOverlay;
@@ -26,18 +34,10 @@ public class WinScreen : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         fadeOverlay.CrossFadeAlpha(0, 0.5f, true);
-        sectionScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<SectionManager>();
-        audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
+        //sectionScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<SectionManager>();
+        //audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
         targetSceneButton = this.gameObject.GetComponent<LoadTargetSceneButton>();
 
-        if (finalDoor)
-        {
-            checkFinalDoor = true;
-        }
-        else
-        {
-            checkFinalDoor = false;
-        }
 
         timeDisplay.text = Timer.ToString();
         scoreDisplay.text = AsteroidsCollected.ToString();
@@ -47,7 +47,7 @@ public class WinScreen : MonoBehaviour {
     //check status of door 
     public void CheckStatus()
     {
-        if (checkFinalDoor)
+        if (finalDoor)
         {
             SetNextSection();
         }
