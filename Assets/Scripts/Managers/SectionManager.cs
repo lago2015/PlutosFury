@@ -140,7 +140,7 @@ public class SectionManager : MonoBehaviour {
         //disable player movement
         if (player && playerScript)
         {
-            playerScript.DisableMovement(true);
+            playerScript.DisableMovement(false);
         }
         //disable joystick
         if (joystickControllerScript && joystickScript)
@@ -224,12 +224,7 @@ public class SectionManager : MonoBehaviour {
             player.SetActive(true);
 
         }
-        //enable joystick
-        if (joystickControllerScript && joystickScript)
-        {
-            joystickScript.enabled = true;
-            joystickControllerScript.enabled = true;
-        }
+        
         if (levelWall&&gameStartTrig&&levelWallActive)
         {
             
@@ -251,6 +246,17 @@ public class SectionManager : MonoBehaviour {
         }
         //give player movement again
         playerScript.ResumePluto();
+
+        //HUD Active again
+        hudCanvas.SetActive(true);
+
+        //enable joystick
+        if (joystickControllerScript && joystickScript)
+        {
+            joystickScript.enabled = true;
+            joystickControllerScript.enabled = true;
+        }
+
         //fade in
         fadeScript.StartfadeIn(true);
     }

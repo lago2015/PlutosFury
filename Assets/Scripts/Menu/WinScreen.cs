@@ -8,9 +8,11 @@ public class WinScreen : MonoBehaviour {
     float Timer;
     int TotalScore;
     public bool finalDoor;
+    private bool checkFinalDoor;
     //GameObject curDoor;
     private SectionManager sectionScript;
     private AudioController audioScript;
+    private LoadTargetSceneButton targetSceneButton;
     public GameObject curDoor;
     public Text timeDisplay;
     public Text scoreDisplay;
@@ -26,17 +28,15 @@ public class WinScreen : MonoBehaviour {
         fadeOverlay.CrossFadeAlpha(0, 0.5f, true);
         sectionScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<SectionManager>();
         audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
-        
+        targetSceneButton = this.gameObject.GetComponent<LoadTargetSceneButton>();
 
         if (finalDoor)
         {
-            nextSection.gameObject.SetActive(false);
-            nextLevel.gameObject.SetActive(true);
+            checkFinalDoor = true;
         }
         else
         {
-            nextLevel.gameObject.SetActive(false);
-            nextSection.gameObject.SetActive(true);
+            checkFinalDoor = false;
         }
 
         timeDisplay.text = Timer.ToString();
@@ -44,6 +44,18 @@ public class WinScreen : MonoBehaviour {
         totalDisplay.text = TotalScore.ToString();
 	}
 
+    //check status of door 
+    public void CheckStatus()
+    {
+        if (checkFinalDoor)
+        {
+            SetNextSection();
+        }
+        else
+        {
+            targetSceneButton.LoadNextLevel();
+        }
+    }
 
     public void SetNextSection()
     {
@@ -59,9 +71,6 @@ public class WinScreen : MonoBehaviour {
     {
         AsteroidsCollected = Temp;
     }
-
-
-
 
     public void SetTime(float Temp)
     {
