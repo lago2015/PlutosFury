@@ -4,6 +4,7 @@ using System.Collections;
 public class SectionManager : MonoBehaviour {
 
     //Gameobject Components
+    public GameObject[] wormholes;
     public GameObject[] sections;
     public GameObject[] sectionExitLocations;
     private CanvasFade fadeScript;
@@ -13,9 +14,16 @@ public class SectionManager : MonoBehaviour {
     private LevelWall wallScript;
     private GameObject gameStartTrig;
     public float fadeTime = 2;
-
+    public GameObject hudCanvas;
+    public GameObject winScreenCanvas;
+    private WinScreen winScreenScript;
+    //player controls and visuals
     private GameObject player;
     private Movement playerScript;
+    private FloatingJoystick joystickScript;
+    private FloatingJoystickController joystickControllerScript;
+
+
     private bool levelWallActive;
     public bool isWallActive(bool isActive) { return levelWallActive = isActive; }
 
@@ -30,16 +38,6 @@ public class SectionManager : MonoBehaviour {
     private float camZAxis;
     void Awake()
     {
-        counterScript = GameObject.FindGameObjectWithTag("HUDManager").GetComponent<CountDownStage>();
-        levelWall = GameObject.FindGameObjectWithTag("LevelWall");
-        gameStartTrig = GameObject.FindGameObjectWithTag("Respawn");
-        if(levelWall)
-        {
-            defaultVector = levelWall.transform.position;
-            wallScript = levelWall.GetComponent<LevelWall>();
-        }
-
-
         for (int i = 0; i < sections.Length; ++i)
         {
             if (i == 0)
@@ -52,6 +50,23 @@ public class SectionManager : MonoBehaviour {
                 sections[i].SetActive(false);
             }
         }
+        joystickScript = GameObject.FindGameObjectWithTag("GameController").GetComponent<FloatingJoystick>();
+        joystickControllerScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<FloatingJoystickController>();
+        counterScript = GameObject.FindGameObjectWithTag("HUDManager").GetComponent<CountDownStage>();
+        levelWall = GameObject.FindGameObjectWithTag("LevelWall");
+        gameStartTrig = GameObject.FindGameObjectWithTag("Respawn");
+        if(levelWall)
+        {
+            defaultVector = levelWall.transform.position;
+            wallScript = levelWall.GetComponent<LevelWall>();
+        }
+        if(winScreenCanvas)
+        {
+            winScreenScript = winScreenCanvas.GetComponent<WinScreen>();
+            SetNextWormhole();
+        }
+
+
         fadeScript = GameObject.FindGameObjectWithTag("Finish").GetComponent<CanvasFade>();
         camScript = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraStop>();
         player = GameObject.FindGameObjectWithTag("Player");
@@ -65,6 +80,26 @@ public class SectionManager : MonoBehaviour {
             camZAxis = camScript.transform.position.z;
         }
 
+    }
+
+    //Telling the win screen what section it is to know to activate next section
+    //button or next level button
+    void SetNextWormhole()
+    {
+        if(winScreenScript)
+        {
+            //Check if its the final door
+            if(currSectionNumber == sections.Length)
+            {
+                winScreenScript.SetFinalDoor(true);
+            }
+            //if not then set next wormhole
+            else
+            {
+                winScreenScript.SetCurDoor(wormholes[currSectionNumber]);
+            }
+            
+        }
     }
 
 
@@ -98,10 +133,42 @@ public class SectionManager : MonoBehaviour {
         }
 
     }
+    // Function called from Door to activate Win Screen
+    public void WinScreenActive()
+    {
+
+        //disable player movement
+        if (player && playerScript)
+        {
+            playerScript.DisableMovement(true);
+        }
+        //disable joystick
+        if (joystickControllerScript && joystickScript)
+        {
+            joystickScript.enabled = false;
+            joystickControllerScript.enabled = false;
+        }
+        //turn off hud
+        if (hudCanvas)
+        {
+            hudCanvas.SetActive(false);
+        }
+        //activate win screen and freeze time
+        if (winScreenCanvas)
+        {
+            
+            winScreenCanvas.SetActive(true);
+            //Time.timeScale = 0;
+            
+        }
+    }
+
     IEnumerator SectionTransition(Vector3 SectionLocation)
     {
         //fade out
         fadeScript.StartfadeIn(false);
+
+        
         //Stop counter
         if (counterScript)
         {
@@ -119,6 +186,8 @@ public class SectionManager : MonoBehaviour {
         }
 
         yield return new WaitForSeconds(fadeTime);
+
+
 
         //turn off recently completed section
         sections[currSectionNumber].SetActive(false);
@@ -155,6 +224,12 @@ public class SectionManager : MonoBehaviour {
             player.SetActive(true);
 
         }
+        //enable joystick
+        if (joystickControllerScript && joystickScript)
+        {
+            joystickScript.enabled = true;
+            joystickControllerScript.enabled = true;
+        }
         if (levelWall&&gameStartTrig&&levelWallActive)
         {
             
@@ -167,11 +242,11 @@ public class SectionManager : MonoBehaviour {
         }
         //increment section number
         currSectionNumber++;
-
         //turn section specific gameobjects in new section
         if (sections[currSectionNumber])
         {
             sections[currSectionNumber].SetActive(true);
+            SetNextWormhole();
 
         }
         //give player movement again

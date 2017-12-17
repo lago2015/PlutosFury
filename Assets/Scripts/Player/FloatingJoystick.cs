@@ -19,15 +19,8 @@ public class FloatingJoystick : MonoBehaviour,IDragHandler,IPointerUpHandler,IPo
     private Vector3[] fourCornersArray = new Vector3[4]; // used to get the bottom right corner of the image in order to ensure that the pivot of the joystick's background image is always at the bottom right corner of the image (the pivot must always be placed on the bottom right corner of the joystick's background image in order to the script to work)
     private Vector2 bgImageStartPosition; // used to temporarily store the starting position of the joystick's background image (where it was placed on the canvas in the editor before play was pressed) in order to set the image back to this same position after setting the pivot to the bottom right corner of the image
     private PointerEventData beginTouch;
-    private FloatingJoystickController joystickControllerScript;
     private ButtonIndicator dashScript;
 
-    public bool isWithinScreen() { return joystickStaysInFixedPosition; }
-
-    void Awake()
-    {
-        joystickControllerScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<FloatingJoystickController>();
-    }
 
     private void Start()
     {
@@ -132,10 +125,7 @@ public class FloatingJoystick : MonoBehaviour,IDragHandler,IPointerUpHandler,IPo
         if(Input.touchCount==1 && !joystickStaysInFixedPosition)
         {
             joystickStaysInFixedPosition = true;
-            if(joystickControllerScript)
-            {
-                joystickControllerScript.touchActive(joystickStaysInFixedPosition);
-            }
+        
             beginTouch = ped;
         }
         
@@ -154,10 +144,7 @@ public class FloatingJoystick : MonoBehaviour,IDragHandler,IPointerUpHandler,IPo
         else
         {
             joystickStaysInFixedPosition = false;
-            if (joystickControllerScript)
-            {
-                joystickControllerScript.touchActive(joystickStaysInFixedPosition);
-            }
+
         }
     }
 

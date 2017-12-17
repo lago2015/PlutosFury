@@ -7,11 +7,11 @@ public class WinScreen : MonoBehaviour {
     int AsteroidsCollected;
     float Timer;
     int TotalScore;
-    bool finalDoor;
-    GameObject curDoor;
+    public bool finalDoor;
+    //GameObject curDoor;
     private SectionManager sectionScript;
     private AudioController audioScript;
-
+    public GameObject curDoor;
     public Text timeDisplay;
     public Text scoreDisplay;
     public Text totalDisplay;
@@ -44,6 +44,7 @@ public class WinScreen : MonoBehaviour {
         totalDisplay.text = TotalScore.ToString();
 	}
 
+
     public void SetNextSection()
     {
         sectionScript.isChanging(true);
@@ -59,6 +60,9 @@ public class WinScreen : MonoBehaviour {
         AsteroidsCollected = Temp;
     }
 
+
+
+
     public void SetTime(float Temp)
     {
         Timer = Temp;
@@ -73,5 +77,5 @@ public class WinScreen : MonoBehaviour {
     {
         curDoor = Temp;
     }
-	
+
 }

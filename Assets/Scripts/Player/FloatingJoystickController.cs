@@ -9,21 +9,15 @@ public class FloatingJoystickController : MonoBehaviour {
     private Image singleJoystickHandleImage; // handle (knob) image of the single joystick
     private FloatingJoystick singleJoystick; // script component attached to the single joystick's background image
     private int singleSideFingerID = 0; // unique finger id for touches on the left-side half of the screen
-    private bool isWithinScreen;
 
-    public bool touchActive(bool isActive) { return isWithinScreen = isActive; }
 
     void Start()
     {
-        GameObject joystickObject = GameObject.FindGameObjectWithTag("GameController");
-        if(joystickObject)
-        {
-            singleJoystickBackgroundImage = joystickObject.GetComponent<Image>();
-            singleJoystickBackgroundImage.enabled = singleJoyStickAlwaysVisible;
-            singleJoystickHandleImage = singleJoystickBackgroundImage.transform.GetChild(0).GetComponent<Image>();
-            singleJoystickHandleImage.enabled = singleJoyStickAlwaysVisible;
-            singleJoystick=joystickObject.GetComponent<FloatingJoystick>();
-        }
+        singleJoystickBackgroundImage = GameObject.FindGameObjectWithTag("GameController").GetComponent<Image>();
+        singleJoystickBackgroundImage.enabled = singleJoyStickAlwaysVisible;
+        singleJoystickHandleImage = singleJoystickBackgroundImage.transform.GetChild(0).GetComponent<Image>();
+        singleJoystickHandleImage.enabled = singleJoyStickAlwaysVisible;
+        
         
     }
 
@@ -67,17 +61,18 @@ public class FloatingJoystickController : MonoBehaviour {
                             singleJoystickHandleImage.enabled = singleJoyStickAlwaysVisible;
                         }
                     }
-                    else
-                    {
-                        // makes the single joystick disappear or stay visible
-                        singleJoystickBackgroundImage.enabled = singleJoyStickAlwaysVisible;
-                        singleJoystickHandleImage.enabled = singleJoyStickAlwaysVisible;
-                    }
 
 
                 }
 
             
+        }
+
+        else
+        {
+            // makes the single joystick disappear or stay visible
+            singleJoystickBackgroundImage.enabled = singleJoyStickAlwaysVisible;
+            singleJoystickHandleImage.enabled = singleJoyStickAlwaysVisible;
         }
     }
 }
