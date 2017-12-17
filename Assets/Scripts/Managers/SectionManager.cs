@@ -16,12 +16,10 @@ public class SectionManager : MonoBehaviour {
 
     private GameObject player;
     private Movement playerScript;
-    private GameObject camera;
     private bool levelWallActive;
     public bool isWallActive(bool isActive) { return levelWallActive = isActive; }
 
-    private float curCamMin;
-    private float curCamMax;
+
     private Vector3 defaultVector;
     //Section Variables
     private bool currentlyChanging;
@@ -61,7 +59,6 @@ public class SectionManager : MonoBehaviour {
         {
             playerScript = player.GetComponent<Movement>();
         }
-        camera = GameObject.FindGameObjectWithTag("MainCamera");
         if (camScript)
         {
             offSet = camScript.OffsetX;
@@ -105,8 +102,13 @@ public class SectionManager : MonoBehaviour {
     {
         //fade out
         fadeScript.StartfadeIn(false);
+        //Stop counter
+        if (counterScript)
+        {
+            counterScript.CounterStatusChange(false);
+        }
         //place level wall for new section
-        if(wallScript)
+        if (wallScript)
         {
             wallScript.DisableWall();
         }
@@ -120,11 +122,10 @@ public class SectionManager : MonoBehaviour {
 
         //turn off recently completed section
         sections[currSectionNumber].SetActive(false);
-
-        //reset timer
-        if(counterScript)
+        //Start counter
+        if (counterScript)
         {
-            counterScript.Begin();
+            counterScript.CounterStatusChange(true);
         }
         //placing new min and max for X axis for camera
         if (camScript)
@@ -137,7 +138,7 @@ public class SectionManager : MonoBehaviour {
             camScript.ChangeCamMax();
 
         }
-        if (player && SectionLocation != Vector3.zero && camera)
+        if (player && SectionLocation != Vector3.zero)
         {
             //turn off player
             player.SetActive(false);

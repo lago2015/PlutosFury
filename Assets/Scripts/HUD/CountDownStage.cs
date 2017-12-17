@@ -16,9 +16,20 @@ public class CountDownStage : MonoBehaviour {
     //functions to call to check for conditions
     public float CurrentTimeRemain() { return timeRemaining; }
     public bool isGameCountingDown() { return isCountingDown; }
-
+    
     //reference to stop the game
     private GameManager gameManScript;
+
+    public void CounterStatusChange(bool isItCounting)
+    {
+        isCountingDown = isItCounting;
+        if (isItCounting)
+        {
+            tick();
+        }
+        
+            
+    }
 
     //getter for game manager
     private void Awake()
@@ -50,7 +61,7 @@ public class CountDownStage : MonoBehaviour {
     {
         timeRemaining--;
         //time is still remaining
-        if (timeRemaining > 0)
+        if (timeRemaining > 0 && isCountingDown)
         {
             //loop to continue ticking until finished
             Invoke("tick", 1f);

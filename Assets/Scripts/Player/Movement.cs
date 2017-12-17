@@ -430,9 +430,11 @@ public class Movement : MonoBehaviour
                 trailRot = joystickscript.rotation();
                 if(curTrail)
                 {
-                    if(isPowerDashing)
+                    if (isPowerDashing)
                     {
-                        //curTrail.transform.rotation = new Quaternion(curTrail.transform.rotation.x, curTrail.transform.rotation.y, trailRot.z,trailRot.z);
+
+                        trailRot.y = curTrail.transform.rotation.y;
+                        curTrail.transform.rotation = trailRot;
                     }
                     else
                     {
@@ -882,7 +884,27 @@ public class Movement : MonoBehaviour
     void OnCollisionEnter(Collision c)
 	{
         string curTag = c.gameObject.tag;
+        if (curTag == "Asteroid")
+        {
 
+            if (!isDead)
+            {
+                if (audioScript)
+                {
+                    audioScript.AsteroidAbsorbed(transform.position);
+                }
+                //int curLevel = ExperienceMan.CurrentLevel() + 1;
+                score += 100;
+                ////ignore collision?
+                //Collider playerCollider = GetComponent<SphereCollider>();
+                //Collider asteroidCollider = col.gameObject.GetComponent<SphereCollider>();
+                //Physics.IgnoreCollision(playerCollider, asteroidCollider);
+
+                ScoreManager.IncreaseScore(score);
+            }
+            ReturnAsteroid(c.gameObject);
+
+        }
         if (curTag == "BigAsteroid")
         {
             if (ShouldDash)
@@ -924,7 +946,7 @@ public class Movement : MonoBehaviour
             }
             if (ShouldDash)
             {
-                myBody.AddForce(c.contacts[0].normal * wallBump * 3, ForceMode.VelocityChange);
+                myBody.AddForce(c.contacts[0].normal * wallBump * 2, ForceMode.VelocityChange);
 
             }
             else
@@ -942,6 +964,10 @@ public class Movement : MonoBehaviour
                 {
                     healthScript.IncrementDamage();
                 }
+                if(c.gameObject.name.Contains("DamageWall"))
+                {
+                    DamagePluto();
+                }
             }
             myBody.AddForce(c.contacts[0].normal * wallBump, ForceMode.VelocityChange);
 
@@ -954,7 +980,7 @@ public class Movement : MonoBehaviour
             }
             if (ShouldDash)
             {
-                myBody.AddForce(c.contacts[0].normal * wallBump * 3, ForceMode.VelocityChange);
+                myBody.AddForce(c.contacts[0].normal * wallBump*2, ForceMode.VelocityChange);
 
             }
             else
@@ -964,43 +990,11 @@ public class Movement : MonoBehaviour
         }
         else if (curTag == "EnvironmentObstacle")
         {
-            myBody.AddForce(c.contacts[0].normal * wallBump * 3, ForceMode.VelocityChange);
+            myBody.AddForce(c.contacts[0].normal * wallBump, ForceMode.VelocityChange);
 
 
-        }
-
-        else if (curTag == "MazeWall")
-        {
-            if (audioScript)
-            {
-                audioScript.WallBounce();
-            }
-            myBody.AddForce(c.contacts[0].normal * mazeBump, ForceMode.VelocityChange);
-        }
-
-        else if(curTag=="NeptuneMoon" || curTag=="Neptune")
-        {
-            if(ShouldDash)
-            {
-                myBody.AddForce(c.contacts[0].normal * wallBump * 4, ForceMode.VelocityChange);
-            }
-            else
-            {
-                myBody.AddForce(c.contacts[0].normal * wallBump * 2, ForceMode.VelocityChange);
-            }
         }
         
-        else if(curTag == "GravityWell")
-        {
-            if(!ShouldDash)
-            {
-                myBody.AddForce(c.contacts[0].normal * wallBump, ForceMode.VelocityChange);
-            }
-        }
-        else if(curTag=="Planet")
-        {
-            myBody.AddForce(c.contacts[0].normal * wallBump*3, ForceMode.VelocityChange);
-        }
         
 	}
 

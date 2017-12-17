@@ -4,7 +4,7 @@ using System.Collections;
 public class BurstBehavior : MonoBehaviour {
 
     private float moveSpeed = 5;
-    private float BurstTimeout = 1;
+    private float BurstTimeout = 0.5f;
     public bool ShouldBurst=false;
     private Rigidbody myBody;
     private bool isNewAsteroid=true;

@@ -39,7 +39,7 @@ public class RotateGameobject : MonoBehaviour {
         {
             Rotation.y = 220f;
         }
-        else if (SelectZ)
+        if (SelectZ)
         {
             Rotation.z = 220f;
             isZZero = false;

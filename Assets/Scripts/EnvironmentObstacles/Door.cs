@@ -25,7 +25,7 @@ public class Door : MonoBehaviour {
         //sectionScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<SectionManager>();
         gameScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<GameManager>();
         //audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
-        winScreenScript = winScreen.GetComponent<WinScreen>();
+        
 
         if(isFinalDoor)
         {
@@ -34,6 +34,12 @@ public class Door : MonoBehaviour {
             {
                 loadScript =loadObject.GetComponent<LoadTargetSceneButton>();
             }
+            if(winScreen)
+            {
+                winScreenScript = winScreen.GetComponent<WinScreen>();
+                winScreen.SetActive(false);
+            }
+            
         }
         isOpen = true;
     }

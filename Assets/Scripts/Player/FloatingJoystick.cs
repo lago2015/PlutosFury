@@ -7,12 +7,11 @@ public class FloatingJoystick : MonoBehaviour,IDragHandler,IPointerUpHandler,IPo
 {
 
     
-    private bool joystickStaysInFixedPosition = false;
+    public bool joystickStaysInFixedPosition = false;
     private bool doOnce;
     private bool scriptDoOnce;
     [Tooltip("Sets the maximum distance the handle (knob) stays away from the center of this joystick. If the joystick handle doesn't look or feel right you can change this value. Must be a whole number. Default value is 4.")]
     public int joystickHandleDistance = 4;
-
     private Image bgImage; // background of the joystick, this is the part of the joystick that recieves input
     private Image joystickKnobImage; // the "knob" part of the joystick, it just moves to provide feedback, it does not receive input from the touch
     private Vector3 inputVector; // normalized direction vector that will be ouput from this joystick, it can be accessed from outside this class using the public function GetInputDirection() defined in this class, this vector can be used to control your game object ex. a player character or any desired game object
@@ -20,8 +19,16 @@ public class FloatingJoystick : MonoBehaviour,IDragHandler,IPointerUpHandler,IPo
     private Vector3[] fourCornersArray = new Vector3[4]; // used to get the bottom right corner of the image in order to ensure that the pivot of the joystick's background image is always at the bottom right corner of the image (the pivot must always be placed on the bottom right corner of the joystick's background image in order to the script to work)
     private Vector2 bgImageStartPosition; // used to temporarily store the starting position of the joystick's background image (where it was placed on the canvas in the editor before play was pressed) in order to set the image back to this same position after setting the pivot to the bottom right corner of the image
     private PointerEventData beginTouch;
-
+    private FloatingJoystickController joystickControllerScript;
     private ButtonIndicator dashScript;
+
+    public bool isWithinScreen() { return joystickStaysInFixedPosition; }
+
+    void Awake()
+    {
+        joystickControllerScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<FloatingJoystickController>();
+    }
+
     private void Start()
     {
         if (GetComponent<Image>() == null)
@@ -125,6 +132,10 @@ public class FloatingJoystick : MonoBehaviour,IDragHandler,IPointerUpHandler,IPo
         if(Input.touchCount==1 && !joystickStaysInFixedPosition)
         {
             joystickStaysInFixedPosition = true;
+            if(joystickControllerScript)
+            {
+                joystickControllerScript.touchActive(joystickStaysInFixedPosition);
+            }
             beginTouch = ped;
         }
         
@@ -143,6 +154,10 @@ public class FloatingJoystick : MonoBehaviour,IDragHandler,IPointerUpHandler,IPo
         else
         {
             joystickStaysInFixedPosition = false;
+            if (joystickControllerScript)
+            {
+                joystickControllerScript.touchActive(joystickStaysInFixedPosition);
+            }
         }
     }
 
