@@ -166,8 +166,10 @@ public class SectionManager : MonoBehaviour {
     IEnumerator SectionTransition(Vector3 SectionLocation)
     {
         //fade out
-        fadeScript.StartfadeIn(false);
-
+        //if(winScreenScript)
+        //{
+        //    winScreenScript.fadeOut();
+        //}
         
         //Stop counter
         if (counterScript)
@@ -258,6 +260,9 @@ public class SectionManager : MonoBehaviour {
         }
 
         //fade in
-        fadeScript.StartfadeIn(true);
+        if (winScreenScript)
+        {
+            winScreenScript.fadeOut();
+        }
     }
 }

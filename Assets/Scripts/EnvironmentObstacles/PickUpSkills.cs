@@ -15,7 +15,6 @@ public class PickUpSkills : MonoBehaviour {
 
     void Awake()
     {
-        hudScript = GameObject.FindGameObjectWithTag("HUDManager").GetComponent<HUDManager>();
         GameObject playerRef = GameObject.FindGameObjectWithTag("Player");
         switch(curSkill)
         {
@@ -41,6 +40,12 @@ public class PickUpSkills : MonoBehaviour {
                 playerScript = playerRef.GetComponent<Movement>();
                 break;
         }
+    }
+
+    private void Start()
+    {
+        hudScript = GameObject.FindGameObjectWithTag("HUDManager").GetComponent<HUDManager>();
+
     }
 
     void OnTriggerEnter(Collider col)

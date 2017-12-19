@@ -67,7 +67,7 @@ public class CountDownStage : MonoBehaviour {
             Invoke("tick", 1f);
         }
         //counter is done, start game over
-        else
+        else if(timeRemaining<=0)
         {
             if(gameManScript)
             {
