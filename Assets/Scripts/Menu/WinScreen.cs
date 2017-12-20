@@ -30,10 +30,12 @@ public class WinScreen : MonoBehaviour {
     public Button nextSection;
 
     public Image fadeOverlay;
+    public Image gameFade;
 
 	// Use this for initialization
 	void Start () {
         fadeOverlay.CrossFadeAlpha(0, 0.5f, true);
+        gameFade.CrossFadeAlpha(1, 0.5f, true);
         //sectionScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<SectionManager>();
         //audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
         targetSceneButton = this.gameObject.GetComponent<LoadTargetSceneButton>();

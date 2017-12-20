@@ -48,7 +48,7 @@ public class Door : MonoBehaviour {
                 //do something winning here
                 
                 sectionScript.WinScreenActive();
-
+                
             }
             else
             {

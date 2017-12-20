@@ -262,7 +262,7 @@ public class SectionManager : MonoBehaviour {
         //fade in
         if (winScreenScript)
         {
-            winScreenScript.fadeOut();
+            winScreenScript.gameFade.CrossFadeAlpha(1,0.5f,true);
         }
     }
 }
