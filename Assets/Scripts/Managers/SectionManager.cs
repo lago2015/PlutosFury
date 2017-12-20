@@ -122,7 +122,6 @@ public class SectionManager : MonoBehaviour {
 
                     //start placing player specific components for new section
                     StartCoroutine(SectionTransition(nextLocation));
-                    
                 }
             }
             //if current section number is maxed according to array length
@@ -151,13 +150,15 @@ public class SectionManager : MonoBehaviour {
         //turn off hud
         if (hudCanvas)
         {
-            hudCanvas.SetActive(false);
+            //hudCanvas.SetActive(false);
+            
         }
         //activate win screen and freeze time
         if (winScreenCanvas)
         {
             
             winScreenCanvas.SetActive(true);
+            winScreenScript.WinScreenGroup.SetActive(true);
             //Time.timeScale = 0;
             
         }
@@ -250,7 +251,7 @@ public class SectionManager : MonoBehaviour {
         playerScript.ResumePluto();
 
         //HUD Active again
-        hudCanvas.SetActive(true);
+        //hudCanvas.SetActive(true);
 
         //enable joystick
         if (joystickControllerScript && joystickScript)
@@ -262,7 +263,9 @@ public class SectionManager : MonoBehaviour {
         //fade in
         if (winScreenScript)
         {
-            winScreenScript.gameFade.CrossFadeAlpha(1,0.5f,true);
+            winScreenScript.gameFade.CrossFadeAlpha(0,0.5f,true);
+            winScreenScript.fadeOverlay.color.a.Equals(1.0f);
+            winScreenScript.WinScreenGroup.SetActive(false);
         }
     }
 }

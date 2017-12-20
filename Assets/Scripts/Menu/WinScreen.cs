@@ -23,6 +23,7 @@ public class WinScreen : MonoBehaviour {
 
     private LoadTargetSceneButton targetSceneButton;
     public GameObject curDoor;
+    public GameObject WinScreenGroup;
     public Text timeDisplay;
     public Text scoreDisplay;
     public Text totalDisplay;
@@ -36,8 +37,9 @@ public class WinScreen : MonoBehaviour {
 	void Start () {
         fadeOverlay.CrossFadeAlpha(0, 0.5f, true);
         gameFade.CrossFadeAlpha(1, 0.5f, true);
-        //sectionScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<SectionManager>();
-        //audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
+
+        sectionScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<SectionManager>();
+        audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
         targetSceneButton = this.gameObject.GetComponent<LoadTargetSceneButton>();
 
 
