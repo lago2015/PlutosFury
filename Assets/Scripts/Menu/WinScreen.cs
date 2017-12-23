@@ -35,8 +35,6 @@ public class WinScreen : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        fadeOverlay.CrossFadeAlpha(0, 0.5f, true);
-        gameFade.CrossFadeAlpha(1, 0.5f, true);
 
         sectionScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<SectionManager>();
         audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
@@ -47,6 +45,12 @@ public class WinScreen : MonoBehaviour {
         scoreDisplay.text = AsteroidsCollected.ToString();
         totalDisplay.text = TotalScore.ToString();
 	}
+
+    public void FadeIn()
+    {
+        fadeOverlay.CrossFadeAlpha(0, 0.5f, true);
+        gameFade.CrossFadeAlpha(1, 0.5f, true);
+    }
 
     //check status of door 
     public void CheckStatus()

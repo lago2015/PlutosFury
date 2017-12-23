@@ -48,11 +48,10 @@ public class Door : MonoBehaviour {
                 //do something winning here
                 
                 sectionScript.WinScreenActive();
-                
+                winScreenScript.FadeIn();
             }
             else
             {
-                
                 //winScreenScript.SetFinalDoor(true);
             }
         }
