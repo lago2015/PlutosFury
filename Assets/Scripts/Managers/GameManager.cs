@@ -7,21 +7,13 @@ using UnityEngine.Advertisements;
 public class GameManager : MonoBehaviour
 {
 
-	public GameObject pluto;
+	private GameObject pluto;
 	private float plutoMass;
-    public GameObject GameEndedUI;
-	public GameObject gameOverUI;
-    public GameObject gameOverText;
-	public GameObject youAreAStarNowUI;
 	private int asteroidsEaten;
     public int AsteroidGoal;
-    private GameObject Wormhole;
     private int curScene;
-	// Game Over UI
-	public Text ScoreText;
-	public Text highScoreText;
+
     public float fadeTime;
-    private int BaseCount = 1;
     public float GameOverDelay = 5f;
     public bool levelWallActive;
     private bool willPlayAd;
@@ -31,25 +23,28 @@ public class GameManager : MonoBehaviour
     AudioController audioCon;
     AdManager AdManager;
     ScoreManager ScoreManager;
-    ExperienceManager ExpManager;
     private GameObject startCamTrigger;
     private GameObject levelWall;
 
 
     void Awake()
     {
-        Application.targetFrameRate = 60;      //60 fps set rate
-
+        //60 fps set rate
+        Application.targetFrameRate = 60;
+        //reference player
+        pluto = GameObject.FindGameObjectWithTag("Player");
         if(pluto)
         {
             modelSwitch = pluto.GetComponent<TextureSwap>();
             playerScript = pluto.GetComponent<Movement>();
         }
-        
+        //getter for audio controller
         audioCon = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
-        ExpManager = GetComponent<ExperienceManager>();
+        //getter Score Manager
         ScoreManager = GetComponent<ScoreManager>();
+        //Getter for Ad Manager
         AdManager = GetComponent<AdManager>();
+        //Getters if level wall is active
         startCamTrigger = GameObject.FindGameObjectWithTag("Respawn");
         levelWall = GameObject.FindGameObjectWithTag("LevelWall");
         if(startCamTrigger&&levelWall)
@@ -67,27 +62,24 @@ public class GameManager : MonoBehaviour
 	void Start ()
     {
         
-        if(GameEndedUI)
-        {
-            GameEndedUI.SetActive(false);
-        }
-        
+        //enable background music
         audioCon.BackgroundMusic();
-		asteroidsEaten = 0;
+        
 
 	}
 
     void LateStart()
     {
+        //check if level wall is suppose to be active within this level
         if(levelWallActive)
         {
             CameraStop camScript = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraStop>();
             camScript.minX -= 10;
         }
+        //if not then camera will just follow player
         else
         {
             GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraStop>().isWallActive(levelWallActive);
-            GameObject.FindGameObjectWithTag("Spawner").GetComponent<SectionManager>().isWallActive(levelWallActive);
         }
     }
     public void PlayAd()
@@ -104,6 +96,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    //if timer reaches 0 then start game over
     public void CountDownFinished()
     {
         if(playerScript)
@@ -114,6 +107,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    //Start game over with time scale going 0 and saving score
     public void StartGameover()
     {
         StartCoroutine(GameOver());
@@ -127,26 +121,15 @@ public class GameManager : MonoBehaviour
         }
 
         yield return new WaitForSeconds(GameOverDelay);
-        //modelSwitch.SwapMaterial(TextureSwap.PlutoState.Lose);
+        //stop time like your a time lord
         Time.timeScale = 0;
-        GameEndedUI.SetActive(true);
-        gameOverUI.SetActive(true);
+        //save that score to show off to your friends
         ScoreManager.SaveScore();
-        gameOverText.SetActive(true);
-        youAreAStarNowUI.SetActive(false);
-        int EndScore = ScoreManager.ReturnScore();
-        int HighScore = ScoreManager.ReturnHighScore();
-        //int AsteroidsLeft = ExpManager.CurrentRequirement();
-        //asertoidsLeftText.text = " Next Level:\n\n " + AsteroidsLeft;
-        ScoreText.text = "Score:\n\n" + EndScore;
-        highScoreText.text = "High Score:\n\n" + HighScore;
+        
 
-        //if (willPlayAd)
-        //{
-        //    Advertisement.Show();
-        //}
         
     }
+    //same kind of functionality as game over except for a win condition
     public void StartYouWin()
     {
         StartCoroutine(YouWin());
@@ -160,50 +143,23 @@ public class GameManager : MonoBehaviour
 
         yield return new WaitForSeconds(GameOverDelay);
         ScoreManager.SaveScore();
-        GameEndedUI.SetActive(true);
-        gameOverText.SetActive(false);
-        gameOverUI.SetActive(false);
-        youAreAStarNowUI.SetActive(true);
 
         pluto.GetComponent<Movement>().DisableMovement(true);
         modelSwitch.SwapMaterial(TextureSwap.PlutoState.Win);
-        int EndScore = ScoreManager.ReturnScore();
-        int HighScore = ScoreManager.ReturnHighScore();
-        ScoreText.text = "Score:\n\n" + EndScore;
-        highScoreText.text = "High Score:\n\n" + HighScore;
+
 
     }
-
-    public void NextLevel()
-    {
-        
-    }
+    
     public void AsteroidEaten(float curEaten)
     {
         
+        //check if orbs eaten is greater then goal for level up or boost or something
         if(curEaten >= AsteroidGoal)
         {
-            if (youAreAStarNowUI)
-            {
-                YouWin();
-            }
-            else
-            {
-                if(Wormhole)
-                {
-                    //Wormhole.SetActive(true);
-                    //Wormhole.GetComponent<Door>().OpenDoor();
-                }
-            }
+            
         }
     }
-    public void Restart ()
-	{
-		Time.timeScale = 1.0f;
-        SceneManager.LoadScene(0);
-		
-        
-	}
+    //number of orbs currently collected
     public int EatNum()
     {
         return asteroidsEaten;

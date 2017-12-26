@@ -27,7 +27,7 @@ public class CameraStop : MonoBehaviour {
     private float curMinX;
     public float OffsetX;
     public int curSection;
-    private int maxNumSections;
+    //private int maxNumSections;
 	private Vector3 cachedCameraPosition;
     private Vector3 wallTransform;
     private Vector3 BossPosition = new Vector3(583, 0, 0);
@@ -57,7 +57,7 @@ public class CameraStop : MonoBehaviour {
             curMinX = cameraStopLocations[curSection].transform.position.x + OffsetX;
             maxX = curMaxX;
             minX = curMinX;
-            maxNumSections = GameObject.FindGameObjectWithTag("Spawner").GetComponent<SectionManager>().NumOfSections();
+            //maxNumSections = GameObject.FindGameObjectWithTag("Spawner").GetComponent<SectionManager>().NumOfSections();
         }
         //targetBody = target.GetComponent<Rigidbody> ();
         //cachedMass = targetBody.mass;

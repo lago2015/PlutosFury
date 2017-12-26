@@ -11,18 +11,17 @@ public class WinScreen : MonoBehaviour {
     //total score counter
     int TotalScore;
 
-    //is it final door
-    public bool finalDoor;
+
 
     //GameObject curDoor;
 
     //section manager
-    private SectionManager sectionScript;
+    //private SectionManager sectionScript;
     //audio script
     private AudioController audioScript;
 
     private LoadTargetSceneButton targetSceneButton;
-    public GameObject curDoor;
+
     public GameObject WinScreenGroup;
     public Text timeDisplay;
     public Text scoreDisplay;
@@ -36,7 +35,7 @@ public class WinScreen : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-        sectionScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<SectionManager>();
+        //sectionScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<SectionManager>();
         audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
         targetSceneButton = this.gameObject.GetComponent<LoadTargetSceneButton>();
 
@@ -55,25 +54,29 @@ public class WinScreen : MonoBehaviour {
     //check status of door 
     public void CheckStatus()
     {
-        if (finalDoor)
-        {
-            SetNextSection();
-        }
-        else
-        {
-            targetSceneButton.LoadNextLevel();
-        }
+        targetSceneButton.LoadNextLevel();
+
     }
 
+    //function being called from button pressed
     public void SetNextSection()
     {
-        sectionScript.isChanging(true);
+        //play audio cue
         if (audioScript)
         {
             audioScript.WormholeEntered(transform.position);
         }
-        sectionScript.ChangeSection(curDoor);
+        //load next level
+        if(targetSceneButton)
+        {
+            targetSceneButton.LoadNextLevel();
+        }
+        
     }
+
+    //*********Variable getters for score display at end game screen
+
+    
 
     public void SetAsteroidsCollected(int Temp)
     {
@@ -83,16 +86,6 @@ public class WinScreen : MonoBehaviour {
     public void SetTime(float Temp)
     {
         Timer = Temp;
-    }
-
-    public void SetFinalDoor(bool Temp)
-    {
-        finalDoor = Temp;
-    }
-
-    public void SetCurDoor(GameObject Temp)
-    {
-        curDoor = Temp;
     }
 
 }

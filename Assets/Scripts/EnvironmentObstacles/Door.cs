@@ -14,14 +14,14 @@ public class Door : MonoBehaviour {
     public float fadeTime = 2;
     private int keyObtained;
     private int numKeyRequired = 1;
-    private SectionManager sectionScript;
+    private CanvasToggle canvasScript;
     //private AudioController audioScript;
 
     private bool doorActive;
     void Awake()
     {
         fadeScript = GameObject.FindGameObjectWithTag("Finish").GetComponent<CanvasFade>();
-        sectionScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<SectionManager>();
+        canvasScript = GameObject.FindGameObjectWithTag("CanvasManager").GetComponent<CanvasToggle>();
         gameScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<GameManager>();
         //audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
 
@@ -42,12 +42,12 @@ public class Door : MonoBehaviour {
     {
         if(col.gameObject.tag=="Player")
         {
-            if(!isFinalDoor && sectionScript&&!doorActive)
+            if(canvasScript)
             {
                 doorActive = true;
                 //do something winning here
-                
-                sectionScript.WinScreenActive();
+                canvasScript.GameEnded(false);
+                //sectionScript.WinScreenActive();
                 winScreenScript.FadeIn();
             }
             else

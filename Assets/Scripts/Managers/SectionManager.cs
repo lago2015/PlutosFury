@@ -88,16 +88,16 @@ public class SectionManager : MonoBehaviour {
     {
         if(winScreenScript)
         {
-            //Check if its the final door
-            if(currSectionNumber == sections.Length)
-            {
-                winScreenScript.SetFinalDoor(true);
-            }
-            //if not then set next wormhole
-            else
-            {
-                winScreenScript.SetCurDoor(wormholes[currSectionNumber]);
-            }
+            ////Check if its the final door
+            //if(currSectionNumber == sections.Length)
+            //{
+            //    winScreenScript.SetFinalDoor(true);
+            //}
+            ////if not then set next wormhole
+            //else
+            //{
+            //    winScreenScript.SetCurDoor(wormholes[currSectionNumber]);
+            //}
             
         }
     }
