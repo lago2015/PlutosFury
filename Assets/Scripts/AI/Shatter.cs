@@ -12,6 +12,7 @@ public class Shatter : MonoBehaviour
 
     public float rotateSpeed;
     public bool canRotate;
+    public GameObject pieces;
 
 
 
@@ -26,10 +27,10 @@ public class Shatter : MonoBehaviour
     void Update()
     {
         // check if rotation is not equal to the target rotation shatter needs to rotate to (If it can rotate). This helps reduce the update calls
-        if (transform.rotation != Quaternion.Euler(targetRotation))
+        if (pieces.transform.rotation != Quaternion.Euler(targetRotation))
         {
             // using interpolation to smoothly rotate to target rotation
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(targetRotation), rotateSpeed * Time.deltaTime);
+            pieces.transform.rotation = Quaternion.Slerp(pieces.transform.rotation, Quaternion.Euler(targetRotation), rotateSpeed * Time.deltaTime);
         }
     }
 
