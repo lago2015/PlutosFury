@@ -4,6 +4,8 @@ using System.Collections;
 
 public class ScoreManager : MonoBehaviour {
 
+
+    private int asteroidsEaten;
     public int highScore;
     public int score;
     //public int asteroidsLeft;
@@ -64,5 +66,10 @@ public class ScoreManager : MonoBehaviour {
     public int ReturnAsteroidsLeft()
     {
         return 1;
+    }
+    //number of orbs currently collected
+    public int EatNum()
+    {
+        return asteroidsEaten;
     }
 }

@@ -4,70 +4,57 @@ using System.Collections.Generic;
 
 public class AsteroidSpawner : MonoBehaviour 
 {
-	public GameObject[] asteroids;
+    private Vector3 newLocation;
+    public int OrbPopulation = 30;
+    private GameObject cameraObject;
+	public GameObject orbModelRef;
 	private List<GameObject> asteroidPool;
     private bool Respawn;
+    [Tooltip("0 - top, 1 - bottom, 2 - left, 3 - right")]
+    public GameObject[] levelBounds;
     public float minX;
     public float maxX;
     public float minY;
     public float maxY;
     AsteroidCollector collecterScript;
-
+    GameObject collectorObject;
     public float newMinX(float newMin) { return minX = newMin; }
     public float newMaxX(float newMax) { return maxX = newMax; }
-	void Awake()
-	{
-        collecterScript = GameObject.FindGameObjectWithTag("GravityWell").GetComponent<AsteroidCollector>();
-		// Populate the list with various asteroids
-		asteroidPool = new List<GameObject>();
-		for (int i = 0; i < asteroids.Length; ++i) 
-		{
-            GameObject asteroid = asteroids[i];
-            if(asteroid)
-            {
-                asteroid.SetActive(false);
-                asteroidPool.Add(asteroid);
-            }
-        }
-	}
-
-    void Start()
+    void Awake()
     {
-        minX = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraStop>().minX;
-        maxX= GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraStop>().maxX;
-        for (int i = 0; i < asteroidPool.Count; i++)
+        collectorObject = GameObject.FindGameObjectWithTag("GravityWell");
+        if (collectorObject)
         {
-            SpawnAsteroid();
+            collecterScript = collectorObject.GetComponent<AsteroidCollector>();
         }
-    }
-
-    public int AsteroidPool()
-    {
-        return asteroids.Length;
-    }
-
-    public void SpawnIntoNewSection(float newMin,float newMax)
-    {
-        minX = newMin;
-        maxX = newMax;
-
-        asteroidPool.Clear();
-        ////despawn asteroid
-        for (int i = 0; i < asteroids.Length; i++)
+        // Populate the list with orbs
+        asteroidPool = new List<GameObject>();
+        for (int i = 0; i < OrbPopulation; ++i)
         {
-            GameObject asteroid = asteroids[i];
-            asteroid.SetActive(false);
-            asteroidPool.Add(asteroid);
+            //Create orb
+            GameObject orbObject = (GameObject)Instantiate(orbModelRef);
+            //Set orb inactive
+            orbObject.SetActive(false);
+            //Add orb to pool for reuse
+            asteroidPool.Add(orbObject);
         }
         for (int i = 0; i < asteroidPool.Count; i++)
         {
             SpawnAsteroid();
         }
+        if (levelBounds.Length == 4)
+        {
+            maxY = levelBounds[0].transform.position.y-50;
+            minY = levelBounds[1].transform.position.y+50;
+            maxX = levelBounds[2].transform.position.x+300;
+            minX = levelBounds[3].transform.position.x-300;
+        }
     }
 
+    //Placing orbs into the scene
     public void SpawnAsteroid()
 	{
-        if(asteroids.Length>0)
+        if(asteroidPool.Count>0)
         {
             // Grab the pooled asteroid
             GameObject asteroid = GetPooledAsteroid();
@@ -75,17 +62,21 @@ public class AsteroidSpawner : MonoBehaviour
                 return;
 
             // Place asteroid in a random location
-            float x = Random.Range(minX, maxX);
-            float y = Random.Range(minY, maxY);
-            float roll = Random.Range(0, 359);
-            asteroid.transform.position = new Vector3(x, y, 0.0f);
-            asteroid.transform.rotation = Quaternion.Euler(0.0f, 0.0f, roll);
+            asteroid.transform.position = GetNewLocation();
             asteroid.SetActive(true);
             asteroid.GetComponent<BurstBehavior>().newSpawnedAsteroid(false);
             asteroid.GetComponent<BurstBehavior>().ResetVelocity();
         }
     }
 
+    Vector3 GetNewLocation()
+    {
+        newLocation.x = Random.Range(minX, maxX);
+        newLocation.y = Random.Range(minY, maxY);
+        return newLocation;
+    }
+
+    //This function is called from large orbs to give it the "broken into pieces" effect
     public void SpawnAsteroidHere(Vector3 spawnPoint)
     {
         GameObject asteroid = GetPooledAsteroid();
@@ -94,7 +85,7 @@ public class AsteroidSpawner : MonoBehaviour
             return;
         }
         asteroid.SetActive(true);
-        asteroid.GetComponent<BurstBehavior>().ResetVelocity();
+        //asteroid.GetComponent<BurstBehavior>().ResetVelocity();
 
     }
 
@@ -118,7 +109,7 @@ public class AsteroidSpawner : MonoBehaviour
     }
     public void ReturnPooledAsteroid(GameObject asteroid)
 	{
-        if(asteroids.Length>=0)
+        if(asteroidPool.Count>=0)
         {
 
             // Return asteroid to the list

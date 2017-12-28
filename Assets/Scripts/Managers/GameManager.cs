@@ -6,10 +6,19 @@ using UnityEngine.Advertisements;
 
 public class GameManager : MonoBehaviour
 {
+    /*
+     GameManager.cs will be used for purely game specific details to effect
+     the current level this script will be in.
+
+        Quick list of features:
+        - Set frame rate
+        - Play ads
+        - Play background music
+        - is Level wall active in this scene?
+        -
+     */
 
 	private GameObject pluto;
-	private float plutoMass;
-	private int asteroidsEaten;
     public int AsteroidGoal;
     private int curScene;
 
@@ -17,20 +26,23 @@ public class GameManager : MonoBehaviour
     public float GameOverDelay = 5f;
     public bool levelWallActive;
     private bool willPlayAd;
-
+    private int currentPlayerHealth;
     Movement playerScript;
     TextureSwap modelSwitch;
-    AudioController audioCon;
+    GameObject audioObject;
+    AudioController audioScript;
     AdManager AdManager;
     ScoreManager ScoreManager;
     private GameObject startCamTrigger;
     private GameObject levelWall;
-
+    
 
     void Awake()
     {
         //60 fps set rate
         Application.targetFrameRate = 60;
+        DontDestroyOnLoad(gameObject);
+
         //reference player
         pluto = GameObject.FindGameObjectWithTag("Player");
         if(pluto)
@@ -39,7 +51,12 @@ public class GameManager : MonoBehaviour
             playerScript = pluto.GetComponent<Movement>();
         }
         //getter for audio controller
-        audioCon = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
+        audioObject = GameObject.FindGameObjectWithTag("AudioController");
+        if(audioObject)
+        {
+            audioScript = audioObject.GetComponent<AudioController>();
+        }
+  
         //getter Score Manager
         ScoreManager = GetComponent<ScoreManager>();
         //Getter for Ad Manager
@@ -53,20 +70,40 @@ public class GameManager : MonoBehaviour
             startCamTrigger.SetActive(levelWallActive);
             
         }
-        else
-        {
-            Debug.Log("Need Game Start Trigger and Level wall within world");
-        }
-        curScene = Application.loadedLevel;
+
+        
     }
 	void Start ()
     {
-        
-        //enable background music
-        audioCon.BackgroundMusic();
-        
+        if(audioScript)
+        {
+            //enable background music
+            audioScript.BackgroundMusic();
+        }
 
+        //carry over the health earned from previous level
+        if (playerScript)
+        {
+            playerScript.curHealth = currentPlayerHealth;
+        }
 	}
+    //function called from wormhole (aka door script) 
+    //to retrieve or disable any gameobjects in scene 
+    public void GameEnded(bool isPlayerDead)
+    {
+        
+        if(playerScript)
+        {
+            //stop player movement
+            playerScript.DisableMovement(isPlayerDead);
+            if(!isPlayerDead)
+            {
+                //save health for next scene
+                currentPlayerHealth = playerScript.CurrentHealth();
+            }
+        }
+
+    }
 
     void LateStart()
     {
@@ -115,20 +152,18 @@ public class GameManager : MonoBehaviour
     }
    public IEnumerator GameOver()
     {
-        if(audioCon)
+        if(audioScript)
         {
-            audioCon.GameOver(pluto.transform.position);
+            audioScript.GameOver(pluto.transform.position);
         }
 
         yield return new WaitForSeconds(GameOverDelay);
         //stop time like your a time lord
         Time.timeScale = 0;
         //save that score to show off to your friends
-        ScoreManager.SaveScore();
-        
-
-        
+        ScoreManager.SaveScore();    
     }
+
     //same kind of functionality as game over except for a win condition
     public void StartYouWin()
     {
@@ -136,9 +171,9 @@ public class GameManager : MonoBehaviour
     }
     public IEnumerator YouWin()
     {
-        if (audioCon)
+        if (audioScript)
         {
-            audioCon.Victory(pluto.transform.position);
+            audioScript.Victory(pluto.transform.position);
         }
 
         yield return new WaitForSeconds(GameOverDelay);
@@ -150,19 +185,7 @@ public class GameManager : MonoBehaviour
 
     }
     
-    public void AsteroidEaten(float curEaten)
-    {
-        
-        //check if orbs eaten is greater then goal for level up or boost or something
-        if(curEaten >= AsteroidGoal)
-        {
-            
-        }
-    }
-    //number of orbs currently collected
-    public int EatNum()
-    {
-        return asteroidsEaten;
-    }
+
+
 	
 }

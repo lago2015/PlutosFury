@@ -81,45 +81,8 @@ public class DamageOrPowerUp : MonoBehaviour {
                 //    Destroy(gameObject);
                 //}
                 break;
-            case EffectState.Drain:
-                //SuperPluto = PlayerScript.SuperBool();
-                if (SuperPluto)
-                {
-                    DrainAmount = SuperDrain;
-                    DrainApplyInterval = SuperDrainInterval;
-                }
-                else
-                {
-                    DrainAmount = NormalDrain;
-                    DrainApplyInterval = NormalInterval;
-                }
-                if (EffectTimer >= DrainApplyInterval)
-                {
-                    PlayerScript.DrainPluto(DrainAmount);
-                    EffectTimer = 0;
-                }
-                else
-                {
-                    EffectTimer += Time.deltaTime * IncrementTimeRate;
-                }
-                break;
-            case EffectState.PowerUp:
-                if (CanPowerUp)
-                {
-                    if (EffectTimer <= PowerUpDuration)
-                    {
-                        PlayerScript.PowerUpPluto(PowerUpAmount);
-                        EffectTimer += Time.deltaTime * IncrementTimeRate;
-                        CanPowerUp = false;
-                        StartCoroutine(CoolDownEffect(PowerCooldown));
-                    }
-                    else
-                    {
-                        Destroy(gameObject);
-                    }
-                }
-
-                break;
+            
+    
         }
     }
    
@@ -214,6 +177,10 @@ public class DamageOrPowerUp : MonoBehaviour {
         if (damageCollider)
         {
             damageCollider.enabled = true;
+        }
+        if (otherDamageCollider)
+        {
+            otherDamageCollider.enabled = true;
         }
         Damaged = false;
     }

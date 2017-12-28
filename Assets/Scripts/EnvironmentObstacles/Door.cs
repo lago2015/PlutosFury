@@ -15,7 +15,6 @@ public class Door : MonoBehaviour {
     private int keyObtained;
     private int numKeyRequired = 1;
     private CanvasToggle canvasScript;
-    //private AudioController audioScript;
 
     private bool doorActive;
     void Awake()
@@ -23,7 +22,6 @@ public class Door : MonoBehaviour {
         fadeScript = GameObject.FindGameObjectWithTag("Finish").GetComponent<CanvasFade>();
         canvasScript = GameObject.FindGameObjectWithTag("CanvasManager").GetComponent<CanvasToggle>();
         gameScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<GameManager>();
-        //audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
 
         if (winScreen)
         {
@@ -42,17 +40,17 @@ public class Door : MonoBehaviour {
     {
         if(col.gameObject.tag=="Player")
         {
-            if(canvasScript)
+            if(canvasScript&&!doorActive&&gameScript)
             {
+                //ensure this gets called once
                 doorActive = true;
-                //do something winning here
-                canvasScript.GameEnded(false);
-                //sectionScript.WinScreenActive();
+                //switch canvas from hud to end game screen
+                canvasScript.GameEnded();
+                //enable fade in
                 winScreenScript.FadeIn();
-            }
-            else
-            {
-                //winScreenScript.SetFinalDoor(true);
+                //disable gameobjects and save variables
+                gameScript.GameEnded(false);
+                
             }
         }
     }

@@ -146,7 +146,7 @@ public class Movement : MonoBehaviour
 
     //functions to check damage
     bool ShieldStatus() { Shielded = shieldScript.PlutoShieldStatus(); return Shielded; }
-    
+    public int CurrentHealth() { return curHealth; }
 
     public void ChargedUp(bool curCharge)
     {
@@ -159,6 +159,7 @@ public class Movement : MonoBehaviour
     // Use this for initialization
     void Awake () 
 	{
+
         hudScript= GameObject.FindGameObjectWithTag("HUDManager").GetComponent<HUDManager>();
         buttonScript = GameObject.FindGameObjectWithTag("DashButt").GetComponent<ButtonIndicator>();
         //get collider that is triggered to change radius during runtime
@@ -199,7 +200,7 @@ public class Movement : MonoBehaviour
         //assigning scale vector3 for health
         smallScale = new Vector3(smallSize, smallSize, smallSize);
         medScale = new Vector3(medSize, medSize, medSize);
-        curHealth = 0;
+        //curHealth = 0;
         transform.localScale = medScale;
         //setting colors
         r_Color = Color.red;
@@ -265,6 +266,10 @@ public class Movement : MonoBehaviour
                 ScoreManager = asteroidSpawn.GetComponent<ScoreManager>();
                 //ExperienceMan = asteroidSpawn.GetComponent<ExperienceManager>();
             }
+            else
+            {
+                GameObject newGameManager = Instantiate(Resources.Load("GameManager", typeof(GameObject))) as GameObject;
+            }
         }
         else
         {
@@ -301,6 +306,8 @@ public class Movement : MonoBehaviour
         {
             hudScript.UpdateHealth(curHealth);
         }
+
+        ResumePluto();
     }
     void LateUpdate()
     {
