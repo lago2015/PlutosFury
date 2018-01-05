@@ -5,7 +5,7 @@ using UnityEngine;
 public class CountDownStage : MonoBehaviour {
 
     //array of durations for specific stages
-    public float[] duration;
+    public float duration=100;
     //track what stage we're on
     private int stageNum=0;
     //current time remaining (used for HUD as well)
@@ -19,7 +19,7 @@ public class CountDownStage : MonoBehaviour {
     
     //reference to stop the game
     private GameManager gameManScript;
-
+    private ScoreManager scoreScript;
     public void CounterStatusChange(bool isItCounting)
     {
         isCountingDown = isItCounting;
@@ -30,11 +30,22 @@ public class CountDownStage : MonoBehaviour {
         
             
     }
-
-    //getter for game manager
+    public void SendRemainingTime()
+    {
+        if(scoreScript)
+        {
+            scoreScript.SetTimeRemaining(timeRemaining);
+        }
+    }
+    //getter for game manager and score manager
     private void Awake()
     {
         gameManScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<GameManager>();
+        GameObject scoreObject = GameObject.FindGameObjectWithTag("ScoreManager");
+        if(scoreObject)
+        {
+            scoreScript = scoreObject.GetComponent<ScoreManager>();
+        }
     }
 
     //Start count down
@@ -49,7 +60,7 @@ public class CountDownStage : MonoBehaviour {
         if (!isCountingDown)
         {
             isCountingDown = true;
-            timeRemaining = duration[stageNum];
+            timeRemaining = duration;
             stageNum++;
             Invoke("tick", 1f);
             

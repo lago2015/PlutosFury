@@ -11,6 +11,7 @@ public class LoadTargetSceneButton : MonoBehaviour {
         DontDestroyOnLoad(gameObject);
     }
 
+    //load to next level from current scene
     public void LoadNextLevel()
     {
         curScene = SceneManager.GetActiveScene();
@@ -23,8 +24,25 @@ public class LoadTargetSceneButton : MonoBehaviour {
         }
         Menu.SetActive(false);
         LoadingScreenManager.LoadScene(num);
+        Time.timeScale = 1;
     }
 
+    //reload the current scene loaded
+    public void RestartLevel()
+    {
+        curScene = SceneManager.GetActiveScene();
+        int num = curScene.buildIndex;
+        Debug.Log(num);
+        if (num < 0 || num >= SceneManager.sceneCountInBuildSettings)
+        {
+            Debug.Log("Scene not loaded properly");
+            return;
+        }
+        Menu.SetActive(false);
+        LoadingScreenManager.LoadScene(num);
+        Time.timeScale = 1;
+    }
+    //load to specific scene base on overload(specifically to main menu)
 	public void LoadSceneNum(int num)
 	{
 		if (num < 0 || num >= SceneManager.sceneCountInBuildSettings) 
@@ -34,5 +52,6 @@ public class LoadTargetSceneButton : MonoBehaviour {
 		}
         Menu.SetActive(false);
         LoadingScreenManager.LoadScene (num);
-	}
+        Time.timeScale = 1;
+    }
 }

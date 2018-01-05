@@ -152,7 +152,7 @@ public class ExperienceManager : MonoBehaviour
             //freeze time
             Time.timeScale = 0.0f;
             //update UI game over screen
-            gameMan.StartGameover();
+            gameMan.StartAdWithMusic();
         }
         else if (curExpPoints <= baseRegenPoints)
         {

@@ -4,21 +4,21 @@ using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.Events;
 
-public class Movement : MonoBehaviour 
+public class Movement : MonoBehaviour
 {
     //Player prefs
     private bool vibrationHit;
     private bool invertControls;
 
     //Buster States
-    public enum BusterStates { Pickup,Shockwave,Death}
+    public enum BusterStates { Pickup, Shockwave, Death }
     private BusterStates busterState;
     public bool startAtBeginning;
     //health properties
     public int curHealth;
-    private int maxHealth=10;
-    public float smallSize=1f;
-    public float medSize=1.5f;
+    private int maxHealth = 10;
+    public float smallSize = 1f;
+    public float medSize = 1.5f;
     public GameObject maxSize;
     private Vector3 smallScale;
     private Vector3 medScale;
@@ -26,14 +26,13 @@ public class Movement : MonoBehaviour
     //Check for shield
     bool Shielded;
     public bool isDamaged;
-    private float invincbleTimer=0.5f;
+    private float invincbleTimer = 0.5f;
     //buffs and debuffs
     private bool isPowerDashing;
     bool CanFreezePluto;
 
     //Num of asteroids/Health
     private float HealthCap;
-    int score;
     public bool isDead = false;
 
     //******Shockwave Variables
@@ -44,7 +43,7 @@ public class Movement : MonoBehaviour
     private bool ShockChargeActive;
     //******Dash Variables
     //Dash States
-    public enum DashState { idle,basicMove,dashMove,chargeStart,chargeComplete,burst}
+    public enum DashState { idle, basicMove, dashMove, chargeStart, chargeComplete, burst }
     private DashState trailState;
     private GameObject curTrail;
     //dash trail rotation
@@ -84,7 +83,7 @@ public class Movement : MonoBehaviour
     public float powerDashDrag;
     private float normalDrag;
     //radius of power dash collider
-    private float powerDashRadius=3;
+    private float powerDashRadius = 3;
     //Components
     private Touch curTouch;
     private ButtonIndicator dashButt;
@@ -136,8 +135,9 @@ public class Movement : MonoBehaviour
     private float velocityMin = -80;
     private float DefaultSpeed;
 
-    
+
     //functions for power dash
+    
     public bool DashChargeStatus() { return DashChargeActive; }
     public bool ShockChargeStatus() { return ShockChargeActive; }
     public float CurPowerDashTimeout() { return chargeTime; }
@@ -148,6 +148,13 @@ public class Movement : MonoBehaviour
     bool ShieldStatus() { Shielded = shieldScript.PlutoShieldStatus(); return Shielded; }
     public int CurrentHealth() { return curHealth; }
 
+    public int InitializeHealth(int CarriedOverHealth)
+    {
+        curHealth = CarriedOverHealth;
+        StartingHealth();
+        return curHealth;
+    }
+
     public void ChargedUp(bool curCharge)
     {
         if (curCharge)
@@ -157,10 +164,10 @@ public class Movement : MonoBehaviour
     }
 
     // Use this for initialization
-    void Awake () 
-	{
+    void Awake()
+    {
 
-        hudScript= GameObject.FindGameObjectWithTag("HUDManager").GetComponent<HUDManager>();
+        hudScript = GameObject.FindGameObjectWithTag("HUDManager").GetComponent<HUDManager>();
         buttonScript = GameObject.FindGameObjectWithTag("DashButt").GetComponent<ButtonIndicator>();
         //get collider that is triggered to change radius during runtime
         foreach (SphereCollider col in GetComponents<SphereCollider>())
@@ -176,7 +183,7 @@ public class Movement : MonoBehaviour
             }
         }
         trailState = DashState.basicMove;
-        foreach(GameObject prefab in busterStates)
+        foreach (GameObject prefab in busterStates)
         {
             prefab.SetActive(false);
         }
@@ -196,7 +203,7 @@ public class Movement : MonoBehaviour
         isDead = false;
         //grab default dash timeout
         defaultDashTimeout = DashTimeout;
-        
+
         //assigning scale vector3 for health
         smallScale = new Vector3(smallSize, smallSize, smallSize);
         medScale = new Vector3(medSize, medSize, medSize);
@@ -205,21 +212,21 @@ public class Movement : MonoBehaviour
         //setting colors
         r_Color = Color.red;
         y_Color = Color.yellow;
-        o_Color = Color.red + Color.yellow+Color.blue;
+        o_Color = Color.red + Color.yellow + Color.blue;
         w_Color = Color.white;
-        
+
         //setting appearance components off
-        if(hitEffect)
+        if (hitEffect)
         {
             hitEffect.SetActive(false);
         }
-        if(maxSize)
+        if (maxSize)
         {
             maxSize.SetActive(false);
         }
         //Dash Button
         dashButt = GameObject.FindGameObjectWithTag("DashButt").GetComponent<ButtonIndicator>();
-        if(!dashButt)
+        if (!dashButt)
         {
             Debug.Log("No Dash Button");
         }
@@ -227,7 +234,7 @@ public class Movement : MonoBehaviour
         shieldScript = GetComponent<Shield>();
         //model change
         modelScript = GetComponent<TextureSwap>();
-        if(modelScript)
+        if (modelScript)
         {
             modelScript.disableRenderTimer = PowerDashTimeout;
         }
@@ -235,10 +242,10 @@ public class Movement : MonoBehaviour
         PowerUpScript = GetComponent<PowerUpManager>();
         //Audio Controller
         audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
-        
+
         //For physic things
-        myBody = GetComponent<Rigidbody> ();
-        if(myBody)
+        myBody = GetComponent<Rigidbody>();
+        if (myBody)
         {
             normalDrag = myBody.drag;
         }
@@ -259,23 +266,22 @@ public class Movement : MonoBehaviour
         if (!asteroidSpawn)
         {
             asteroidSpawn = GameObject.FindGameObjectWithTag("Spawner");
-            if(asteroidSpawn)
+            if (asteroidSpawn)
             {
                 spawnScript = asteroidSpawn.GetComponent<AsteroidSpawner>();
                 gameManager = asteroidSpawn.GetComponent<GameManager>();
-                ScoreManager = asteroidSpawn.GetComponent<ScoreManager>();
-                //ExperienceMan = asteroidSpawn.GetComponent<ExperienceManager>();
+
             }
             else
             {
                 GameObject newGameManager = Instantiate(Resources.Load("GameManager", typeof(GameObject))) as GameObject;
             }
         }
-        else
+        GameObject ScoreObject = GameObject.FindGameObjectWithTag("ScoreManager");
+        if (ScoreObject)
         {
-            Debug.Log("Assign GameManager GameObject in scene");
+            ScoreManager = ScoreObject.GetComponent<ScoreManager>();
         }
-
         //setting option menu fields
         //vibration enabled/disabled
         if (PlayerPrefs.GetInt("VibrationHit") == 1)
@@ -295,18 +301,22 @@ public class Movement : MonoBehaviour
         {
             invertControls = false;
         }
-        
+
 
     }
 
     void Start()
     {
         //Update hud of current health
-        if(hudScript)
+        if (hudScript)
         {
             hudScript.UpdateHealth(curHealth);
         }
-
+        if (ScoreManager)
+        {
+            curHealth = ScoreManager.CurrentHealth();
+            StartingHealth();
+        }
         ResumePluto();
     }
     void LateUpdate()
@@ -324,9 +334,9 @@ public class Movement : MonoBehaviour
             newVelocity *= velocityCap;
             myBody.velocity = newVelocity;
         }
-        if(isDead)
+        if (isDead)
         {
-            if(modelScript)
+            if (modelScript)
             {
                 modelScript.SwapMaterial(TextureSwap.PlutoState.Lose);
                 TrailChange(DashState.idle);
@@ -351,22 +361,22 @@ public class Movement : MonoBehaviour
     }
 
     // Update is mainly used for player controls
-    void Update () 
-	{
+    void Update()
+    {
         if (joystickscript && !isDead)
         {
             //Joystick input
             Vector3 move = Vector3.zero;
             move.x = joystickscript.horizontal();
             move.y = joystickscript.vertial();
-            
+
             //normalize input
             if (move.magnitude > 1)
             {
                 move.Normalize();
             }
             //check if controls are inverted if so invert
-            if(invertControls)
+            if (invertControls)
             {
                 move -= move;
             }
@@ -375,12 +385,12 @@ public class Movement : MonoBehaviour
 
 
             //trail rotation and enabling trails
-            if (trailContainer.Length>0)
+            if (trailContainer.Length > 0)
             {
                 if (move == Vector3.zero)
                 {
                     TrailChange(DashState.idle);
-                   
+
                 }
                 else
                 {
@@ -419,10 +429,10 @@ public class Movement : MonoBehaviour
                         {
                             TrailChange(DashState.burst);
                         }
-                        
+
                     }
                     //player is charging
-                    else if(Charging)
+                    else if (Charging)
                     {
                         if (!startOnce)
                         {
@@ -435,7 +445,7 @@ public class Movement : MonoBehaviour
 
                 //Get current rotation
                 trailRot = joystickscript.rotation();
-                if(curTrail)
+                if (curTrail)
                 {
                     if (isPowerDashing)
                     {
@@ -458,19 +468,19 @@ public class Movement : MonoBehaviour
     public void BusterChange(BusterStates nextState)
     {
         busterState = nextState;
-        
 
-        switch(busterState)
+
+        switch (busterState)
         {
             //share delay with shockwave
             case BusterStates.Pickup:
-                if(busterStates[0])
+                if (busterStates[0])
                 {
                     busterStates[0].SetActive(true);
                     StartCoroutine(BusterTransition(busterStates[0]));
                 }
                 break;
-                //turn off after shockwave so delay
+            //turn off after shockwave so delay
             case BusterStates.Shockwave:
                 if (busterStates[1])
                 {
@@ -479,9 +489,9 @@ public class Movement : MonoBehaviour
                     hudScript.isShockwaveActive(false);
                 }
                 break;
-                //doesnt turn off
+            //doesnt turn off
             case BusterStates.Death:
-                if(busterStates[2])
+                if (busterStates[2])
                 {
                     DisableMovement(true);
                     modelScript.DeathToRender();
@@ -498,7 +508,7 @@ public class Movement : MonoBehaviour
                 break;
         }
     }
-    
+
     IEnumerator BusterTransition(GameObject curObject)
     {
         yield return new WaitForSeconds(1f);
@@ -535,13 +545,13 @@ public class Movement : MonoBehaviour
             case DashState.basicMove:
                 ShouldDash = false;
                 moveOn = true;
-                    burstOn = false;
-                    dashOn = false;
-                    //cache gameobject 
-                    curTrail = trailContainer[0];
-                    //enable trail
-                    trailContainer[0].SetActive(true);
-                
+                burstOn = false;
+                dashOn = false;
+                //cache gameobject 
+                curTrail = trailContainer[0];
+                //enable trail
+                trailContainer[0].SetActive(true);
+
                 break;
             case DashState.dashMove:
                 if (!dashOn)
@@ -553,7 +563,7 @@ public class Movement : MonoBehaviour
                     curTrail = trailContainer[1];
                     trailContainer[1].SetActive(true);
                 }
-                
+
                 break;
             case DashState.chargeStart:
                 //notify charging is active
@@ -569,7 +579,7 @@ public class Movement : MonoBehaviour
                 trailContainer[3].SetActive(true);
                 break;
             case DashState.burst:
-                if(!burstOn)
+                if (!burstOn)
                 {
 
                     moveOn = false;
@@ -589,10 +599,10 @@ public class Movement : MonoBehaviour
 
     public bool ActivateShockCharge()
     {
-       if(DashChargeActive)
+        if (DashChargeActive)
         {
             DashChargeActive = false;
-            
+
         }
         return ShockChargeActive = true;
     }
@@ -615,11 +625,11 @@ public class Movement : MonoBehaviour
                 Vector3 points = hitBody.position - transform.position;
                 //Get distance from the two points
                 float distance = points.magnitude;
-                
+
                 Vector3 direction = points / distance;
                 hitBody.AddForce(direction * power);
             }
-            
+
             DetectThenExplode explodeScript = col.GetComponent<DetectThenExplode>();
             if (explodeScript)
             {
@@ -661,9 +671,9 @@ public class Movement : MonoBehaviour
 
     public void Dash()
     {
-        
+
         //Check if exhausted dash
-        if(!isExhausted)
+        if (!isExhausted)
         {
             //model switch for dash
             if (modelScript)
@@ -674,7 +684,7 @@ public class Movement : MonoBehaviour
             //also if power dash is charged
             if (DashChargeActive)
             {
-                if(isCharged)
+                if (isCharged)
                 {
                     DashDamage = 20;
                     MoveSpeed = SuperDashSpeed;
@@ -704,7 +714,7 @@ public class Movement : MonoBehaviour
 
 
             }
-            if(!dashOnce&&ShouldDash)
+            if (!dashOnce && ShouldDash)
             {
                 //audio
                 if (audioScript)
@@ -754,7 +764,7 @@ public class Movement : MonoBehaviour
         //Reset Value
         ObtainedWhileDash = false;
         myBody.drag = normalDrag;
-        
+
         MoveSpeed = DefaultSpeed;
         //Change trail back
         TrailChange(DashState.basicMove);
@@ -776,7 +786,7 @@ public class Movement : MonoBehaviour
 
         isExhausted = false;
     }
-    
+
     //Reset velocity by increasing drag
     IEnumerator SlowDown()
     {
@@ -795,7 +805,7 @@ public class Movement : MonoBehaviour
         yield return new WaitForSeconds(0.3f);
         hitEffect.SetActive(false);
     }
-    
+
     public bool DashStatus()
     {
         return ShouldDash;
@@ -803,12 +813,12 @@ public class Movement : MonoBehaviour
 
     public bool ActivateDashCharge()
     {
-        if(ShouldDash)
+        if (ShouldDash)
         {
             ObtainedWhileDash = true;
         }
 
-        if(ShockChargeActive)
+        if (ShockChargeActive)
         {
             hudScript.isShockwaveActive(false);
             ShockChargeActive = false;
@@ -818,10 +828,10 @@ public class Movement : MonoBehaviour
 
     public bool DeactivateDashCharge()
     {
-        
+
         return DashChargeActive = false;
     }
-    
+
     public void ReturnAsteroid(GameObject curAsteroid)
     {
         spawnScript.ReturnPooledAsteroid(curAsteroid);
@@ -833,40 +843,34 @@ public class Movement : MonoBehaviour
         string curTag = col.gameObject.tag;
         if (curTag == "Asteroid")
         {
-            
+            //check if player is dead
             if (!isDead)
             {
-                if(audioScript)
+                //play audio cue for absorbed
+                if (audioScript)
                 {
                     audioScript.AsteroidAbsorbed(transform.position);
                 }
-                //int curLevel = ExperienceMan.CurrentLevel() + 1;
-                score += 100;
-                ////ignore collision?
-                //Collider playerCollider = GetComponent<SphereCollider>();
-                //Collider asteroidCollider = col.gameObject.GetComponent<SphereCollider>();
-                //Physics.IgnoreCollision(playerCollider, asteroidCollider);
-
-                ScoreManager.IncreaseScore(score);
             }
+            //return orb to pool
             ReturnAsteroid(col.gameObject);
-            
+
         }
         else if (curTag == "EnvironmentObstacle" || curTag == "MoonBall")
         {
             Vector3 knockBackDirection = col.transform.position - transform.position;
             knockBackDirection = knockBackDirection.normalized;
-            myBody.AddForce(-knockBackDirection*wallBump*2);
-            
+            myBody.AddForce(-knockBackDirection * wallBump * 2);
+
         }
-        if(isPowerDashing)
+        if (isPowerDashing)
         {
-            
+
             WallHealth healthScript = col.gameObject.GetComponent<WallHealth>();
             if (healthScript)
             {
                 healthScript.IncrementDamage();
-                if(solidCollider)
+                if (solidCollider)
                 {
                     StartCoroutine(colliderTimeout());
                 }
@@ -874,10 +878,10 @@ public class Movement : MonoBehaviour
 
             }
             BigAsteroid bigOrbScript = col.gameObject.GetComponent<BigAsteroid>();
-            if(bigOrbScript)
+            if (bigOrbScript)
             {
                 bigOrbScript.AsteroidHit(3);
-                if(solidCollider)
+                if (solidCollider)
                 {
                     StartCoroutine(colliderTimeout());
                 }
@@ -889,26 +893,20 @@ public class Movement : MonoBehaviour
 
     //Basic collision for BASIC PLUTO
     void OnCollisionEnter(Collision c)
-	{
+    {
         string curTag = c.gameObject.tag;
         if (curTag == "Asteroid")
         {
-
+            //check if player is dead
             if (!isDead)
             {
+                //play audio cue for absorbed
                 if (audioScript)
                 {
                     audioScript.AsteroidAbsorbed(transform.position);
                 }
-                //int curLevel = ExperienceMan.CurrentLevel() + 1;
-                score += 100;
-                ////ignore collision?
-                //Collider playerCollider = GetComponent<SphereCollider>();
-                //Collider asteroidCollider = col.gameObject.GetComponent<SphereCollider>();
-                //Physics.IgnoreCollision(playerCollider, asteroidCollider);
-
-                ScoreManager.IncreaseScore(score);
             }
+            //return orb to pool
             ReturnAsteroid(c.gameObject);
 
         }
@@ -918,12 +916,12 @@ public class Movement : MonoBehaviour
             {
                 c.gameObject.GetComponent<BigAsteroid>().AsteroidHit(1);
                 StartCoroutine(PlutoHit(c.contacts[0].point));
-                
+
                 bool Smashed = c.gameObject.GetComponent<BigAsteroid>().RockStatus();
                 if (Smashed)
                 {
-                    
-                    if(!isPowerDashing)
+
+                    if (!isPowerDashing)
                         myBody.AddForce(c.contacts[0].normal * explosionBump, ForceMode.VelocityChange);
 
 
@@ -932,22 +930,27 @@ public class Movement : MonoBehaviour
                 {
                     myBody.AddForce(c.contacts[0].normal * dashAsteroidBump, ForceMode.VelocityChange);
                 }
+                if(ScoreManager)
+                {
+                    //update score
+                    ScoreManager.IncreaseScore(200);
+                }
             }
             else
             {
                 myBody.AddForce(c.contacts[0].normal * wallBump, ForceMode.VelocityChange);
-                if(audioScript)
+                if (audioScript)
                 {
                     audioScript.AsteroidBounce(transform.position);
                 }
             }
 
         }
-        
-        
-        else if (curTag == "Wall"||curTag=="LevelWall") 
-		{
-            if(audioScript)
+
+
+        else if (curTag == "Wall" || curTag == "LevelWall")
+        {
+            if (audioScript)
             {
                 audioScript.WallBounce();
             }
@@ -960,26 +963,30 @@ public class Movement : MonoBehaviour
             {
                 myBody.AddForce(c.contacts[0].normal * wallBump, ForceMode.VelocityChange);
             }
-		}
-        else if(curTag=="BreakableWall")
+        }
+        else if (curTag == "BreakableWall")
         {
-            if(ShouldDash)
+            if (ShouldDash)
             {
-                
+
                 WallHealth healthScript = c.gameObject.GetComponent<WallHealth>();
-                if(healthScript)
+                if (healthScript)
                 {
                     healthScript.IncrementDamage();
                 }
-                if(c.gameObject.name.Contains("DamageWall"))
+                if (c.gameObject.name.Contains("DamageWall"))
                 {
                     DamagePluto();
                 }
             }
             myBody.AddForce(c.contacts[0].normal * wallBump, ForceMode.VelocityChange);
-
+            if(ScoreManager)
+            {
+                //update score
+                ScoreManager.IncreaseScore(20);
+            }
         }
-        else if(curTag=="LazerWall")
+        else if (curTag == "LazerWall")
         {
             if (audioScript)
             {
@@ -987,7 +994,7 @@ public class Movement : MonoBehaviour
             }
             if (ShouldDash)
             {
-                myBody.AddForce(c.contacts[0].normal * wallBump*2, ForceMode.VelocityChange);
+                myBody.AddForce(c.contacts[0].normal * wallBump * 2, ForceMode.VelocityChange);
 
             }
             else
@@ -1001,23 +1008,26 @@ public class Movement : MonoBehaviour
 
 
         }
-        
-        
-	}
+
+
+    }
 
 
     public void IndicatePickup()
     {
-        if(modelScript)
+        if (modelScript)
         {
             modelScript.SwapMaterial(TextureSwap.PlutoState.Pickup);
         }
-        if(asteroidCollider)
+        if (asteroidCollider)
         {
             asteroidCollider.radius = 3.85f;
         }
     }
-    
+
+    //function is called when game has ended and this stops player movement
+    //and identify the player as dead for other scripts to read like 
+    //end game behaviors (winner or game over)
     public void DisableMovement(bool isPlayerDead)
     {
         MoveSpeed = 0;
@@ -1026,25 +1036,15 @@ public class Movement : MonoBehaviour
         TrailChange(DashState.idle);
         isDead = isPlayerDead;
     }
-
-    public void HealthPickup()
+    //pretty much the same has health pick up
+    //but without incrementing health
+    void StartingHealth()
     {
-        if(curHealth<2)
+        if (curHealth <= 2)
         {
-            curHealth++;
-            
-            if (curHealth == 0)
+
+            if (curHealth <= 1)
             {
-                //transform.localScale = smallScale;
-                if (maxSize)
-                {
-                    maxSize.SetActive(false);
-                }
-            }
-            //med size
-            else if (curHealth == 1)
-            {
-                //transform.localScale = medScale;
                 if (maxSize)
                 {
                     maxSize.SetActive(false);
@@ -1058,9 +1058,44 @@ public class Movement : MonoBehaviour
                     maxSize.SetActive(true);
                 }
             }
+            //update hud on health
             if (hudScript)
             {
                 hudScript.UpdateHealth(curHealth);
+            }
+        }
+    }
+
+    public void HealthPickup()
+    {
+        if(curHealth<2)
+        {
+            curHealth++;
+            
+            if (curHealth <= 1)
+            {
+                if (maxSize)
+                {
+                    maxSize.SetActive(false);
+                }
+            }
+            else if (curHealth >= 2)
+            {
+                curHealth = 2;
+                if (maxSize)
+                {
+                    maxSize.SetActive(true);
+                }
+            }
+            //update hud on health
+            if (hudScript)
+            {
+                hudScript.UpdateHealth(curHealth);
+            }
+            //save the health incase of level change
+            if(ScoreManager)
+            {
+                ScoreManager.HealthChange(curHealth);
             }
         }
     }
@@ -1088,7 +1123,7 @@ public class Movement : MonoBehaviour
                     isDead = true;
                     BusterChange(BusterStates.Death);
                     audioScript.PlutoDeath(transform.position);
-                    gameManager.StartGameover();
+                    gameManager.GameEnded(true);
                 }
                 //small size
                 else if (curHealth == 0)
@@ -1116,6 +1151,10 @@ public class Movement : MonoBehaviour
                 {
                     hudScript.UpdateHealth(curHealth);
                 }
+                if(ScoreManager)
+                {
+                    ScoreManager.HealthChange(curHealth);
+                }
                 //audio cue for damage
                 if (audioScript)
                 {
@@ -1126,7 +1165,6 @@ public class Movement : MonoBehaviour
                 {
                     Handheld.Vibrate();
                 }
-                ScoreManager.GotDamaged();
                 CamShake.EnableCameraShake();
 
 

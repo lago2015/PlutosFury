@@ -10,13 +10,7 @@ public class WinScreen : MonoBehaviour {
     float Timer;
     //total score counter
     int TotalScore;
-
-
-
-    //GameObject curDoor;
-
-    //section manager
-    //private SectionManager sectionScript;
+    
     //audio script
     private AudioController audioScript;
 
@@ -28,7 +22,7 @@ public class WinScreen : MonoBehaviour {
     public Text totalDisplay;
 
     public Button nextSection;
-
+    public Button RestartLevel;
     public Image fadeOverlay;
     public Image gameFade;
 
@@ -70,13 +64,9 @@ public class WinScreen : MonoBehaviour {
         if(targetSceneButton)
         {
             targetSceneButton.LoadNextLevel();
-        }
-        
+        }   
     }
-
     //*********Variable getters for score display at end game screen
-
-    
 
     public void SetAsteroidsCollected(int Temp)
     {

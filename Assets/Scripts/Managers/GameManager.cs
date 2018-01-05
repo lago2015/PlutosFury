@@ -15,34 +15,38 @@ public class GameManager : MonoBehaviour
         - Play ads
         - Play background music
         - is Level wall active in this scene?
-        -
+        - if timer reaches 0
      */
 
 	private GameObject pluto;
     public int AsteroidGoal;
-    private int curScene;
 
     public float fadeTime;
     public float GameOverDelay = 5f;
     public bool levelWallActive;
     private bool willPlayAd;
-    private int currentPlayerHealth;
     Movement playerScript;
     TextureSwap modelSwitch;
     GameObject audioObject;
     AudioController audioScript;
     AdManager AdManager;
+    private GameObject scoreObject;
     ScoreManager ScoreManager;
     private GameObject startCamTrigger;
     private GameObject levelWall;
-    
+    private GameObject CanvasManager;
+    private CanvasToggle canvasScript;
 
     void Awake()
     {
         //60 fps set rate
-        Application.targetFrameRate = 60;
-        DontDestroyOnLoad(gameObject);
+        Application.targetFrameRate = 40;
 
+        CanvasManager = GameObject.FindGameObjectWithTag("CanvasManager");
+        if(CanvasManager)
+        {
+            canvasScript = CanvasManager.GetComponent<CanvasToggle>();
+        }
         //reference player
         pluto = GameObject.FindGameObjectWithTag("Player");
         if(pluto)
@@ -56,9 +60,13 @@ public class GameManager : MonoBehaviour
         {
             audioScript = audioObject.GetComponent<AudioController>();
         }
-  
-        //getter Score Manager
-        ScoreManager = GetComponent<ScoreManager>();
+
+        scoreObject = GameObject.FindGameObjectWithTag("ScoreManager");
+        if(scoreObject)
+        {
+            //getter Score Manager
+            ScoreManager = scoreObject.GetComponent<ScoreManager>();
+        }
         //Getter for Ad Manager
         AdManager = GetComponent<AdManager>();
         //Getters if level wall is active
@@ -80,28 +88,30 @@ public class GameManager : MonoBehaviour
             //enable background music
             audioScript.BackgroundMusic();
         }
-
-        //carry over the health earned from previous level
-        if (playerScript)
-        {
-            playerScript.curHealth = currentPlayerHealth;
-        }
 	}
     //function called from wormhole (aka door script) 
     //to retrieve or disable any gameobjects in scene 
     public void GameEnded(bool isPlayerDead)
     {
         
-        if(playerScript)
+        if(playerScript && ScoreManager)
         {
             //stop player movement
             playerScript.DisableMovement(isPlayerDead);
             if(!isPlayerDead)
             {
                 //save health for next scene
-                currentPlayerHealth = playerScript.CurrentHealth();
+                ScoreManager.HealthChange(playerScript.curHealth);
+            }
+            else
+            {
+                //reset health otherwise
+                ScoreManager.HealthChange(0);
+
             }
         }
+        //play ad
+        StartAdWithMusic();
 
     }
 
@@ -140,12 +150,13 @@ public class GameManager : MonoBehaviour
         {
             playerScript.curHealth = 0;
             playerScript.DamagePluto();
-            StartGameover();
+            StartAdWithMusic();
         }
     }
 
-    //Start game over with time scale going 0 and saving score
-    public void StartGameover()
+    //Start game over with time scale going 0, possible chance for ad to play
+    //and start game over music
+    public void StartAdWithMusic()
     {
         StartCoroutine(GameOver());
         PlayAd();
@@ -158,10 +169,17 @@ public class GameManager : MonoBehaviour
         }
 
         yield return new WaitForSeconds(GameOverDelay);
+        if (canvasScript)
+        {
+            canvasScript.GameEnded();
+        }
         //stop time like your a time lord
         Time.timeScale = 0;
-        //save that score to show off to your friends
-        ScoreManager.SaveScore();    
+        if(ScoreManager)
+        {
+            //save that score to show off to your friends
+            ScoreManager.SaveScore();
+        }
     }
 
     //same kind of functionality as game over except for a win condition
@@ -177,6 +195,10 @@ public class GameManager : MonoBehaviour
         }
 
         yield return new WaitForSeconds(GameOverDelay);
+        if (canvasScript)
+        {
+            canvasScript.GameEnded();
+        }
         ScoreManager.SaveScore();
 
         pluto.GetComponent<Movement>().DisableMovement(true);

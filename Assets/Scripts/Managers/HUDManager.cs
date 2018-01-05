@@ -11,6 +11,7 @@ public class HUDManager : MonoBehaviour {
 
     //Script References for hud
     private CountDownStage timerScript;
+    private WinScreen winScript;
     private ScoreManager scoreScript;
     //Text to apply to hud
     public Text scoreText;
@@ -24,8 +25,15 @@ public class HUDManager : MonoBehaviour {
     // Use this for initialization
     void Awake()
     {
+        //Get timer script to display
         timerScript = GetComponent<CountDownStage>();
-        scoreScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<ScoreManager>();
+        //get score manager to display current score
+        GameObject scoreObject = GameObject.FindGameObjectWithTag("ScoreManager");
+        if(scoreObject)
+        {
+            scoreScript = scoreObject.GetComponent<ScoreManager>();
+        }
+        //turn off all power up indicators
         isPowerDashActive(false);
         isShieldActive(false);
         isShockwaveActive(false);
@@ -83,4 +91,6 @@ public class HUDManager : MonoBehaviour {
         }
             
     }
+
+    
 }

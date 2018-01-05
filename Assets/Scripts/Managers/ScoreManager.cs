@@ -4,28 +4,52 @@ using System.Collections;
 
 public class ScoreManager : MonoBehaviour {
 
-
-    private int asteroidsEaten;
+    private float timeRemaining;
     public int highScore;
     public int score;
     //public int asteroidsLeft;
     private int Level;
     public int exp;
-
-
-    //ExperienceManager expManager;
-    GameManager gameManager;
+    public int playerHealth;
+    public WinScreen winScript;
+    private int orbObtained;
+    public int CurrentHealth() { return playerHealth; }
 	// Use this for initialization
-	void Start ()
+	void Awake ()
     {
+        DontDestroyOnLoad(gameObject);
+        
+
         //setting high score
         PlayerPrefs.GetInt("scorePref");
         highScore= PlayerPrefs.GetInt("scorePref");
-        gameManager = GetComponent<GameManager>();
-        //expManager = GetComponent<ExperienceManager>();
-        //asteroidsLeft = expManager.CurrentRequirement();
-        //exp = PlayerPrefs.GetInt("expPref");
-        //Level = expManager.CurrentLevel();
+    }
+    
+
+    public void SendEndGameStats()
+    {
+        GameObject winObject = GameObject.FindGameObjectWithTag("WinScreen");
+        if (winObject)
+        {
+            winScript = winObject.GetComponent<WinScreen>();
+            winScript.SetAsteroidsCollected(orbObtained);
+            winScript.SetTime(timeRemaining);
+            
+        }
+    }
+
+    public float SetTimeRemaining(float newTime)
+    {
+        return timeRemaining = newTime;
+    }
+    public int IncrementCompletedLevel()
+    {
+        return Level++;
+    }
+
+    public void HealthChange(int newHealth)
+    {
+        playerHealth = newHealth;
     }
 
     //run this function during game over
@@ -35,25 +59,16 @@ public class ScoreManager : MonoBehaviour {
         {
             PlayerPrefs.SetInt("scorePref", score);
         }
-        //PlayerPrefs.SetInt("expPref", exp);
     }
     //to increase score
     public int IncreaseScore(int value)
     {
-        
-        
-        
-        //expManager.ExpAcquired();
-        //exp = expManager.CurrentExperience();
-        //Level = expManager.CurrentLevel();
-        //asteroidsLeft = expManager.CurrentRequirement();
-        return score = value; 
+ 
+        return score += value; 
     }
-    public int GotDamaged()
+    public int OrbObtained()
     {
-        //exp = expManager.CurrentExperience();
-
-        return exp;
+        return orbObtained++;
     }
     public int ReturnHighScore()
     {
@@ -63,13 +78,5 @@ public class ScoreManager : MonoBehaviour {
     {
         return score;
     }
-    public int ReturnAsteroidsLeft()
-    {
-        return 1;
-    }
-    //number of orbs currently collected
-    public int EatNum()
-    {
-        return asteroidsEaten;
-    }
+
 }

@@ -44,7 +44,50 @@ public class RogueCollision : MonoBehaviour {
             Model3.SetActive(true);
         }
     }
-    
+
+    //Apply damage to rogue and check if 
+    void RogueDamage()
+    {
+        EnemyHealth--;
+        if (EnemyHealth <= 0)
+        {
+            if (audioScript)
+            {
+                audioScript.RogueDeath(transform.position);
+            }
+            myCollider.enabled = false;
+
+            if (Explosion && Model)
+            {
+                myCollider.enabled = false;
+                Explosion.SetActive(true);
+                Model.SetActive(false);
+
+                if (rogueMoveScript)
+                {
+                    rogueMoveScript.yesDead();
+                }
+                if (Model2)
+                {
+                    Model2.SetActive(false);
+                }
+                if (pursueModel)
+                {
+                    pursueModel.SetActive(false);
+                }
+                if (Model3)
+                {
+                    Model3.SetActive(false);
+                }
+
+            }
+            else
+            {
+                Destroy(transform.parent.gameObject);
+            }
+        }
+    }
+
     void OnCollisionEnter(Collision col)
     {
         string curTag = col.gameObject.tag;
@@ -62,47 +105,25 @@ public class RogueCollision : MonoBehaviour {
                         myBody.AddForce(col.contacts[0].normal * wallBump, ForceMode.VelocityChange);
                     }
 
-                    EnemyHealth--;
-                    if (EnemyHealth <= 0)
-                    {
-                        if (audioScript)
-                        {
-                            audioScript.RogueDeath(transform.position);
-                        }
-                        myCollider.enabled = false;
-
-                        if (Explosion && Model)
-                        {
-                            myCollider.enabled = false;
-                            Explosion.SetActive(true);
-                            Model.SetActive(false);
-
-                            if (rogueMoveScript)
-                            {
-                                rogueMoveScript.yesDead();
-                            }
-                            if (Model2)
-                            {
-                                Model2.SetActive(false);
-                            }
-                            if (pursueModel)
-                            {
-                                pursueModel.SetActive(false);
-                            }
-                            if (Model3)
-                            {
-                                Model3.SetActive(false);
-                            }
-
-                        }
-                        else
-                        {
-                            Destroy(transform.parent.gameObject);
-                        }
-                    }
+                    RogueDamage();
                 }
             }
         }
+        
+        else if(curTag== "MoonBall")
+        {
+            MoonBall moonBall = col.gameObject.GetComponent<MoonBall>();
+
+            if (moonBall.getAttackMode())
+            {
+                bool RogueDashing = rogueMoveScript.isDashing();
+                if (!RogueDashing)
+                {
+                    RogueDamage();
+                }
+            }
+        }
+
         else if(curTag=="BreakableWall")
         {
             bool RogueDashing = rogueMoveScript.isDashing();
@@ -129,44 +150,7 @@ public class RogueCollision : MonoBehaviour {
                 bool RogueDashing = rogueMoveScript.isDashing();
                 if (!RogueDashing)
                 {
-                    EnemyHealth--;
-                    if (EnemyHealth <= 0)
-                    {
-                        if (audioScript)
-                        {
-                            audioScript.RogueDeath(transform.position);
-                        }
-                        myCollider.enabled = false;
-
-                        if (Explosion && Model)
-                        {
-                            myCollider.enabled = false;
-                            Explosion.SetActive(true);
-                            Model.SetActive(false);
-
-                            if (rogueMoveScript)
-                            {
-                                rogueMoveScript.yesDead();
-                            }
-                            if (Model2)
-                            {
-                                Model2.SetActive(false);
-                            }
-                            if (pursueModel)
-                            {
-                                pursueModel.SetActive(false);
-                            }
-                            if (Model3)
-                            {
-                                Model3.SetActive(false);
-                            }
-
-                        }
-                        else
-                        {
-                            Destroy(transform.parent.gameObject);
-                        }
-                    }
+                    RogueDamage();
                 }
             }
         }

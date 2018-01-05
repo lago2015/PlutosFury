@@ -100,19 +100,19 @@ public class FleeOrPursue : MonoBehaviour {
         //when detection collider finds player than this is enabled
        if(PlayerNear)
         {
+            PursuePlayer();
 
             if (!isCharging || ShouldDash)
             {
                 //calculate distance between player and rogue
                 float curDistance = Vector3.Distance(transform.position, Player.transform.position);
-                if (curDistance > 2f)
+                if (curDistance > 7f)
                 {
                     //move rogue forward if hes not charging
                     transform.parent.position += transform.forward * MoveSpeed * Time.deltaTime;
                     transform.parent.position = new Vector3(transform.position.x, transform.position.y, 0);
                 }
             }
-            PursuePlayer();
 
         }
     }
@@ -135,6 +135,13 @@ public class FleeOrPursue : MonoBehaviour {
             {
                 if (Player)
                 {
+                    if (RotationSpeed > 0)
+                    {
+                        Quaternion rotation = Quaternion.LookRotation(Player.transform.position - transform.position);
+
+                        transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * RotationSpeed);
+                    }
+
                     if (!isExhausted)
                     {
                         if (!isCharging)
@@ -142,6 +149,8 @@ public class FleeOrPursue : MonoBehaviour {
                             Dash();
                         }
                     }
+                    //transform.parent.position += transform.forward * MoveSpeed * Time.deltaTime;
+
                 }
             }
 

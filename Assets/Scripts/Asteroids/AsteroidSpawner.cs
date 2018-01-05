@@ -20,8 +20,27 @@ public class AsteroidSpawner : MonoBehaviour
     GameObject collectorObject;
     public float newMinX(float newMin) { return minX = newMin; }
     public float newMaxX(float newMax) { return maxX = newMax; }
+    
+    private ScoreManager scoreScript;
+
     void Awake()
     {
+        GameObject scoreObject = GameObject.FindGameObjectWithTag("ScoreManager");
+        if(scoreObject)
+        {
+            scoreScript = scoreObject.GetComponent<ScoreManager>();
+        }
+
+
+        //using border cube colliders to give the min and max of the level
+        if (levelBounds.Length == 4)
+        {
+            maxY = levelBounds[0].transform.position.y - 50;
+            minY = levelBounds[1].transform.position.y + 50;
+            minX = levelBounds[2].transform.position.x;
+            maxX = levelBounds[3].transform.position.x;
+        }
+
         collectorObject = GameObject.FindGameObjectWithTag("GravityWell");
         if (collectorObject)
         {
@@ -38,17 +57,12 @@ public class AsteroidSpawner : MonoBehaviour
             //Add orb to pool for reuse
             asteroidPool.Add(orbObject);
         }
+        //populate level with orbs
         for (int i = 0; i < asteroidPool.Count; i++)
         {
             SpawnAsteroid();
         }
-        if (levelBounds.Length == 4)
-        {
-            maxY = levelBounds[0].transform.position.y-50;
-            minY = levelBounds[1].transform.position.y+50;
-            maxX = levelBounds[2].transform.position.x+300;
-            minX = levelBounds[3].transform.position.x-300;
-        }
+
     }
 
     //Placing orbs into the scene
@@ -85,7 +99,6 @@ public class AsteroidSpawner : MonoBehaviour
             return;
         }
         asteroid.SetActive(true);
-        //asteroid.GetComponent<BurstBehavior>().ResetVelocity();
 
     }
 
@@ -103,15 +116,12 @@ public class AsteroidSpawner : MonoBehaviour
                 }
             }
         }
-
         return null;
-
     }
     public void ReturnPooledAsteroid(GameObject asteroid)
 	{
         if(asteroidPool.Count>=0)
         {
-
             // Return asteroid to the list
             bool isNew = asteroid.GetComponent<BurstBehavior>().asteroidStatus();
             if (isNew)
@@ -122,7 +132,18 @@ public class AsteroidSpawner : MonoBehaviour
             {
                 asteroid.SetActive(false);
                 int asteroidIndex = asteroidPool.IndexOf(asteroid);
-                asteroidPool.Insert(asteroidIndex, asteroid);
+                if(asteroidPool[asteroidIndex])
+                {
+                    asteroidPool.Insert(asteroidIndex, asteroid);
+                }
+                
+            }
+            if(scoreScript)
+            {
+                //update score on orb
+                scoreScript.IncreaseScore(50);
+                //increment orb obtained 
+                scoreScript.OrbObtained();
             }
         }
 	}
