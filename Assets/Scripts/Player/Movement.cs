@@ -1119,7 +1119,7 @@ public class Movement : MonoBehaviour
                 //run game over procedure
                 if (curHealth < 0)
                 {
-                    curHealth = 0;
+                    
                     isDead = true;
                     BusterChange(BusterStates.Death);
                     audioScript.PlutoDeath(transform.position);

@@ -9,19 +9,12 @@ public class DamageOrPowerUp : MonoBehaviour {
 
     //Drain
     float SuperDrain;
-    float SuperDrainInterval;
     float NormalDrain;
     float NormalInterval;
-    private float DrainAmount;
-    private float DrainApplyInterval;
-    //Super
-    private float PowerUpAmount;
-    private float PowerUpDuration;
-    private float PowerCooldown;
-    bool CanPowerUp;
+    
     public bool colliderTriggered = true;
     public float DamageCooldown;
-    float EffectTimer;
+    
     //Rate of effect to apply
     //public float ApplyEffectRate;
     public float IncrementTimeRate;
@@ -38,7 +31,6 @@ public class DamageOrPowerUp : MonoBehaviour {
 
     void Start()
     {
-        CanPowerUp = true;
         PlayerScript = GameObject.FindGameObjectWithTag("Player").GetComponent<Movement>();
         if(dashModel)
         {
@@ -49,10 +41,6 @@ public class DamageOrPowerUp : MonoBehaviour {
         {
             otherDamageCollider = GetComponent<BoxCollider>();
         }
-        NormalInterval = DrainApplyInterval;
-        NormalDrain = DrainAmount;
-        SuperDrain = DrainAmount + DrainAmount;
-        SuperDrainInterval = 0.25f;
     }
 
 
@@ -188,7 +176,7 @@ public class DamageOrPowerUp : MonoBehaviour {
     IEnumerator CoolDownEffect(float EffectTimer)
     {
         yield return new WaitForSeconds(EffectTimer);
-        CanPowerUp = true;
+        
     }
 
     

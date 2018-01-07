@@ -15,7 +15,7 @@ public class HUDManager : MonoBehaviour {
     private ScoreManager scoreScript;
     //Text to apply to hud
     public Text scoreText;
-    public Text healthText;
+    public Image[] healthSprites;
     public Text timerText;
 
     //local variables for hud 
@@ -39,14 +39,61 @@ public class HUDManager : MonoBehaviour {
         isShockwaveActive(false);
 
     }
-    
+
+    private void Start()
+    {
+        if(scoreScript)
+        {
+            UpdateHealth(scoreScript.playerHealth);
+        }
+        
+    }
+
+
     //Called from players movement script to update text
     public void UpdateHealth(int newHealth)
     {
-        if(healthText)
+        if(newHealth==-1)
         {
-            healthText.text = ("Health: " + newHealth);
+            for (int i = 0; i <= healthSprites.Length - 1; ++i)
+            {
+                healthSprites[i].enabled = false;
+              
+            }
         }
+        else if(newHealth==0)
+        {
+            for(int i=0;i<=healthSprites.Length-1;++i)
+            {
+                healthSprites[i].enabled = false;
+                if(i==0)
+                {
+                    healthSprites[i].enabled = true;
+                }
+            }
+        }
+        else if(newHealth==1)
+        {
+            for (int i = 0; i <= healthSprites.Length-1; ++i)
+            {
+                healthSprites[i].enabled = false;
+                if (i == 1)
+                {
+                    healthSprites[0].enabled = true;
+                    healthSprites[1].enabled = true;
+                }
+            }
+        }
+        else if(newHealth==2)
+        {
+            for (int i = 0; i <= healthSprites.Length-1; ++i)
+            {
+                healthSprites[i].enabled = true;
+                
+            }
+        }
+
+
     }
 
     //called from pick up script to enable or disable image
@@ -76,21 +123,21 @@ public class HUDManager : MonoBehaviour {
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if(scoreScript&&scoreText)
-        {
-            currentScore = scoreScript.ReturnScore();
-            scoreText.text = ("Score: " + currentScore);
-        }
-        if(timerScript&&timerText)
-        {
-            currentTime = timerScript.CurrentTimeRemain();
-            timerText.text = ("Time Left: " + currentTime);
-        }
+    //// Update is called once per frame
+    //void Update()
+    //{
+    //    if(scoreScript&&scoreText)
+    //    {
+    //        //currentScore = scoreScript.ReturnScore();
+    //        //scoreText.text = ("Score: " + currentScore);
+    //    }
+    //    if(timerScript&&timerText)
+    //    {
+    //        currentTime = timerScript.CurrentTimeRemain();
+    //        timerText.text = ("Time Left: " + currentTime);
+    //    }
             
-    }
+    //}
 
     
 }
