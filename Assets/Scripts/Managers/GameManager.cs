@@ -40,7 +40,7 @@ public class GameManager : MonoBehaviour
     void Awake()
     {
         //60 fps set rate
-        Application.targetFrameRate = 40;
+        Application.targetFrameRate = 30;
 
         CanvasManager = GameObject.FindGameObjectWithTag("CanvasManager");
         if(CanvasManager)
