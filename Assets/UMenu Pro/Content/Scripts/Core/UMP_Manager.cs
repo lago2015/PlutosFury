@@ -37,7 +37,7 @@ public class UMP_Manager : MonoBehaviour {
             GameObject l = Instantiate(LevelPrefab) as GameObject;
 
             UMP_LevelInfo li = l.GetComponent<UMP_LevelInfo>();
-            li.GetInfo(Levels[i].Title, Levels[i].Description, Levels[i].Preview, Levels[i].LevelName,PlayButtonName);
+            li.GetInfo(Levels[i].Title, Levels[i].Preview, Levels[i].LevelBuildNum,PlayButtonName);
 
             l.transform.SetParent(LevelPanel, false);
         }
@@ -121,10 +121,10 @@ public class UMP_Manager : MonoBehaviour {
         /// <summary>
         /// Name of scene of build setting
         /// </summary>
-        public string LevelName;
+        public int LevelBuildNum;
         [Space(5)]
         public string Title;
-        public string Description;
+        //public string Description;
         public Sprite Preview;
     }
 }

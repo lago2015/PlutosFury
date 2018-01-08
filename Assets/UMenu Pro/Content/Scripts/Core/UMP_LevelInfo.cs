@@ -7,11 +7,11 @@ using UnityEngine.SceneManagement;
 public class UMP_LevelInfo : MonoBehaviour {
 
     public Text Title;
-    public Text Description;
+    //public Text Description;
     public Text PlayText;
     public Image Preview;
     //Name of scene of build setting
-    private string LevelName;
+    private int LevelNum;
 
     /// <summary>
     /// Level Info
@@ -20,18 +20,24 @@ public class UMP_LevelInfo : MonoBehaviour {
     /// <param name="desc"></param>
     /// <param name="preview"></param>
     /// <param name="scene"></param>
-    public void GetInfo(string title,string desc,Sprite preview,string scene,string pn)
+    public void GetInfo(string title,Sprite preview,int sceneNum,string pn)
     {
         Title.text = title;
-        Description.text = desc;
+       // Description.text = desc;
         Preview.sprite = preview;
-        PlayText.text = pn;
-        LevelName = scene;
+       // PlayText.text = pn;
+        LevelNum = sceneNum;
     }
     /// <summary>
     /// 
     /// </summary>
-    public void OpenLevel() { LoadLevel(LevelName); }
+   // public void OpenLevel() { LoadLevel(LevelName); }
+
+    public void LoadTargetLevel()
+    {
+        FindObjectOfType<LoadTargetSceneButton>().LoadSceneNum(LevelNum);
+    }
+
 
     public static void LoadLevel(string scene)
     {
