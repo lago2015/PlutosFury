@@ -57,6 +57,10 @@ public class LoadingScreenManager : MonoBehaviour {
             {
                 screenTapped = true;
             }
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                screenTapped = true;
+            }
         }
     }
 
