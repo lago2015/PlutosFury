@@ -10,8 +10,8 @@ public class FleeOrPursue : MonoBehaviour {
     public float decreaseFactor;
     private Vector3 startPosition;
     private Vector3 shakeVector;
-
-
+    public float WaitToExplode = 1f;
+    public float DistanceFromPlayerToExplode = 7f;
     //Dash
     public float MoveSpeed;
     public float DashSpeed;
@@ -21,16 +21,18 @@ public class FleeOrPursue : MonoBehaviour {
     public float chargeTime = 0.5f;
     public bool isExhausted = false;
     public bool ShouldDash;
-    private bool firstEncounter=false;
+    private bool firstEncounter = false;
     private float DefaultSpeed;
     private float normalDrag;
     Vector3 avoidance;
-    public float maxDistAvoidance=20f;
-    public float maxAvoidForce=100f;
+    public float maxDistAvoidance = 20f;
+    public float maxAvoidForce = 100f;
     //components
     AudioController audioScript;
     Transform Player;
     public GameObject myParent;
+    public GameObject scriptObject;
+    private RogueCollision collisionScript;
     public GameObject trailModel;
     private Rigidbody myBody;
     private bool isAlive;
@@ -39,7 +41,7 @@ public class FleeOrPursue : MonoBehaviour {
     private bool isCharging;
     private bool doOnce;
     private bool PlayerNear;
-    private readonly int RotationSpeed=10;
+    private readonly int RotationSpeed = 10;
     public bool isDead;
     public bool isDashing() { return ShouldDash; }
     public bool yesDead() { return isDead = true; }
@@ -49,14 +51,17 @@ public class FleeOrPursue : MonoBehaviour {
         audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
         Player = GameObject.FindGameObjectWithTag("Player").transform;
         DefaultSpeed = MoveSpeed;
-
+        if (scriptObject)
+        {
+            collisionScript = scriptObject.GetComponent<RogueCollision>();
+        }
         myBody = myParent.GetComponent<Rigidbody>();
         if (myBody)
         {
             normalDrag = myBody.drag;
         }
 
-     
+
 
         if (isTriggered)
         {
@@ -77,7 +82,7 @@ public class FleeOrPursue : MonoBehaviour {
     // Update is called once per frame
     void FixedUpdate()
     {
-        if(isCharging)
+        if (isCharging)
         {
             if (shake > 0.0f)
             {
@@ -87,7 +92,7 @@ public class FleeOrPursue : MonoBehaviour {
                 myParent.transform.localPosition = shakeVector;
                 shake -= Time.deltaTime * decreaseFactor;
             }
-            
+
         }
         else
         {
@@ -96,9 +101,9 @@ public class FleeOrPursue : MonoBehaviour {
             shakeVector = Vector3.zero;
         }
         transform.parent.position = new Vector3(transform.position.x, transform.position.y, 0);
-        
+
         //when detection collider finds player than this is enabled
-       if(PlayerNear)
+        if (PlayerNear)
         {
             PursuePlayer();
 
@@ -106,17 +111,42 @@ public class FleeOrPursue : MonoBehaviour {
             {
                 //calculate distance between player and rogue
                 float curDistance = Vector3.Distance(transform.position, Player.transform.position);
-                if (curDistance > 7f)
+                //check if player is close enough, if not then pursue
+                if (curDistance > DistanceFromPlayerToExplode)
                 {
                     //move rogue forward if hes not charging
                     transform.parent.position += transform.forward * MoveSpeed * Time.deltaTime;
                     transform.parent.position = new Vector3(transform.position.x, transform.position.y, 0);
+                }
+                else
+                {
+                    StartCoroutine(CountdownToExplode());
                 }
             }
 
         }
     }
 
+    IEnumerator CountdownToExplode()
+    {
+        yield return new WaitForSeconds(WaitToExplode);
+        if(collisionScript &&Player)
+        {
+            //Stop any dashing
+            StopCoroutine(ChargeDash());
+            StopCoroutine(DashTransition());
+            DisableDashTrail();
+            //disable trail for dashing
+            StartCoroutine(DashCooldown());
+            //calculate distance between player and rogue
+            float curDistance = Vector3.Distance(transform.position, Player.transform.position);
+            //check if player is close enough, if so explode
+            if (curDistance < DistanceFromPlayerToExplode)
+            {
+                collisionScript.RogueDamage();
+            }
+        }
+    }
 
     void PursuePlayer()
     {
@@ -229,6 +259,14 @@ public class FleeOrPursue : MonoBehaviour {
         
     }
     
+    void DisableDashTrail()
+    {
+        if(trailModel)
+        {
+            trailModel.SetActive(false);
+        }
+    }
+
     //Cool down for exhaustion from dash
     IEnumerator DashCooldown()
     {

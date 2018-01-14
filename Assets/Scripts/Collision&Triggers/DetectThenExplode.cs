@@ -25,12 +25,9 @@ public class DetectThenExplode : MonoBehaviour {
         //explosion gameobject
         if (explosionState)
         {
-            if(isRocket)
-            {
-                //Getting damage script to notify if damage has been applied
-                damageScript = explosionState.GetComponent<DamageOrPowerUp>();
-                
-            }
+            //Getting damage script to notify if damage has been applied
+            damageScript = explosionState.GetComponent<DamageOrPowerUp>();
+
             explosionState.SetActive(false);
         }
 
@@ -74,7 +71,11 @@ public class DetectThenExplode : MonoBehaviour {
         string CurTag = col.gameObject.tag;
         if(CurTag == "Player")
         {
-          
+            if(damageScript)
+            {
+                damageScript.didDamage();
+            }
+            col.gameObject.GetComponent<Movement>().DamagePluto();
             //Start Explosion
             TriggeredExplosion();
         }

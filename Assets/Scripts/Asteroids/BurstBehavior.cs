@@ -6,6 +6,7 @@ public class BurstBehavior : MonoBehaviour {
     private float moveSpeed = 7;
     private float BurstTimeout = 0.25f;
     public bool ShouldBurst=false;
+    public float wallBump = 20f;
     private SphereCollider myCollider;
     private Rigidbody myBody;
     private bool isNewAsteroid=true;
@@ -39,7 +40,14 @@ public class BurstBehavior : MonoBehaviour {
         gameObject.tag = "Asteroid";
     }
 
-    
+    private void OnCollisionEnter(Collision collision)
+    {
+        string curTag = collision.gameObject.tag;
+        if(curTag=="Wall")
+        {
+            myBody.AddForce(collision.contacts[0].normal * wallBump, ForceMode.VelocityChange);
+        }
+    }
 
     public void ResetVelocity()
     {

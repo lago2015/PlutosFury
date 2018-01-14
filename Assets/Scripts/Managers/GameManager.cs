@@ -39,7 +39,7 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
-        //60 fps set rate
+        //30 fps set rate
         Application.targetFrameRate = 30;
 
         CanvasManager = GameObject.FindGameObjectWithTag("CanvasManager");
@@ -171,7 +171,7 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(GameOverDelay);
         if (canvasScript)
         {
-            canvasScript.GameEnded();
+            canvasScript.GameEnded(true);
         }
         //stop time like your a time lord
         Time.timeScale = 0;
@@ -197,7 +197,7 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(GameOverDelay);
         if (canvasScript)
         {
-            canvasScript.GameEnded();
+            canvasScript.GameEnded(false);
         }
         ScoreManager.SaveScore();
 

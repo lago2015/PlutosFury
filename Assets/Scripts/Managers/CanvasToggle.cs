@@ -6,7 +6,8 @@ public class CanvasToggle : MonoBehaviour {
 
 
     public GameObject hudCanvas;
-    public GameObject endGameCanvas;        //currently labelled win screen
+    public GameObject GameOverCanvas;
+    public GameObject WinScreenCanvas;
     private WinScreen winScript;
     private ScoreManager scoreScript;
 	// Use this for initialization
@@ -19,18 +20,19 @@ public class CanvasToggle : MonoBehaviour {
         }
 
         //get canvas script to enable fading
-        if(endGameCanvas)
+        if(GameOverCanvas)
         {
-            winScript = endGameCanvas.GetComponent<WinScreen>();
+            winScript = GameOverCanvas.GetComponent<WinScreen>();
         }
         //enable hud and disable win screen
         hudCanvas.SetActive(true);
-        endGameCanvas.SetActive(false);
+        GameOverCanvas.SetActive(false);
+        WinScreenCanvas.SetActive(false);
 	}
 	
     //toggle canvas and pass through if the player is dead or not to know 
     //which button to set active(one for going to menu and one to next level
-	public void GameEnded()
+	public void GameEnded(bool isGameOver)
     {
         //send all end game stats for win screen
         if(scoreScript)
@@ -38,10 +40,23 @@ public class CanvasToggle : MonoBehaviour {
             scoreScript.SendEndGameStats();
         }
         hudCanvas.SetActive(false);
-        endGameCanvas.SetActive(true);
-        if(winScript)
+
+        if(isGameOver)
         {
-            winScript.FadeIn();
+
+            GameOverCanvas.SetActive(true);
+            if (winScript)
+            {
+                winScript.FadeIn();
+            }
+        }
+        else
+        {
+            WinScreenCanvas.SetActive(true);
+            if (winScript)
+            {
+                winScript.FadeIn();
+            }
         }
     }
 }

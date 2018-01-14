@@ -131,6 +131,8 @@ public class MoonBall : MonoBehaviour
         {
             rb.AddForce(col.contacts[0].normal * knockbackSpeed, ForceMode.VelocityChange);
         }
+
+
     }
 
     public void rocketHit(Vector3 Direction)
@@ -139,6 +141,23 @@ public class MoonBall : MonoBehaviour
         rb.AddForce(Direction * knockbackSpeed, ForceMode.VelocityChange);
         rb.AddTorque(Direction * hitSpeed);
     }
+
+    public void rogueHit(Vector3 direction,bool isDashing)
+    {
+        if(isDashing)
+        {
+            // Apply force and rotation to knock back from rogue with dashing
+            rb.AddForce(direction * hitSpeed, ForceMode.VelocityChange);
+            //rb.AddTorque(direction * hitSpeed);
+        }
+        else
+        {
+            // Apply force and rotation to knock back from rogue
+            rb.AddForce(direction * wallBounce, ForceMode.VelocityChange);
+            //rb.AddTorque(direction * hitSpeed);
+        }
+    }
+
 
     IEnumerator HitBreak()
     {

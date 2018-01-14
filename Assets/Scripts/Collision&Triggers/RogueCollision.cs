@@ -46,7 +46,7 @@ public class RogueCollision : MonoBehaviour {
     }
 
     //Apply damage to rogue and check if 
-    void RogueDamage()
+    public void RogueDamage()
     {
         EnemyHealth--;
         if (EnemyHealth <= 0)
@@ -121,6 +121,12 @@ public class RogueCollision : MonoBehaviour {
                 {
                     RogueDamage();
                 }
+            }
+            else
+            {
+                Vector3 forwardDirection = rogueMoveScript.transform.forward.normalized;
+                bool rogueDashing = rogueMoveScript.isDashing();
+                moonBall.rogueHit(forwardDirection, rogueDashing);
             }
         }
 

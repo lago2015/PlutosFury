@@ -18,7 +18,7 @@ public class Door : MonoBehaviour {
     private bool doorActive;
     void Awake()
     {
-        fadeScript = GameObject.FindGameObjectWithTag("Finish").GetComponent<CanvasFade>();
+        //fadeScript = GameObject.FindGameObjectWithTag("Finish").GetComponent<CanvasFade>();
         canvasScript = GameObject.FindGameObjectWithTag("CanvasManager").GetComponent<CanvasToggle>();
         gameScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<GameManager>();
         timerScript = GameObject.FindGameObjectWithTag("HUDManager").GetComponent<CountDownStage>();
@@ -45,7 +45,7 @@ public class Door : MonoBehaviour {
                 //ensure this gets called once
                 doorActive = true;
                 //switch canvas from hud to end game screen
-                canvasScript.GameEnded();
+                canvasScript.GameEnded(false);
                 //enable fade in
                 winScreenScript.FadeIn();
                 //disable gameobjects and save variables
