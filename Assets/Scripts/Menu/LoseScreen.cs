@@ -29,7 +29,7 @@ public class LoseScreen : MonoBehaviour {
     {
 	    if (plutoSprite.transform.position.y < 500)
         {
-            plutoSprite.transform.Translate(Vector3.up * 100 * Time.deltaTime, Space.World);
+            plutoSprite.transform.Translate(Vector3.up * 500 * Time.deltaTime, Space.World);
         }
         else
         {
