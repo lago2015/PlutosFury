@@ -13,7 +13,8 @@ public class HomingProjectile : MonoBehaviour {
     private SphereCollider TriggerCollider;
     private float startRadius;
     private float lostSightRadius = 10f;
-
+    public float DistanceFromPlayerToExplode = 7f;
+    private DetectWaitThenExplode explodeScript;
     public bool activateMovement(bool isActive)
     {
         enabled = isActive;
@@ -29,6 +30,7 @@ public class HomingProjectile : MonoBehaviour {
     {
         Player = GameObject.FindGameObjectWithTag("Player");
         enabled = false;
+        explodeScript = GetComponent<DetectWaitThenExplode>();
         TriggerCollider = GetComponent<SphereCollider>();
         collider = GetComponent<BoxCollider>();
         if(TriggerCollider)
@@ -49,12 +51,25 @@ public class HomingProjectile : MonoBehaviour {
     {
         if (ShouldMove)
         {
-            Quaternion rotation = Quaternion.LookRotation(Player.transform.position - transform.position);
+            //calculate distance between player and rogue
+            float curDistance = Vector3.Distance(transform.position, Player.transform.position);
+            //check if player is close enough, if not then pursue
+            if (curDistance > DistanceFromPlayerToExplode)
+            {
+                Quaternion rotation = Quaternion.LookRotation(Player.transform.position - transform.position);
 
-            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * rotationSpeed);
+                transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * rotationSpeed);
 
-            transform.parent.position += moveSpeed * transform.forward * Time.deltaTime;
-            transform.parent.position = new Vector3(transform.position.x, transform.position.y, 0);
+                transform.parent.position += moveSpeed * transform.forward * Time.deltaTime;
+                transform.parent.position = new Vector3(transform.position.x, transform.position.y, 0);
+            }
+            else
+            {
+                if(explodeScript)
+                {
+                    explodeScript.TriggeredExplosion();
+                }
+            }
         }
     }
 

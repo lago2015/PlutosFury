@@ -46,7 +46,10 @@ public class BigAsteroid : MonoBehaviour {
         }
         if(AsteroidModel&&Explosion)
         {
-            Collider.isTrigger = true;
+            foreach(SphereCollider col in GetComponents<SphereCollider>())
+            {
+                col.enabled = false;
+            }
             AsteroidModel.SetActive(false);
             Explosion.SetActive(true);
             isDestroyed = true;

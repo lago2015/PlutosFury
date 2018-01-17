@@ -11,18 +11,19 @@ public class ScoreManager : MonoBehaviour {
     private int Level;
     public int exp;
     public int playerHealth;
-    public WinScreen winScript;
+    private WinScreen winScript;
     private int orbObtained;
     public int CurrentHealth() { return playerHealth; }
 	// Use this for initialization
 	void Awake ()
     {
-        DontDestroyOnLoad(gameObject);
+        //DontDestroyOnLoad(gameObject);
         
 
         //setting high score
         PlayerPrefs.GetInt("scorePref");
         highScore= PlayerPrefs.GetInt("scorePref");
+        playerHealth = PlayerPrefs.GetInt("healthPref");
     }
     
 
@@ -50,6 +51,10 @@ public class ScoreManager : MonoBehaviour {
     public void HealthChange(int newHealth)
     {
         playerHealth = newHealth;
+        if(playerHealth==-1)
+        {
+            DefaultHealth();
+        }
     }
 
     //run this function during game over
@@ -60,6 +65,20 @@ public class ScoreManager : MonoBehaviour {
             PlayerPrefs.SetInt("scorePref", score);
         }
     }
+
+    public void SaveHealth()
+    {
+        if(playerHealth>0)
+        {
+            PlayerPrefs.SetInt("healthPref", playerHealth);
+        }
+    }
+
+    public void DefaultHealth()
+    {
+        PlayerPrefs.SetInt("healthPref", 0);
+    }
+
     //to increase score
     public int IncreaseScore(int value)
     {

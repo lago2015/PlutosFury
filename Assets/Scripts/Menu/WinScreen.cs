@@ -15,7 +15,7 @@ public class WinScreen : MonoBehaviour {
     private AudioController audioScript;
 
     private LoadTargetSceneButton targetSceneButton;
-
+    private ScoreManager scoreScript;
     public GameObject WinScreenGroup;
     public Text timeDisplay;
     public Text scoreDisplay;
@@ -32,7 +32,7 @@ public class WinScreen : MonoBehaviour {
         //sectionScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<SectionManager>();
         audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
         targetSceneButton = this.gameObject.GetComponent<LoadTargetSceneButton>();
-
+        scoreScript = GameObject.FindGameObjectWithTag("ScoreManager").GetComponent<ScoreManager>();
 
         timeDisplay.text = Timer.ToString();
         scoreDisplay.text = AsteroidsCollected.ToString();
@@ -65,6 +65,10 @@ public class WinScreen : MonoBehaviour {
         {
             targetSceneButton.LoadNextLevel();
         }   
+        if(scoreScript)
+        {
+            scoreScript.SaveHealth();
+        }
     }
     //*********Variable getters for score display at end game screen
 

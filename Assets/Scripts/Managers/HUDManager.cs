@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 public class HUDManager : MonoBehaviour {
 
     //images for powerups for hud
@@ -17,7 +18,7 @@ public class HUDManager : MonoBehaviour {
     public Text scoreText;
     public Image[] healthSprites;
     public Text timerText;
-
+    public Text currentLevel;
     //local variables for hud 
     private int currentScore;
     private float currentTime;
@@ -46,6 +47,11 @@ public class HUDManager : MonoBehaviour {
         {
             UpdateHealth(scoreScript.playerHealth);
         }
+        if(currentLevel)
+        {
+            Scene curScene = SceneManager.GetActiveScene();
+            currentLevel.text = curScene.name;
+        }
         
     }
 
@@ -53,15 +59,7 @@ public class HUDManager : MonoBehaviour {
     //Called from players movement script to update text
     public void UpdateHealth(int newHealth)
     {
-        if(newHealth==-1)
-        {
-            for (int i = 0; i <= healthSprites.Length - 1; ++i)
-            {
-                healthSprites[i].enabled = false;
-              
-            }
-        }
-        else if(newHealth==0)
+        if(newHealth==0)
         {
             for(int i=0;i<=healthSprites.Length-1;++i)
             {
@@ -90,6 +88,14 @@ public class HUDManager : MonoBehaviour {
             {
                 healthSprites[i].enabled = true;
                 
+            }
+        }
+        else if (newHealth == -1)
+        {
+            for (int i = 0; i <= healthSprites.Length - 1; ++i)
+            {
+                healthSprites[i].enabled = false;
+
             }
         }
 

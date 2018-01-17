@@ -174,11 +174,14 @@ public class GameManager : MonoBehaviour
             canvasScript.GameEnded(true);
         }
         //stop time like your a time lord
-        Time.timeScale = 0;
+        //Time.timeScale = 0;
         if(ScoreManager)
         {
             //save that score to show off to your friends
             ScoreManager.SaveScore();
+
+            //Default health
+            ScoreManager.DefaultHealth();
         }
     }
 
@@ -199,7 +202,14 @@ public class GameManager : MonoBehaviour
         {
             canvasScript.GameEnded(false);
         }
-        ScoreManager.SaveScore();
+        if(ScoreManager)
+        {
+            //Save score
+            ScoreManager.SaveScore();
+            //Save health
+            ScoreManager.SaveHealth();
+        }
+        
 
         pluto.GetComponent<Movement>().DisableMovement(true);
         modelSwitch.SwapMaterial(TextureSwap.PlutoState.Win);
