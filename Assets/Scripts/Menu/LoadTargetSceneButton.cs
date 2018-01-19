@@ -6,10 +6,10 @@ public class LoadTargetSceneButton : MonoBehaviour {
     private Scene curScene;
     public GameObject Menu;
 
-    void Awake()
-    {
-        DontDestroyOnLoad(gameObject);
-    }
+    //void Awake()
+    //{
+    //    DontDestroyOnLoad(gameObject);
+    //}
 
     //load to next level from current scene
     public void LoadNextLevel()
