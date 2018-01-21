@@ -209,7 +209,10 @@ public class NeptuneMoon : MonoBehaviour {
 
     void ReturnCoordinates()
     {
-        CurrentOffset=Neptune.GetComponent<NepMoonReturn>().SetCurrentLocation(CurrentOffset);
+        if(Neptune)
+        {
+            CurrentOffset = Neptune.GetComponent<NepMoonReturn>().SetCurrentLocation(CurrentOffset);
+        }
     }
 
 	void RetractMoon()
