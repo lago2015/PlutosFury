@@ -52,13 +52,20 @@ public class UMP_Manager : MonoBehaviour {
         if (CurrentWindow == id)
             return;
 
+        
         if (id != 2)
         {
+            if(GetComponent<OptionsMenu>().isOpen())
+            {
+                GetComponent<OptionsMenu>().WndowAnimation(false);
+            }
+
             for (int i = 0; i < Windows.Count; i++)
             {
                 Windows[i].SetActive(false);
             }
-           
+
+            
         }
         CurrentWindow = id;
         Windows[id].SetActive(true);
