@@ -3,9 +3,10 @@ using System.Collections;
 
 public class PickUpSkills : MonoBehaviour {
 
-    public enum Skills { DashCharge,Shield, Inflation, Health,Shockwave}
+    public enum Skills { DashCharge,Shield, Inflation, Health,Shockwave,LifeUp}
     public Skills curSkill;
     //Script references
+
     private PowerUpManager PowerUpScript;
     private Movement playerScript;
     private Shield ShieldScript;
@@ -33,11 +34,14 @@ public class PickUpSkills : MonoBehaviour {
                 break;
             case Skills.Health:
                 playerScript = playerRef.GetComponent<Movement>();
-                playerScript = playerRef.GetComponent<Movement>();
                 break;
             case Skills.Shockwave:
                 PowerUpScript = playerRef.GetComponent<PowerUpManager>();
                 playerScript = playerRef.GetComponent<Movement>();
+                break;
+            case Skills.LifeUp:
+                playerScript = playerRef.GetComponent<Movement>();
+
                 break;
         }
     }
@@ -98,6 +102,14 @@ public class PickUpSkills : MonoBehaviour {
                         hudScript.isPowerDashActive(false);
                         pickupObtained = true;
                         PowerUpScript.ShockPluto(transform.position);
+                        Destroy(gameObject);
+                    }
+                    break;
+                case Skills.LifeUp:
+                    if(playerScript&&!pickupObtained)
+                    {
+                        pickupObtained = true;
+                        playerScript.LifeUp();
                         Destroy(gameObject);
                     }
                     break;

@@ -854,7 +854,10 @@ public class Movement : MonoBehaviour
             }
             //return orb to pool
             ReturnAsteroid(col.gameObject);
-
+            if(ScoreManager)
+            {
+                ScoreManager.OrbObtained();
+            }
         }
         else if (curTag == "EnvironmentObstacle" || curTag == "MoonBall")
         {
@@ -891,6 +894,8 @@ public class Movement : MonoBehaviour
 
     }
 
+    
+
     //Basic collision for BASIC PLUTO
     void OnCollisionEnter(Collision c)
     {
@@ -908,7 +913,10 @@ public class Movement : MonoBehaviour
             }
             //return orb to pool
             ReturnAsteroid(c.gameObject);
-
+            if (ScoreManager)
+            {
+                ScoreManager.OrbObtained();
+            }
         }
         if (curTag == "BigAsteroid")
         {
@@ -1063,6 +1071,14 @@ public class Movement : MonoBehaviour
             {
                 hudScript.UpdateHealth(curHealth);
             }
+        }
+    }
+
+    public void LifeUp()
+    {
+        if(ScoreManager)
+        {
+            ScoreManager.IncrementLifes();
         }
     }
 

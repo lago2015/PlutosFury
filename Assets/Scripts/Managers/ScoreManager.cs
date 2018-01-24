@@ -7,23 +7,24 @@ public class ScoreManager : MonoBehaviour {
     private float timeRemaining;
     public int highScore;
     public int score;
+    private int playerLives;
     //public int asteroidsLeft;
     private int Level;
     public int exp;
     public int playerHealth;
     private WinScreen winScript;
     private int orbObtained;
+    private int healthUp=10;
     public int CurrentHealth() { return playerHealth; }
 	// Use this for initialization
 	void Awake ()
     {
-        //DontDestroyOnLoad(gameObject);
         
-
         //setting high score
         PlayerPrefs.GetInt("scorePref");
         highScore= PlayerPrefs.GetInt("scorePref");
         playerHealth = PlayerPrefs.GetInt("healthPref");
+        playerLives = PlayerPrefs.GetInt("playerLives");
     }
     
 
@@ -72,6 +73,20 @@ public class ScoreManager : MonoBehaviour {
         {
             PlayerPrefs.SetInt("healthPref", playerHealth);
         }
+        if(playerLives>0)
+        {
+            PlayerPrefs.SetInt("playerLives", playerLives);
+        }
+    }
+
+    public int CurrentLives()
+    {
+        return playerLives;
+    }
+
+    public void IncrementLifes()
+    {
+        playerLives++;
     }
 
     public void DefaultHealth()
@@ -87,7 +102,14 @@ public class ScoreManager : MonoBehaviour {
     }
     public int OrbObtained()
     {
-        return orbObtained++;
+        orbObtained++;
+        if(orbObtained>=healthUp)
+        {
+            healthUp += healthUp;
+            playerLives++;
+        }
+
+        return orbObtained;
     }
     public int ReturnHighScore()
     {

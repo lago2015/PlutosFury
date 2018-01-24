@@ -19,10 +19,11 @@ public class HUDManager : MonoBehaviour {
     public Image[] healthSprites;
     public Text timerText;
     public Text currentLevel;
+    public Text playerLives;
     //local variables for hud 
     private int currentScore;
     private float currentTime;
-
+    private int currentPlayerLives;
     // Use this for initialization
     void Awake()
     {
@@ -52,7 +53,10 @@ public class HUDManager : MonoBehaviour {
             Scene curScene = SceneManager.GetActiveScene();
             currentLevel.text = curScene.name;
         }
-        
+        if(playerLives&&scoreScript)
+        {
+            currentPlayerLives = scoreScript.CurrentLives();
+        }
     }
 
 
@@ -129,21 +133,26 @@ public class HUDManager : MonoBehaviour {
         }
     }
 
-    //// Update is called once per frame
-    //void Update()
-    //{
-    //    if(scoreScript&&scoreText)
-    //    {
-    //        //currentScore = scoreScript.ReturnScore();
-    //        //scoreText.text = ("Score: " + currentScore);
-    //    }
-    //    if(timerScript&&timerText)
-    //    {
-    //        currentTime = timerScript.CurrentTimeRemain();
-    //        timerText.text = ("Time Left: " + currentTime);
-    //    }
-            
-    //}
+    // Update is called once per frame
+    void Update()
+    {
+        //if (scoreScript && scoreText)
+        //{
+        //    //currentScore = scoreScript.ReturnScore();
+        //    //scoreText.text = ("Score: " + currentScore);
+        //}
+        //if (timerScript && timerText)
+        //{
+        //    currentTime = timerScript.CurrentTimeRemain();
+        //    timerText.text = ("Time Left: " + currentTime);
+        //}
 
-    
+        if(scoreScript&&playerLives)
+        {
+            currentPlayerLives = scoreScript.CurrentLives();
+            playerLives.text = ("Lives: " + currentPlayerLives);
+        }
+    }
+
+
 }

@@ -107,7 +107,6 @@ public class GameManager : MonoBehaviour
             {
                 //reset health otherwise
                 ScoreManager.HealthChange(0);
-
             }
         }
         //play ad
@@ -173,6 +172,11 @@ public class GameManager : MonoBehaviour
         {
             canvasScript.GameEnded(true);
         }
+        int playerLives = ScoreManager.CurrentLives();
+        if(playerLives>0)
+        {
+            GameObject.FindGameObjectWithTag("WinScreen").GetComponent<LoadTargetSceneButton>().RestartLevel();
+        }
         //stop time like your a time lord
         //Time.timeScale = 0;
         if(ScoreManager)
@@ -206,7 +210,7 @@ public class GameManager : MonoBehaviour
         {
             //Save score
             ScoreManager.SaveScore();
-            //Save health
+            //Save health and lives
             ScoreManager.SaveHealth();
         }
         
