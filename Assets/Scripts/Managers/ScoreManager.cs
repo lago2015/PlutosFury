@@ -14,7 +14,7 @@ public class ScoreManager : MonoBehaviour {
     public int playerHealth;
     private WinScreen winScript;
     private int orbObtained;
-    private int healthUp=10;
+    private int healthUp=100;
     public int CurrentHealth() { return playerHealth; }
 	// Use this for initialization
 	void Awake ()
@@ -82,6 +82,11 @@ public class ScoreManager : MonoBehaviour {
     public int CurrentLives()
     {
         return playerLives;
+    }
+
+    public void DecrementLives()
+    {
+        playerLives--;
     }
 
     public void IncrementLifes()

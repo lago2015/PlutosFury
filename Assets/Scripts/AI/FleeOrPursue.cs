@@ -120,7 +120,7 @@ public class FleeOrPursue : MonoBehaviour {
                 }
                 else
                 {
-                    StartCoroutine(CountdownToExplode());
+                    //StartCoroutine(CountdownToExplode());
                 }
             }
 

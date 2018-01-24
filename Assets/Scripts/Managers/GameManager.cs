@@ -176,6 +176,7 @@ public class GameManager : MonoBehaviour
         if(playerLives>0)
         {
             GameObject.FindGameObjectWithTag("WinScreen").GetComponent<LoadTargetSceneButton>().RestartLevel();
+            ScoreManager.DecrementLives();
         }
         //stop time like your a time lord
         //Time.timeScale = 0;
