@@ -79,6 +79,11 @@ public class ScoreManager : MonoBehaviour {
         }
     }
 
+    public void ResetLives()
+    {
+        PlayerPrefs.SetInt("playerLives", 0);
+    }
+
     public int CurrentLives()
     {
         return playerLives;

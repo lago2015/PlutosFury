@@ -14,7 +14,8 @@ public class DamageOrPowerUp : MonoBehaviour {
     
     public bool colliderTriggered = true;
     public float DamageCooldown;
-    
+    public GameObject SecondaryDamageObject;
+    private DamageOrPowerUp secondDamageScript;
     //Rate of effect to apply
     //public float ApplyEffectRate;
     public float IncrementTimeRate;
@@ -24,7 +25,6 @@ public class DamageOrPowerUp : MonoBehaviour {
     bool PlayerNear = false;
     Movement PlayerScript;
     FleeOrPursue dashScript;
-    public GameObject dashModel;
     private SphereCollider damageCollider;
     private BoxCollider otherDamageCollider;
     public bool didDamage() { return Damaged = true; }
@@ -32,9 +32,9 @@ public class DamageOrPowerUp : MonoBehaviour {
     void Start()
     {
         PlayerScript = GameObject.FindGameObjectWithTag("Player").GetComponent<Movement>();
-        if(dashModel)
+        if(SecondaryDamageObject)
         {
-            dashScript = dashModel.transform.GetComponent<FleeOrPursue>();
+            secondDamageScript = SecondaryDamageObject.GetComponent<DamageOrPowerUp>();
         }
         damageCollider = GetComponent<SphereCollider>();
         if(damageCollider==null)
@@ -101,6 +101,11 @@ public class DamageOrPowerUp : MonoBehaviour {
                             {
                                 otherDamageCollider.enabled = false;
                             }
+                            if(secondDamageScript)
+                            {
+                                secondDamageScript.didDamage();
+                            }
+
                             StartCoroutine(DamageReset());
                         }
                     }

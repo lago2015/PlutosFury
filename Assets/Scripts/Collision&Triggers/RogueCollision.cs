@@ -13,7 +13,7 @@ public class RogueCollision : MonoBehaviour {
     public GameObject Model2;
     public GameObject Model3;
 
-
+    private DamageOrPowerUp damageScript;
     private FleeOrPursue rogueMoveScript;
     private Collider myCollider;
     private Rigidbody myBody;
@@ -31,6 +31,7 @@ public class RogueCollision : MonoBehaviour {
         }
         if (Explosion && Model)
         {
+            damageScript = Explosion.GetComponent<DamageOrPowerUp>();
             Explosion.SetActive(false);
             Model.SetActive(true);
 
@@ -104,7 +105,10 @@ public class RogueCollision : MonoBehaviour {
                     {
                         myBody.AddForce(col.contacts[0].normal * wallBump, ForceMode.VelocityChange);
                     }
-
+                    if(damageScript)
+                    {
+                        damageScript.didDamage();
+                    }
                     RogueDamage();
                 }
             }

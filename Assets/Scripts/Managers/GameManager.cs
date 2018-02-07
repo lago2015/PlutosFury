@@ -173,7 +173,7 @@ public class GameManager : MonoBehaviour
             canvasScript.GameEnded(true);
         }
         int playerLives = ScoreManager.CurrentLives();
-        if(playerLives>0)
+        if(playerLives>=0)
         {
             GameObject.FindGameObjectWithTag("WinScreen").GetComponent<LoadTargetSceneButton>().RestartLevel();
             ScoreManager.DecrementLives();
