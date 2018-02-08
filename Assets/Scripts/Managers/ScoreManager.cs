@@ -92,11 +92,13 @@ public class ScoreManager : MonoBehaviour {
     public void DecrementLives()
     {
         playerLives--;
+        PlayerPrefs.SetInt("playerLives", playerLives);
     }
 
     public void IncrementLifes()
     {
         playerLives++;
+        PlayerPrefs.SetInt("playerLives", playerLives);
     }
 
     public void DefaultHealth()

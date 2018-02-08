@@ -168,15 +168,23 @@ public class GameManager : MonoBehaviour
         }
 
         yield return new WaitForSeconds(GameOverDelay);
-        if (canvasScript)
-        {
-            canvasScript.GameEnded(true);
-        }
+        
         int playerLives = ScoreManager.CurrentLives();
-        if(playerLives>=0)
+        if(playerLives>0)
         {
-            GameObject.FindGameObjectWithTag("WinScreen").GetComponent<LoadTargetSceneButton>().RestartLevel();
             ScoreManager.DecrementLives();
+            GameObject winObject = GameObject.FindGameObjectWithTag("CanvasManager");
+            if (winObject)
+            {
+                winObject.GetComponent<LoadTargetSceneButton>().RestartLevel();
+            }
+        }
+        else
+        {
+            if (canvasScript)
+            {
+                canvasScript.GameEnded(true);
+            }
         }
         //stop time like your a time lord
         //Time.timeScale = 0;

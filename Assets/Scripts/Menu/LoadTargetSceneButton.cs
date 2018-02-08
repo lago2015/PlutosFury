@@ -22,7 +22,11 @@ public class LoadTargetSceneButton : MonoBehaviour {
             Debug.Log("Scene not loaded properly");
             return;
         }
-        Menu.SetActive(false);
+        if(Menu)
+        {
+            Menu.SetActive(false);
+        }
+        
         LoadingScreenManager.LoadScene(num);
         Time.timeScale = 1;
     }
@@ -38,7 +42,10 @@ public class LoadTargetSceneButton : MonoBehaviour {
             Debug.Log("Scene not loaded properly");
             return;
         }
-        Menu.SetActive(false);
+        if (Menu)
+        {
+            Menu.SetActive(false);
+        }
         LoadingScreenManager.LoadScene(num);
         Time.timeScale = 1;
     }
@@ -57,7 +64,10 @@ public class LoadTargetSceneButton : MonoBehaviour {
 
         }
 
-        Menu.SetActive(false);
+        if (Menu)
+        {
+            Menu.SetActive(false);
+        }
         LoadingScreenManager.LoadScene (num);
         Time.timeScale = 1;
     }
