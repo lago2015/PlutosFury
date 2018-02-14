@@ -19,8 +19,8 @@ public class GameManager : MonoBehaviour
      */
 
 	private GameObject pluto;
-    public int AsteroidGoal;
-
+    public int curScore;
+    private int newRating;
     public float fadeTime;
     public float GameOverDelay = 5f;
     public bool levelWallActive;
@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour
     private GameObject levelWall;
     private GameObject CanvasManager;
     private CanvasToggle canvasScript;
-
+    private RatingSystem ratingScript;
     void Awake()
     {
         //30 fps set rate
@@ -66,6 +66,7 @@ public class GameManager : MonoBehaviour
         {
             //getter Score Manager
             ScoreManager = scoreObject.GetComponent<ScoreManager>();
+            ratingScript = scoreObject.GetComponent<RatingSystem>();
         }
         //Getter for Ad Manager
         AdManager = GetComponent<AdManager>();
@@ -102,9 +103,12 @@ public class GameManager : MonoBehaviour
             {
                 //save health for next scene
                 ScoreManager.HealthChange(playerScript.curHealth);
+                StartYouWin();
             }
             else
             {
+                StartCoroutine(GameOver());
+
                 //reset health otherwise
                 ScoreManager.HealthChange(0);
             }
@@ -157,19 +161,20 @@ public class GameManager : MonoBehaviour
     //and start game over music
     public void StartAdWithMusic()
     {
-        StartCoroutine(GameOver());
         PlayAd();
     }
    public IEnumerator GameOver()
     {
-        if(audioScript)
+
+        //start game over audio
+        if (audioScript)
         {
             audioScript.GameOver(pluto.transform.position);
         }
-
         yield return new WaitForSeconds(GameOverDelay);
         
         int playerLives = ScoreManager.CurrentLives();
+        //Check if player has anymore lives and if so restart the level and decrement lives
         if(playerLives>0)
         {
             ScoreManager.DecrementLives();
@@ -181,6 +186,8 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+
+            //enable game over screen
             if (canvasScript)
             {
                 canvasScript.GameEnded(true);
@@ -209,24 +216,27 @@ public class GameManager : MonoBehaviour
         {
             audioScript.Victory(pluto.transform.position);
         }
+        modelSwitch.SwapMaterial(TextureSwap.PlutoState.Win);
 
-        yield return new WaitForSeconds(GameOverDelay);
-        if (canvasScript)
+        yield return new WaitForSeconds(0.5f);
+        if (ScoreManager)
         {
-            canvasScript.GameEnded(false);
-        }
-        if(ScoreManager)
-        {
+            curScore = ScoreManager.ReturnScore();
+            if(ratingScript)
+            {
+                newRating = ratingScript.CheckRating(curScore);
+            }
             //Save score
             ScoreManager.SaveScore();
             //Save health and lives
             ScoreManager.SaveHealth();
         }
-        
 
-        pluto.GetComponent<Movement>().DisableMovement(true);
-        modelSwitch.SwapMaterial(TextureSwap.PlutoState.Win);
-
+        if (canvasScript)
+        {
+            canvasScript.SendRating(newRating);
+            canvasScript.GameEnded(false);
+        }
 
     }
     

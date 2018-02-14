@@ -99,6 +99,7 @@ public class Movement : MonoBehaviour
     private AsteroidSpawner spawnScript;
     private GameManager gameManager;
     private ScoreManager ScoreManager;
+    private WinScoreManager winScoreManager;
     private ExperienceManager ExperienceMan;
     private CameraShake CamShake;
     private FloatingJoystick joystickscript;
@@ -281,6 +282,7 @@ public class Movement : MonoBehaviour
         if (ScoreObject)
         {
             ScoreManager = ScoreObject.GetComponent<ScoreManager>();
+            winScoreManager = ScoreObject.GetComponent<WinScoreManager>();
         }
         //setting option menu fields
         //vibration enabled/disabled
@@ -856,7 +858,7 @@ public class Movement : MonoBehaviour
             ReturnAsteroid(col.gameObject);
             if(ScoreManager)
             {
-                ScoreManager.OrbObtained();
+                winScoreManager.ScoreObtained(WinScoreManager.ScoreList.Orb);
             }
         }
         else if (curTag == "EnvironmentObstacle" || curTag == "MoonBall")
@@ -938,10 +940,10 @@ public class Movement : MonoBehaviour
                 {
                     myBody.AddForce(c.contacts[0].normal * dashAsteroidBump, ForceMode.VelocityChange);
                 }
-                if(ScoreManager)
+                if(winScoreManager)
                 {
                     //update score
-                    ScoreManager.IncreaseScore(200);
+                    winScoreManager.ScoreObtained(WinScoreManager.ScoreList.BigOrb);
                 }
             }
             else
@@ -976,7 +978,11 @@ public class Movement : MonoBehaviour
         {
             if (ShouldDash)
             {
-
+                if (winScoreManager)
+                {
+                    //update score
+                    winScoreManager.ScoreObtained(WinScoreManager.ScoreList.BreakableCube);
+                }
                 WallHealth healthScript = c.gameObject.GetComponent<WallHealth>();
                 if (healthScript)
                 {
@@ -988,11 +994,7 @@ public class Movement : MonoBehaviour
                 }
             }
             myBody.AddForce(c.contacts[0].normal * wallBump, ForceMode.VelocityChange);
-            if(ScoreManager)
-            {
-                //update score
-                ScoreManager.IncreaseScore(20);
-            }
+            
         }
         else if (curTag == "LazerWall")
         {
@@ -1042,7 +1044,10 @@ public class Movement : MonoBehaviour
         myBody.velocity = Vector3.zero;
         myBody.drag = 100;
         TrailChange(DashState.idle);
-        isDead = isPlayerDead;
+        if(isPlayerDead)
+        {
+            isDead = isPlayerDead;
+        }
     }
     //pretty much the same has health pick up
     //but without incrementing health
@@ -1080,6 +1085,10 @@ public class Movement : MonoBehaviour
         {
             ScoreManager.IncrementLifes();
         }
+        if(winScoreManager)
+        {
+            winScoreManager.ScoreObtained(WinScoreManager.ScoreList.Life);
+        }
     }
 
     public void HealthPickup()
@@ -1112,6 +1121,10 @@ public class Movement : MonoBehaviour
             if(ScoreManager)
             {
                 ScoreManager.HealthChange(curHealth);
+            }
+            if(winScoreManager)
+            {
+                winScoreManager.ScoreObtained(WinScoreManager.ScoreList.Health);
             }
         }
     }

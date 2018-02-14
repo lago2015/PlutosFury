@@ -10,6 +10,10 @@ public class CanvasToggle : MonoBehaviour {
     public GameObject WinScreenCanvas;
     private WinScreen winScript;
     private ScoreManager scoreScript;
+    private int curRating;
+    private RatingSystem ratingScript;
+
+    public int SendRating(int newRating) { return curRating = newRating; }
 	// Use this for initialization
 	void Awake ()
     {
@@ -17,12 +21,13 @@ public class CanvasToggle : MonoBehaviour {
         if(scoreObject)
         {
             scoreScript = scoreObject.GetComponent<ScoreManager>();
+            ratingScript = scoreObject.GetComponent<RatingSystem>();
         }
 
         //get canvas script to enable fading
-        if(GameOverCanvas)
+        if(WinScreenCanvas)
         {
-            winScript = GameOverCanvas.GetComponent<WinScreen>();
+            winScript = WinScreenCanvas.GetComponent<WinScreen>();
         }
         //enable hud and disable win screen
         hudCanvas.SetActive(true);
@@ -53,8 +58,10 @@ public class CanvasToggle : MonoBehaviour {
         else
         {
             WinScreenCanvas.SetActive(true);
+            
             if (winScript)
             {
+                winScript.GetRating(curRating);
                 winScript.FadeIn();
             }
         }

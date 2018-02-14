@@ -10,7 +10,10 @@ public class WinScreen : MonoBehaviour {
     float Timer;
     //total score counter
     int TotalScore;
-    
+
+    //Image for rating system
+    public Image[] ratingArray;
+    private int curRating;
     //audio script
     private AudioController audioScript;
 
@@ -26,19 +29,31 @@ public class WinScreen : MonoBehaviour {
     public Image fadeOverlay;
     public Image gameFade;
 
+
 	// Use this for initialization
-	void Start () {
+	void Awake () {
 
         //sectionScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<SectionManager>();
         audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
         targetSceneButton = this.gameObject.GetComponent<LoadTargetSceneButton>();
         scoreScript = GameObject.FindGameObjectWithTag("ScoreManager").GetComponent<ScoreManager>();
-
+        //diable images for rating
+        for(int i=0;i<=ratingArray.Length-1;i++)
+        {
+            ratingArray[i].enabled = false;
+        }
         timeDisplay.text = Timer.ToString();
         scoreDisplay.text = AsteroidsCollected.ToString();
         totalDisplay.text = TotalScore.ToString();
 	}
-
+    //getting rating from score manager to game manager to canvas toggle to here
+    public void GetRating(int CurrentRating)
+    {
+        for(int i=0;i<=CurrentRating;i++)
+        {
+            ratingArray[i].enabled = true;
+        }
+    }
     public void FadeIn()
     {
         fadeOverlay.CrossFadeAlpha(0, 0.5f, true);
