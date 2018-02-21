@@ -51,8 +51,15 @@ public class WinScreen : MonoBehaviour {
     }
     public void FadeIn()
     {
-        scoreDisplay.text = "Score: " + curScore;
-        highScoreDisplay.text = "High Score " + highScore;
+        if(scoreDisplay)
+        {
+            scoreDisplay.text = "Score: " + curScore;
+        }
+        if(highScoreDisplay)
+        {
+            highScoreDisplay.text = "High Score " + highScore;
+        }
+        
 
         fadeOverlay.CrossFadeAlpha(0, 0.5f, true);
         gameFade.CrossFadeAlpha(1, 0.5f, true);
