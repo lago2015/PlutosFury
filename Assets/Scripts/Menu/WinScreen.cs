@@ -4,12 +4,10 @@ using System.Collections;
 
 public class WinScreen : MonoBehaviour {
 
-    //asteroid counter
-    int AsteroidsCollected;
-    //timer score counter
-    float Timer;
-    //total score counter
-    int TotalScore;
+    //score
+    private int curScore;
+    //high score 
+    private int highScore;
 
     //Image for rating system
     public Image[] ratingArray;
@@ -20,16 +18,16 @@ public class WinScreen : MonoBehaviour {
     private LoadTargetSceneButton targetSceneButton;
     private ScoreManager scoreScript;
     public GameObject WinScreenGroup;
-    public Text timeDisplay;
     public Text scoreDisplay;
-    public Text totalDisplay;
+    public Text highScoreDisplay;
 
     public Button nextSection;
     public Button RestartLevel;
     public Image fadeOverlay;
     public Image gameFade;
 
-
+    public int newScore(int sessionScore) { return curScore = sessionScore; }
+    public int theHighestOfScore(int curHighScore) { return highScore = curHighScore; }
 	// Use this for initialization
 	void Awake () {
 
@@ -42,9 +40,6 @@ public class WinScreen : MonoBehaviour {
         {
             ratingArray[i].enabled = false;
         }
-        timeDisplay.text = Timer.ToString();
-        scoreDisplay.text = AsteroidsCollected.ToString();
-        totalDisplay.text = TotalScore.ToString();
 	}
     //getting rating from score manager to game manager to canvas toggle to here
     public void GetRating(int CurrentRating)
@@ -56,6 +51,9 @@ public class WinScreen : MonoBehaviour {
     }
     public void FadeIn()
     {
+        scoreDisplay.text = "Score: " + curScore;
+        highScoreDisplay.text = "High Score " + highScore;
+
         fadeOverlay.CrossFadeAlpha(0, 0.5f, true);
         gameFade.CrossFadeAlpha(1, 0.5f, true);
     }
@@ -84,17 +82,6 @@ public class WinScreen : MonoBehaviour {
         {
             scoreScript.SaveHealth();
         }
-    }
-    //*********Variable getters for score display at end game screen
-
-    public void SetAsteroidsCollected(int Temp)
-    {
-        AsteroidsCollected = Temp;
-    }
-
-    public void SetTime(float Temp)
-    {
-        Timer = Temp;
     }
 
 }

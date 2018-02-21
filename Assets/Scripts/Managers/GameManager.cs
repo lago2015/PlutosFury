@@ -19,7 +19,8 @@ public class GameManager : MonoBehaviour
      */
 
 	private GameObject pluto;
-    public int curScore;
+    private int curScore;
+    private int curHighScore;
     private int newRating;
     public float fadeTime;
     public float GameOverDelay = 5f;
@@ -218,10 +219,11 @@ public class GameManager : MonoBehaviour
         }
         modelSwitch.SwapMaterial(TextureSwap.PlutoState.Win);
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1f);
         if (ScoreManager)
         {
             curScore = ScoreManager.ReturnScore();
+            curHighScore = ScoreManager.ReturnHighScore();
             if(ratingScript)
             {
                 newRating = ratingScript.CheckRating(curScore);
@@ -234,8 +236,15 @@ public class GameManager : MonoBehaviour
 
         if (canvasScript)
         {
+            //turn on gameobject
+            canvasScript.GameEnded(false);  
+            //Send data for win summary
+            canvasScript.SendScore(curScore);
+            canvasScript.SendHighScore(curHighScore);
             canvasScript.SendRating(newRating);
-            canvasScript.GameEnded(false);
+            canvasScript.SendDataToWinScreen();
+            //start fade in
+            canvasScript.StartFadeIn();
         }
 
     }

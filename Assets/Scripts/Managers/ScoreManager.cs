@@ -34,8 +34,7 @@ public class ScoreManager : MonoBehaviour {
         if (winObject)
         {
             winScript = winObject.GetComponent<WinScreen>();
-            winScript.SetAsteroidsCollected(orbObtained);
-            winScript.SetTime(timeRemaining);
+            
             
         }
     }

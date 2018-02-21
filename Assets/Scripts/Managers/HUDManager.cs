@@ -12,7 +12,6 @@ public class HUDManager : MonoBehaviour {
 
     //Script References for hud
     private CountDownStage timerScript;
-    private WinScreen winScript;
     private ScoreManager scoreScript;
     //Text to apply to hud
     public Text scoreText;
@@ -22,7 +21,6 @@ public class HUDManager : MonoBehaviour {
     public Text playerLives;
     //local variables for hud 
     private int currentScore;
-    private float currentTime;
     private int currentPlayerLives;
     // Use this for initialization
     void Awake()

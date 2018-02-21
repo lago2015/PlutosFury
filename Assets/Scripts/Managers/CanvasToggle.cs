@@ -11,9 +11,14 @@ public class CanvasToggle : MonoBehaviour {
     private WinScreen winScript;
     private ScoreManager scoreScript;
     private int curRating;
+    private int curScore;
+    private int curHighScore;
     private RatingSystem ratingScript;
 
     public int SendRating(int newRating) { return curRating = newRating; }
+    public int SendScore(int newScore) { return curScore = newScore; }
+    public int SendHighScore(int newHighScore) { return curHighScore = newHighScore; }
+
 	// Use this for initialization
 	void Awake ()
     {
@@ -58,12 +63,20 @@ public class CanvasToggle : MonoBehaviour {
         else
         {
             WinScreenCanvas.SetActive(true);
-            
-            if (winScript)
-            {
-                winScript.GetRating(curRating);
-                winScript.FadeIn();
-            }
+        }
+    }
+
+    public void SendDataToWinScreen()
+    {
+        winScript.GetRating(curRating);
+        winScript.newScore(curScore);
+        winScript.theHighestOfScore(curHighScore);
+    }
+    public void StartFadeIn()
+    {
+        if (winScript)
+        {
+            winScript.FadeIn();
         }
     }
 }
