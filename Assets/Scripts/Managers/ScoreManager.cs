@@ -108,7 +108,7 @@ public class ScoreManager : MonoBehaviour {
     //to increase score
     public int IncreaseScore(int value)
     {
- 
+        
         return score += value; 
     }
     public int OrbObtained()

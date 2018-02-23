@@ -20,9 +20,16 @@ public class AsteroidCollector : MonoBehaviour {
     public bool isConsumable;
     float AttractionStrength = 5f;
     private AsteroidSpawner spawnScript;
-
+    private WinScoreManager winScoreManager;
+    private AudioController audioScript;
     void Awake()
     {
+        audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
+        GameObject ScoreObject = GameObject.FindGameObjectWithTag("ScoreManager");
+        if (ScoreObject)
+        {
+            winScoreManager = ScoreObject.GetComponent<WinScoreManager>();
+        }
         spawnScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<AsteroidSpawner>();    
         player = GameObject.FindGameObjectWithTag("Player");
     }
@@ -47,6 +54,10 @@ public class AsteroidCollector : MonoBehaviour {
                 {
                     spawnScript.ReturnPooledAsteroid(curAsteroid);
                 }
+                if(winScoreManager)
+                {
+                    winScoreManager.ScoreObtained(WinScoreManager.ScoreList.Orb, transform.position);
+                }
             }
             else
             {
@@ -63,5 +74,4 @@ public class AsteroidCollector : MonoBehaviour {
             }
         }
     }
-
 }

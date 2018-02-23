@@ -23,9 +23,10 @@ Moonball Hits
     Seeker
      */
 
-    public enum ScoreList {Orb,Health,Life,BigOrb,BreakableCube }
+    public enum ScoreList {Orb,Health,Life,BigOrb,BreakableCube,Rogue }
     private ScoreList scoreState;
     private ScoreManager scoreManager;
+    private PopUpScoreController textController;
 
     [Header("Pickup-Orb")]
     public int orbScore=100;
@@ -42,32 +43,62 @@ Moonball Hits
     [Header("EnvironmentDestruction-Breakable Cube")]
     public int breakableCubeScore = 100;
 
+    [Header("Enemy-Rogue")]
+    public int rogueScore = 250;
+
+    [Header("Enemy-Spike")]
+    public int spikeScore = 300;
+
+    [Header("Enemy-Turret")]
+    public int turretScore = 200;
+
+
+
+
     private void Awake()
     {
         scoreManager = GetComponent<ScoreManager>();
+        textController = GetComponent<PopUpScoreController>();
     }
 
 
-    public void ScoreObtained(ScoreList curScoreState)
+    public void ScoreObtained(ScoreList curScoreState, Vector3 curLocation)
     {
         scoreState = curScoreState;
         switch(scoreState)
         {
             case ScoreList.Orb:
                 SendScoreToManager(orbScore);
+                curLocation.y += Random.Range(5f,10f);
+                curLocation.x += Random.Range(-5f, 5f);
+                SendScoreToFloatingText(curLocation, orbScore.ToString());
                 break;
             case ScoreList.Health:
                 SendScoreToManager(healthScore);
+                SendScoreToFloatingText(curLocation, healthScore.ToString());
                 break;
             case ScoreList.Life:
                 SendScoreToManager(lifeScore);
+                SendScoreToFloatingText(curLocation, lifeScore.ToString());
                 break;
             case ScoreList.BreakableCube:
                 SendScoreToManager(breakableCubeScore);
+                SendScoreToFloatingText(curLocation, breakableCubeScore.ToString());
                 break;
             case ScoreList.BigOrb:
                 SendScoreToManager(bigOrbScore);
+                SendScoreToFloatingText(curLocation, bigOrbScore.ToString());
                 break;
+            
+        }
+    }
+
+    void SendScoreToFloatingText(Vector3 curLocation,string score)
+    {
+        if(textController)
+        {
+            
+            textController.CreateFloatingText(score, curLocation);
         }
     }
 

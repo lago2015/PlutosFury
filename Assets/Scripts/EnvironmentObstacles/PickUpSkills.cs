@@ -91,7 +91,7 @@ public class PickUpSkills : MonoBehaviour {
                     if(playerScript && !pickupObtained)
                     {
                         pickupObtained = true;
-                        playerScript.HealthPickup();
+                        playerScript.HealthPickup(transform.position);
                         Destroy(gameObject);
                     }
                     break;
@@ -109,7 +109,7 @@ public class PickUpSkills : MonoBehaviour {
                     if(playerScript&&!pickupObtained)
                     {
                         pickupObtained = true;
-                        playerScript.LifeUp();
+                        playerScript.LifeUp(transform.position);
                         Destroy(gameObject);
                     }
                     break;

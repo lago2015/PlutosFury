@@ -858,7 +858,7 @@ public class Movement : MonoBehaviour
             ReturnAsteroid(col.gameObject);
             if(ScoreManager)
             {
-                winScoreManager.ScoreObtained(WinScoreManager.ScoreList.Orb);
+                winScoreManager.ScoreObtained(WinScoreManager.ScoreList.Orb,transform.position);
             }
         }
         else if (curTag == "EnvironmentObstacle" || curTag == "MoonBall")
@@ -919,6 +919,10 @@ public class Movement : MonoBehaviour
             {
                 ScoreManager.OrbObtained();
             }
+            if (ScoreManager)
+            {
+                winScoreManager.ScoreObtained(WinScoreManager.ScoreList.Orb, c.transform.position);
+            }
         }
         if (curTag == "BigAsteroid")
         {
@@ -943,7 +947,7 @@ public class Movement : MonoBehaviour
                 if(winScoreManager)
                 {
                     //update score
-                    winScoreManager.ScoreObtained(WinScoreManager.ScoreList.BigOrb);
+                    winScoreManager.ScoreObtained(WinScoreManager.ScoreList.BigOrb, c.transform.position);
                 }
             }
             else
@@ -981,7 +985,7 @@ public class Movement : MonoBehaviour
                 if (winScoreManager)
                 {
                     //update score
-                    winScoreManager.ScoreObtained(WinScoreManager.ScoreList.BreakableCube);
+                    winScoreManager.ScoreObtained(WinScoreManager.ScoreList.BreakableCube, c.transform.position);
                 }
                 WallHealth healthScript = c.gameObject.GetComponent<WallHealth>();
                 if (healthScript)
@@ -1079,7 +1083,7 @@ public class Movement : MonoBehaviour
         }
     }
 
-    public void LifeUp()
+    public void LifeUp(Vector3 curLocation)
     {
         if(ScoreManager)
         {
@@ -1087,11 +1091,11 @@ public class Movement : MonoBehaviour
         }
         if(winScoreManager)
         {
-            winScoreManager.ScoreObtained(WinScoreManager.ScoreList.Life);
+            winScoreManager.ScoreObtained(WinScoreManager.ScoreList.Life,curLocation);
         }
     }
 
-    public void HealthPickup()
+    public void HealthPickup(Vector3 curLocation)
     {
         if(curHealth<2)
         {
@@ -1124,7 +1128,7 @@ public class Movement : MonoBehaviour
             }
             if(winScoreManager)
             {
-                winScoreManager.ScoreObtained(WinScoreManager.ScoreList.Health);
+                winScoreManager.ScoreObtained(WinScoreManager.ScoreList.Health, curLocation);
             }
         }
     }
