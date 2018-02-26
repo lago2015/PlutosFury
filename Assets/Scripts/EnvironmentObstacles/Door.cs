@@ -19,7 +19,7 @@ public class Door : MonoBehaviour {
     {
         //fadeScript = GameObject.FindGameObjectWithTag("Finish").GetComponent<CanvasFade>();
         gameScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<GameManager>();
-        timerScript = GameObject.FindGameObjectWithTag("HUDManager").GetComponent<CountDownStage>();
+        //timerScript = GameObject.FindGameObjectWithTag("HUDManager").GetComponent<CountDownStage>();
         if (winScreen)
         {
             winScreenScript = winScreen.GetComponent<WinScreen>();

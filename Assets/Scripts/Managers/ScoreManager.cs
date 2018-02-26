@@ -13,13 +13,18 @@ public class ScoreManager : MonoBehaviour {
     public int exp;
     public int playerHealth;
     private WinScreen winScript;
+    private HUDManager HUDScript;
     private int orbObtained;
     private int healthUp=100;
     public int CurrentHealth() { return playerHealth; }
 	// Use this for initialization
 	void Awake ()
     {
-        
+        GameObject hudObject = GameObject.FindGameObjectWithTag("HUDManager");
+        if(hudObject)
+        {
+            HUDScript=hudObject.GetComponent<HUDManager>();
+        }
         //setting high score
         PlayerPrefs.GetInt("scorePref");
         highScore= PlayerPrefs.GetInt("scorePref");
@@ -28,16 +33,7 @@ public class ScoreManager : MonoBehaviour {
     }
     
 
-    public void SendEndGameStats()
-    {
-        GameObject winObject = GameObject.FindGameObjectWithTag("WinScreen");
-        if (winObject)
-        {
-            winScript = winObject.GetComponent<WinScreen>();
-            
-            
-        }
-    }
+
 
     public float SetTimeRemaining(float newTime)
     {
@@ -92,12 +88,20 @@ public class ScoreManager : MonoBehaviour {
     {
         playerLives--;
         PlayerPrefs.SetInt("playerLives", playerLives);
+        if (HUDScript)
+        {
+            HUDScript.UpdateLives(playerLives);
+        }
     }
 
     public void IncrementLifes()
     {
         playerLives++;
         PlayerPrefs.SetInt("playerLives", playerLives);
+        if(HUDScript)
+        {
+            HUDScript.UpdateLives(playerLives);
+        }
     }
 
     public void DefaultHealth()
@@ -108,8 +112,12 @@ public class ScoreManager : MonoBehaviour {
     //to increase score
     public int IncreaseScore(int value)
     {
-        
-        return score += value; 
+        score += value;
+        if (HUDScript)
+        {
+            HUDScript.UpdateScore(score);
+        }
+        return score;
     }
     public int OrbObtained()
     {

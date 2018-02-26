@@ -168,8 +168,17 @@ public class Movement : MonoBehaviour
     void Awake()
     {
 
-        hudScript = GameObject.FindGameObjectWithTag("HUDManager").GetComponent<HUDManager>();
-        buttonScript = GameObject.FindGameObjectWithTag("DashButt").GetComponent<ButtonIndicator>();
+        GameObject hudObject = GameObject.FindGameObjectWithTag("HUDManager");
+        if(hudObject)
+        {
+            hudScript = hudObject.GetComponent<HUDManager>();
+
+        }
+        GameObject buttonObject = GameObject.FindGameObjectWithTag("DashButt");
+        if(buttonObject)
+        {
+            buttonScript = buttonObject.GetComponent<ButtonIndicator>();
+        }
         //get collider that is triggered to change radius during runtime
         foreach (SphereCollider col in GetComponents<SphereCollider>())
         {
@@ -843,25 +852,7 @@ public class Movement : MonoBehaviour
     void OnTriggerEnter(Collider col)
     {
         string curTag = col.gameObject.tag;
-        if (curTag == "Asteroid")
-        {
-            //check if player is dead
-            if (!isDead)
-            {
-                //play audio cue for absorbed
-                if (audioScript)
-                {
-                    audioScript.AsteroidAbsorbed(transform.position);
-                }
-            }
-            //return orb to pool
-            ReturnAsteroid(col.gameObject);
-            if(ScoreManager)
-            {
-                winScoreManager.ScoreObtained(WinScoreManager.ScoreList.Orb,transform.position);
-            }
-        }
-        else if (curTag == "EnvironmentObstacle" || curTag == "MoonBall")
+if (curTag == "EnvironmentObstacle" || curTag == "MoonBall")
         {
             Vector3 knockBackDirection = col.transform.position - transform.position;
             knockBackDirection = knockBackDirection.normalized;

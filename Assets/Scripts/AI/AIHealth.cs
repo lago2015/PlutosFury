@@ -17,10 +17,11 @@ public class AIHealth : MonoBehaviour {
     public float wallBump = 20;
     private Rigidbody myBody;
     private FleeOrPursue RogueScript;
+    private WinScoreManager scoringManager;
     void Awake()
     {
 
-        
+        scoringManager = GameObject.FindGameObjectWithTag("ScoreManager").GetComponent<WinScoreManager>();
         myCollider = GetComponent<Collider>();
         myBody = GetComponent<Rigidbody>();
         if(Explosion&&Model)
@@ -41,7 +42,31 @@ public class AIHealth : MonoBehaviour {
         EnemyHealth--;
         if(EnemyHealth<=0)
         {
-
+            if(scoringManager)
+            {
+                string objectName;
+                if (transform.parent != null)
+                {
+                    objectName = gameObject.transform.parent.name;
+                }
+                else
+                {
+                    objectName = gameObject.name;
+                }
+                
+                if (objectName.Contains("Turret_AsteroidCannon"))
+                {
+                    scoringManager.ScoreObtained(WinScoreManager.ScoreList.TurretSingle, transform.position);
+                }
+                else if (objectName.Contains("Turret_ScatterCannon"))
+                {
+                    scoringManager.ScoreObtained(WinScoreManager.ScoreList.TurretScatter, transform.position);
+                }
+                else if (objectName.Contains("Spike"))
+                {
+                    scoringManager.ScoreObtained(WinScoreManager.ScoreList.Spike, transform.position);
+                }
+            }
             if (Explosion && Model)
             {
               // myCollider.enabled = false;

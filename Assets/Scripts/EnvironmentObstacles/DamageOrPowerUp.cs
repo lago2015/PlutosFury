@@ -73,17 +73,17 @@ public class DamageOrPowerUp : MonoBehaviour {
     
         }
     }
-   
+
     void OnCollisionEnter(Collision col)
     {
         string curString = col.gameObject.tag;
-        if(curString=="Player")
+        if (curString == "Player")
         {
-            if(CurrentEffect==EffectState.Damage)
+            if (CurrentEffect == EffectState.Damage)
             {
                 if (!Damaged)
                 {
-                    if(dashScript)
+                    if (dashScript)
                     {
                         bool playerDamaged = col.gameObject.GetComponent<Movement>().DamageStatus();
                         bool plutoDashing = PlayerScript.DashStatus();
@@ -101,7 +101,7 @@ public class DamageOrPowerUp : MonoBehaviour {
                             {
                                 otherDamageCollider.enabled = false;
                             }
-                            if(secondDamageScript)
+                            if (secondDamageScript)
                             {
                                 secondDamageScript.didDamage();
                             }
@@ -124,7 +124,7 @@ public class DamageOrPowerUp : MonoBehaviour {
                                 {
                                     damageCollider.enabled = false;
                                 }
-                                if(otherDamageCollider)
+                                if (otherDamageCollider)
                                 {
                                     otherDamageCollider.enabled = false;
                                 }

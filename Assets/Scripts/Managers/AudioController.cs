@@ -15,6 +15,12 @@ public class AudioController : MonoBehaviour {
     [Header("BackgroundBossMusic")]
     public AudioSource BgBossSource;
 
+    [Header("Intro-Ready")]
+    public AudioSource ReadyAudioSource;
+
+    [Header("Intro-Go")]
+    public AudioSource GoAudioSource;
+
     [Header("Pluto Hit")]
     public AudioSource plutoHitSource;
     public float hitDelay;
@@ -169,6 +175,28 @@ public class AudioController : MonoBehaviour {
         }
     }
 
+    public void StartReadyIntro()
+    {
+        if (ReadyAudioSource != null)
+        {
+            ReadyAudioSource.priority = 200;
+            ReadyAudioSource.volume = 1f;
+            ReadyAudioSource.minDistance = 1000f;
+            ReadyAudioSource.loop = false;
+            ReadyAudioSource.Play();
+        }
+    }
+    public void StartGoIntro()
+    {
+        if (GoAudioSource != null)
+        {
+            GoAudioSource.priority = 200;
+            GoAudioSource.volume = 1f;
+            GoAudioSource.minDistance = 1000f;
+            GoAudioSource.loop = false;
+            GoAudioSource.Play();
+        }
+    }
     public void BackgroundBossMusic()
     {
         if (timer_02 >= bgMusicDelay)

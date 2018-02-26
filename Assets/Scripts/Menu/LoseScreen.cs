@@ -6,48 +6,73 @@ using UnityEngine.UI;
 public class LoseScreen : MonoBehaviour {
 
 
-    public Button RestartLevel;
     public Button MainMenu;
-
+    public Text scoreText;
+    public Text highScoreText;
     public Image fadeOverlay;
 
-    public Image plutoSprite;
+    public Image gameOverSprite;
 
-    public float fadeDuration = 15.0f;
+    public float fadeDuration = 0.5f;
+
+    private ScoreManager scoreScript;
+    private void Awake()
+    {
+        GameObject scoreObject = GameObject.FindGameObjectWithTag("ScoreManager");
+        scoreScript = scoreObject.GetComponent<ScoreManager>();
+    }
+
+    private void OnEnable()
+    {
+        if(scoreScript)
+        {
+            if(scoreText!=null)
+            {
+                int curScore = scoreScript.ReturnScore();
+                scoreText.text = ("Score: ") + curScore;
+            }
+            if(highScoreText!=null)
+            {
+                int curHighScore = scoreScript.ReturnHighScore();
+                highScoreText.text = ("High Score: ") + curHighScore;
+            }
+        }
+    }
+
     void Start()
     {
-        plutoSprite.transform.position.Set(0f, -450f, 0);
-        RestartLevel.image.canvasRenderer.SetAlpha(0.0f);
+        gameOverSprite.transform.position.Set(0f, -450f, 0);
+        scoreText.canvasRenderer.SetAlpha(0.0f);
+        highScoreText.canvasRenderer.SetAlpha(0.0f);
         MainMenu.image.canvasRenderer.SetAlpha(0.0f);
         StartCoroutine(startFade());
     }
 
     public void ResetPositions()
     {
-        plutoSprite.transform.position.Set(0f, -450f, 0);
-        RestartLevel.image.canvasRenderer.SetAlpha(0.0f);
+        gameOverSprite.transform.position.Set(0f, -450f, 0);
         MainMenu.image.canvasRenderer.SetAlpha(0.0f);
     }
 
 	// Update is called once per frame
 	void Update ()
     {
-        if (plutoSprite.transform.position.y < 500)
+        if (gameOverSprite.transform.position.y < 800)
         {
-            plutoSprite.transform.Translate(Vector3.up * 500 * Time.deltaTime, Space.World);
+            gameOverSprite.transform.Translate(Vector3.up * 550 * Time.deltaTime, Space.World);
         }
         else
         {
-            plutoSprite.transform.position.Set(0, 500, 0);
+            gameOverSprite.transform.position.Set(0, 800, 0);
         }
-        Debug.Log(RestartLevel.GetComponent<Image>().color.a);
 	}
 
     void FadeIn()
     {
         fadeOverlay.CrossFadeAlpha(0, fadeDuration, true);
-        RestartLevel.image.CrossFadeAlpha(1, fadeDuration, true);
         MainMenu.image.CrossFadeAlpha(1, fadeDuration, true);
+        scoreText.CrossFadeAlpha(1, fadeDuration, true);
+        highScoreText.CrossFadeAlpha(1, fadeDuration, true);
     }
 
     private IEnumerator startFade()
@@ -55,5 +80,6 @@ public class LoseScreen : MonoBehaviour {
         FadeIn();
 
         yield return new WaitForSeconds(fadeDuration);
+        
     }
 }

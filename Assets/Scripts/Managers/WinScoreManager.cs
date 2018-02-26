@@ -23,7 +23,7 @@ Moonball Hits
     Seeker
      */
 
-    public enum ScoreList {Orb,Health,Life,BigOrb,BreakableCube,Rogue }
+    public enum ScoreList {Orb,Health,Life,BigOrb,BreakableCube,Rogue,Spike,TurretSingle,TurretScatter }
     private ScoreList scoreState;
     private ScoreManager scoreManager;
     private PopUpScoreController textController;
@@ -49,8 +49,12 @@ Moonball Hits
     [Header("Enemy-Spike")]
     public int spikeScore = 300;
 
-    [Header("Enemy-Turret")]
-    public int turretScore = 200;
+    [Header("Enemy-TurretSingle")]
+    public int turretSingleScore = 200;
+
+    [Header("Enemy-TurretScatter")]
+    public int turretScatterScore = 250;
+
 
 
 
@@ -65,12 +69,12 @@ Moonball Hits
     public void ScoreObtained(ScoreList curScoreState, Vector3 curLocation)
     {
         scoreState = curScoreState;
-        switch(scoreState)
+        curLocation.y += Random.Range(5f, 10f);
+        curLocation.x += Random.Range(-5f, 5f);
+        switch (scoreState)
         {
             case ScoreList.Orb:
                 SendScoreToManager(orbScore);
-                curLocation.y += Random.Range(5f,10f);
-                curLocation.x += Random.Range(-5f, 5f);
                 SendScoreToFloatingText(curLocation, orbScore.ToString());
                 break;
             case ScoreList.Health:
@@ -89,7 +93,23 @@ Moonball Hits
                 SendScoreToManager(bigOrbScore);
                 SendScoreToFloatingText(curLocation, bigOrbScore.ToString());
                 break;
-            
+            case ScoreList.Rogue:
+                SendScoreToManager(rogueScore);
+                SendScoreToFloatingText(curLocation, rogueScore.ToString());
+                break;
+            case ScoreList.Spike:
+                SendScoreToManager(spikeScore);
+                SendScoreToFloatingText(curLocation, spikeScore.ToString());
+                break;
+            case ScoreList.TurretSingle:
+                SendScoreToManager(turretSingleScore);
+                SendScoreToFloatingText(curLocation, turretSingleScore.ToString());
+                break;
+            case ScoreList.TurretScatter:
+                SendScoreToManager(turretScatterScore);
+                SendScoreToFloatingText(curLocation, turretScatterScore.ToString());
+                break;
+
         }
     }
 

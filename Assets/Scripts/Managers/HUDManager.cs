@@ -54,6 +54,9 @@ public class HUDManager : MonoBehaviour {
         if(playerLives&&scoreScript)
         {
             currentPlayerLives = scoreScript.CurrentLives();
+            currentScore = scoreScript.ReturnScore();
+            UpdateLives(currentPlayerLives);
+            UpdateScore(currentScore);
         }
     }
 
@@ -130,27 +133,21 @@ public class HUDManager : MonoBehaviour {
             shockwaveSprite.enabled = isActive;
         }
     }
+    
 
-    // Update is called once per frame
-    void Update()
+    public void UpdateScore(int newScore)
     {
-        //if (scoreScript && scoreText)
-        //{
-        //    //currentScore = scoreScript.ReturnScore();
-        //    //scoreText.text = ("Score: " + currentScore);
-        //}
-        //if (timerScript && timerText)
-        //{
-        //    currentTime = timerScript.CurrentTimeRemain();
-        //    timerText.text = ("Time Left: " + currentTime);
-        //}
-
-        if(scoreScript&&playerLives)
+        if (scoreText)
         {
-            currentPlayerLives = scoreScript.CurrentLives();
-            playerLives.text = ("Lives: " + currentPlayerLives);
+            scoreText.text = ("Score: " + newScore);
         }
     }
 
-
+    public void UpdateLives(int newLives)
+    {
+        if (scoreScript)
+        {
+            playerLives.text = ("Lives: " + newLives);
+        }
+    }
 }
