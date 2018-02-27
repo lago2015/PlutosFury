@@ -3,7 +3,7 @@ using System.Collections;
 
 public class BigAsteroid : MonoBehaviour {
 
-    public GameObject[] Asteroids;
+    //public GameObject[] Asteroids;
     public GameObject Explosion;
     public GameObject AsteroidModel;
     private SphereCollider Collider;
@@ -34,16 +34,16 @@ public class BigAsteroid : MonoBehaviour {
 
     public void SpawnAsteroids()
     {
-        for(int i=0;i<Asteroids.Length;i++)
-        {
+        //for(int i=0;i<Asteroids.Length;i++)
+        //{
            
-            SpawnPoint =  Random.insideUnitSphere * spawnRadius;
-            SpawnPoint = transform.TransformPoint(SpawnPoint);
-            Object Asteroid=Instantiate(Asteroids[i], SpawnPoint, Quaternion.identity);
-            GameObject ConAsteroid = (GameObject)Asteroid;
-            ConAsteroid.GetComponent<BurstBehavior>().GoBurst();
-            ConAsteroid.GetComponent<BurstBehavior>().newSpawnedAsteroid(true);
-        }
+        //    SpawnPoint =  Random.insideUnitSphere * spawnRadius;
+        //    SpawnPoint = transform.TransformPoint(SpawnPoint);
+        //    Object Asteroid=Instantiate(Asteroids[i], SpawnPoint, Quaternion.identity);
+        //    GameObject ConAsteroid = (GameObject)Asteroid;
+        //    ConAsteroid.GetComponent<BurstBehavior>().GoBurst();
+        //    ConAsteroid.GetComponent<BurstBehavior>().newSpawnedAsteroid(true);
+        //}
         if(AsteroidModel&&Explosion)
         {
             foreach(SphereCollider col in GetComponents<SphereCollider>())
@@ -94,6 +94,7 @@ public class BigAsteroid : MonoBehaviour {
                     SpawnAsteroids();
                     doOnce = true;
                 }
+                col.gameObject.GetComponent<MoonBall>().OnExplosion();
             }
         }
     }

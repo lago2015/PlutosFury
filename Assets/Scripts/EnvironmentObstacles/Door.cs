@@ -13,7 +13,7 @@ public class Door : MonoBehaviour {
     public float fadeTime = 2;
     private int keyObtained;
     private int numKeyRequired = 1;
-    private CountDownStage timerScript;
+    //private CountDownStage timerScript;
     private bool doorActive;
     void Awake()
     {
@@ -37,9 +37,9 @@ public class Door : MonoBehaviour {
     {
         if(col.gameObject.tag=="Player")
         {
-            if(!doorActive&&gameScript&&timerScript)
+            if(!doorActive&&gameScript)
             {
-                timerScript.SendRemainingTime();
+                //timerScript.SendRemainingTime();
                 //ensure this gets called once
                 doorActive = true;
                 //disable gameobjects and save variables

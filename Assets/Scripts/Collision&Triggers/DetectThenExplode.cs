@@ -108,6 +108,7 @@ public class DetectThenExplode : MonoBehaviour {
                     if (moonBall)
                     {
                         moonBall.rocketHit(forwardVec);
+                        moonBall.OnExplosion();
                     }
             }
 

@@ -49,7 +49,8 @@ public class HUDManager : MonoBehaviour {
         if(currentLevel)
         {
             Scene curScene = SceneManager.GetActiveScene();
-            currentLevel.text = curScene.name;
+            int curIndex = curScene.buildIndex-1;
+            currentLevel.text = (" "+curIndex);
         }
         if(playerLives&&scoreScript)
         {
@@ -139,7 +140,7 @@ public class HUDManager : MonoBehaviour {
     {
         if (scoreText)
         {
-            scoreText.text = ("Score: " + newScore);
+            scoreText.text = (" "+newScore);
         }
     }
 
@@ -147,7 +148,7 @@ public class HUDManager : MonoBehaviour {
     {
         if (scoreScript)
         {
-            playerLives.text = ("Lives: " + newLives);
+            playerLives.text = (" " + newLives);
         }
     }
 }

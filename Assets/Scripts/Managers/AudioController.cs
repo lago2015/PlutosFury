@@ -21,6 +21,9 @@ public class AudioController : MonoBehaviour {
     [Header("Intro-Go")]
     public AudioSource GoAudioSource;
 
+    [Header("Complete Level")]
+    public AudioSource CompleteSource;
+
     [Header("Pluto Hit")]
     public AudioSource plutoHitSource;
     public float hitDelay;
@@ -195,6 +198,17 @@ public class AudioController : MonoBehaviour {
             GoAudioSource.minDistance = 1000f;
             GoAudioSource.loop = false;
             GoAudioSource.Play();
+        }
+    }
+    public void CompleteLevel()
+    {
+        if (CompleteSource != null)
+        {
+            CompleteSource.priority = 200;
+            CompleteSource.volume = 1f;
+            CompleteSource.minDistance = 1000f;
+            CompleteSource.loop = false;
+            CompleteSource.Play();
         }
     }
     public void BackgroundBossMusic()

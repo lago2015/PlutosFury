@@ -215,6 +215,7 @@ public class GameManager : MonoBehaviour
     {
         if (audioScript)
         {
+            audioScript.CompleteLevel();
             audioScript.Victory(pluto.transform.position);
         }
         modelSwitch.SwapMaterial(TextureSwap.PlutoState.Win);

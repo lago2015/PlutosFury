@@ -135,7 +135,7 @@ public class Movement : MonoBehaviour
     private float velocityCap = 80;
     private float velocityMin = -80;
     private float DefaultSpeed;
-
+    private bool isWaiting;
 
     //functions for power dash
     
@@ -328,7 +328,6 @@ public class Movement : MonoBehaviour
             curHealth = ScoreManager.CurrentHealth();
             StartingHealth();
         }
-        ResumePluto();
     }
     void LateUpdate()
     {
@@ -533,78 +532,86 @@ public class Movement : MonoBehaviour
         {
             col.SetActive(false);
         }
-        switch (trailState)
+        if(!isWaiting)
         {
-            case DashState.idle:
-                ResumePluto();
-                modelScript.StartRender();
-                ShouldDash = false;
-                isPowerDashing = false;
-                isCharged = false;
-                startOnce = false;
-                moveOn = false;
-                burstOn = false;
-                ShouldDash = false;
-                dashOn = false;
-                PowerUpScript.DashModelTransition(false);
-                if (buttonScript)
-                {
-                    buttonScript.isCharged = false;
-                }
-                Charging = false;
-                break;
-            case DashState.basicMove:
-                ShouldDash = false;
-                moveOn = true;
-                burstOn = false;
-                dashOn = false;
-                //cache gameobject 
-                curTrail = trailContainer[0];
-                //enable trail
-                trailContainer[0].SetActive(true);
 
-                break;
-            case DashState.dashMove:
-                if (!dashOn)
-                {
+            switch (trailState)
+            {
+                case DashState.idle:
+                    if (!isWaiting)
+                    {
+                        ResumePluto();
+                    }
+                    modelScript.StartRender();
+                    ShouldDash = false;
+                    isPowerDashing = false;
+                    isCharged = false;
+                    startOnce = false;
                     moveOn = false;
                     burstOn = false;
-                    dashOn = true;
-                    //cache gameobject 
-                    curTrail = trailContainer[1];
-                    trailContainer[1].SetActive(true);
-                }
-
-                break;
-            case DashState.chargeStart:
-                //notify charging is active
-                trailContainer[2].SetActive(true);
-                break;
-            case DashState.chargeComplete:
-                //disable charging after completion
-                ShouldDash = false;
-                Charging = false;
-                startOnce = false;
-                isCharged = true;
-                //cache gameobject 
-                trailContainer[3].SetActive(true);
-                break;
-            case DashState.burst:
-                if (!burstOn)
-                {
-
-                    moveOn = false;
-                    burstOn = true;
+                    ShouldDash = false;
                     dashOn = false;
-
-                    //disable render for burst
-                    modelScript.DisableRender();
+                    PowerUpScript.DashModelTransition(false);
+                    if (buttonScript)
+                    {
+                        buttonScript.isCharged = false;
+                    }
+                    Charging = false;
+                    break;
+                case DashState.basicMove:
+                    ShouldDash = false;
+                    moveOn = true;
+                    burstOn = false;
+                    dashOn = false;
                     //cache gameobject 
-                    playOnce = false;
-                    curTrail = trailContainer[4];
-                    trailContainer[4].SetActive(true);
-                }
-                break;
+                    curTrail = trailContainer[0];
+
+                    //enable trail
+                    trailContainer[0].SetActive(true);
+
+                    break;
+                case DashState.dashMove:
+                    if (!dashOn)
+                    {
+                        moveOn = false;
+                        burstOn = false;
+                        dashOn = true;
+                        //cache gameobject 
+                        curTrail = trailContainer[1];
+                        trailContainer[1].SetActive(true);
+                    }
+
+                    break;
+                case DashState.chargeStart:
+                    //notify charging is active
+                    trailContainer[2].SetActive(true);
+                    break;
+                case DashState.chargeComplete:
+                    //disable charging after completion
+                    ShouldDash = false;
+                    Charging = false;
+                    startOnce = false;
+                    isCharged = true;
+                    //cache gameobject 
+                    trailContainer[3].SetActive(true);
+                    break;
+                case DashState.burst:
+                    if (!burstOn)
+                    {
+
+                        moveOn = false;
+                        burstOn = true;
+                        dashOn = false;
+
+                        //disable render for burst
+                        modelScript.DisableRender();
+                        //cache gameobject 
+                        playOnce = false;
+                        curTrail = trailContainer[4];
+                        trailContainer[4].SetActive(true);
+                    }
+                    break;
+            }
         }
     }
 
@@ -1035,6 +1042,7 @@ if (curTag == "EnvironmentObstacle" || curTag == "MoonBall")
     //end game behaviors (winner or game over)
     public void DisableMovement(bool isPlayerDead)
     {
+        isWaiting = true;
         MoveSpeed = 0;
         myBody.velocity = Vector3.zero;
         myBody.drag = 100;
@@ -1290,6 +1298,7 @@ if (curTag == "EnvironmentObstacle" || curTag == "MoonBall")
     //Resume function when pluto is done being frozen or slowed
     public void ResumePluto()
     {
+        isWaiting = false;
         MoveSpeed = DefaultSpeed;
         myBody.drag = normalDrag;
     }

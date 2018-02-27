@@ -35,7 +35,7 @@ public class WallGenerator : MonoBehaviour {
 
             if (moonBall.getAttackMode())
             {
-                managerScript.WallDestroyed();
+                //managerScript.WallDestroyed();
             }
         }
     }

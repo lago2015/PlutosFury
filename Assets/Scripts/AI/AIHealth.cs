@@ -149,7 +149,7 @@ public class AIHealth : MonoBehaviour {
             if (moonBall.getAttackMode())
             {
                 IncrementDamage();
-                 
+                moonBall.OnExplosion();   
             } 
         } 
     }

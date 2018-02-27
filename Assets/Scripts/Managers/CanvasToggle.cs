@@ -13,14 +13,16 @@ public class CanvasToggle : MonoBehaviour {
     private WinScreen winScript;
     private ScoreManager scoreScript;
     private AudioController audioScript;
-    public float StartAudioDelay=1f;
+    public float StartReady=1f;
     public float GoAudioLength=1f;
-    public float spriteFadeIn = 1;
+    public float ReadySpriteFadeIn = 1;
+    public float goSpriteFadeIn = 1;
+    public float goSpriteFadeOut = 1;
     private int curRating;
     private int curScore;
     private int curHighScore;
     private RatingSystem ratingScript;
-    
+    private Movement playerScript;
     public int SendRating(int newRating) { return curRating = newRating; }
     public int SendScore(int newScore) { return curScore = newScore; }
     public int SendHighScore(int newHighScore) { return curHighScore = newHighScore; }
@@ -30,7 +32,7 @@ public class CanvasToggle : MonoBehaviour {
     {
         ReadySprite.canvasRenderer.SetAlpha(0.0f);
         GoSprite.canvasRenderer.SetAlpha(0.0f);
-        
+        playerScript = GameObject.FindGameObjectWithTag("Player").GetComponent<Movement>();
         GameObject scoreObject = GameObject.FindGameObjectWithTag("ScoreManager");
         if(scoreObject)
         {
@@ -55,13 +57,18 @@ public class CanvasToggle : MonoBehaviour {
 
     private void Start()
     {
+        if(playerScript)
+        {
+            playerScript.DisableMovement(false);
+        }
         StartCoroutine(ReadyIntro());
     }
 
     IEnumerator ReadyIntro()
     {
-        yield return new WaitForSeconds(StartAudioDelay);
-        ReadySprite.CrossFadeAlpha(1, spriteFadeIn, true);
+        
+        yield return new WaitForSeconds(StartReady);
+        ReadySprite.CrossFadeAlpha(1, ReadySpriteFadeIn, true);
         if(audioScript)
         {
             audioScript.StartReadyIntro();
@@ -70,24 +77,37 @@ public class CanvasToggle : MonoBehaviour {
     }
     IEnumerator SpriteFadeOut()
     {
-        yield return new WaitForSeconds(spriteFadeIn);
-        ReadySprite.CrossFadeAlpha(0, spriteFadeIn, true);
+        yield return new WaitForSeconds(ReadySpriteFadeIn);
+        ReadySprite.CrossFadeAlpha(0, goSpriteFadeIn, true);
         StartCoroutine(GoIntro());
     }
     IEnumerator GoIntro()
     {
-        yield return new WaitForSeconds(GoAudioLength);
-        GoSprite.CrossFadeAlpha(1, spriteFadeIn, true);
+        yield return new WaitForSeconds(goSpriteFadeIn);
+        GoSprite.CrossFadeAlpha(1, goSpriteFadeOut, true);
         if(audioScript)
         {
             audioScript.StartGoIntro();
         }
+        
         StartCoroutine(GoSpriteFadeOut());
     }
     IEnumerator GoSpriteFadeOut()
     {
-        yield return new WaitForSeconds(spriteFadeIn);
-        GoSprite.CrossFadeAlpha(0, spriteFadeIn, true);
+        yield return new WaitForSeconds(goSpriteFadeOut);
+        GoSprite.CrossFadeAlpha(0, ReadySpriteFadeIn, true);
+        if (playerScript)
+        {
+            playerScript.ResumePluto();
+        }
+        StartCoroutine(SetSpritesInactive());
+    }
+
+    IEnumerator SetSpritesInactive()
+    {
+        yield return new WaitForSeconds(0.7f);
+        GoSprite.gameObject.SetActive(false);
+        ReadySprite.gameObject.SetActive(false);
     }
 
     //toggle canvas and pass through if the player is dead or not to know 

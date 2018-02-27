@@ -137,6 +137,7 @@ public class RogueCollision : MonoBehaviour {
                 bool rogueDashing = rogueMoveScript.isDashing();
                 moonBall.rogueHit(forwardDirection, rogueDashing);
             }
+            moonBall.OnExplosion();
         }
 
         else if(curTag=="BreakableWall")
@@ -168,6 +169,8 @@ public class RogueCollision : MonoBehaviour {
                     RogueDamage();
                 }
             }
+            moonBall.OnExplosion();
+
         }
         else if (col.tag == "BreakableWall")
         {

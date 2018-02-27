@@ -33,6 +33,8 @@ public class ShatterCore : MonoBehaviour
         if(collision.tag == "MoonBall")
         {
             transform.parent.GetComponent<Shatter>().OnDeath();
+            MoonBall ballScript = collision.gameObject.GetComponent<MoonBall>();
+            ballScript.OnExplosion();
         }
     }
 }

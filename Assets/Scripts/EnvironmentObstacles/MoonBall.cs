@@ -9,7 +9,8 @@ public class MoonBall : MonoBehaviour
     public float idleSpeed = 10.0f;
     public float velocityCap;
     public float velocityMin;
-
+    public GameObject Explosion;
+    public bool canExplodeOnImpact;
 
     private Rigidbody rb;
     private Vector3 newVelocity;
@@ -103,6 +104,11 @@ public class MoonBall : MonoBehaviour
 
             // reverse direction and apply force to it to simulate bounce
             rb.AddForce(-direction.normalized * 20.0f, ForceMode.VelocityChange);
+
+            if (canExplodeOnImpact)
+            {
+                OnExplosion();
+            }
         }
     }
 
@@ -114,12 +120,21 @@ public class MoonBall : MonoBehaviour
         {
             Debug.Log("LAAAAZER!");
             rb.AddForce(col.contacts[0].normal * wallBounce, ForceMode.VelocityChange);
+            if(canExplodeOnImpact)
+            {
+                OnExplosion();
+            }
+            
         }
 
         if (col.gameObject.tag == "BreakableWall")
         {
             col.gameObject.GetComponent<WallHealth>().IncrementDamage();
             rb.AddForce(col.contacts[0].normal * knockbackSpeed, ForceMode.VelocityChange);
+            if (canExplodeOnImpact)
+            {
+                OnExplosion();
+            }
         }
 
         if (col.gameObject.tag == "Wall")
@@ -140,6 +155,11 @@ public class MoonBall : MonoBehaviour
         // Apply force and rotation to knock back from rocket explosion
         rb.AddForce(Direction * knockbackSpeed, ForceMode.VelocityChange);
         rb.AddTorque(Direction * hitSpeed);
+
+        if (canExplodeOnImpact)
+        {
+            OnExplosion();
+        }
     }
 
     public void rogueHit(Vector3 direction,bool isDashing)
@@ -156,6 +176,10 @@ public class MoonBall : MonoBehaviour
             rb.AddForce(direction * wallBounce, ForceMode.VelocityChange);
             //rb.AddTorque(direction * hitSpeed);
         }
+        if (canExplodeOnImpact)
+        {
+            OnExplosion();
+        }
     }
 
 
@@ -165,6 +189,15 @@ public class MoonBall : MonoBehaviour
         canHit = false;
         yield return new WaitForSeconds(0.5f);
         canHit = true;
+    }
+
+    public void OnExplosion()
+    {
+        if(Explosion)
+        {
+            Instantiate(Explosion, transform.position,Quaternion.identity);
+            Destroy(gameObject);
+        }
     }
 
 }

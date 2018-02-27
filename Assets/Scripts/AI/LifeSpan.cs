@@ -21,7 +21,7 @@ public class LifeSpan : MonoBehaviour {
         {
             Instantiate(Explosion, transform.position, transform.rotation);
         }
-        if (gameObject.transform.parent.gameObject)
+        if (transform.parent)
         {
             Destroy(gameObject.transform.parent.gameObject);
         }

@@ -28,7 +28,11 @@ public class OptionsMenu : MonoBehaviour {
         }
         else
         {
-            Music.value = MusicVol;
+            if(Music)
+            {
+                Music.value = MusicVol;
+            }
+            
         }
         if (PlayerPrefs.HasKey("SFXVol"))
         {
@@ -36,7 +40,10 @@ public class OptionsMenu : MonoBehaviour {
         }
         else
         {
-            SFX.value = SFXVol;
+            if(SFX)
+            {
+                SFX.value = SFXVol;
+            }
         }
 
         if (PlayerPrefs.HasKey("VibrationHit"))
@@ -47,7 +54,10 @@ public class OptionsMenu : MonoBehaviour {
             }
             else
             {
-                vHit.isOn = false;
+                if(vHit)
+                {
+                    vHit.isOn = false;
+                }
             }
         }
 
@@ -59,7 +69,10 @@ public class OptionsMenu : MonoBehaviour {
             }
             else
             {
-                iControls.isOn = false;
+                if(iControls)
+                {
+                    iControls.isOn = false;
+                }
             }
         }
         
