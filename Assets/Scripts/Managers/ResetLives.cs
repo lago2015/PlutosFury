@@ -4,8 +4,19 @@ using UnityEngine;
 
 public class ResetLives : MonoBehaviour {
 
-	// Use this for initialization
-	void Start ()
+
+    private void Awake()
+    {
+        //hard locking landscape rotation for the screen
+        Screen.autorotateToLandscapeLeft = true;
+        Screen.autorotateToLandscapeRight = true;
+        Screen.autorotateToPortrait = false;
+        Screen.autorotateToPortraitUpsideDown = false;
+        Screen.orientation = ScreenOrientation.AutoRotation;
+    }
+
+    // Use this for initialization
+    void Start ()
     {
         PlayerPrefs.SetInt("playerLives", 0);
 	}

@@ -71,4 +71,9 @@ public class LoadTargetSceneButton : MonoBehaviour {
         LoadingScreenManager.LoadScene (num);
         Time.timeScale = 1;
     }
+
+    public void LoadToMainMenu()
+    {
+        SceneManager.LoadScene(0);
+    }
 }

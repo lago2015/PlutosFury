@@ -11,7 +11,7 @@ public class ShootProjectiles : MonoBehaviour {
     float elapseTime;
     bool isReloading = false;
     bool PlayerNear;
-    
+    public bool PlayerIsNotNear() { return PlayerNear = false; }
     void Awake()
     {
         if(Muzzle)
@@ -68,11 +68,5 @@ public class ShootProjectiles : MonoBehaviour {
         }
     }
 
-    void OnTriggerExit(Collider col)
-    {
-        if (col.gameObject.tag == "Player")
-        {
-            PlayerNear = false;
-        }
-    }
+
 }

@@ -37,13 +37,30 @@ public class DetectWaitThenExplode : MonoBehaviour {
         string CurTag = col.gameObject.tag;
         if (CurTag == "Player")
         {
-            if (damageScript)
+            Movement playerScript = col.gameObject.GetComponent<Movement>();
+            if(playerScript)
             {
-                damageScript.didDamage();
+                bool isDashing = playerScript.DashStatus();
+                if(isDashing)
+                {
+                    if (damageScript)
+                    {
+                        damageScript.didDamage();
+                    }
+                    WaitTimeToExplode = 0;
+                    TriggeredExplosion();
+                }
+                else
+                {
+                    if (damageScript)
+                    {
+                        damageScript.didDamage();
+                    }
+                    playerScript.DamagePluto();
+                    //Start Explosion
+                    TriggeredExplosion();
+                }
             }
-            col.gameObject.GetComponent<Movement>().DamagePluto();
-            //Start Explosion
-            TriggeredExplosion();
         }
         else if (CurTag == "BigAsteroid")
         {

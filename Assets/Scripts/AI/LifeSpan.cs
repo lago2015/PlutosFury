@@ -8,7 +8,7 @@ public class LifeSpan : MonoBehaviour {
     float IncrementTime=1;
     bool DamagePlayer;
     public GameObject Explosion;
-
+    
     void Start()
     {
         StartCoroutine(CountdownToLife());

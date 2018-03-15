@@ -94,7 +94,6 @@ public class BigAsteroid : MonoBehaviour {
                     SpawnAsteroids();
                     doOnce = true;
                 }
-                col.gameObject.GetComponent<MoonBall>().OnExplosion();
             }
         }
     }

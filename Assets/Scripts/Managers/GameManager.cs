@@ -42,6 +42,12 @@ public class GameManager : MonoBehaviour
     {
         //30 fps set rate
         Application.targetFrameRate = 30;
+        //hard locking landscape rotation for the screen
+        Screen.autorotateToLandscapeLeft = true;
+        Screen.autorotateToLandscapeRight = true;
+        Screen.autorotateToPortrait = false;
+        Screen.autorotateToPortraitUpsideDown = false;
+        Screen.orientation = ScreenOrientation.AutoRotation;
 
         CanvasManager = GameObject.FindGameObjectWithTag("CanvasManager");
         if(CanvasManager)

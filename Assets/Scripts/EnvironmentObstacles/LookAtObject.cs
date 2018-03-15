@@ -9,10 +9,13 @@ public class LookAtObject : MonoBehaviour {
     public bool AmITurret;
     public float RotationSpeed = 5;
     private Vector3 startPosition;
-
+    private ShootProjectiles shootScript;
+    public float maxDistanceToAttack;
+    private float distanceToPlayer;
     void Awake()
     {
         TrigCollider = GetComponent<SphereCollider>();
+        shootScript = GetComponent<ShootProjectiles>();
     }
 
     void Start()
@@ -31,14 +34,29 @@ public class LookAtObject : MonoBehaviour {
 
     void FixedUpdate()
     {
+        CalculatePlayerDistance();
         RotateToObject();
+    }
+    //is player close enough to attack
+    void CalculatePlayerDistance()
+    {
+        distanceToPlayer = Vector3.Distance(transform.position, Player.transform.position);
+        if(distanceToPlayer>=maxDistanceToAttack)
+        {
+            TrigCollider.enabled = true;
+            enabled = false;
+            if(shootScript)
+            {
+                shootScript.PlayerIsNotNear();
+            }
+        }
     }
     
     void RotateToObject()
     {
-
+        //get y rotation
         float rotY = transform.rotation.y;
-        //float rotZ = transform.rotation.z;
+        
         //calculate distance for rotation
         Vector3 vectorToTarget = Player.transform.position - transform.position;
         //calculate angle
@@ -61,20 +79,11 @@ public class LookAtObject : MonoBehaviour {
         {
             if(AmITurret)
             {
+                TrigCollider.enabled = false;
                 enabled = true;
             }
         }
     }
-    
-    void OnTriggerExit(Collider col)
-    {
-        if(col.gameObject.tag=="Player")
-        {
-            if(AmITurret)
-            {
-                enabled = false;
-            }
-        }
-    }
+ 
     
 }

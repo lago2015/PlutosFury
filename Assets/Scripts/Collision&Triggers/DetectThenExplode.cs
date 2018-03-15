@@ -69,15 +69,24 @@ public class DetectThenExplode : MonoBehaviour {
     void OnTriggerEnter(Collider col)
     {
         string CurTag = col.gameObject.tag;
-        if(CurTag == "Player")
+        //turn off collider to ensure nothing gets called twice
+        if (TriggerCollider)
         {
-            if(damageScript)
+            TriggerCollider.enabled = false;
+        }
+        if (CurTag == "Player")
+        {
+            if(!doOnce)
             {
-                damageScript.didDamage();
+                if (damageScript)
+                {
+                    damageScript.didDamage();
+                }
+                col.gameObject.GetComponent<Movement>().DamagePluto();
+                //Start Explosion
+                TriggeredExplosion();
             }
-            col.gameObject.GetComponent<Movement>().DamagePluto();
-            //Start Explosion
-            TriggeredExplosion();
+            
         }
         else if(CurTag == "BigAsteroid")
         {
@@ -120,12 +129,6 @@ public class DetectThenExplode : MonoBehaviour {
     
     public void TriggeredExplosion()
     {
-        //turn off collider to ensure nothing gets called twice
-        if (TriggerCollider)
-        {
-            TriggerCollider.enabled = false;
-        }
-
         
         //check if theres a model and explosion
         if (regularState && explosionState)
@@ -165,5 +168,6 @@ public class DetectThenExplode : MonoBehaviour {
         {
             explosionState.SetActive(true);
         }
+        enabled = false;
     }
 }
