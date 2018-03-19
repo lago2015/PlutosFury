@@ -7,16 +7,31 @@ public class StartCameraTrigger : MonoBehaviour {
     private CameraStop cameraScript;
     void Awake()
     {
-        wallScript = GameObject.FindGameObjectWithTag("LevelWall").GetComponent<LevelWall>();
-        cameraScript = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraStop>();
+        GameObject wallObject = GameObject.FindGameObjectWithTag("LevelWall");
+        if(wallObject)
+        {
+            wallScript = wallObject.GetComponent<LevelWall>();
+        }
+        GameObject camObject = GameObject.FindGameObjectWithTag("MainCamera");
+        if(camObject)
+        {
+            cameraScript = camObject.GetComponent<CameraStop>();
+        }
     }
 
     void OnTriggerExit(Collider col)
     {
         if(col.gameObject.tag=="Player")
         {
-            wallScript.EnableWall();
-            cameraScript.EnableCamera();    
+            if(wallScript)
+            {
+                wallScript.EnableWall();
+            }
+            if(cameraScript)
+            {
+                cameraScript.EnableCamera();
+            }
+            
         }
     }
 }

@@ -70,10 +70,7 @@ public class DetectThenExplode : MonoBehaviour {
     {
         string CurTag = col.gameObject.tag;
         //turn off collider to ensure nothing gets called twice
-        if (TriggerCollider)
-        {
-            TriggerCollider.enabled = false;
-        }
+
         if (CurTag == "Player")
         {
             if(!doOnce)
@@ -107,7 +104,6 @@ public class DetectThenExplode : MonoBehaviour {
         }
         else if(CurTag == "MoonBall")
         {
-         
             if (isRocket)
             {
                 Vector3 forwardVec = transform.forward.normalized;
@@ -129,7 +125,10 @@ public class DetectThenExplode : MonoBehaviour {
     
     public void TriggeredExplosion()
     {
-        
+        if (TriggerCollider)
+        {
+            TriggerCollider.enabled = false;
+        }
         //check if theres a model and explosion
         if (regularState && explosionState)
         {

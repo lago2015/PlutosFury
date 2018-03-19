@@ -262,8 +262,12 @@ public class Movement : MonoBehaviour
         //Ensure speed is saved for default settings
         DefaultSpeed = MoveSpeed;
         //For camera Shakes
-        CamShake = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraShake>();
-        camera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+        GameObject camObject = GameObject.FindGameObjectWithTag("MainCamera");
+        if(camObject)
+        {
+            CamShake = camObject.GetComponent<CameraShake>();
+            camera = camObject.GetComponent<Camera>();
+        }
 
 
         //Look if there is a joystick
