@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class DamageOnCollision : MonoBehaviour {
 
-    
+    public GameObject explosionObject;
     private Movement playerScript;
     private bool isDamaged;
     private float DamageCooldown = 0.2f;
@@ -12,6 +12,10 @@ public class DamageOnCollision : MonoBehaviour {
     void Awake()
     {
         playerScript = GameObject.FindGameObjectWithTag("Player").GetComponent<Movement>();
+        if(explosionObject)
+        {
+            explosionObject.SetActive(false);
+        }
     }
 
     void OnCollisionEnter(Collision col)
@@ -30,6 +34,21 @@ public class DamageOnCollision : MonoBehaviour {
                     StartCoroutine(DamageReset());
                 }
             }
+        }
+        else if(curString=="MoonBall")
+        {
+            if(explosionObject)
+            {
+                GetComponent<SpriteRenderer>().enabled = false;
+                explosionObject.SetActive(true);
+
+            }
+            else
+            {
+                Destroy(this);
+            }
+            
+            
         }
     }
 

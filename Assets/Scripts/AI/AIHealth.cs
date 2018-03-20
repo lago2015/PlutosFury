@@ -12,6 +12,7 @@ public class AIHealth : MonoBehaviour {
     public GameObject Explosion;
     public GameObject Model;
     public GameObject Model2;
+    public GameObject parent;
     private Collider myCollider;
    
     public float wallBump = 20;
@@ -76,14 +77,16 @@ public class AIHealth : MonoBehaviour {
 
                 Destroy(Explosion, Explosion.GetComponent<ParticleSystem>().main.duration);
 
-                if (transform.parent != null)
+                
+                if(parent!=null)
+                {
+                    Destroy(parent);
+                }
+                else if (transform.parent != null)
                 {
                     Destroy(transform.parent.gameObject);
                 }
-                else
-                {
-                    Destroy(this.gameObject);
-                }
+
 
             }
         }

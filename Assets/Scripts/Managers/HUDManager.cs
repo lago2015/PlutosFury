@@ -148,7 +148,7 @@ public class HUDManager : MonoBehaviour {
     {
         if (scoreScript)
         {
-            playerLives.text = (" " + newLives);
+            playerLives.text = ("x " + newLives);
         }
     }
 }

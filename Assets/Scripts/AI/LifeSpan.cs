@@ -8,7 +8,7 @@ public class LifeSpan : MonoBehaviour {
     float IncrementTime=1;
     bool DamagePlayer;
     public GameObject Explosion;
-    
+    public GameObject parent;
     void Start()
     {
         StartCoroutine(CountdownToLife());
@@ -21,9 +21,9 @@ public class LifeSpan : MonoBehaviour {
         {
             Instantiate(Explosion, transform.position, transform.rotation);
         }
-        if (transform.parent)
+        if (parent!=null)
         {
-            Destroy(gameObject.transform.parent.gameObject);
+            Destroy(parent);
         }
         else
         {

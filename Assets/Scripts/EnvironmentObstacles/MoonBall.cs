@@ -116,7 +116,7 @@ public class MoonBall : MonoBehaviour
     private void OnCollisionEnter(Collision col)
     {
         // APPLYING BOUNCE BACK TO CERTAIN OBJECTS
-        if(col.gameObject.name == "LaserWall")
+        if(col.gameObject.name == "LaserWall" || col.gameObject.tag == "EnvironmentObstacle")
         {
             Debug.Log("LAAAAZER!");
             rb.AddForce(col.contacts[0].normal * wallBounce, ForceMode.VelocityChange);
