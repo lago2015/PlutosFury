@@ -14,6 +14,7 @@ public class DetectThenExplode : MonoBehaviour {
     private bool doOnce;
     public bool isRocket;
     public bool isLandmine;
+    public float travelTimeRocket = 3;
     void Awake()
     {
         //model gameobject
@@ -61,7 +62,7 @@ public class DetectThenExplode : MonoBehaviour {
     IEnumerator LaunchTime()
     {
         
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(travelTimeRocket);
 
         TriggeredExplosion();
     }
@@ -83,7 +84,6 @@ public class DetectThenExplode : MonoBehaviour {
                 //Start Explosion
                 TriggeredExplosion();
             }
-            
         }
         else if(CurTag == "BigAsteroid")
         {
@@ -102,7 +102,7 @@ public class DetectThenExplode : MonoBehaviour {
             //start explosion
             TriggeredExplosion();
         }
-        else if(CurTag == "MoonBall")
+        else if(CurTag == "MoonBall"||CurTag=="BreakableWall")
         {
             if (isRocket)
             {

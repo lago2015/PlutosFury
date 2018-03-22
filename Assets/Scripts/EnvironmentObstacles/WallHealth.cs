@@ -9,11 +9,11 @@ public class WallHealth : MonoBehaviour
     public int EnemyHealth = 1;
     public GameObject Explosion;
     public GameObject Model;
-    private BoxCollider Mycollider;
+    private Collider Mycollider;
     // Use this for initialization
     void Awake ()
     {
-        Mycollider = GetComponent<BoxCollider>();
+        Mycollider = GetComponent<Collider>();
         if (Explosion && Model)
         {
             Explosion.SetActive(false);
