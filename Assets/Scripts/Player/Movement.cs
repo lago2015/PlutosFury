@@ -863,7 +863,7 @@ public class Movement : MonoBehaviour
     void OnTriggerEnter(Collider col)
     {
         string curTag = col.gameObject.tag;
-if (curTag == "EnvironmentObstacle" || curTag == "MoonBall")
+        if (curTag == "EnvironmentObstacle" || curTag == "MoonBall")
         {
             Vector3 knockBackDirection = col.transform.position - transform.position;
             knockBackDirection = knockBackDirection.normalized;
@@ -931,21 +931,21 @@ if (curTag == "EnvironmentObstacle" || curTag == "MoonBall")
             if (ShouldDash)
             {
                 c.gameObject.GetComponent<BigAsteroid>().AsteroidHit(1);
-                StartCoroutine(PlutoHit(c.contacts[0].point));
+                //StartCoroutine(PlutoHit(c.contacts[0].point));
 
-                bool Smashed = c.gameObject.GetComponent<BigAsteroid>().RockStatus();
-                if (Smashed)
-                {
+                //bool Smashed = c.gameObject.GetComponent<BigAsteroid>().RockStatus();
+                //if (Smashed)
+                //{
 
-                    if (!isPowerDashing)
-                        myBody.AddForce(c.contacts[0].normal * explosionBump, ForceMode.VelocityChange);
+                //    if (!isPowerDashing)
+                //        myBody.AddForce(c.contacts[0].normal * explosionBump, ForceMode.VelocityChange);
 
 
-                }
-                else
-                {
-                    myBody.AddForce(c.contacts[0].normal * dashAsteroidBump, ForceMode.VelocityChange);
-                }
+                //}
+                //else
+                //{
+                //    myBody.AddForce(c.contacts[0].normal * dashAsteroidBump, ForceMode.VelocityChange);
+                //}
                 if(winScoreManager)
                 {
                     //update score
@@ -954,7 +954,7 @@ if (curTag == "EnvironmentObstacle" || curTag == "MoonBall")
             }
             else
             {
-                myBody.AddForce(c.contacts[0].normal * wallBump, ForceMode.VelocityChange);
+                myBody.AddForce(c.contacts[0].normal * wallBump/3, ForceMode.VelocityChange);
                 if (audioScript)
                 {
                     audioScript.AsteroidBounce(transform.position);
