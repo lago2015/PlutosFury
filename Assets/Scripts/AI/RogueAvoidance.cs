@@ -20,10 +20,11 @@ public class RogueAvoidance : MonoBehaviour {
     private Vector3 avoidanceForce;
     private RaycastHit hit;
     private FleeOrPursue dashScript;
-
-
+    public bool EnableScript() { return enabled = true; }
+    public bool DisableScript() { return enabled = false; }
     void Awake()
     {
+        enabled = false;
         dashScript = GetComponent<FleeOrPursue>();
     }
 

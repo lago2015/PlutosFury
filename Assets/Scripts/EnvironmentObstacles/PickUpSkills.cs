@@ -3,7 +3,7 @@ using System.Collections;
 
 public class PickUpSkills : MonoBehaviour {
 
-    public enum Skills { DashCharge,Shield, Inflation, Health,Shockwave,LifeUp}
+    public enum Skills { Star, Inflation, Health,Shockwave,LifeUp}
     public Skills curSkill;
     //Script references
 
@@ -19,13 +19,9 @@ public class PickUpSkills : MonoBehaviour {
         GameObject playerRef = GameObject.FindGameObjectWithTag("Player");
         switch(curSkill)
         {
-            
-            case Skills.DashCharge:
-                PowerUpScript = playerRef.GetComponent<PowerUpManager>();
-                playerScript = playerRef.GetComponent<Movement>();
-                break;
-            case Skills.Shield:
+            case Skills.Star:
                 ShieldScript = playerRef.GetComponent<Shield>();
+                PowerUpScript = playerRef.GetComponent<PowerUpManager>();
                 playerScript = playerRef.GetComponent<Movement>();
                 break;
             case Skills.Inflation:
@@ -59,18 +55,11 @@ public class PickUpSkills : MonoBehaviour {
             playerScript.BusterChange(Movement.BusterStates.Pickup);
             switch(curSkill)
             {
-                case Skills.DashCharge:
-                    if (PowerUpScript && !pickupObtained && hudScript)
+                case Skills.Star:
+                
+                    if (ShieldScript && playerScript && !pickupObtained && hudScript && PowerUpScript)
                     {
                         PowerUpScript.DashPluto(transform.position);
-                        hudScript.isPowerDashActive(true);
-                        hudScript.isShockwaveActive(false);
-                        Destroy(gameObject);
-                    }
-                    break;
-                case Skills.Shield:
-                    if(ShieldScript&&playerScript && !pickupObtained&&hudScript)
-                    {
                         hudScript.isShieldActive(true);
                         pickupObtained = true;
                         playerScript.IndicatePickup();
@@ -78,6 +67,7 @@ public class PickUpSkills : MonoBehaviour {
                         Destroy(gameObject);
                     }
                     break;
+
                 case Skills.Inflation:
                     if(InflateScript && !pickupObtained)
                     {

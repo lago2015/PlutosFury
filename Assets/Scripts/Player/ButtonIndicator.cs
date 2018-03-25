@@ -47,155 +47,153 @@ public class ButtonIndicator : MonoBehaviour
         {
             isButtDown = false;
         }
-        
-        //Check if button or key is down
-        if(isButtDown)
-        {
 
+        //Check if button or key is down
+        if (isButtDown)
+        {
+            isDashActive = isPowerDashActive();
+            if(!isDashActive)
+            {
+                playerScript.Dash();
+            }
+            
             //ensure dash is activated once then a wait transition
             //to reset the condition
-            doOnce = true;
-            isDashing = playerScript.DashStatus();
-            isShockActive = isShockwaveActive();
-            isDashActive = isPowerDashActive();
+            //doOnce = true;
+            //isDashing = playerScript.DashStatus();
+            //isShockActive = isShockwaveActive();
             //Check for Power Dash pick up obtained and if player has charged up yet
-            if (isDashActive &&!isCharged)
-            {
-                if (delayTimer >= delayChargeTimeout)
-                {
-                    
-                    //Increment time
-                    curTime += 1* Time.deltaTime;
-                    //check timer 
-                    if (curTime >= PowerDashTimeout)
-                    {
-                        //if successful start power dash
-                        curTime = 0;
-                        isCharged = true;
-                        delayTimer = 0;
-                        playerScript.TrailChange(Movement.DashState.chargeComplete);
+            //if (isDashActive && !isCharged)
+            //{
+            //    if (delayTimer >= delayChargeTimeout)
+            //    {
 
-                    }
-                    //Show Charging up model
-                    else
-                    {
-                        if (!isExhausted)
-                        {
-                            if (audioScript)
-                            {
-                                if (!playOnce)
-                                {
-                                    audioScript.PlutoPowerChargeStart(playerScript.transform.position);
-                                    playOnce = true;
-                                }
-                            }
-                            isCharging = true;
-                            isExhausted = true;
-                            //while charging player is halt
-                            playerScript.FreezePluto();
-                            playerScript.isCharging();
-                        }
-                    }
-                }
-                else
-                {
-                    delayTimer += 1f * Time.deltaTime;
-                }
-            }
-            else if(isShockActive &&!isCharged)
-            {
-                //Increment time
-                curTime += 1 * Time.deltaTime;
-                //check timer 
-                if (curTime >= PowerDashTimeout)
-                {
-                    //if successful start power dash
-                    curTime = 0;
-                    isCharged = true;
+            //        //Increment time
+            //        curTime += 1 * Time.deltaTime;
+            //        //check timer 
+            //        if (curTime >= PowerDashTimeout)
+            //        {
+            //            //if successful start power dash
+            //            curTime = 0;
+            //            isCharged = true;
+            //            delayTimer = 0;
+            //            playerScript.TrailChange(Movement.DashState.chargeComplete);
 
-                    playerScript.TrailChange(Movement.DashState.chargeComplete);
+            //        }
+            //        //Show Charging up model
+            //        else
+            //        {
+            //            if (!isExhausted)
+            //            {
+            //                if (audioScript)
+            //                {
+            //                    if (!playOnce)
+            //                    {
+            //                        audioScript.PlutoPowerChargeStart(playerScript.transform.position);
+            //                        playOnce = true;
+            //                    }
+            //                }
+            //                isCharging = true;
+            //                isExhausted = true;
+            //                //while charging player is halt
+            //                playerScript.FreezePluto();
+            //                playerScript.isCharging();
+            //            }
+            //        }
+            //    }
+            //    else
+            //    {
+            //        delayTimer += 1f * Time.deltaTime;
+            //    }
+            //}
+            //else if (isShockActive && !isCharged)
+            //{
+            //    //Increment time
+            //    curTime += 1 * Time.deltaTime;
+            //    //check timer 
+            //    if (curTime >= PowerDashTimeout)
+            //    {
+            //        //if successful start power dash
+            //        curTime = 0;
+            //        isCharged = true;
 
-                }
-                //Show Charging up model
-                else
-                {
-                    if (!isExhausted)
-                    {
-                        if (audioScript)
-                        {
-                            if (!playOnce)
-                            {
-                                audioScript.PlutoPowerChargeStart(playerScript.transform.position);
-                                playOnce = true;
-                            }
-                        }
-                        isCharging = true;
-                        isExhausted = true;
-                        //while charging player is halt
-                        playerScript.FreezePluto();
-                        playerScript.isCharging();
-                    }
-                }
-            } 
-       }
+            //        playerScript.TrailChange(Movement.DashState.chargeComplete);
+
+            //    }
+            //    ////Show Charging up model
+            //    //else
+            //    //{
+            //    //    if (!isExhausted)
+            //    //    {
+            //    //        if (audioScript)
+            //    //        {
+            //    //            if (!playOnce)
+            //    //            {
+            //    //                audioScript.PlutoPowerChargeStart(playerScript.transform.position);
+            //    //                playOnce = true;
+            //    //            }
+            //    //        }
+            //    //        isCharging = true;
+            //    //        isExhausted = true;
+            //    //        //while charging player is halt
+            //    //        playerScript.FreezePluto();
+            //    //        playerScript.isCharging();
+            //    //    }
+            //    //}
+            //}
+        }
+        //else
+        //{
+        //    if (isCharged)
+        //    {
+        //        if(isDashActive)
+        //        {
+        //            if(doOnce)
+        //            {
+        //                doOnce = false;
+        //                //start power dash
+        //                playerScript.ChargedUp(true);
+        //                playerScript.TrailChange(Movement.DashState.burst);
+        //                playerScript.Dash();
+        //                dashDelay = dashTimeout();
+        //                StartCoroutine(DashDelay());
+        //            }
+        //        }
+        //        else if(isShockActive)
+        //        {
+        //            if(doOnce)
+        //            {                    
+        //                playerScript.Shockwave();
+        //                doOnce = false;
+        //                StartCoroutine(DashDelay());
+        //            }
+        //        }
+
+        //    }
+
         else
         {
-            if (isCharged)
+            if (doOnce)
             {
-                if(isDashActive)
-                {
-                    if(doOnce)
-                    {
-                        doOnce = false;
-                        //start power dash
-                        playerScript.ChargedUp(true);
-                        playerScript.TrailChange(Movement.DashState.burst);
-                        playerScript.Dash();
-                        dashDelay = dashTimeout();
-                        StartCoroutine(DashDelay());
-                    }
-                }
-                else if(isShockActive)
-                {
-                    if(doOnce)
-                    {                    
-                        playerScript.Shockwave();
-                        doOnce = false;
-                        StartCoroutine(DashDelay());
-                    }
-                }
 
-            }
-             
-            else 
-            {
-                if(doOnce)
-                {
-
-                    if (audioScript)
-                    {
-                        audioScript.PlutoPowerChargeCancel();
-                        playOnce = false;
-
-                    }
-                    //reset dash timer
-                    curTime = 0;
-                    delayTimer = 0;
-                    //resume player movement
-                    playerScript.ResetDrag();
-                    //change variables and appearance for charging being false
-                    playerScript.cancelCharge();
-                    isCharging = false;
-                    //Dash and do it once
-                    playerScript.Dash();
-                    doOnce = false;
-                    dashDelay = dashTimeout();
-                    StartCoroutine(DashDelay());
-                }
-
+                
+                //reset dash timer
+                curTime = 0;
+                delayTimer = 0;
+                
+                //change variables and appearance for charging being false
+                playerScript.cancelCharge();
+                isCharging = false;
+                //Dash and do it once
+                playerScript.Dash();
+                doOnce = false;
+                //dashDelay = dashTimeout();
+                //StartCoroutine(DashDelay());
             }
         }
     }
+        
+
     //Monitors if both finger touch is down
     public bool changeChargeStatus(bool curStatus)
     {

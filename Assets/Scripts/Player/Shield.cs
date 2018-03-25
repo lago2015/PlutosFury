@@ -11,14 +11,15 @@ public class Shield : MonoBehaviour {
     bool doOnce;
     private SphereCollider MyCollider;
     public bool PlutoShieldStatus() { return isShielded; }
-
+    private Animator anim;
     void Awake()
     {
         if(ShieldModel)
         {
+            anim = ShieldModel.GetComponent<Animator>();
             ShieldModel.SetActive(false);
         }
-
+        
         MyCollider = GetComponent<SphereCollider>();
         defaultRadius = MyCollider.radius;
     }
@@ -36,7 +37,11 @@ public class Shield : MonoBehaviour {
                     doOnce = true;
                 }
             }
-            //StartCoroutine(ShieldDuration());
+            if(anim)
+            {
+                anim.SetBool("ShieldActive", true);
+                anim.Play("ShieldActive",0);
+            }
             ShieldModel.SetActive(true);
             isShielded = true;
             MyCollider.radius = shieldRadius;
@@ -45,22 +50,21 @@ public class Shield : MonoBehaviour {
 
     public void ShieldOff()
     {
+        if (anim)
+        {
+            anim.SetBool("ShieldActive", false);
+            anim.Play("ShieldInactive", 0);
+        }
+        StartCoroutine(WaitForAnimation());
+    }
+    IEnumerator WaitForAnimation()
+    {
+        yield return new WaitForSeconds(0.9f);
         ShieldModel.SetActive(false);
         isShielded = false;
         MyCollider.radius = defaultRadius;
         doOnce = false;
     }
 
-    //Timer for shield
-    IEnumerator ShieldDuration()
-    {
-        ShieldModel.SetActive(true);
-        isShielded = true;
-        MyCollider.radius = shieldRadius;
-        yield return new WaitForSeconds(shieldTimeout);
-        ShieldModel.SetActive(false);
-        isShielded = false;
-        MyCollider.radius = defaultRadius;
-        doOnce = false;
-    }
+
 }
