@@ -52,7 +52,11 @@ public class PickUpSkills : MonoBehaviour {
     {
         if(col.gameObject.tag=="Player")
         {
-            playerScript.BusterChange(Movement.BusterStates.Pickup);
+            if(playerScript)
+            {
+                playerScript.BusterChange(Movement.BusterStates.Pickup);
+            }
+            
             switch(curSkill)
             {
                 case Skills.Star:
