@@ -28,7 +28,7 @@ public class Movement : MonoBehaviour
     public bool isDamaged;
     private float invincbleTimer = 0.5f;
     //buffs and debuffs
-    private bool isPowerDashing;
+    public bool isPowerDashing;
     bool CanFreezePluto;
 
     //Num of asteroids/Health
@@ -48,6 +48,7 @@ public class Movement : MonoBehaviour
     private GameObject curTrail;
     //dash trail rotation
     private Quaternion trailRot;
+    private Quaternion lastTrailRot;
     //trail checks
     private bool moveOn;
     private bool dashOn;
@@ -136,9 +137,10 @@ public class Movement : MonoBehaviour
     private float velocityMin = -80;
     private float DefaultSpeed;
     private bool isWaiting;
-
+    public Vector3 lastMove;
+    private Vector3 move;
     //functions for power dash
-    
+
     public bool DashChargeStatus() { return DashChargeActive; }
     public bool ShockChargeStatus() { return ShockChargeActive; }
     public float CurPowerDashTimeout() { return chargeTime; }
@@ -377,25 +379,39 @@ public class Movement : MonoBehaviour
     // Update is mainly used for player controls
     void Update()
     {
+
         if (joystickscript && !isDead)
         {
             //Joystick input
-            Vector3 move = Vector3.zero;
+            move = Vector3.zero;
             move.x = joystickscript.horizontal();
             move.y = joystickscript.vertial();
-
             //normalize input
             if (move.magnitude > 1)
             {
                 move.Normalize();
             }
+           if(move.x>0.7f || move.x<-0.7f)
+            {
+                lastMove.x= move.x;
+
+            }
+            if (move.y > 0.7f||move.y<-0.7f)
+            {
+                lastMove.y = move.y;
+            }
+           
             //check if controls are inverted if so invert
             if (invertControls)
             {
                 move -= move;
             }
-            //move player
-            myBody.AddForce(move * MoveSpeed * Time.deltaTime, ForceMode.VelocityChange);
+            if(!isPowerDashing)
+            {
+                //move player
+                myBody.AddForce(move * MoveSpeed * Time.deltaTime, ForceMode.VelocityChange);
+
+            }
 
 
             //trail rotation and enabling trails
@@ -408,6 +424,7 @@ public class Movement : MonoBehaviour
                 }
                 else
                 {
+
                     //Player not moving but dash is fully charged
                     if (move == Vector3.zero && isCharged)
                     {
@@ -459,6 +476,7 @@ public class Movement : MonoBehaviour
 
                 //Get current rotation
                 trailRot = joystickscript.rotation();
+                lastTrailRot = trailRot;
                 if (curTrail)
                 {
                     if (isPowerDashing)
@@ -475,6 +493,21 @@ public class Movement : MonoBehaviour
                 }
             }
         }
+        //using the last input move player forward while power dashing
+        if (isPowerDashing&&move==Vector3.zero)
+        {
+            MoveSpeed = SuperDashSpeed;
+            //move player
+            myBody.AddForce(lastMove * MoveSpeed * Time.deltaTime, ForceMode.VelocityChange);
+
+            if (!burstOn)
+            {
+                TrailChange(DashState.burst);
+            }
+            lastTrailRot.y = curTrail.transform.rotation.y;
+            curTrail.transform.rotation = lastTrailRot;
+        }
+
 
     }
 
@@ -548,7 +581,7 @@ public class Movement : MonoBehaviour
                     }
                     modelScript.StartRender();
                     ShouldDash = false;
-                    isPowerDashing = false;
+                    //isPowerDashing = false;
                     isCharged = false;
                     startOnce = false;
                     moveOn = false;
@@ -608,7 +641,7 @@ public class Movement : MonoBehaviour
                         dashOn = false;
 
                         //disable render for burst
-                        modelScript.DisableRender();
+                        //modelScript.DisableRender();
                         //cache gameobject 
                         playOnce = false;
                         curTrail = trailContainer[4];
@@ -690,7 +723,12 @@ public class Movement : MonoBehaviour
         yield return new WaitForSeconds(0.2f);
         solidCollider.enabled = true;
     }
-
+    //start power dash
+    public void StarDashDuration(float starDuration)
+    {
+        isPowerDashing = true;
+        DashTimeout = starDuration;
+    }
     public void Dash()
     {
 
@@ -710,7 +748,7 @@ public class Movement : MonoBehaviour
                 {
                     DashDamage = 20;
                     MoveSpeed = SuperDashSpeed;
-                    DashTimeout = PowerDashTimeout;
+                    //DashTimeout = PowerDashTimeout;
                     curCooldownTime = PowerCooldownTime;
                     asteroidCollider.radius = powerDashRadius;
                     isPowerDashing = true;
@@ -763,26 +801,19 @@ public class Movement : MonoBehaviour
     {
         yield return new WaitForSeconds(DashTimeout);
         //Check if a dash pick up was obtained while dashing
-        if (isCharged)
+        //reset everything
+        DashChargeActive = false;
+        isCharged = false;
+        slowDownDrag = powerDashDrag;
+        isPowerDashing = false;
+        //disable power dash halo indicator
+        PowerUpScript.DashModelTransition(false);
+        asteroidCollider.radius = defaultRadius;
+        slowDownDrag = normalDrag;
+        if (hudScript)
         {
-            DashChargeActive = false;
-            isCharged = false;
-            slowDownDrag = powerDashDrag;
-            isPowerDashing = false;
-            //disable power dash halo indicator
-            PowerUpScript.DashModelTransition(false);
-            asteroidCollider.radius = defaultRadius;
-
-            if (hudScript)
-            {
-                hudScript.isPowerDashActive(false);
-            }
+            hudScript.isShieldActive(false);
         }
-        else
-        {
-            slowDownDrag = normalDrag;
-        }
-
         //Reset Value
         ObtainedWhileDash = false;
         myBody.drag = normalDrag;
@@ -863,7 +894,7 @@ public class Movement : MonoBehaviour
     void OnTriggerEnter(Collider col)
     {
         string curTag = col.gameObject.tag;
-if (curTag == "EnvironmentObstacle" || curTag == "MoonBall")
+        if (curTag == "EnvironmentObstacle" || curTag == "MoonBall")
         {
             Vector3 knockBackDirection = col.transform.position - transform.position;
             knockBackDirection = knockBackDirection.normalized;
@@ -931,21 +962,21 @@ if (curTag == "EnvironmentObstacle" || curTag == "MoonBall")
             if (ShouldDash)
             {
                 c.gameObject.GetComponent<BigAsteroid>().AsteroidHit(1);
-                StartCoroutine(PlutoHit(c.contacts[0].point));
+                //StartCoroutine(PlutoHit(c.contacts[0].point));
 
-                bool Smashed = c.gameObject.GetComponent<BigAsteroid>().RockStatus();
-                if (Smashed)
-                {
+                //bool Smashed = c.gameObject.GetComponent<BigAsteroid>().RockStatus();
+                //if (Smashed)
+                //{
 
-                    if (!isPowerDashing)
-                        myBody.AddForce(c.contacts[0].normal * explosionBump, ForceMode.VelocityChange);
+                //    if (!isPowerDashing)
+                //        myBody.AddForce(c.contacts[0].normal * explosionBump, ForceMode.VelocityChange);
 
 
-                }
-                else
-                {
-                    myBody.AddForce(c.contacts[0].normal * dashAsteroidBump, ForceMode.VelocityChange);
-                }
+                //}
+                //else
+                //{
+                //    myBody.AddForce(c.contacts[0].normal * dashAsteroidBump, ForceMode.VelocityChange);
+                //}
                 if(winScoreManager)
                 {
                     //update score
@@ -954,7 +985,7 @@ if (curTag == "EnvironmentObstacle" || curTag == "MoonBall")
             }
             else
             {
-                myBody.AddForce(c.contacts[0].normal * wallBump, ForceMode.VelocityChange);
+                myBody.AddForce(c.contacts[0].normal * wallBump/3, ForceMode.VelocityChange);
                 if (audioScript)
                 {
                     audioScript.AsteroidBounce(transform.position);
@@ -1208,23 +1239,23 @@ if (curTag == "EnvironmentObstacle" || curTag == "MoonBall")
 
             else
             {
-                if (asteroidCollider)
-                {
-                    asteroidCollider.radius = defaultRadius;
-                }
-                if (shieldScript)
-                {
-                    shieldScript.ShieldOff();
-                }
-                if(hudScript)
-                {
-                    hudScript.isShieldActive(false);
-                }
+                //if (asteroidCollider)
+                //{
+                //    asteroidCollider.radius = defaultRadius;
+                //}
+                //if (shieldScript)
+                //{
+                //    shieldScript.ShieldOff();
+                //}
+                //if(hudScript)
+                //{
+                //    hudScript.isShieldActive(false);
+                //}
                 if (audioScript)
                 {
                     audioScript.ShieldDing(transform.position);
                 }
-                StartCoroutine(DamageTransition());
+                //StartCoroutine(DamageTransition());
 
             }
         }    

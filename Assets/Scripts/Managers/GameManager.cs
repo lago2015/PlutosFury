@@ -173,13 +173,9 @@ public class GameManager : MonoBehaviour
    public IEnumerator GameOver()
     {
 
-        //start game over audio
-        if (audioScript)
-        {
-            audioScript.GameOver(pluto.transform.position);
-        }
+
         yield return new WaitForSeconds(GameOverDelay);
-        
+
         int playerLives = ScoreManager.CurrentLives();
         //Check if player has anymore lives and if so restart the level and decrement lives
         if(playerLives>0)
@@ -193,7 +189,11 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-
+            //start game over audio
+            if (audioScript)
+            {
+                audioScript.GameOver(pluto.transform.position);
+            }
             //enable game over screen
             if (canvasScript)
             {
@@ -222,7 +222,6 @@ public class GameManager : MonoBehaviour
         if (audioScript)
         {
             audioScript.CompleteLevel();
-            audioScript.Victory(pluto.transform.position);
         }
         modelSwitch.SwapMaterial(TextureSwap.PlutoState.Win);
 
@@ -252,6 +251,7 @@ public class GameManager : MonoBehaviour
             canvasScript.SendDataToWinScreen();
             //start fade in
             canvasScript.StartFadeIn();
+
         }
 
     }

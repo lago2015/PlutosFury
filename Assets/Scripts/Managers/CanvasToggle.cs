@@ -119,7 +119,7 @@ public class CanvasToggle : MonoBehaviour {
 
         if(isGameOver)
         {
-
+ 
             GameOverCanvas.SetActive(true);
             if (winScript)
             {
@@ -128,6 +128,10 @@ public class CanvasToggle : MonoBehaviour {
         }
         else
         {
+            if (audioScript)
+            {
+                audioScript.BackgroundWinMusic();
+            }
             WinScreenCanvas.SetActive(true);
         }
     }
@@ -140,8 +144,9 @@ public class CanvasToggle : MonoBehaviour {
     }
     public void StartFadeIn()
     {
-        if (winScript)
+        if (winScript&&audioScript)
         {
+            audioScript.BackgroundWinMusic();
             winScript.FadeIn();
         }
     }

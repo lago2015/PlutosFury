@@ -8,6 +8,13 @@ public class AudioController : MonoBehaviour {
     // Audio timers
     float timer_01, timer_02;
 
+    [Header("Background-WinMusic")]
+    public AudioSource BgMusicWinSource;
+
+    [Header("Background-GameOverMusic")]
+    public AudioSource BgMusicGameOverSource;
+
+
     [Header("BackgroundMusic")]
     public AudioSource BgMusicSource;
     public float bgMusicDelay;
@@ -162,6 +169,19 @@ public class AudioController : MonoBehaviour {
         timer_01 += Time.deltaTime;
         timer_02 += Time.deltaTime;
 	}
+    public void BackgroundWinMusic()
+    {
+        if (BgMusicWinSource != null)
+        {
+            BgMusicSource.Stop();
+            BgMusicWinSource.priority = 200;
+            BgMusicWinSource.volume = 0.25f;
+            BgMusicWinSource.minDistance = 1000f;
+            BgMusicWinSource.loop = true;
+            BgMusicWinSource.Play();
+        }
+    }
+
 
     public void BackgroundMusic()
     {
@@ -654,23 +674,7 @@ public class AudioController : MonoBehaviour {
             }
         }
     }
-    public void Victory(Vector3 pos)
-    {
-        if (timer_01 >= GameOverDelay)
-        {
-            if (VictorySource != null)
-            {
-                VictorySource.transform.position = pos;
-                VictorySource.minDistance = 20f;
-                VictorySource.loop = true;
-                if (BgMusicSource)
-                {
-                    BgMusicSource.Stop();
-                }
-                VictorySource.Play();
-            }
-        }
-    }
+
     /********Neptune and Moon********/
     public void NeptunesHit(Vector3 pos)
     {

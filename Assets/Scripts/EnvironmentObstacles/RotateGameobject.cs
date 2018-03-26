@@ -52,6 +52,7 @@ public class RotateGameobject : MonoBehaviour {
    void Start ()
     {
         myBody.AddTorque(Rotation * rotatePower);
+        
     }
 
 
