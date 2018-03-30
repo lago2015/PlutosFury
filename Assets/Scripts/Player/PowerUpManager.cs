@@ -26,11 +26,11 @@ public class PowerUpManager : MonoBehaviour {
         {
             audioScript.PlutoPowerDashReady(curpos);
             audioScript.ShieldLive(curpos);
-            moveScript.ActivateDashCharge();
+            //moveScript.ActivateDashCharge();
             shieldScript.ShieldPluto();
-            StartCoroutine(PlutoCharging());
+            //StartCoroutine(PlutoCharging());
         }
-        DashModelTransition(true);
+        //DashModelTransition(true);
 
     }
     IEnumerator PlutoCharging()

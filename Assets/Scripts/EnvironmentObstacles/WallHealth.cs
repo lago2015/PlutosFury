@@ -10,6 +10,8 @@ public class WallHealth : MonoBehaviour
     public GameObject Explosion;
     public GameObject Model;
     private Collider Mycollider;
+    public GameObject pickUpContained;
+    private Collider pickUpCollider;
     // Use this for initialization
     void Awake ()
     {

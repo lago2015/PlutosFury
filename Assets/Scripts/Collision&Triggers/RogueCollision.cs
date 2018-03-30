@@ -99,23 +99,19 @@ public class RogueCollision : MonoBehaviour {
         string curTag = col.gameObject.tag;
         if(curTag=="Player")
         {
-            bool isDashing = col.gameObject.GetComponent<Movement>().DashStatus();
-            if(isDashing)
+            bool RogueDashing = rogueMoveScript.isDashing();
+            if (!RogueDashing)
             {
-                bool RogueDashing = rogueMoveScript.isDashing();
-                if (!RogueDashing)
-                {
 
-                    if (myBody)
-                    {
-                        myBody.AddForce(col.contacts[0].normal * wallBump, ForceMode.VelocityChange);
-                    }
-                    if(damageScript)
-                    {
-                        damageScript.didDamage();
-                    }
-                    RogueDamage();
+                if (myBody)
+                {
+                    myBody.AddForce(col.contacts[0].normal * wallBump, ForceMode.VelocityChange);
                 }
+                if (damageScript)
+                {
+                    damageScript.didDamage();
+                }
+                RogueDamage();
             }
         }
         

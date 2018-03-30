@@ -64,7 +64,7 @@ public class PickUpSkills : MonoBehaviour {
                     if (ShieldScript && playerScript && !pickupObtained && hudScript && PowerUpScript)
                     {
                         PowerUpScript.DashPluto(transform.position);
-                        hudScript.isShieldActive(true);
+                        //hudScript.isShieldActive(true);
                         pickupObtained = true;
                         playerScript.IndicatePickup();
                         ShieldScript.ShieldPluto();

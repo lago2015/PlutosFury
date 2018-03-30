@@ -85,14 +85,11 @@ public class BigAsteroid : MonoBehaviour {
 
         if(col.gameObject.tag == "MoonBall")
         {
-            if(col.GetComponent<MoonBall>().getAttackMode())
+            if (!doOnce)
             {
-                if (!doOnce)
-                {
-                    GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>().AsteroidExplosion(transform.position);
-                    SpawnAsteroids();
-                    doOnce = true;
-                }
+                GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>().AsteroidExplosion(transform.position);
+                SpawnAsteroids();
+                doOnce = true;
             }
         }
     }

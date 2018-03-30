@@ -130,8 +130,10 @@ public class MoonBall : MonoBehaviour
         if (col.gameObject.tag == "BreakableWall")
         {
             col.gameObject.GetComponent<WallHealth>().IncrementDamage();
-            
-
+            if (canExplodeOnImpact)
+            {
+                OnExplosion();
+            }
         }
 
         if (col.gameObject.tag == "Wall")
@@ -142,6 +144,10 @@ public class MoonBall : MonoBehaviour
         if(col.gameObject.GetComponent<AIHealth>())
         {
             rb.AddForce(col.contacts[0].normal * knockbackSpeed, ForceMode.VelocityChange);
+            if (canExplodeOnImpact)
+            {
+                OnExplosion();
+            }
         }
 
 

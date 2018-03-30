@@ -509,11 +509,12 @@ public class Movement : MonoBehaviour
         {
             CamShake.EnableCameraShake();
         }
-        Debug.DrawRay(transform.position, transform.up * 10f, Color.green);
-        Debug.DrawRay(transform.position, -transform.up * 10f, Color.green);
+        //Debug.DrawRay(transform.position, transform.up * 5f, Color.green);
+        //Debug.DrawRay(transform.position, -transform.up * 5f, Color.green);
 
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, transform.up, out hit, 5f) || Physics.Raycast(transform.position, -transform.up, out hit, 5f))
+        if (Physics.Raycast(transform.position, transform.up, out hit, 5f) || Physics.Raycast(transform.position, -transform.up, out hit, 5f)|| 
+            Physics.Raycast(transform.position, -transform.right, out hit, 5f))
         {
             string rayTag = hit.transform.gameObject.tag;
             if (rayTag == "Wall")
@@ -910,29 +911,50 @@ public class Movement : MonoBehaviour
     void OnTriggerEnter(Collider col)
     {
         string curTag = col.gameObject.tag;
-        if (curTag == "EnvironmentObstacle" || curTag == "MoonBall")
+        if (curTag == "EnvironmentObstacle" || curTag=="Planet" || curTag=="ShatterPiece")
         {
 
             Vector3 knockBackDirection = col.transform.position - transform.position;
             knockBackDirection = knockBackDirection.normalized;
-            myBody.AddForce(-knockBackDirection * wallBump);
-
+            myBody.AddForce(-knockBackDirection * wallBump*7,ForceMode.VelocityChange);
+            if(!isDamaged)
+            {
+                DamagePluto();
+            }
         }
-        
+        else if (curTag == "Asteroid")
+        {
+            //check if player is dead
+            if (!isDead)
+            {
+                //play audio cue for absorbed
+                if (audioScript)
+                {
+                    audioScript.AsteroidAbsorbed(transform.position);
+                }
+            }
+            //return orb to pool
+            ReturnAsteroid(col.gameObject);
+            if (ScoreManager)
+            {
+                ScoreManager.OrbObtained();
+            }
+            if (ScoreManager)
+            {
+                winScoreManager.ScoreObtained(WinScoreManager.ScoreList.Orb, col.transform.position);
+            }
+        }
+        else if(curTag=="Moonball")
+        {
+
+            Vector3 knockBackDirection = col.transform.position - transform.position;
+            knockBackDirection = knockBackDirection.normalized;
+            myBody.AddForce(-knockBackDirection * wallBump,ForceMode.VelocityChange);
+        }
         if (isPowerDashing&&curTag=="BigAsteroid")
         {
 
-            WallHealth healthScript = col.gameObject.GetComponent<WallHealth>();
-            if (healthScript)
-            {
-                healthScript.IncrementDamage();
-                if (solidCollider)
-                {
-                    StartCoroutine(colliderTimeout());
-                }
-                return;
-
-            }
+  
             BigAsteroid bigOrbScript = col.gameObject.GetComponent<BigAsteroid>();
             if (bigOrbScript)
             {
@@ -960,7 +982,7 @@ public class Movement : MonoBehaviour
             {
                 Vector3 knockBackDirection = col.transform.position - transform.position;
                 knockBackDirection = knockBackDirection.normalized;
-                myBody.AddForce(-knockBackDirection * wallBump*4);
+                myBody.AddForce(-knockBackDirection * wallBump* 4,ForceMode.VelocityChange);
             }
         }
         else if(curTag=="BreakableWall")
@@ -983,7 +1005,7 @@ public class Movement : MonoBehaviour
                 }
                 Vector3 knockBackDirection = col.transform.position - transform.position;
                 knockBackDirection = knockBackDirection.normalized;
-                myBody.AddForce(-knockBackDirection * wallBump * 8);
+                myBody.AddForce(-knockBackDirection * wallBump, ForceMode.VelocityChange);
             }
         }
     }
@@ -994,28 +1016,7 @@ public class Movement : MonoBehaviour
     void OnCollisionEnter(Collision c)
     {
         string curTag = c.gameObject.tag;
-        if (curTag == "Asteroid")
-        {
-            //check if player is dead
-            if (!isDead)
-            {
-                //play audio cue for absorbed
-                if (audioScript)
-                {
-                    audioScript.AsteroidAbsorbed(transform.position);
-                }
-            }
-            //return orb to pool
-            ReturnAsteroid(c.gameObject);
-            if (ScoreManager)
-            {
-                ScoreManager.OrbObtained();
-            }
-            if (ScoreManager)
-            {
-                winScoreManager.ScoreObtained(WinScoreManager.ScoreList.Orb, c.transform.position);
-            }
-        }
+
         if (curTag == "BigAsteroid")
         {
             myBody.AddForce(c.contacts[0].normal * wallBump, ForceMode.VelocityChange);
