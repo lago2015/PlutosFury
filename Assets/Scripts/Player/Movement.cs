@@ -406,12 +406,9 @@ public class Movement : MonoBehaviour
             {
                 move -= move;
             }
-            if(!isPowerDashing)
-            {
-                //move player
-                myBody.AddForce(move * MoveSpeed * Time.deltaTime, ForceMode.VelocityChange);
+            //move player
+            myBody.AddForce(move * MoveSpeed * Time.deltaTime, ForceMode.VelocityChange);
 
-            }
 
 
             //trail rotation and enabling trails
@@ -506,9 +503,26 @@ public class Movement : MonoBehaviour
             }
             lastTrailRot.y = curTrail.transform.rotation.y;
             curTrail.transform.rotation = lastTrailRot;
+            CamShake.EnableCameraShake();
         }
+        else if(isPowerDashing)
+        {
+            CamShake.EnableCameraShake();
+        }
+        Debug.DrawRay(transform.position, transform.up * 10f, Color.green);
+        Debug.DrawRay(transform.position, -transform.up * 10f, Color.green);
 
-
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, transform.up, out hit, 5f) || Physics.Raycast(transform.position, -transform.up, out hit, 5f))
+        {
+            string rayTag = hit.transform.gameObject.tag;
+            if (rayTag == "Wall")
+            {
+                Vector3 normalizePoint = hit.point - transform.position;
+                normalizePoint = normalizePoint.normalized;
+                myBody.AddForce(-normalizePoint * wallBump * 2, ForceMode.VelocityChange);
+            }
+        }
     }
 
     //function for changing buster states depending on overload
@@ -720,7 +734,7 @@ public class Movement : MonoBehaviour
     IEnumerator colliderTimeout()
     {
         solidCollider.enabled = false;
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.3f);
         solidCollider.enabled = true;
     }
     //start power dash
@@ -735,6 +749,7 @@ public class Movement : MonoBehaviour
         //Check if exhausted dash
         if (!isExhausted)
         {
+            solidCollider.enabled = false;
             //model switch for dash
             if (modelScript)
             {
@@ -819,6 +834,7 @@ public class Movement : MonoBehaviour
         myBody.drag = normalDrag;
 
         MoveSpeed = DefaultSpeed;
+        solidCollider.enabled = true;
         //Change trail back
         TrailChange(DashState.basicMove);
 
@@ -896,12 +912,14 @@ public class Movement : MonoBehaviour
         string curTag = col.gameObject.tag;
         if (curTag == "EnvironmentObstacle" || curTag == "MoonBall")
         {
+
             Vector3 knockBackDirection = col.transform.position - transform.position;
             knockBackDirection = knockBackDirection.normalized;
-            myBody.AddForce(-knockBackDirection * wallBump * 2);
+            myBody.AddForce(-knockBackDirection * wallBump);
 
         }
-        if (isPowerDashing)
+        
+        if (isPowerDashing&&curTag=="BigAsteroid")
         {
 
             WallHealth healthScript = col.gameObject.GetComponent<WallHealth>();
@@ -926,7 +944,48 @@ public class Movement : MonoBehaviour
                 return;
             }
         }
-
+        else if(curTag=="BigAsteroid")
+        {
+            if (ShouldDash)
+            {
+                col.gameObject.GetComponent<BigAsteroid>().AsteroidHit(1);
+                
+                if (winScoreManager)
+                {
+                    //update score
+                    winScoreManager.ScoreObtained(WinScoreManager.ScoreList.BigOrb, col.transform.position);
+                }
+            }
+            else
+            {
+                Vector3 knockBackDirection = col.transform.position - transform.position;
+                knockBackDirection = knockBackDirection.normalized;
+                myBody.AddForce(-knockBackDirection * wallBump*4);
+            }
+        }
+        else if(curTag=="BreakableWall")
+        {
+            if (ShouldDash)
+            {
+                if (winScoreManager)
+                {
+                    //update score
+                    winScoreManager.ScoreObtained(WinScoreManager.ScoreList.BreakableCube, col.transform.position);
+                }
+                WallHealth healthScript = col.gameObject.GetComponent<WallHealth>();
+                if (healthScript)
+                {
+                    healthScript.IncrementDamage();
+                }
+                if (col.gameObject.name.Contains("DamageWall"))
+                {
+                    DamagePluto();
+                }
+                Vector3 knockBackDirection = col.transform.position - transform.position;
+                knockBackDirection = knockBackDirection.normalized;
+                myBody.AddForce(-knockBackDirection * wallBump * 8);
+            }
+        }
     }
 
     
@@ -959,38 +1018,12 @@ public class Movement : MonoBehaviour
         }
         if (curTag == "BigAsteroid")
         {
-            if (ShouldDash)
-            {
-                c.gameObject.GetComponent<BigAsteroid>().AsteroidHit(1);
-                //StartCoroutine(PlutoHit(c.contacts[0].point));
-
-                //bool Smashed = c.gameObject.GetComponent<BigAsteroid>().RockStatus();
-                //if (Smashed)
-                //{
-
-                //    if (!isPowerDashing)
-                //        myBody.AddForce(c.contacts[0].normal * explosionBump, ForceMode.VelocityChange);
-
-
-                //}
-                //else
-                //{
-                //    myBody.AddForce(c.contacts[0].normal * dashAsteroidBump, ForceMode.VelocityChange);
-                //}
-                if(winScoreManager)
-                {
-                    //update score
-                    winScoreManager.ScoreObtained(WinScoreManager.ScoreList.BigOrb, c.transform.position);
-                }
-            }
-            else
-            {
-                myBody.AddForce(c.contacts[0].normal * wallBump/3, ForceMode.VelocityChange);
+            myBody.AddForce(c.contacts[0].normal * wallBump, ForceMode.VelocityChange);
                 if (audioScript)
                 {
                     audioScript.AsteroidBounce(transform.position);
                 }
-            }
+            
 
         }
 
@@ -1003,12 +1036,15 @@ public class Movement : MonoBehaviour
             }
             if (ShouldDash)
             {
-                myBody.AddForce(c.contacts[0].normal * wallBump * 2, ForceMode.VelocityChange);
+                myBody.AddForce(c.contacts[0].normal * wallBump*10, ForceMode.VelocityChange);
 
             }
             else
             {
-                myBody.AddForce(c.contacts[0].normal * wallBump, ForceMode.VelocityChange);
+                if(isPowerDashing==false)
+                {
+                    myBody.AddForce(c.contacts[0].normal * wallBump*6, ForceMode.VelocityChange);
+                }
             }
         }
         else if (curTag == "BreakableWall")
@@ -1049,7 +1085,7 @@ public class Movement : MonoBehaviour
                 myBody.AddForce(c.contacts[0].normal * wallBump, ForceMode.VelocityChange);
             }
         }
-        else if (curTag == "EnvironmentObstacle")
+        else if (curTag == "EnvironmentObstacle" )
         {
             myBody.AddForce(c.contacts[0].normal * wallBump, ForceMode.VelocityChange);
 
@@ -1149,6 +1185,7 @@ public class Movement : MonoBehaviour
                 {
                     maxSize.SetActive(true);
                 }
+
             }
             //update hud on health
             if (hudScript)
@@ -1160,7 +1197,11 @@ public class Movement : MonoBehaviour
             {
                 ScoreManager.HealthChange(curHealth);
             }
-            if(winScoreManager)
+            if(winScoreManager&&curHealth==2)
+            {
+                winScoreManager.ScoreObtained(WinScoreManager.ScoreList.MaxHealthBonus, curLocation);
+            }
+            else if(winScoreManager)
             {
                 winScoreManager.ScoreObtained(WinScoreManager.ScoreList.Health, curLocation);
             }

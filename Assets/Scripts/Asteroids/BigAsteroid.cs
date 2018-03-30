@@ -72,7 +72,7 @@ public class BigAsteroid : MonoBehaviour {
             bool isDashing = moveScript.DashStatus();
             //bool isPowerReady = moveScript.DashChargeStatus();
 
-            if(isDashing==true&isCharged==true)
+            if(isDashing==true&&isCharged==true)
             {
                 if (!doOnce)
                 {
@@ -85,7 +85,6 @@ public class BigAsteroid : MonoBehaviour {
 
         if(col.gameObject.tag == "MoonBall")
         {
-            Debug.Log("got er");
             if(col.GetComponent<MoonBall>().getAttackMode())
             {
                 if (!doOnce)

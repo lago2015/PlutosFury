@@ -38,8 +38,6 @@ public class FloatingJoystick : MonoBehaviour,IDragHandler,IPointerUpHandler,IPo
         {
             bgImage = GetComponent<Image>(); // gets the background image of this joystick
             joystickKnobImage = transform.GetChild(0).GetComponent<Image>(); // gets the joystick "knob" imae (the handle of the joystick), the joystick knob game object must be a child of this game object and have an image component 
-
-            
         }
     }
 

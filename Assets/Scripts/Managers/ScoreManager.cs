@@ -14,12 +14,14 @@ public class ScoreManager : MonoBehaviour {
     public int playerHealth;
     private WinScreen winScript;
     private HUDManager HUDScript;
+    private WinScoreManager scoreContainerScript;
     private int orbObtained;
     private int healthUp=100;
     public int CurrentHealth() { return playerHealth; }
 	// Use this for initialization
 	void Awake ()
     {
+        scoreContainerScript = GetComponent<WinScoreManager>();
         GameObject hudObject = GameObject.FindGameObjectWithTag("HUDManager");
         if(hudObject)
         {
@@ -51,6 +53,7 @@ public class ScoreManager : MonoBehaviour {
         {
             DefaultHealth();
         }
+
     }
 
     //run this function during game over

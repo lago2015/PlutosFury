@@ -37,14 +37,14 @@ public class CameraShake : MonoBehaviour
 
     private IEnumerator Hit()
     {
-        Time.timeScale = 0.0f;
+        //Time.timeScale = 0.7f;
         float EndShake = Time.realtimeSinceStartup + 0.1f;
 
         while (Time.realtimeSinceStartup < EndShake)
         {
             yield return 0;
         }
-        Time.timeScale = 1.0f;
+        //Time.timeScale = 1.0f;
     }
 
     public void EnableCameraShake()

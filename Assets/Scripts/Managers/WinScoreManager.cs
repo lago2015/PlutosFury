@@ -23,7 +23,7 @@ Moonball Hits
     Seeker
      */
 
-    public enum ScoreList {Orb,Health,Life,BigOrb,BreakableCube,Rogue,Spike,TurretSingle,TurretScatter }
+    public enum ScoreList {Orb,Health,MaxHealthBonus,Life,BigOrb,BreakableCube,Rogue,Spike,TurretSingle,TurretScatter }
     private ScoreList scoreState;
     private ScoreManager scoreManager;
     private PopUpScoreController textController;
@@ -33,6 +33,9 @@ Moonball Hits
 
     [Header("Pickup-Health")]
     public int healthScore = 100;
+
+    [Header("Pickup-MaxHealthBonus")]
+    public int maxHealthBonus = 1000;
 
     [Header("Pickup-Life")]
     public int lifeScore = 100;
@@ -80,6 +83,10 @@ Moonball Hits
             case ScoreList.Health:
                 SendScoreToManager(healthScore);
                 SendScoreToFloatingText(curLocation, healthScore.ToString());
+                break;
+            case ScoreList.MaxHealthBonus:
+                SendScoreToManager(maxHealthBonus);
+                SendScoreToFloatingText(curLocation, maxHealthBonus.ToString());
                 break;
             case ScoreList.Life:
                 SendScoreToManager(lifeScore);
