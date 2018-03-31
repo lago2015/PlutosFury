@@ -22,6 +22,12 @@ public class WallHealth : MonoBehaviour
             Model.SetActive(true);
 
         }
+        if(pickUpContained)
+        {
+            pickUpCollider = pickUpContained.GetComponent<Collider>();
+            pickUpCollider.enabled = false;
+            pickUpContained = null;
+        }
     }
 	
     public void IncrementDamage()
@@ -38,6 +44,10 @@ public class WallHealth : MonoBehaviour
             {
                 Explosion.SetActive(true);
                 Model.SetActive(false);
+                if(pickUpCollider)
+                {
+                    pickUpCollider.enabled = true;
+                }
                 
                 //Explosion.transform.parent = null;
                 //Destroy gameobject at the end of explosions duration to play

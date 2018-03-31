@@ -34,6 +34,8 @@ public class FleeOrPursue : MonoBehaviour {
     public GameObject scriptObject;
     private RogueCollision collisionScript;
     public GameObject trailModel;
+    public GameObject chargingParticle;
+    public GameObject burstParticle;
     private Rigidbody myBody;
     private bool isAlive;
     public bool isTriggered;
@@ -60,9 +62,19 @@ public class FleeOrPursue : MonoBehaviour {
         {
             normalDrag = myBody.drag;
         }
+        if(chargingParticle)
+        {
+            chargingParticle.SetActive(false);
+        }
 
-
-
+        if (trailModel)
+        {
+            trailModel.SetActive(false);
+        }
+        if(burstParticle)
+        {
+            burstParticle.SetActive(false);
+        }
         if (isTriggered)
         {
             PlayerNear = false;
@@ -72,13 +84,7 @@ public class FleeOrPursue : MonoBehaviour {
             PlayerNear = true;
         }
     }
-    void Start()
-    {
-        if (trailModel)
-        {
-            trailModel.SetActive(false);
-        }
-    }
+    
     // Update is called once per frame
     void FixedUpdate()
     {
@@ -211,12 +217,18 @@ public class FleeOrPursue : MonoBehaviour {
     //Transition between charging and burst models
     IEnumerator ChargeDash()
     {
+        //take away movement speed
         MoveSpeed = 0;
+        //make is charging true for shaking effect
         isCharging = true;
-        
+        //turn on charging particle
+        chargingParticle.SetActive(true);
+        //ensure trail container is off
+        trailModel.SetActive(false);
         yield return new WaitForSeconds(chargeTime);
         if(PlayerNear)
         {
+            StartCoroutine(burstTimeout());
             StartCoroutine(DashTransition());   //Start dash
         }
         else
@@ -227,18 +239,27 @@ public class FleeOrPursue : MonoBehaviour {
             MoveSpeed = DefaultSpeed;
         }
     }
+    IEnumerator burstTimeout()
+    {
+        burstParticle.SetActive(true);
+        MoveSpeed = DashSpeed;
+        ShouldDash = true;  //Update dash status
+
+        yield return new WaitForSeconds(1.1f);
+        burstParticle.SetActive(false);
+    }
     //Dash function with model switch
     IEnumerator DashTransition()
     {
+        yield return new WaitForSeconds(0.2f);
         if (!isDead)
         {
-            if (trailModel)
+            if (trailModel && chargingParticle)
             {
                 trailModel.SetActive(true);
+                chargingParticle.SetActive(false);
             }
         }
-        MoveSpeed = DashSpeed;
-        ShouldDash = true;  //Update dash status
         //audio
         if (audioScript)
         {

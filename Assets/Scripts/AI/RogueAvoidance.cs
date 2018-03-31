@@ -54,7 +54,7 @@ public class RogueAvoidance : MonoBehaviour {
             string curTag = raycastHit.transform.gameObject.tag;
             if (curTag == ("BreakableWall") || curTag == "Wall")
             {
-                Debug.Log("Hit2");
+                //Debug.Log("Hit2");
 
                 isThereAnyThing = false;
             }

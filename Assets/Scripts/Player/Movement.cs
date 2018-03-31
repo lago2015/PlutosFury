@@ -94,6 +94,7 @@ public class Movement : MonoBehaviour
     public Rigidbody myBody;
     private Camera camera;
     private GameObject joystick;
+    public GameObject moonBallHitEffect;
 
     //Scripts
     private GameObject asteroidSpawn;
@@ -129,15 +130,15 @@ public class Movement : MonoBehaviour
     //Basic Movement
     private Vector3 newVelocity;
     public float wallBump = 20.0f;
-    public float mazeBump = 10f;
-    public float dashAsteroidBump = 20f;
+    public float OrbBump = 10f;
+    public float obstacleBump = 20f;
     public float explosionBump = 50f;
     public float soccerKnockback = 50f;
     private float velocityCap = 80;
     private float velocityMin = -80;
     private float DefaultSpeed;
     private bool isWaiting;
-    public Vector3 lastMove;
+    private Vector3 lastMove;
     private Vector3 move;
     //functions for power dash
 
@@ -476,16 +477,11 @@ public class Movement : MonoBehaviour
                 lastTrailRot = trailRot;
                 if (curTrail)
                 {
-                    if (isPowerDashing)
+                    //apply rotation
+                    curTrail.transform.rotation = trailRot;
+                    if(ShouldDash)
                     {
-
-                        trailRot.y = curTrail.transform.rotation.y;
-                        curTrail.transform.rotation = trailRot;
-                    }
-                    else
-                    {
-                        //apply rotation
-                        curTrail.transform.rotation = trailRot;
+                        trailContainer[1].transform.rotation = trailRot;
                     }
                 }
             }
@@ -513,8 +509,8 @@ public class Movement : MonoBehaviour
         //Debug.DrawRay(transform.position, -transform.up * 5f, Color.green);
 
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, transform.up, out hit, 5f) || Physics.Raycast(transform.position, -transform.up, out hit, 5f)|| 
-            Physics.Raycast(transform.position, -transform.right, out hit, 5f))
+        if (Physics.Raycast(transform.position, transform.up, out hit, 2f) || Physics.Raycast(transform.position, -transform.up, out hit, 2f) ||
+            Physics.Raycast(transform.position, -transform.right, out hit, 2f))
         {
             string rayTag = hit.transform.gameObject.tag;
             if (rayTag == "Wall")
@@ -629,8 +625,11 @@ public class Movement : MonoBehaviour
                         burstOn = false;
                         dashOn = true;
                         //cache gameobject 
-                        curTrail = trailContainer[1];
                         trailContainer[1].SetActive(true);
+                        trailContainer[0].SetActive(true);
+
+                        curTrail = trailContainer[0];
+
                     }
 
                     break;
@@ -908,6 +907,13 @@ public class Movement : MonoBehaviour
         spawnScript.SpawnAsteroid();
     }
 
+    public void KnockbackPlayer(Vector3 Direction)
+    {
+        // Apply force and rotation to knock back from rocket explosion
+        myBody.AddForce(-Direction * soccerKnockback, ForceMode.VelocityChange);
+        
+    }
+
     void OnTriggerEnter(Collider col)
     {
         string curTag = col.gameObject.tag;
@@ -916,7 +922,7 @@ public class Movement : MonoBehaviour
 
             Vector3 knockBackDirection = col.transform.position - transform.position;
             knockBackDirection = knockBackDirection.normalized;
-            myBody.AddForce(-knockBackDirection * wallBump*7,ForceMode.VelocityChange);
+            myBody.AddForce(-knockBackDirection * obstacleBump,ForceMode.VelocityChange);
             if(!isDamaged)
             {
                 DamagePluto();
@@ -944,12 +950,18 @@ public class Movement : MonoBehaviour
                 winScoreManager.ScoreObtained(WinScoreManager.ScoreList.Orb, col.transform.position);
             }
         }
-        else if(curTag=="Moonball")
+        else if(curTag=="MoonBall")
         {
+            if(ShouldDash)
+            {
+                //Vector3 midPoint = col.transform.position - transform.position / 2;
+                //Instantiate(moonBallHitEffect, midPoint, Quaternion.identity);
 
-            Vector3 knockBackDirection = col.transform.position - transform.position;
-            knockBackDirection = knockBackDirection.normalized;
-            myBody.AddForce(-knockBackDirection * wallBump,ForceMode.VelocityChange);
+                Vector3 knockBackDirection = col.transform.position - transform.position;
+                knockBackDirection = knockBackDirection.normalized;
+                myBody.AddForce(-knockBackDirection * soccerKnockback, ForceMode.VelocityChange);
+            }
+            
         }
         if (isPowerDashing&&curTag=="BigAsteroid")
         {
@@ -982,13 +994,16 @@ public class Movement : MonoBehaviour
             {
                 Vector3 knockBackDirection = col.transform.position - transform.position;
                 knockBackDirection = knockBackDirection.normalized;
-                myBody.AddForce(-knockBackDirection * wallBump* 4,ForceMode.VelocityChange);
+                myBody.AddForce(-knockBackDirection * OrbBump,ForceMode.VelocityChange);
             }
         }
         else if(curTag=="BreakableWall")
         {
             if (ShouldDash)
             {
+                Vector3 knockBackDirection = col.transform.position - transform.position;
+                knockBackDirection = knockBackDirection.normalized;
+                myBody.AddForce(-knockBackDirection * OrbBump, ForceMode.VelocityChange);
                 if (winScoreManager)
                 {
                     //update score
@@ -1003,9 +1018,7 @@ public class Movement : MonoBehaviour
                 {
                     DamagePluto();
                 }
-                Vector3 knockBackDirection = col.transform.position - transform.position;
-                knockBackDirection = knockBackDirection.normalized;
-                myBody.AddForce(-knockBackDirection * wallBump, ForceMode.VelocityChange);
+
             }
         }
     }
@@ -1019,7 +1032,7 @@ public class Movement : MonoBehaviour
 
         if (curTag == "BigAsteroid")
         {
-            myBody.AddForce(c.contacts[0].normal * wallBump, ForceMode.VelocityChange);
+            myBody.AddForce(c.contacts[0].normal * OrbBump, ForceMode.VelocityChange);
                 if (audioScript)
                 {
                     audioScript.AsteroidBounce(transform.position);
@@ -1037,17 +1050,18 @@ public class Movement : MonoBehaviour
             }
             if (ShouldDash)
             {
-                myBody.AddForce(c.contacts[0].normal * wallBump*10, ForceMode.VelocityChange);
+                myBody.AddForce(c.contacts[0].normal * wallBump, ForceMode.VelocityChange);
 
             }
             else
             {
                 if(isPowerDashing==false)
                 {
-                    myBody.AddForce(c.contacts[0].normal * wallBump*6, ForceMode.VelocityChange);
+                    myBody.AddForce(c.contacts[0].normal * wallBump*2, ForceMode.VelocityChange);
                 }
             }
         }
+
         else if (curTag == "BreakableWall")
         {
             if (ShouldDash)
@@ -1067,28 +1081,18 @@ public class Movement : MonoBehaviour
                     DamagePluto();
                 }
             }
-            myBody.AddForce(c.contacts[0].normal * wallBump, ForceMode.VelocityChange);
+            myBody.AddForce(c.contacts[0].normal * OrbBump, ForceMode.VelocityChange);
             
         }
-        else if (curTag == "LazerWall")
+        else if (curTag == "MoonBall")
         {
-            if (audioScript)
-            {
-                audioScript.LazerBounce();
-            }
-            if (ShouldDash)
-            {
-                myBody.AddForce(c.contacts[0].normal * wallBump * 2, ForceMode.VelocityChange);
-
-            }
-            else
-            {
-                myBody.AddForce(c.contacts[0].normal * wallBump, ForceMode.VelocityChange);
-            }
+            myBody.AddForce(c.contacts[0].normal * OrbBump, ForceMode.VelocityChange);
+            
         }
+
         else if (curTag == "EnvironmentObstacle" )
         {
-            myBody.AddForce(c.contacts[0].normal * wallBump, ForceMode.VelocityChange);
+            myBody.AddForce(c.contacts[0].normal * obstacleBump, ForceMode.VelocityChange);
 
 
         }

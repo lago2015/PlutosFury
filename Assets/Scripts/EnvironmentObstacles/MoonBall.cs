@@ -80,7 +80,7 @@ public class MoonBall : MonoBehaviour
                         Vector3 playerdirection = Vector3.Normalize(playerRb.velocity);
 
                         rb.velocity = playerdirection * hitSpeed;
-
+                        
                         // add rotation to the ball since it is 3D
                         rb.AddTorque(playerdirection * hitSpeed);
 
