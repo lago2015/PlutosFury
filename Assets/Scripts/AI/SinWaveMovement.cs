@@ -24,6 +24,8 @@ public class SinWaveMovement : MonoBehaviour {
         //reset number of ticks
         numberOfTicks = 0;
         enabled = false;
+
+        startShot();
     }
 
 
@@ -41,13 +43,14 @@ public class SinWaveMovement : MonoBehaviour {
             y = amplitude * (Mathf.Sin(numberOfTicks * frequency * Time.deltaTime));
             //apply movement
             transform.Translate(x * Time.deltaTime, y * Time.deltaTime, 0);
+            transform.position = new Vector3(transform.position.x, transform.position.y, 0.0f);
         }
 
     }
 
     public void startShot()
     {
-        xSpeed = Random.Range(6, 15);
+        //xSpeed = Random.Range(6, 15);
         canShoot = true;
         enabled = true;
     }
