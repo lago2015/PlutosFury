@@ -963,10 +963,10 @@ public class Movement : MonoBehaviour
             }
             
         }
-        if (isPowerDashing&&curTag=="BigAsteroid")
+        if (isPowerDashing && curTag == "BigAsteroid")
         {
 
-  
+
             BigAsteroid bigOrbScript = col.gameObject.GetComponent<BigAsteroid>();
             if (bigOrbScript)
             {
@@ -978,12 +978,12 @@ public class Movement : MonoBehaviour
                 return;
             }
         }
-        else if(curTag=="BigAsteroid")
+        else if (curTag == "BigAsteroid")
         {
             if (ShouldDash)
             {
                 col.gameObject.GetComponent<BigAsteroid>().AsteroidHit(1);
-                
+
                 if (winScoreManager)
                 {
                     //update score
@@ -994,21 +994,32 @@ public class Movement : MonoBehaviour
             {
                 Vector3 knockBackDirection = col.transform.position - transform.position;
                 knockBackDirection = knockBackDirection.normalized;
-                myBody.AddForce(-knockBackDirection * OrbBump,ForceMode.VelocityChange);
+                myBody.AddForce(-knockBackDirection * OrbBump, ForceMode.VelocityChange);
             }
         }
-        else if(curTag=="BreakableWall")
+        else if (curTag == "BreakableWall")
         {
             if (ShouldDash)
             {
                 Vector3 knockBackDirection = col.transform.position - transform.position;
                 knockBackDirection = knockBackDirection.normalized;
-                myBody.AddForce(-knockBackDirection * OrbBump, ForceMode.VelocityChange);
+                myBody.AddForce(-knockBackDirection * OrbBump*3, ForceMode.VelocityChange);
                 if (winScoreManager)
                 {
                     //update score
                     winScoreManager.ScoreObtained(WinScoreManager.ScoreList.BreakableCube, col.transform.position);
                 }
+
+
+            }
+        }
+        else if(curTag=="Obstacle")
+        {
+            if (ShouldDash)
+            {
+                Vector3 knockBackDirection = col.transform.position - transform.position;
+                knockBackDirection = knockBackDirection.normalized;
+                myBody.AddForce(-knockBackDirection * OrbBump * 3, ForceMode.VelocityChange);
                 WallHealth healthScript = col.gameObject.GetComponent<WallHealth>();
                 if (healthScript)
                 {
@@ -1018,7 +1029,12 @@ public class Movement : MonoBehaviour
                 {
                     DamagePluto();
                 }
-
+            }
+            else
+            {
+                Vector3 knockBackDirection = col.transform.position - transform.position;
+                knockBackDirection = knockBackDirection.normalized;
+                myBody.AddForce(-knockBackDirection * OrbBump, ForceMode.VelocityChange);
             }
         }
     }
@@ -1033,12 +1049,10 @@ public class Movement : MonoBehaviour
         if (curTag == "BigAsteroid")
         {
             myBody.AddForce(c.contacts[0].normal * OrbBump, ForceMode.VelocityChange);
-                if (audioScript)
-                {
-                    audioScript.AsteroidBounce(transform.position);
-                }
-            
-
+            if (audioScript)
+            {
+                audioScript.AsteroidBounce(transform.position);
+            }
         }
 
 
@@ -1090,7 +1104,7 @@ public class Movement : MonoBehaviour
             
         }
 
-        else if (curTag == "EnvironmentObstacle" )
+        else if (curTag == "EnvironmentObstacle" || curTag=="Obstacle")
         {
             myBody.AddForce(c.contacts[0].normal * obstacleBump, ForceMode.VelocityChange);
 
@@ -1285,23 +1299,12 @@ public class Movement : MonoBehaviour
 
             else
             {
-                //if (asteroidCollider)
-                //{
-                //    asteroidCollider.radius = defaultRadius;
-                //}
-                //if (shieldScript)
-                //{
-                //    shieldScript.ShieldOff();
-                //}
-                //if(hudScript)
-                //{
-                //    hudScript.isShieldActive(false);
-                //}
+
                 if (audioScript)
                 {
                     audioScript.ShieldDing(transform.position);
                 }
-                //StartCoroutine(DamageTransition());
+
 
             }
         }    
