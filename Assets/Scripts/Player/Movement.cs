@@ -89,8 +89,7 @@ public class Movement : MonoBehaviour
     private Touch curTouch;
     private ButtonIndicator dashButt;
     private AudioController audioScript;
-    private SphereCollider asteroidCollider;
-    private SphereCollider solidCollider;
+    
     public Rigidbody myBody;
     private Camera camera;
     private GameObject joystick;
@@ -182,19 +181,7 @@ public class Movement : MonoBehaviour
         {
             buttonScript = buttonObject.GetComponent<ButtonIndicator>();
         }
-        //get collider that is triggered to change radius during runtime
-        foreach (SphereCollider col in GetComponents<SphereCollider>())
-        {
-            if (col.isTrigger)
-            {
-                asteroidCollider = col;
-                defaultRadius = asteroidCollider.radius;
-            }
-            else
-            {
-                solidCollider = col;
-            }
-        }
+
         trailState = DashState.basicMove;
         foreach (GameObject prefab in busterStates)
         {
@@ -730,13 +717,6 @@ public class Movement : MonoBehaviour
         }
     }
 
-    //function to turn on and off the collider if trigger is applying damage while in power dash mode
-    IEnumerator colliderTimeout()
-    {
-        solidCollider.enabled = false;
-        yield return new WaitForSeconds(0.3f);
-        solidCollider.enabled = true;
-    }
     //start power dash
     public void StarDashDuration(float starDuration)
     {
@@ -749,7 +729,7 @@ public class Movement : MonoBehaviour
         //Check if exhausted dash
         if (!isExhausted)
         {
-            solidCollider.enabled = false;
+            gameObject.layer = 9;
             //model switch for dash
             if (modelScript)
             {
@@ -765,7 +745,6 @@ public class Movement : MonoBehaviour
                     MoveSpeed = SuperDashSpeed;
                     //DashTimeout = PowerDashTimeout;
                     curCooldownTime = PowerCooldownTime;
-                    asteroidCollider.radius = powerDashRadius;
                     isPowerDashing = true;
 
                 }
@@ -823,7 +802,7 @@ public class Movement : MonoBehaviour
         isPowerDashing = false;
         //disable power dash halo indicator
         PowerUpScript.DashModelTransition(false);
-        asteroidCollider.radius = defaultRadius;
+        //asteroidCollider.radius = defaultRadius;
         slowDownDrag = normalDrag;
         if (hudScript)
         {
@@ -834,7 +813,7 @@ public class Movement : MonoBehaviour
         myBody.drag = normalDrag;
 
         MoveSpeed = DefaultSpeed;
-        solidCollider.enabled = true;
+        gameObject.layer = 8;
         //Change trail back
         TrailChange(DashState.basicMove);
 
@@ -914,130 +893,7 @@ public class Movement : MonoBehaviour
         
     }
 
-    void OnTriggerEnter(Collider col)
-    {
-        string curTag = col.gameObject.tag;
-        if (curTag == "EnvironmentObstacle" || curTag=="Planet" || curTag=="ShatterPiece")
-        {
 
-            Vector3 knockBackDirection = col.transform.position - transform.position;
-            knockBackDirection = knockBackDirection.normalized;
-            myBody.AddForce(-knockBackDirection * obstacleBump,ForceMode.VelocityChange);
-            if(!isDamaged)
-            {
-                DamagePluto();
-            }
-        }
-        else if (curTag == "Asteroid")
-        {
-            //check if player is dead
-            if (!isDead)
-            {
-                //play audio cue for absorbed
-                if (audioScript)
-                {
-                    audioScript.AsteroidAbsorbed(transform.position);
-                }
-            }
-            //return orb to pool
-            ReturnAsteroid(col.gameObject);
-            if (ScoreManager)
-            {
-                ScoreManager.OrbObtained();
-            }
-            if (ScoreManager)
-            {
-                winScoreManager.ScoreObtained(WinScoreManager.ScoreList.Orb, col.transform.position);
-            }
-        }
-        else if(curTag=="MoonBall")
-        {
-            if(ShouldDash)
-            {
-                //Vector3 midPoint = col.transform.position - transform.position / 2;
-                //Instantiate(moonBallHitEffect, midPoint, Quaternion.identity);
-
-                Vector3 knockBackDirection = col.transform.position - transform.position;
-                knockBackDirection = knockBackDirection.normalized;
-                myBody.AddForce(-knockBackDirection * soccerKnockback, ForceMode.VelocityChange);
-            }
-            
-        }
-        if (isPowerDashing && curTag == "BigAsteroid")
-        {
-
-
-            BigAsteroid bigOrbScript = col.gameObject.GetComponent<BigAsteroid>();
-            if (bigOrbScript)
-            {
-                bigOrbScript.AsteroidHit(3);
-                if (solidCollider)
-                {
-                    StartCoroutine(colliderTimeout());
-                }
-                return;
-            }
-        }
-        else if (curTag == "BigAsteroid")
-        {
-            if (ShouldDash)
-            {
-                col.gameObject.GetComponent<BigAsteroid>().AsteroidHit(1);
-
-                if (winScoreManager)
-                {
-                    //update score
-                    winScoreManager.ScoreObtained(WinScoreManager.ScoreList.BigOrb, col.transform.position);
-                }
-            }
-            else
-            {
-                Vector3 knockBackDirection = col.transform.position - transform.position;
-                knockBackDirection = knockBackDirection.normalized;
-                myBody.AddForce(-knockBackDirection * OrbBump, ForceMode.VelocityChange);
-            }
-        }
-        else if (curTag == "BreakableWall")
-        {
-            if (ShouldDash)
-            {
-                Vector3 knockBackDirection = col.transform.position - transform.position;
-                knockBackDirection = knockBackDirection.normalized;
-                myBody.AddForce(-knockBackDirection * OrbBump*3, ForceMode.VelocityChange);
-                if (winScoreManager)
-                {
-                    //update score
-                    winScoreManager.ScoreObtained(WinScoreManager.ScoreList.BreakableCube, col.transform.position);
-                }
-
-
-            }
-        }
-        else if(curTag=="Obstacle")
-        {
-            if (ShouldDash)
-            {
-                Vector3 knockBackDirection = col.transform.position - transform.position;
-                knockBackDirection = knockBackDirection.normalized;
-                myBody.AddForce(-knockBackDirection * OrbBump * 3, ForceMode.VelocityChange);
-                WallHealth healthScript = col.gameObject.GetComponent<WallHealth>();
-                if (healthScript)
-                {
-                    healthScript.IncrementDamage();
-                }
-                if (col.gameObject.name.Contains("DamageWall"))
-                {
-                    DamagePluto();
-                }
-            }
-            else
-            {
-                Vector3 knockBackDirection = col.transform.position - transform.position;
-                knockBackDirection = knockBackDirection.normalized;
-                myBody.AddForce(-knockBackDirection * OrbBump, ForceMode.VelocityChange);
-            }
-        }
-    }
 
     
 
@@ -1090,10 +946,7 @@ public class Movement : MonoBehaviour
                 {
                     healthScript.IncrementDamage();
                 }
-                if (c.gameObject.name.Contains("DamageWall"))
-                {
-                    DamagePluto();
-                }
+                
             }
             myBody.AddForce(c.contacts[0].normal * OrbBump, ForceMode.VelocityChange);
             
@@ -1104,14 +957,27 @@ public class Movement : MonoBehaviour
             
         }
 
-        else if (curTag == "EnvironmentObstacle" || curTag=="Obstacle")
+        else if (curTag == "EnvironmentObstacle" || curTag == "Planet" || curTag == "ShatterPiece")
         {
             myBody.AddForce(c.contacts[0].normal * obstacleBump, ForceMode.VelocityChange);
-
+            if (!isDamaged)
+            {
+                DamagePluto();
+            }
 
         }
-
-
+        else if (curTag == "Obstacle")
+        {
+            if (ShouldDash)
+            {
+                WallHealth healthScript = c.gameObject.GetComponent<WallHealth>();
+                if (healthScript)
+                {
+                    healthScript.IncrementDamage();
+                    DamagePluto();
+                }
+            }
+        }
     }
 
 
@@ -1121,10 +987,7 @@ public class Movement : MonoBehaviour
         {
             modelScript.SwapMaterial(TextureSwap.PlutoState.Pickup);
         }
-        if (asteroidCollider)
-        {
-            asteroidCollider.radius = 3.85f;
-        }
+
     }
 
     //function is called when game has ended and this stops player movement

@@ -63,7 +63,7 @@ public class BigAsteroid : MonoBehaviour {
         Destroy(gameObject);
     }
 
-    void OnTriggerEnter(Collider col)
+    void OnCollisionEnter(Collision col)
     {
         if(col.gameObject.tag=="Player")
         {

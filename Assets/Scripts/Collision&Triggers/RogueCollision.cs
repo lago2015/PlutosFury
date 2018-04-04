@@ -102,7 +102,12 @@ public class RogueCollision : MonoBehaviour {
             bool RogueDashing = rogueMoveScript.isDashing();
             if (!RogueDashing)
             {
-
+                Movement moveScript = col.gameObject.GetComponent<Movement>();
+                bool isDashing = moveScript.DashStatus();
+                if(!isDashing&&moveScript)
+                {
+                    moveScript.DamagePluto();
+                }
                 if (myBody)
                 {
                     myBody.AddForce(col.contacts[0].normal * wallBump, ForceMode.VelocityChange);

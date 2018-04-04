@@ -48,7 +48,7 @@ public class DetectWaitThenExplode : MonoBehaviour {
                         damageScript.didDamage();
                     }
                     WaitTimeToExplode = 0;
-                    TriggeredExplosion();
+                    TriggerExplosionInstantly();
                 }
                 else
                 {
@@ -81,7 +81,32 @@ public class DetectWaitThenExplode : MonoBehaviour {
         }
 
     }
+    void TriggerExplosionInstantly()
+    {
+        if (pursuitScript)
+        {
+            pursuitScript.moveSpeed = 0;
+        }
+        //check if theres a model and explosion
+        if (regularState && explosionState)
+        {
+            //ensure audio gets played once
+            if (!doOnce)
+            {
+                //get audio controller and play audio
+                GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>().DestructionSmall(transform.position);
+                doOnce = true;
+            }
 
+            //turn off model gameobject
+            regularState.SetActive(false);
+            //activate explosion gameobject
+            if (explosionState)
+            {
+                explosionState.SetActive(true);
+            }
+        }
+    }
 
     public void TriggeredExplosion()
     {
