@@ -954,7 +954,10 @@ public class Movement : MonoBehaviour
         else if (curTag == "MoonBall")
         {
             myBody.AddForce(c.contacts[0].normal * OrbBump, ForceMode.VelocityChange);
-            
+            if(ShouldDash)
+            {
+                Instantiate(moonBallHitEffect, c.contacts[0].point,Quaternion.identity);
+            }
         }
 
         else if (curTag == "EnvironmentObstacle" || curTag == "Planet" || curTag == "ShatterPiece")
@@ -977,6 +980,7 @@ public class Movement : MonoBehaviour
                     DamagePluto();
                 }
             }
+            myBody.AddForce(c.contacts[0].normal * obstacleBump, ForceMode.VelocityChange);
         }
     }
 

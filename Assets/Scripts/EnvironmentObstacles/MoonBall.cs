@@ -23,6 +23,7 @@ public class MoonBall : MonoBehaviour
     {
         // Get rigibody component
         rb = GetComponent<Rigidbody>();
+        
 	}
 	
 	// Update is called once per frame
@@ -140,6 +141,15 @@ public class MoonBall : MonoBehaviour
         {
             rb.AddForce(col.contacts[0].normal * wallBounce, ForceMode.VelocityChange);
         }
+        if(col.gameObject.tag=="Obstacle")
+        {
+            if(col.gameObject.name.Contains("DamageWall"))
+            {
+                col.gameObject.GetComponent<WallHealth>().IncrementDamage();
+                OnExplosion();
+
+            }
+        }
 
         if(col.gameObject.GetComponent<AIHealth>())
         {
@@ -152,7 +162,6 @@ public class MoonBall : MonoBehaviour
 
 
     }
-
     public void rocketHit(Vector3 Direction)
     {
         // Apply force and rotation to knock back from rocket explosion
@@ -199,6 +208,14 @@ public class MoonBall : MonoBehaviour
         if(Explosion)
         {
             Instantiate(Explosion, transform.position,Quaternion.identity);
+            Destroy(gameObject);
+        }
+    }
+    public void OnExplosionAtPosition(Vector3 spawnPoint)
+    {
+        if (Explosion)
+        {
+            Instantiate(Explosion, spawnPoint, Quaternion.identity);
             Destroy(gameObject);
         }
     }

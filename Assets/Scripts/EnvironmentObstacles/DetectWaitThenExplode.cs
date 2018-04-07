@@ -74,10 +74,16 @@ public class DetectWaitThenExplode : MonoBehaviour {
             //apply damage to asteroid
             col.gameObject.GetComponent<BigAsteroid>().AsteroidHit(5);
         }
-        else if (CurTag == "EnvironmentObstacle"|| CurTag == "MoonBall")
+        else if (CurTag == "EnvironmentObstacle")
         {
             //start explosion
             TriggeredExplosion();
+        }
+        else if(CurTag=="MoonBall")
+        {
+            TriggerExplosionInstantly();
+            Vector3 spawnPoint = col.transform.position;
+            col.gameObject.GetComponent<MoonBall>().OnExplosionAtPosition(spawnPoint);
         }
 
     }
