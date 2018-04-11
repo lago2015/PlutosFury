@@ -97,8 +97,17 @@ public class MoonBall : MonoBehaviour
                 }
             }
         }
+        else if(col.tag=="BigAsteroid")
+        {
+            Collider orbCollider = col.gameObject.GetComponent<Collider>();
+            if(orbCollider)
+            {
+                orbCollider.enabled = false;
+            }
+            col.gameObject.GetComponent<BigAsteroid>().AsteroidHit(5);
+        }
 
-       if(col.gameObject.tag == "Spike")
+       else if(col.gameObject.tag == "Spike")
        {
             // get direction from ball to spike
             Vector3 direction = col.transform.position - transform.position;

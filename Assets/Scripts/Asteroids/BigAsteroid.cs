@@ -83,15 +83,15 @@ public class BigAsteroid : MonoBehaviour {
             }
         }
 
-        if(col.gameObject.tag == "MoonBall")
-        {
-            if (!doOnce)
-            {
-                GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>().AsteroidExplosion(transform.position);
-                SpawnAsteroids();
-                doOnce = true;
-            }
-        }
+        //if(col.gameObject.tag == "MoonBall")
+        //{
+        //    if (!doOnce)
+        //    {
+        //        GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>().AsteroidExplosion(transform.position);
+        //        SpawnAsteroids();
+        //        doOnce = true;
+        //    }
+        //}
     }
 
     public void AsteroidHit(int DamageAmount)

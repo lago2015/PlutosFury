@@ -32,7 +32,7 @@ public class DetectWaitThenExplode : MonoBehaviour {
         pursuitScript = GetComponent<HomingProjectile>();
     }
 
-    void OnTriggerEnter(Collider col)
+    void OnCollisionEnter(Collision col)
     {
         string CurTag = col.gameObject.tag;
         if (CurTag == "Player")
@@ -84,6 +84,15 @@ public class DetectWaitThenExplode : MonoBehaviour {
             TriggerExplosionInstantly();
             Vector3 spawnPoint = col.transform.position;
             col.gameObject.GetComponent<MoonBall>().OnExplosionAtPosition(spawnPoint);
+        }
+        else if(CurTag=="Obstacle")
+        {
+            WallHealth orbScript = col.gameObject.GetComponent<WallHealth>();
+            if(orbScript)
+            {
+                orbScript.IncrementDamage();
+            }
+            TriggerExplosionInstantly();
         }
 
     }

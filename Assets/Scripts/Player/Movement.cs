@@ -61,7 +61,7 @@ public class Movement : MonoBehaviour
     /////Cooldowns
     private float DashCooldownTime = 0.2f;
     private float PowerCooldownTime = 0.75f;
-    private float curCooldownTime;
+    private float curCooldownTime=1f;
     /////checks
     private bool playOnce;
     private bool isExhausted = false;
@@ -70,7 +70,7 @@ public class Movement : MonoBehaviour
     private bool startOnce;
     private bool DashChargeActive;
     public bool isCharged;
-    private bool ShouldDash;
+    public bool ShouldDash;
     private bool dashOnce;
     public bool Charging;
     /////Speeds
@@ -109,7 +109,7 @@ public class Movement : MonoBehaviour
     private Shield shieldScript;
     private ButtonIndicator buttonScript;
     private HUDManager hudScript;
-
+    private TriggerCollisionPluto triggerScript;
     //Appearance Components
     [Tooltip("0=default, 1=dash, 2=chargeStart, 3=chargeComplete, 4=burst")]
     public GameObject[] trailContainer;
@@ -138,7 +138,7 @@ public class Movement : MonoBehaviour
     private float DefaultSpeed;
     private bool isWaiting;
     private Vector3 lastMove;
-    private Vector3 move;
+    public Vector3 move;
     //functions for power dash
 
     public bool DashChargeStatus() { return DashChargeActive; }
@@ -146,6 +146,7 @@ public class Movement : MonoBehaviour
     public float CurPowerDashTimeout() { return chargeTime; }
     public void cancelCharge() { TrailChange(DashState.idle); }
     public bool DamageStatus() { return isDamaged; }
+
 
     //functions to check damage
     bool ShieldStatus() { Shielded = shieldScript.PlutoShieldStatus(); return Shielded; }
@@ -181,7 +182,11 @@ public class Movement : MonoBehaviour
         {
             buttonScript = buttonObject.GetComponent<ButtonIndicator>();
         }
-
+        GameObject AsteroidCollectorChild = GameObject.FindGameObjectWithTag("GravityWell").transform.GetChild(0).gameObject;
+        if(AsteroidCollectorChild)
+        {
+            triggerScript = AsteroidCollectorChild.GetComponent<TriggerCollisionPluto>();
+        }
         trailState = DashState.basicMove;
         foreach (GameObject prefab in busterStates)
         {
@@ -397,8 +402,6 @@ public class Movement : MonoBehaviour
             //move player
             myBody.AddForce(move * MoveSpeed * Time.deltaTime, ForceMode.VelocityChange);
 
-
-
             //trail rotation and enabling trails
             if (trailContainer.Length > 0)
             {
@@ -613,9 +616,9 @@ public class Movement : MonoBehaviour
                         dashOn = true;
                         //cache gameobject 
                         trailContainer[1].SetActive(true);
-                        trailContainer[0].SetActive(true);
+                        trailContainer[0].SetActive(false);
 
-                        curTrail = trailContainer[0];
+                        curTrail = trailContainer[1];
 
                     }
 
@@ -723,6 +726,7 @@ public class Movement : MonoBehaviour
         isPowerDashing = true;
         DashTimeout = starDuration;
     }
+
     public void Dash()
     {
 
@@ -786,6 +790,10 @@ public class Movement : MonoBehaviour
                 }
                 Charging = false;
                 dashOnce = true;    //ensure dash gets called once per dash
+                if(triggerScript)
+                {
+                    triggerScript.DashChange(ShouldDash);
+                }
                 StartCoroutine(DashTransition());   //Start dash
             }
         }
@@ -798,12 +806,12 @@ public class Movement : MonoBehaviour
         //reset everything
         DashChargeActive = false;
         isCharged = false;
-        slowDownDrag = powerDashDrag;
+        //slowDownDrag = powerDashDrag;
         isPowerDashing = false;
         //disable power dash halo indicator
         PowerUpScript.DashModelTransition(false);
         //asteroidCollider.radius = defaultRadius;
-        slowDownDrag = normalDrag;
+        //slowDownDrag = normalDrag;
         if (hudScript)
         {
             hudScript.isShieldActive(false);
@@ -813,14 +821,26 @@ public class Movement : MonoBehaviour
         myBody.drag = normalDrag;
 
         MoveSpeed = DefaultSpeed;
-        gameObject.layer = 8;
         //Change trail back
         TrailChange(DashState.basicMove);
-
+        StartCoroutine(DashComplete());
         //Start Slowdown/Cooldown
         StartCoroutine(DashCooldown());
         StartCoroutine(SlowDown());
         dashOnce = false;
+    }
+
+    IEnumerator DashComplete()
+    {
+        yield return new WaitForSeconds(0.25f);
+        
+        ShouldDash = false;
+        if (triggerScript)
+        {
+            triggerScript.DashChange(ShouldDash);
+        }
+        gameObject.layer = 8;
+
     }
 
     //Cool down for exhaustion from dash
@@ -830,7 +850,6 @@ public class Movement : MonoBehaviour
         //ensure no drifting after reaching high speeds.
         isExhausted = true;
         yield return new WaitForSeconds(curCooldownTime);
-        ShouldDash = false;
 
         isExhausted = false;
     }
@@ -892,11 +911,6 @@ public class Movement : MonoBehaviour
         myBody.AddForce(-Direction * soccerKnockback, ForceMode.VelocityChange);
         
     }
-
-
-
-    
-
     //Basic collision for BASIC PLUTO
     void OnCollisionEnter(Collision c)
     {

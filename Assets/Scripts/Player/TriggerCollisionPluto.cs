@@ -13,7 +13,7 @@ public class TriggerCollisionPluto : MonoBehaviour {
     private AudioController audioScript;
     private ScoreManager ScoreManager;
     private WinScoreManager WinScoreManager;
-    
+    public bool DashChange(bool curDash) { return ShouldDash = curDash; }
     private void Awake()
     {
         parentOfPlayer = GameObject.FindGameObjectWithTag("Player");
@@ -27,7 +27,7 @@ public class TriggerCollisionPluto : MonoBehaviour {
         audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
 
     }
-
+    
     void OnTriggerEnter(Collider col)
     {
         string curTag = col.gameObject.tag;
@@ -57,22 +57,24 @@ public class TriggerCollisionPluto : MonoBehaviour {
         }
 
 
-        else if (curTag == "BigAsteroid")
+        
+    }
+    private void OnTriggerStay(Collider other)
+    {
+        string curTag = other.tag;
+        if (curTag == "BigAsteroid")
         {
-            ShouldDash = moveScript.DashStatus();
             if (ShouldDash)
             {
-                col.gameObject.GetComponent<BigAsteroid>().AsteroidHit(1);
+                other.gameObject.GetComponent<BigAsteroid>().AsteroidHit(1);
 
                 if (WinScoreManager)
                 {
                     //update score
-                    WinScoreManager.ScoreObtained(WinScoreManager.ScoreList.BigOrb, col.transform.position);
+                    WinScoreManager.ScoreObtained(WinScoreManager.ScoreList.BigOrb, other.transform.position);
                 }
             }
 
         }
-
-
     }
 }
