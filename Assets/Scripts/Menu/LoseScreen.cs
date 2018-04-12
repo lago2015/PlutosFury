@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class LoseScreen : MonoBehaviour {
 
-
+    public Button PlayAgain;
     public Button MainMenu;
     public Text scoreText;
     public Text highScoreText;
@@ -45,6 +45,8 @@ public class LoseScreen : MonoBehaviour {
         scoreText.canvasRenderer.SetAlpha(0.0f);
         highScoreText.canvasRenderer.SetAlpha(0.0f);
         MainMenu.image.canvasRenderer.SetAlpha(0.0f);
+        PlayAgain.image.canvasRenderer.SetAlpha(0.0f);
+
         StartCoroutine(startFade());
     }
 
@@ -71,6 +73,7 @@ public class LoseScreen : MonoBehaviour {
     {
         fadeOverlay.CrossFadeAlpha(0, fadeDuration, true);
         MainMenu.image.CrossFadeAlpha(1, fadeDuration, true);
+        PlayAgain.image.CrossFadeAlpha(1, fadeDuration, true);
         scoreText.CrossFadeAlpha(1, fadeDuration, true);
         highScoreText.CrossFadeAlpha(1, fadeDuration, true);
     }

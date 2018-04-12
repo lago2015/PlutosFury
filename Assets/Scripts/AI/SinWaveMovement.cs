@@ -25,7 +25,7 @@ public class SinWaveMovement : MonoBehaviour {
         numberOfTicks = 0;
         enabled = false;
 
-        startShot();
+        //startShot();
     }
 
 

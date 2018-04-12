@@ -29,7 +29,18 @@ public class WallHealth : MonoBehaviour
             pickUpContained = null;
         }
     }
-	
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.tag=="EnvironmentObstacle")
+        {
+            if(collision.gameObject.name.Contains("Seeker"))
+            {
+                collision.transform.GetChild(3).GetComponent<DetectWaitThenExplode>().TriggeredExplosion();
+            }
+        }
+    }
+
     public void IncrementDamage()
     {
        

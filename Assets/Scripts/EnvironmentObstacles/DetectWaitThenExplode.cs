@@ -32,7 +32,7 @@ public class DetectWaitThenExplode : MonoBehaviour {
         pursuitScript = GetComponent<HomingProjectile>();
     }
 
-    void OnTriggerEnter(Collider col)
+    void OnCollisionEnter(Collision col)
     {
         string CurTag = col.gameObject.tag;
         if (CurTag == "Player")
@@ -48,7 +48,7 @@ public class DetectWaitThenExplode : MonoBehaviour {
                         damageScript.didDamage();
                     }
                     WaitTimeToExplode = 0;
-                    TriggeredExplosion();
+                    TriggerExplosionInstantly();
                 }
                 else
                 {
@@ -74,14 +74,54 @@ public class DetectWaitThenExplode : MonoBehaviour {
             //apply damage to asteroid
             col.gameObject.GetComponent<BigAsteroid>().AsteroidHit(5);
         }
-        else if (CurTag == "EnvironmentObstacle"|| CurTag == "MoonBall")
+        else if (CurTag == "EnvironmentObstacle")
         {
             //start explosion
             TriggeredExplosion();
         }
+        else if(CurTag=="MoonBall")
+        {
+            TriggerExplosionInstantly();
+            Vector3 spawnPoint = col.transform.position;
+            col.gameObject.GetComponent<MoonBall>().OnExplosionAtPosition(spawnPoint);
+        }
+        else if(CurTag=="Obstacle")
+        {
+            WallHealth orbScript = col.gameObject.GetComponent<WallHealth>();
+            if(orbScript)
+            {
+                orbScript.IncrementDamage();
+            }
+            TriggerExplosionInstantly();
+        }
 
     }
+    void TriggerExplosionInstantly()
+    {
+        if (pursuitScript)
+        {
+            pursuitScript.moveSpeed = 0;
+        }
+        //check if theres a model and explosion
+        if (regularState && explosionState)
+        {
+            //ensure audio gets played once
+            if (!doOnce)
+            {
+                //get audio controller and play audio
+                GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>().DestructionSmall(transform.position);
+                doOnce = true;
+            }
 
+            //turn off model gameobject
+            regularState.SetActive(false);
+            //activate explosion gameobject
+            if (explosionState)
+            {
+                explosionState.SetActive(true);
+            }
+        }
+    }
 
     public void TriggeredExplosion()
     {

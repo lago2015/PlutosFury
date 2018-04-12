@@ -6,6 +6,7 @@ public class DetectPlayer : MonoBehaviour {
     //***For Rogue Enemy
 
     public GameObject ScriptModel;
+    public GameObject playerDiscoveredSprite;
     private ChasePlayer ChaseScript;
     private FleeOrPursue pursueScript;
     private RogueAvoidance avoidanceScript;

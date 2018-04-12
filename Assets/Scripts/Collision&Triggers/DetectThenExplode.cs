@@ -74,7 +74,7 @@ public class DetectThenExplode : MonoBehaviour {
 
         if (CurTag == "Player")
         {
-            if(!doOnce)
+            if (!doOnce)
             {
                 if (damageScript)
                 {
@@ -85,28 +85,28 @@ public class DetectThenExplode : MonoBehaviour {
                 TriggeredExplosion();
             }
         }
-        else if(CurTag == "BigAsteroid")
+        else if (CurTag == "BigAsteroid")
         {
             //start explosion
             TriggeredExplosion();
             //notify damage script that damage is dealt to asteroid
-            if(damageScript)
+            if (damageScript)
             {
                 damageScript.didDamage();
             }
             //apply damage to asteroid
             col.gameObject.GetComponent<BigAsteroid>().AsteroidHit(5);
         }
-        else if(CurTag=="EnvironmentObstacle")
+        else if (CurTag == "EnvironmentObstacle")
         {
-            if(col.gameObject.name.Contains("DamageWall"))
+            if (col.gameObject.name.Contains("DamageWall"))
             {
                 col.gameObject.GetComponent<WallHealth>().IncrementDamage();
             }
             //start explosion
             TriggeredExplosion();
         }
-        else if(CurTag == "MoonBall"||CurTag=="BreakableWall")
+        else if (CurTag == "BreakableWall")
         {
             if (isRocket)
             {
@@ -114,15 +114,20 @@ public class DetectThenExplode : MonoBehaviour {
 
                 //Get moonball script
                 MoonBall moonBall = col.gameObject.GetComponent<MoonBall>();
-                    if (moonBall)
-                    {
-                        moonBall.rocketHit(forwardVec);
-                        moonBall.OnExplosion();
-                    }
+                if (moonBall)
+                {
+                    moonBall.rocketHit(forwardVec);
+                    moonBall.OnExplosion();
+                }
             }
 
             //start explosion
-            TriggeredExplosion(); 
+            TriggeredExplosion();
+        }
+        else if(CurTag == "MoonBall")
+        {
+            col.gameObject.GetComponent<MoonBall>().OnExplosionAtPosition(col.transform.position);
+            TriggeredExplosion();
         }
     }
 

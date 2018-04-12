@@ -63,7 +63,7 @@ public class BigAsteroid : MonoBehaviour {
         Destroy(gameObject);
     }
 
-    void OnTriggerEnter(Collider col)
+    void OnCollisionEnter(Collision col)
     {
         if(col.gameObject.tag=="Player")
         {
@@ -83,15 +83,15 @@ public class BigAsteroid : MonoBehaviour {
             }
         }
 
-        if(col.gameObject.tag == "MoonBall")
-        {
-            if (!doOnce)
-            {
-                GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>().AsteroidExplosion(transform.position);
-                SpawnAsteroids();
-                doOnce = true;
-            }
-        }
+        //if(col.gameObject.tag == "MoonBall")
+        //{
+        //    if (!doOnce)
+        //    {
+        //        GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>().AsteroidExplosion(transform.position);
+        //        SpawnAsteroids();
+        //        doOnce = true;
+        //    }
+        //}
     }
 
     public void AsteroidHit(int DamageAmount)

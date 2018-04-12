@@ -45,7 +45,14 @@ public class Shield : MonoBehaviour {
             ShieldModel.SetActive(true);
             isShielded = true;
             MyCollider.radius = shieldRadius;
+            StartCoroutine(TimerForShield());
         }
+    }
+
+    IEnumerator TimerForShield()
+    {
+        yield return new WaitForSeconds(shieldTimeout);
+        ShieldOff();
     }
 
     public void ShieldOff()

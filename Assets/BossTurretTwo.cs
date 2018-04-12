@@ -4,43 +4,44 @@ using UnityEngine;
 
 public class BossTurretTwo : MonoBehaviour
 {
-    public Transform[] minePositions;
     public GameObject minePrefab;
-
+    public Transform[] mineTransform;
     public float mineFireRate;
     public float mineSpeed;
+
+    public GameObject energyBallPrefab;
+    public Transform energyBallTransform;
+    public float energyBallFireRate;
+    
     bool isReloadingMines;
-    float elapseTime;
+    bool isReloadingEnergyBall;
+    float elapseMineTime;
+    float elapseEnergyTime;
    
-	// Use this for initialization
-	void Start ()
-    {
-		
-	}
-	
 	// Update is called once per frame
 	void Update ()
     {
         LaunchMines();
+        LaunchEnergyBall();
 	}
 
     public void LaunchMines()
     {
-        elapseTime += Time.deltaTime;
-        if (elapseTime >= mineFireRate)
+        elapseMineTime += Time.deltaTime;
+        if (elapseMineTime >= mineFireRate)
         {
-           
-            for (int i = 0; i < minePositions.Length; i++)
+
+            for (int i = 0; i < mineTransform.Length; i++)
             {
                 if (!isReloadingMines)
                 {
-                    GameObject Mine = Instantiate(minePrefab, minePositions[i].position, minePositions[i].rotation) as GameObject;
+                    GameObject Mine = Instantiate(minePrefab, mineTransform[i].position, mineTransform[i].rotation) as GameObject;
 
                     Rigidbody mineRb = Mine.GetComponent<Rigidbody>();
-                    
-                    if(mineRb)
+
+                    if (mineRb)
                     {
-                      
+
                         mineRb.velocity = Vector3.right * -mineSpeed;
                         Debug.Log("YESSS");
                     }
@@ -48,11 +49,32 @@ public class BossTurretTwo : MonoBehaviour
             }
 
             isReloadingMines = true;
-            elapseTime = 0;
+            elapseMineTime = 0;
         }
         else
         {
             isReloadingMines = false;
         }
     }
+
+    public void LaunchEnergyBall()
+    {
+        elapseEnergyTime += Time.deltaTime;
+        if (elapseEnergyTime >= energyBallFireRate)
+        {
+    
+            if (!isReloadingEnergyBall)
+            {
+                GameObject Mine = Instantiate(energyBallPrefab, energyBallTransform.position, energyBallTransform.rotation) as GameObject;
+            }
+           
+            isReloadingEnergyBall = true;
+            elapseEnergyTime = 0;
+        }
+        else
+        {
+            isReloadingEnergyBall = false;
+        }
+    }
+
 }
