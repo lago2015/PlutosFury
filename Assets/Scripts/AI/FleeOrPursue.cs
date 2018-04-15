@@ -47,6 +47,7 @@ public class FleeOrPursue : MonoBehaviour {
     public bool isDead;
     public bool isDashing() { return ShouldDash; }
     public bool yesDead() { return isDead = true; }
+    public Animator animComp;
     // Use this for initialization
     void Awake()
     {
@@ -230,6 +231,7 @@ public class FleeOrPursue : MonoBehaviour {
         {
             StartCoroutine(burstTimeout());
             StartCoroutine(DashTransition());   //Start dash
+            animComp.SetBool("isDashing", true);
         }
         else
         {
@@ -272,7 +274,7 @@ public class FleeOrPursue : MonoBehaviour {
         }
         yield return new WaitForSeconds(DashTimeout);
 
-
+        animComp.SetBool("isDashing", false);
         ShouldDash = false;
         //Start Slowdown/Cooldown
         StartCoroutine(DashCooldown());

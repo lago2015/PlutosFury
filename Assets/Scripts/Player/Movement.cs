@@ -106,6 +106,7 @@ public class Movement : MonoBehaviour
     private FloatingJoystick joystickscript;
     //private TextureSwap modelScript;
     public Animator animComp;
+    public SpriteRenderer rendererComp;
     private PowerUpManager PowerUpScript;
     private Shield shieldScript;
     private ButtonIndicator buttonScript;
@@ -582,7 +583,7 @@ public class Movement : MonoBehaviour
                     {
                         ResumePluto();
                     }
-                    animComp.SetBool("isDashing", false);
+                    //animComp.SetBool("isDashing", false);
                     //modelScript.StartRender();
                     ShouldDash = false;
                     //isPowerDashing = false;
@@ -620,7 +621,7 @@ public class Movement : MonoBehaviour
                         //cache gameobject 
                         trailContainer[1].SetActive(true);
                         trailContainer[0].SetActive(false);
-                        animComp.SetBool("isDashing", true);
+                        //animComp.SetBool("isDashing", true);
 
                         curTrail = trailContainer[1];
 
@@ -738,11 +739,7 @@ public class Movement : MonoBehaviour
         if (!isExhausted)
         {
             gameObject.layer = 9;
-            //model switch for dash
-            //if (modelScript)
-            //{
-            //    modelScript.SwapMaterial(TextureSwap.PlutoState.Smash);
-            //}
+
             //Check if power pick up as been obtained
             //also if power dash is charged
             if (DashChargeActive)
@@ -798,6 +795,8 @@ public class Movement : MonoBehaviour
                 {
                     triggerScript.DashChange(ShouldDash);
                 }
+                animComp.SetBool("isDashing", true);
+
                 StartCoroutine(DashTransition());   //Start dash
             }
         }
@@ -806,7 +805,8 @@ public class Movement : MonoBehaviour
     IEnumerator DashTransition()
     {
         yield return new WaitForSeconds(DashTimeout);
-        //Check if a dash pick up was obtained while dashing
+        animComp.SetBool("isDashing", false);
+
         //reset everything
         DashChargeActive = false;
         isCharged = false;
@@ -995,7 +995,11 @@ public class Movement : MonoBehaviour
                     DamagePluto();
                 }
             }
-            myBody.AddForce(c.contacts[0].normal * obstacleBump, ForceMode.VelocityChange);
+            if(c.transform.parent.name!="Seeker")
+            {
+                myBody.AddForce(c.contacts[0].normal * obstacleBump, ForceMode.VelocityChange);
+            }
+            
         }
     }
 
@@ -1128,7 +1132,8 @@ public class Movement : MonoBehaviour
                 //run game over procedure
                 if (curHealth < 0)
                 {
-                    
+                    rendererComp.enabled = false;
+                    animComp.enabled = false;
                     isDead = true;
                     BusterChange(BusterStates.Death);
                     audioScript.PlutoDeath(transform.position);

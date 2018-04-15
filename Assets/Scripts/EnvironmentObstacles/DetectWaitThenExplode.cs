@@ -7,11 +7,12 @@ public class DetectWaitThenExplode : MonoBehaviour {
 
     public GameObject regularState;
     public GameObject explosionState;
-
+    public GameObject chargeState;
     private DamageOrPowerUp damageScript;
     private HomingProjectile pursuitScript;
     private bool doOnce;
-    public float WaitTimeToExplode = 0.25f;
+    public float WaitTimeToExplode = 1f;
+    public Animator animComp;
     // Use this for initialization
     void Awake ()
     {
@@ -30,6 +31,7 @@ public class DetectWaitThenExplode : MonoBehaviour {
             explosionState.SetActive(false);
         }
         pursuitScript = GetComponent<HomingProjectile>();
+        chargeState.SetActive(false);
     }
 
     void OnCollisionEnter(Collision col)
@@ -52,11 +54,8 @@ public class DetectWaitThenExplode : MonoBehaviour {
                 }
                 else
                 {
-                    if (damageScript)
-                    {
-                        damageScript.didDamage();
-                    }
-                    playerScript.DamagePluto();
+                    
+                    
                     //Start Explosion
                     TriggeredExplosion();
                 }
@@ -102,6 +101,7 @@ public class DetectWaitThenExplode : MonoBehaviour {
         {
             pursuitScript.moveSpeed = 0;
         }
+        animComp.SetBool("isExploding", true);
         //check if theres a model and explosion
         if (regularState && explosionState)
         {
@@ -125,8 +125,8 @@ public class DetectWaitThenExplode : MonoBehaviour {
 
     public void TriggeredExplosion()
     {
-        
-        if(pursuitScript)
+        animComp.SetBool("isExploding", true);
+        if (pursuitScript)
         {
             pursuitScript.moveSpeed = 0;
         }
@@ -146,9 +146,9 @@ public class DetectWaitThenExplode : MonoBehaviour {
     }
     IEnumerator SwitchModels()
     {
-        
+        chargeState.SetActive(true);
         yield return new WaitForSeconds(WaitTimeToExplode);
-
+        chargeState.SetActive(false);
         //turn off model gameobject
         regularState.SetActive(false);
         //activate explosion gameobject
