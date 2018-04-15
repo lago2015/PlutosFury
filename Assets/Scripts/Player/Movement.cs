@@ -59,7 +59,7 @@ public class Movement : MonoBehaviour
     public float chargeTime = 2f;
     private float defaultDashTimeout;
     /////Cooldowns
-    private float DashCooldownTime = 0.2f;
+    private float DashCooldownTime = 1f;
     private float PowerCooldownTime = 0.75f;
     private float curCooldownTime=1f;
     /////checks
@@ -811,7 +811,7 @@ public class Movement : MonoBehaviour
         //disable power dash halo indicator
         PowerUpScript.DashModelTransition(false);
         //asteroidCollider.radius = defaultRadius;
-        //slowDownDrag = normalDrag;
+        slowDownDrag = normalDrag;
         if (hudScript)
         {
             hudScript.isShieldActive(false);

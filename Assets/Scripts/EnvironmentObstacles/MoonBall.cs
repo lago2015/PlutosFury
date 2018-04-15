@@ -47,6 +47,7 @@ public class MoonBall : MonoBehaviour
         // IF ball is in attack mode, switch it back to idle mode when velocity goes under a specific speed
         if (attackMode)
         {
+
             if (rb.velocity.magnitude < idleSpeed)
             {
                 attackMode = false;
@@ -97,15 +98,15 @@ public class MoonBall : MonoBehaviour
                 }
             }
         }
-        else if(col.tag=="BigAsteroid")
-        {
-            Collider orbCollider = col.gameObject.GetComponent<Collider>();
-            if(orbCollider)
-            {
-                orbCollider.enabled = false;
-            }
-            col.gameObject.GetComponent<BigAsteroid>().AsteroidHit(5);
-        }
+        //else if(col.tag=="BigAsteroid")
+        //{
+        //    Collider orbCollider = col.gameObject.GetComponent<Collider>();
+        //    if(orbCollider)
+        //    {
+        //        orbCollider.enabled = false;
+        //    }
+        //    col.gameObject.GetComponent<BigAsteroid>().AsteroidHit(5);
+        //}
 
        else if(col.gameObject.tag == "Spike")
        {

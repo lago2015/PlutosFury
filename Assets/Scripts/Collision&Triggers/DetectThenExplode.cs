@@ -97,7 +97,7 @@ public class DetectThenExplode : MonoBehaviour {
             //apply damage to asteroid
             col.gameObject.GetComponent<BigAsteroid>().AsteroidHit(5);
         }
-        else if (CurTag == "EnvironmentObstacle")
+        else if (CurTag == "EnvironmentObstacle"||CurTag=="Obstacle")
         {
             if (col.gameObject.name.Contains("DamageWall"))
             {
@@ -128,6 +128,13 @@ public class DetectThenExplode : MonoBehaviour {
         {
             col.gameObject.GetComponent<MoonBall>().OnExplosionAtPosition(col.transform.position);
             TriggeredExplosion();
+        }
+        else if(CurTag=="Wall")
+        {
+            if(isRocket)
+            {
+                TriggeredExplosion();
+            }
         }
     }
 
