@@ -4,9 +4,8 @@ using System.Collections;
 public class DetectPlayer : MonoBehaviour {
 
     //***For Rogue Enemy
-
+    private ExPointController exPointController;
     public GameObject ScriptModel;
-    public GameObject playerDiscoveredSprite;
     private ChasePlayer ChaseScript;
     private FleeOrPursue pursueScript;
     private RogueAvoidance avoidanceScript;
@@ -15,7 +14,7 @@ public class DetectPlayer : MonoBehaviour {
     void Awake()
     {
         audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
-
+        exPointController = GetComponent<ExPointController>();
         if (ScriptModel)
         {
             ChaseScript = ScriptModel.GetComponent<ChasePlayer>();
@@ -49,6 +48,10 @@ public class DetectPlayer : MonoBehaviour {
                     playOnce = true;
                 }
                 pursueScript.PlayerIsNear();
+            }
+            if(exPointController)
+            {
+                exPointController.CreateFloatingExPoint(transform.position);
             }
             
         }

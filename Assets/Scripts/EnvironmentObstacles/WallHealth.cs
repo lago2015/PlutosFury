@@ -26,7 +26,7 @@ public class WallHealth : MonoBehaviour
         {
             pickUpCollider = pickUpContained.GetComponent<Collider>();
             pickUpCollider.enabled = false;
-            pickUpContained = null;
+            
         }
     }
 
@@ -55,9 +55,9 @@ public class WallHealth : MonoBehaviour
             {
                 Explosion.SetActive(true);
                 Model.SetActive(false);
-                if(pickUpCollider)
+                if(pickUpContained)
                 {
-                    pickUpCollider.enabled = true;
+                    pickUpContained.GetComponent<PickUpSkills>().PickUpObtained();
                 }
                 
                 //Explosion.transform.parent = null;

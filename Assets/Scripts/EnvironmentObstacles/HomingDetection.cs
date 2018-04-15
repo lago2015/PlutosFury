@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class HomingDetection : MonoBehaviour
 {
-
+    private ExPointController ExPointController;
     public GameObject ScriptModel;
     private HomingProjectile moveScript;
     public float lostInterestRadius;
@@ -23,6 +23,7 @@ public class HomingDetection : MonoBehaviour
             TriggerCollider.enabled = true;
             startRadius = TriggerCollider.radius;
         }
+        ExPointController = GetComponent<ExPointController>();
     }
 
 
@@ -39,6 +40,10 @@ public class HomingDetection : MonoBehaviour
                     TriggerCollider.enabled = false;
                     TriggerCollider.radius = lostInterestRadius;
                 }
+            }
+            if(ExPointController)
+            {
+                ExPointController.CreateFloatingExPoint(transform.position);
             }
         }
     }
