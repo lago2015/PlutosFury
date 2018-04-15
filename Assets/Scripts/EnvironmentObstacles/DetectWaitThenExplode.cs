@@ -85,7 +85,7 @@ public class DetectWaitThenExplode : MonoBehaviour {
             Vector3 spawnPoint = col.transform.position;
             col.gameObject.GetComponent<MoonBall>().OnExplosionAtPosition(spawnPoint);
         }
-        else if(CurTag=="Obstacle")
+        else if(CurTag=="BreakableWall")
         {
             WallHealth orbScript = col.gameObject.GetComponent<WallHealth>();
             if(orbScript)

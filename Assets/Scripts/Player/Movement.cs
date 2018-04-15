@@ -61,7 +61,7 @@ public class Movement : MonoBehaviour
     /////Cooldowns
     private float DashCooldownTime = 1f;
     private float PowerCooldownTime = 0.75f;
-    private float curCooldownTime=1f;
+    private float curCooldownTime=0.65f;
     /////checks
     private bool playOnce;
     private bool isExhausted = false;
@@ -104,7 +104,8 @@ public class Movement : MonoBehaviour
     private ExperienceManager ExperienceMan;
     private CameraShake CamShake;
     private FloatingJoystick joystickscript;
-    private TextureSwap modelScript;
+    //private TextureSwap modelScript;
+    public Animator animComp;
     private PowerUpManager PowerUpScript;
     private Shield shieldScript;
     private ButtonIndicator buttonScript;
@@ -219,7 +220,7 @@ public class Movement : MonoBehaviour
         y_Color = Color.yellow;
         o_Color = Color.red + Color.yellow + Color.blue;
         w_Color = Color.white;
-
+        
         //setting appearance components off
         if (hitEffect)
         {
@@ -238,11 +239,11 @@ public class Movement : MonoBehaviour
         //shield script
         shieldScript = GetComponent<Shield>();
         //model change
-        modelScript = GetComponent<TextureSwap>();
-        if (modelScript)
-        {
-            modelScript.disableRenderTimer = PowerDashTimeout;
-        }
+        //modelScript = GetComponent<TextureSwap>();
+        //if (modelScript)
+        //{
+        //    modelScript.disableRenderTimer = PowerDashTimeout;
+        //}
         //dash script
         PowerUpScript = GetComponent<PowerUpManager>();
         //Audio Controller
@@ -345,11 +346,12 @@ public class Movement : MonoBehaviour
         }
         if (isDead)
         {
-            if (modelScript)
-            {
-                modelScript.SwapMaterial(TextureSwap.PlutoState.Lose);
-                TrailChange(DashState.idle);
-            }
+            TrailChange(DashState.idle);
+
+            //if (modelScript)
+            //{
+            //    modelScript.SwapMaterial(TextureSwap.PlutoState.Lose);
+            //}
         }
         //Checking for dash charge
         if (DashChargeActive)
@@ -534,7 +536,7 @@ public class Movement : MonoBehaviour
                 {
                     busterStates[1].SetActive(true);
                     StartCoroutine(BusterTransition(busterStates[1]));
-                    hudScript.isShockwaveActive(false);
+                    
                 }
                 break;
             //doesnt turn off
@@ -542,7 +544,7 @@ public class Movement : MonoBehaviour
                 if (busterStates[2])
                 {
                     DisableMovement(true);
-                    modelScript.DeathToRender();
+                    //modelScript.DeathToRender();
                     maxSize.SetActive(false);
                     foreach (SphereCollider col in GetComponents<SphereCollider>())
                     {
@@ -580,7 +582,8 @@ public class Movement : MonoBehaviour
                     {
                         ResumePluto();
                     }
-                    modelScript.StartRender();
+                    animComp.SetBool("isDashing", false);
+                    //modelScript.StartRender();
                     ShouldDash = false;
                     //isPowerDashing = false;
                     isCharged = false;
@@ -617,6 +620,7 @@ public class Movement : MonoBehaviour
                         //cache gameobject 
                         trailContainer[1].SetActive(true);
                         trailContainer[0].SetActive(false);
+                        animComp.SetBool("isDashing", true);
 
                         curTrail = trailContainer[1];
 
@@ -735,10 +739,10 @@ public class Movement : MonoBehaviour
         {
             gameObject.layer = 9;
             //model switch for dash
-            if (modelScript)
-            {
-                modelScript.SwapMaterial(TextureSwap.PlutoState.Smash);
-            }
+            //if (modelScript)
+            //{
+            //    modelScript.SwapMaterial(TextureSwap.PlutoState.Smash);
+            //}
             //Check if power pick up as been obtained
             //also if power dash is charged
             if (DashChargeActive)
@@ -812,10 +816,7 @@ public class Movement : MonoBehaviour
         PowerUpScript.DashModelTransition(false);
         //asteroidCollider.radius = defaultRadius;
         slowDownDrag = normalDrag;
-        if (hudScript)
-        {
-            hudScript.isShieldActive(false);
-        }
+        
         //Reset Value
         ObtainedWhileDash = false;
         myBody.drag = normalDrag;
@@ -887,7 +888,7 @@ public class Movement : MonoBehaviour
 
         if (ShockChargeActive)
         {
-            hudScript.isShockwaveActive(false);
+            
             ShockChargeActive = false;
         }
         return DashChargeActive = true;
@@ -1001,10 +1002,10 @@ public class Movement : MonoBehaviour
 
     public void IndicatePickup()
     {
-        if (modelScript)
-        {
-            modelScript.SwapMaterial(TextureSwap.PlutoState.Pickup);
-        }
+        //if (modelScript)
+        //{
+        //    modelScript.SwapMaterial(TextureSwap.PlutoState.Pickup);
+        //}
 
     }
 

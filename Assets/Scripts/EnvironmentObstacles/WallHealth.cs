@@ -30,13 +30,15 @@ public class WallHealth : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
+    void OnCollisionEnter(Collision collision)
     {
-        if(collision.gameObject.tag=="EnvironmentObstacle")
+        if(collision.gameObject.tag=="Obstacle")
         {
-            if(collision.gameObject.name.Contains("Seeker"))
+            if(collision.transform.name.Contains("Seeker"))
             {
                 collision.transform.GetChild(3).GetComponent<DetectWaitThenExplode>().TriggeredExplosion();
+                Destroy(pickUpContained);
+                IncrementDamage();
             }
         }
     }

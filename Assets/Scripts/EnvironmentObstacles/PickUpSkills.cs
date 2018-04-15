@@ -71,7 +71,7 @@ public class PickUpSkills : MonoBehaviour {
                 if (ShieldScript && playerScript && !pickupObtained && hudScript && PowerUpScript)
                 {
                     PowerUpScript.DashPluto(transform.position);
-                    //hudScript.isShieldActive(true);
+                    hudScript.isShieldActive(true);
                     pickupObtained = true;
                     playerScript.IndicatePickup();
                     ShieldScript.ShieldPluto();
@@ -104,8 +104,7 @@ public class PickUpSkills : MonoBehaviour {
             case Skills.Shockwave:
                 if (PowerUpScript && !pickupObtained && hudScript)
                 {
-                    hudScript.isShockwaveActive(true);
-                    hudScript.isPowerDashActive(false);
+                    
                     pickupObtained = true;
                     PowerUpScript.ShockPluto(transform.position);
                     Destroy(gameObject);

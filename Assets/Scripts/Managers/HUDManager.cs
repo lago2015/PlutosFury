@@ -6,9 +6,7 @@ using UnityEngine.SceneManagement;
 public class HUDManager : MonoBehaviour {
 
     //images for powerups for hud
-    public Image powerDashSprite;
-    public Image shieldSprite;
-    public Image shockwaveSprite;
+    public GameObject shieldSprite;
 
     //Script References for hud
     private CountDownStage timerScript;
@@ -34,9 +32,9 @@ public class HUDManager : MonoBehaviour {
             scoreScript = scoreObject.GetComponent<ScoreManager>();
         }
         //turn off all power up indicators
-        isPowerDashActive(false);
+        
         isShieldActive(false);
-        isShockwaveActive(false);
+        
 
     }
 
@@ -108,33 +106,16 @@ public class HUDManager : MonoBehaviour {
 
     }
 
-    //called from pick up script to enable or disable image
-    public void isPowerDashActive(bool isActive)
-    {
-        if(powerDashSprite)
-        {
-            powerDashSprite.enabled = isActive;
-        }
-    }
 
     //called from pick up script to enable or disable image
     public void isShieldActive(bool isActive)
     {
         if(shieldSprite)
         {
-            shieldSprite.enabled = isActive;
+            shieldSprite.SetActive(isActive);
         }
     }
 
-    //called from pick up script to enable or disable image
-    public void isShockwaveActive(bool isActive)
-    {
-        if(shockwaveSprite)
-        {
-            shockwaveSprite.enabled = isActive;
-        }
-    }
-    
 
     public void UpdateScore(int newScore)
     {

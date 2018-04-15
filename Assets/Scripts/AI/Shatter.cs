@@ -83,6 +83,7 @@ public class Shatter : MonoBehaviour
         // depending on the state of shatter, switch animation to either detach or retract pieces
         if (detach)
         {
+            
             anim.SetTrigger("Detach");
             detached = true;
         }

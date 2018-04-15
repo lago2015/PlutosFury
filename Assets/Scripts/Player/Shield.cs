@@ -1,17 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+using UnityEngine.UI;
 public class Shield : MonoBehaviour {
 
     public float shieldRadius = 5f;
     private float defaultRadius;
     public float shieldTimeout = 5f;
+    public float curTime;
     public GameObject ShieldModel;
     bool isShielded;
     bool doOnce;
     private SphereCollider MyCollider;
+    private HUDManager hudScript;
     public bool PlutoShieldStatus() { return isShielded; }
     private Animator anim;
+    public Image ShieldProgress;
     void Awake()
     {
         if(ShieldModel)
@@ -23,7 +26,10 @@ public class Shield : MonoBehaviour {
         MyCollider = GetComponent<SphereCollider>();
         defaultRadius = MyCollider.radius;
     }
-
+    private void Start()
+    {
+        hudScript = GameObject.FindGameObjectWithTag("HUDManager").GetComponent<HUDManager>();
+    }
     public void ShieldPluto()
     {
         if (ShieldModel)
@@ -45,11 +51,26 @@ public class Shield : MonoBehaviour {
             ShieldModel.SetActive(true);
             isShielded = true;
             MyCollider.radius = shieldRadius;
+            curTime = shieldTimeout;
+            StartCoroutine(RadialProgress(shieldTimeout));
             StartCoroutine(TimerForShield());
         }
     }
 
-    IEnumerator TimerForShield()
+    IEnumerator RadialProgress(float time)
+    {
+        
+        float rate = 1 / time;
+        float i = 1;
+        while (i > 0)
+        {
+            i -= Time.deltaTime * rate;
+            ShieldProgress.fillAmount = i;
+            yield return 0;
+        }
+    }
+
+IEnumerator TimerForShield()
     {
         yield return new WaitForSeconds(shieldTimeout);
         ShieldOff();
@@ -71,6 +92,10 @@ public class Shield : MonoBehaviour {
         isShielded = false;
         MyCollider.radius = defaultRadius;
         doOnce = false;
+        if(hudScript)
+        {
+            hudScript.isShieldActive(false);
+        }
     }
 
 

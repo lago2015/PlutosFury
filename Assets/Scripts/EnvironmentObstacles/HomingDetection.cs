@@ -7,10 +7,10 @@ public class HomingDetection : MonoBehaviour
     private ExPointController ExPointController;
     public GameObject ScriptModel;
     private HomingProjectile moveScript;
-    public float lostInterestRadius;
     private SphereCollider TriggerCollider;
     private float startRadius;
-
+    private LostInterest interestScript;
+    private bool doOnce;
     void Awake()
     {
         if (ScriptModel)
@@ -24,37 +24,52 @@ public class HomingDetection : MonoBehaviour
             startRadius = TriggerCollider.radius;
         }
         ExPointController = GetComponent<ExPointController>();
+        interestScript = GetComponent<LostInterest>();
+        enabled = false;
     }
 
+    public void SeekerLostSight()
+    {
+        moveScript.ShouldMove = false;
+        TriggerCollider.radius = startRadius;
+        TriggerCollider.enabled = true;
+        doOnce = false;
+        if(interestScript)
+        {
+            interestScript.enableScript(false);
+        }
+    }
 
     void OnTriggerEnter(Collider col)
     {
         string CurTag = col.gameObject.tag;
         if (CurTag == "Player")
         {
+            //turn on move scripts and disable trigger collider
             if (moveScript)
             {
                 moveScript.activateMovement(true);
                 if(TriggerCollider)
                 {
                     TriggerCollider.enabled = false;
-                    TriggerCollider.radius = lostInterestRadius;
+                    
                 }
             }
+            //Spawn ex points
             if(ExPointController)
             {
-                ExPointController.CreateFloatingExPoint(transform.position);
+                if(!doOnce)
+                {
+                    ExPointController.CreateFloatingExPoint(transform.position);
+                    doOnce = true;
+                }
+                
+            }
+            if(interestScript)
+            {
+                interestScript.enableScript(true);
             }
         }
     }
 
-    private void OnTriggerExit(Collider other)
-    {
-        string CurString = other.gameObject.tag;
-        if (CurString == "Player")
-        {
-            moveScript.ShouldMove = false;
-            TriggerCollider.radius = startRadius;
-        }
-    }
 }
