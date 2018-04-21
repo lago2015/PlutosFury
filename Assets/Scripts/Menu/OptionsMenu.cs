@@ -5,14 +5,14 @@ using UnityEngine.UI;
 [System.Serializable]
 public class OptionsMenu : MonoBehaviour {
 
-	public float MusicVol = 0.5f;
-	public float SFXVol = 0.5f;
+	//public float MusicVol = 0.5f;
+	//public float SFXVol = 0.5f;
 	public bool VibrationHit = true;
 	public bool InvertControls = false;
 
-	public Slider Music;
-	public Slider SFX;
-	public Toggle vHit;
+    public Slider Music;
+    public Slider SFX;
+    public Toggle vHit;
 	public Toggle iControls;
     
 
@@ -22,29 +22,29 @@ public class OptionsMenu : MonoBehaviour {
     // Use this for initialization
     void Start ()
     {
-        if (PlayerPrefs.HasKey("MusicVol"))
-        {
-            Music.value = PlayerPrefs.GetFloat("MusicVol");
-        }
-        else
-        {
-            if(Music)
-            {
-                Music.value = MusicVol;
-            }
+        //if (PlayerPrefs.HasKey("MusicVol"))
+        //{
+        //    Music.value = PlayerPrefs.GetFloat("MusicVol");
+        //}
+        //else
+        //{
+        //    if(Music)
+        //    {
+        //        Music.value = MusicVol;
+        //    }
             
-        }
-        if (PlayerPrefs.HasKey("SFXVol"))
-        {
-            SFX.value = PlayerPrefs.GetFloat("SFXVol");
-        }
-        else
-        {
-            if(SFX)
-            {
-                SFX.value = SFXVol;
-            }
-        }
+        //}
+        //if (PlayerPrefs.HasKey("SFXVol"))
+        //{
+        //    SFX.value = PlayerPrefs.GetFloat("SFXVol");
+        //}
+        //else
+        //{
+        //    if(SFX)
+        //    {
+        //        SFX.value = SFXVol;
+        //    }
+        //}
 
         if (PlayerPrefs.HasKey("VibrationHit"))
         {
@@ -77,20 +77,17 @@ public class OptionsMenu : MonoBehaviour {
         }
         
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	}
+
 
 	public void UpdateValues()
     {
 		int VibrationHit;
 		int InvertControls;
 
-		PlayerPrefs.SetFloat ("MusicVol", Music.value);
-		PlayerPrefs.SetFloat ("SFXVol", SFX.value);
+        PlayerPrefs.SetFloat("musicParam", Music.value);
+        PlayerPrefs.SetFloat("sfxParam", SFX.value);
 
-		if (vHit.isOn) {
+        if (vHit.isOn) {
 			VibrationHit = 1;
         } else {
 			VibrationHit = 0;
@@ -101,7 +98,7 @@ public class OptionsMenu : MonoBehaviour {
 		} else {
 			InvertControls = 0;
 		}
-
+        
 		PlayerPrefs.SetInt ("VibrationHit", VibrationHit);
 		PlayerPrefs.SetInt ("InvertControls", InvertControls);
 	}

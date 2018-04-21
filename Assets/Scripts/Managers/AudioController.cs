@@ -11,9 +11,6 @@ public class AudioController : MonoBehaviour {
     [Header("Background-WinMusic")]
     public AudioSource BgMusicWinSource;
 
-    [Header("Background-GameOverMusic")]
-    public AudioSource BgMusicGameOverSource;
-
 
     [Header("BackgroundMusic")]
     public AudioSource BgMusicSource;
@@ -77,12 +74,6 @@ public class AudioController : MonoBehaviour {
     public AudioSource ShieldHitSource;
     public float shieldHitDelay = 0.7f;
 
-    [Header("InflateActive")]
-    public AudioSource InflateActive;
-    public float inflateActiveDelay = 0.5f;
-    [Header("Deflate")]
-    public AudioSource DeflateSrc;
-    public float deflateDelay = 0.5f;
 
     [Header("RogueDash")]
     public AudioSource RogueDashSource;
@@ -422,37 +413,7 @@ public class AudioController : MonoBehaviour {
         }
     }
 
-    public void InflateActiv(Vector3 MyPos)
-    {
-        if (timer_01 >= inflateActiveDelay)
-        {
-            if (InflateActive != null)
-            {
-                InflateActive.transform.position = MyPos;
-                InflateActive.minDistance = 20f;
-                InflateActive.loop = false;
-                InflateActive.Play();
-                timer_01 = 0f;
 
-            }
-        }
-    }
-
-    public void Deflate(Vector3 MyPos)
-    {
-        if (timer_01 >= deflateDelay)
-        {
-            if (DeflateSrc != null)
-            {
-                DeflateSrc.transform.position = MyPos;
-                DeflateSrc.minDistance = 20f;
-                DeflateSrc.loop = false;
-                DeflateSrc.Play();
-                timer_01 = 0f;
-
-            }
-        }
-    }
 
     public void WormholeEntered(Vector3 MyPos)
     {

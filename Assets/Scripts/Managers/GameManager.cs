@@ -58,7 +58,7 @@ public class GameManager : MonoBehaviour
         pluto = GameObject.FindGameObjectWithTag("Player");
         if(pluto)
         {
-            modelSwitch = pluto.GetComponent<TextureSwap>();
+            //modelSwitch = pluto.GetComponent<TextureSwap>();
             playerScript = pluto.GetComponent<Movement>();
         }
         //getter for audio controller
@@ -223,7 +223,7 @@ public class GameManager : MonoBehaviour
         {
             audioScript.CompleteLevel();
         }
-        modelSwitch.SwapMaterial(TextureSwap.PlutoState.Win);
+        //modelSwitch.SwapMaterial(TextureSwap.PlutoState.Win);
 
         yield return new WaitForSeconds(1f);
         if (ScoreManager)
