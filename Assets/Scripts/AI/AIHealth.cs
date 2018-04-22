@@ -37,35 +37,65 @@ public class AIHealth : MonoBehaviour {
         }
     }
 
-    public void IncrementDamage()
+    public void IncrementDamage(string CurName)
     {
        
         EnemyHealth--;
         if(EnemyHealth<=0)
         {
-            if(scoringManager)
+            if (scoringManager)
             {
-                string objectName;
-                if (transform.parent != null)
+                if (CurName.Contains("Player"))
                 {
-                    objectName = gameObject.transform.parent.name;
+
+                    string objectName;
+                    if (transform.parent != null)
+                    {
+                        objectName = gameObject.transform.parent.name;
+                    }
+                    else
+                    {
+                        objectName = gameObject.name;
+                    }
+
+                    if (objectName.Contains("Turret_AsteroidCannon"))
+                    {
+                        scoringManager.ScoreObtained(WinScoreManager.ScoreList.TurretSingle, transform.position);
+                    }
+                    else if (objectName.Contains("Turret_ScatterCannon"))
+                    {
+                        scoringManager.ScoreObtained(WinScoreManager.ScoreList.TurretScatter, transform.position);
+                    }
+                    else if (objectName.Contains("Spike"))
+                    {
+                        scoringManager.ScoreObtained(WinScoreManager.ScoreList.Spike, transform.position);
+                    }
                 }
-                else
+                else if(CurName.Contains("MoonBall"))
                 {
-                    objectName = gameObject.name;
-                }
-                
-                if (objectName.Contains("Turret_AsteroidCannon"))
-                {
-                    scoringManager.ScoreObtained(WinScoreManager.ScoreList.TurretSingle, transform.position);
-                }
-                else if (objectName.Contains("Turret_ScatterCannon"))
-                {
-                    scoringManager.ScoreObtained(WinScoreManager.ScoreList.TurretScatter, transform.position);
-                }
-                else if (objectName.Contains("Spike"))
-                {
-                    scoringManager.ScoreObtained(WinScoreManager.ScoreList.Spike, transform.position);
+
+                    string objectName;
+                    if (transform.parent != null)
+                    {
+                        objectName = gameObject.transform.parent.name;
+                    }
+                    else
+                    {
+                        objectName = gameObject.name;
+                    }
+
+                    if (objectName.Contains("Turret_AsteroidCannon"))
+                    {
+                        scoringManager.ScoreObtained(WinScoreManager.ScoreList.MoonballTurretSingle, transform.position);
+                    }
+                    else if (objectName.Contains("Turret_ScatterCannon"))
+                    {
+                        scoringManager.ScoreObtained(WinScoreManager.ScoreList.MoonballTurretScatter, transform.position);
+                    }
+                    else if (objectName.Contains("Spike"))
+                    {
+                        scoringManager.ScoreObtained(WinScoreManager.ScoreList.MoonballSpike, transform.position);
+                    }
                 }
             }
             if (Explosion && Model)
@@ -102,7 +132,7 @@ public class AIHealth : MonoBehaviour {
             bool isDashing = col.gameObject.GetComponent<Movement>().DashStatus();
             if (isDashing)
             {
-                IncrementDamage();
+                IncrementDamage(col.transform.parent.name);
 
                 if (myBody)
                 {
@@ -138,7 +168,7 @@ public class AIHealth : MonoBehaviour {
 
                 if (isPlayerDashing)
                 {
-                    IncrementDamage();
+                    IncrementDamage(col.transform.parent.name);
                 }
             }
         }
@@ -151,8 +181,9 @@ public class AIHealth : MonoBehaviour {
 
             if (moonBall.getAttackMode())
             {
-                IncrementDamage();
-                moonBall.OnExplosion();   
+                IncrementDamage(col.transform.parent.name);
+                moonBall.OnExplosion();
+                
             } 
         } 
     }

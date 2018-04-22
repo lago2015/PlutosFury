@@ -59,7 +59,7 @@ public class Movement : MonoBehaviour
     public float chargeTime = 2f;
     private float defaultDashTimeout;
     /////Cooldowns
-    private float DashCooldownTime = 1f;
+    private float DashCooldownTime = 0.5f;
     private float PowerCooldownTime = 0.75f;
     private float curCooldownTime=0.65f;
     /////checks
@@ -703,7 +703,7 @@ public class Movement : MonoBehaviour
             AIHealth enemyScript = col.GetComponent<AIHealth>();
             if (enemyScript)
             {
-                enemyScript.IncrementDamage();
+                enemyScript.IncrementDamage("Player");
 
             }
             BigAsteroid asteroidScript = col.GetComponent<BigAsteroid>();

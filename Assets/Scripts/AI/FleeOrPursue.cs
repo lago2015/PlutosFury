@@ -150,7 +150,7 @@ public class FleeOrPursue : MonoBehaviour {
             //check if player is close enough, if so explode
             if (curDistance < DistanceFromPlayerToExplode)
             {
-                collisionScript.RogueDamage();
+                collisionScript.RogueDamage("Player");
             }
         }
     }

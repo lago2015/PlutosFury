@@ -16,14 +16,15 @@ Pick ups
     Life
 Moonball Hits
     Big orb
-    Breakable(All blocks)
     Turret(Both)
     Rogue
     Landmine(Both)
     Seeker
      */
 
-    public enum ScoreList {Orb,Health,MaxHealthBonus,Life,BigOrb,BreakableCube,Rogue,Spike,TurretSingle,TurretScatter }
+    public enum ScoreList {Orb,Health,MaxHealthBonus,Life,BigOrb,BreakableCube,Rogue,Spike,Shatter,TurretSingle,TurretScatter,
+                            MoonballOrb,MoonballTurretSingle,MoonballTurretScatter,MoonballRogue,MoonballSpike,MoonballLandmine,
+                            MoonballShatter,MoonballBlockOcker }
     private ScoreList scoreState;
     private ScoreManager scoreManager;
     private PopUpScoreController textController;
@@ -58,26 +59,54 @@ Moonball Hits
     [Header("Enemy-TurretScatter")]
     public int turretScatterScore = 250;
 
+    [Header("Enemy-Shatter")]
+    public int shatterScore = 300;
+
+    [Header("MoonballHit-Orb")]
+    public int moonballOrbScore = 200;
+    [Header("MoonballHit-Seeker")]
+    public int moonballSeekerScore = 400;
+    [Header("MoonballHit-Shatter")]
+    public int moonballShatterScore = 600;
+    [Header("MoonballHit-TurretSingle")]
+    public int moonballTurretScore = 400;
+    [Header("MoonballHit-TurretScatter")]
+    public int moonballTurretScatterScore = 200;
+    [Header("MoonballHit-RogueKill")]
+    public int moonballRogueScore = 500;
+    [Header("MoonballHit-SpikeKill")]
+    public int moonballSpikeScore = 600;
+    [Header("MoonballHit-Landmine")]
+    public int moonballLandmineScore = 300;
+    [Header("MoonballHit-BlockOcker")]
+    public int moonballBlockockerScore = 200;
 
 
 
 
     private void Awake()
     {
+        //getters for score manager and pop text component
         scoreManager = GetComponent<ScoreManager>();
         textController = GetComponent<PopUpScoreController>();
     }
 
-
+    //main function used to transfer data for pop up text
     public void ScoreObtained(ScoreList curScoreState, Vector3 curLocation)
     {
+        //change the score state to choose which score to display and send to manager
         scoreState = curScoreState;
+        //randomly choose location on screen near the score area
         curLocation.y += Random.Range(5f, 10f);
         curLocation.x += Random.Range(-5f, 5f);
+        //each case is specific to the scoring data sent in to apply the right scores
         switch (scoreState)
         {
+            //example for this case is for a single orb to obtained
             case ScoreList.Orb:
+                //send score to the score manager script to store data
                 SendScoreToManager(orbScore);
+                //send data to pop up text to display in current area and score
                 SendScoreToFloatingText(curLocation, orbScore.ToString());
                 break;
             case ScoreList.Health:
@@ -108,6 +137,10 @@ Moonball Hits
                 SendScoreToManager(spikeScore);
                 SendScoreToFloatingText(curLocation, spikeScore.ToString());
                 break;
+            case ScoreList.Shatter:
+                SendScoreToManager(shatterScore);
+                SendScoreToFloatingText(curLocation, shatterScore.ToString());
+                break;
             case ScoreList.TurretSingle:
                 SendScoreToManager(turretSingleScore);
                 SendScoreToFloatingText(curLocation, turretSingleScore.ToString());
@@ -116,7 +149,38 @@ Moonball Hits
                 SendScoreToManager(turretScatterScore);
                 SendScoreToFloatingText(curLocation, turretScatterScore.ToString());
                 break;
-
+            case ScoreList.MoonballOrb:
+                SendScoreToManager(moonballOrbScore);
+                SendScoreToFloatingText(curLocation, moonballOrbScore.ToString());
+                break;
+            case ScoreList.MoonballTurretSingle:
+                SendScoreToManager(moonballTurretScore);
+                SendScoreToFloatingText(curLocation, moonballTurretScore.ToString());
+                break;
+            case ScoreList.MoonballTurretScatter:
+                SendScoreToManager(moonballTurretScatterScore);
+                SendScoreToFloatingText(curLocation, moonballTurretScatterScore.ToString());
+                break;
+            case ScoreList.MoonballRogue:
+                SendScoreToManager(moonballRogueScore);
+                SendScoreToFloatingText(curLocation, moonballRogueScore.ToString());
+                break;
+            case ScoreList.MoonballSpike:
+                SendScoreToManager(moonballSpikeScore);
+                SendScoreToFloatingText(curLocation, moonballSpikeScore.ToString());
+                break;
+            case ScoreList.MoonballLandmine:
+                SendScoreToManager(moonballLandmineScore);
+                SendScoreToFloatingText(curLocation, moonballLandmineScore.ToString());
+                break;
+            case ScoreList.MoonballShatter:
+                SendScoreToManager(moonballShatterScore);
+                SendScoreToFloatingText(curLocation, moonballShatterScore.ToString());
+                break;
+            case ScoreList.MoonballBlockOcker:
+                SendScoreToManager(moonballBlockockerScore);
+                SendScoreToFloatingText(curLocation, moonballBlockockerScore.ToString());
+                break;
         }
     }
 

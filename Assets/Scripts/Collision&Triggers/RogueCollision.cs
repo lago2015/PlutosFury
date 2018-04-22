@@ -49,7 +49,7 @@ public class RogueCollision : MonoBehaviour {
     }
 
     //Apply damage to rogue and check if 
-    public void RogueDamage()
+    public void RogueDamage(string CurName)
     {
         EnemyHealth--;
         if (EnemyHealth <= 0)
@@ -59,10 +59,21 @@ public class RogueCollision : MonoBehaviour {
                 audioScript.RogueDeath(transform.position);
             }
             myCollider.enabled = false;
-            if(scoringScript)
+            if(CurName.Contains("Player"))
             {
-                scoringScript.ScoreObtained(WinScoreManager.ScoreList.Rogue, transform.position);
+                if (scoringScript)
+                {
+                    scoringScript.ScoreObtained(WinScoreManager.ScoreList.Rogue, transform.position);
+                }
             }
+            else if(CurName.Contains("MoonBall"))
+            {
+                if (scoringScript)
+                {
+                    scoringScript.ScoreObtained(WinScoreManager.ScoreList.MoonballRogue, transform.position);
+                }
+            }
+            
             if (Explosion && Model)
             {
                 myCollider.enabled = false;
@@ -116,7 +127,7 @@ public class RogueCollision : MonoBehaviour {
                 {
                     damageScript.didDamage();
                 }
-                RogueDamage();
+                RogueDamage(col.transform.name);
             }
         }
         
@@ -129,7 +140,7 @@ public class RogueCollision : MonoBehaviour {
                 bool RogueDashing = rogueMoveScript.isDashing();
                 if (!RogueDashing)
                 {
-                    RogueDamage();
+                    RogueDamage(col.transform.name);
                 }
             }
             else
@@ -167,7 +178,7 @@ public class RogueCollision : MonoBehaviour {
                 bool RogueDashing = rogueMoveScript.isDashing();
                 if (!RogueDashing)
                 {
-                    RogueDamage();
+                    RogueDamage(col.transform.name);
                 }
             }
             moonBall.OnExplosion();

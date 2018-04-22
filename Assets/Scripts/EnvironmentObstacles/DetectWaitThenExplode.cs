@@ -10,12 +10,15 @@ public class DetectWaitThenExplode : MonoBehaviour {
     public GameObject chargeState;
     private DamageOrPowerUp damageScript;
     private HomingProjectile pursuitScript;
+    private WinScoreManager scoreScript;
     private bool doOnce;
     public float WaitTimeToExplode = 1f;
     public Animator animComp;
     // Use this for initialization
     void Awake ()
     {
+        //getter for score script
+        scoreScript = GameObject.FindGameObjectWithTag("ScoreManager").GetComponent<WinScoreManager>();
         //model gameobject
         if (regularState)
         {
@@ -81,6 +84,10 @@ public class DetectWaitThenExplode : MonoBehaviour {
         else if(CurTag=="MoonBall")
         {
             TriggerExplosionInstantly();
+            if(scoreScript)
+            {
+
+            }
             Vector3 spawnPoint = col.transform.position;
             col.gameObject.GetComponent<MoonBall>().OnExplosionAtPosition(spawnPoint);
         }
