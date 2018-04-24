@@ -995,7 +995,7 @@ public class Movement : MonoBehaviour
                     DamagePluto();
                 }
             }
-            if(c.transform.parent.name!="Seeker")
+            if(c.transform.name!="Seeker")
             {
                 myBody.AddForce(c.contacts[0].normal * obstacleBump, ForceMode.VelocityChange);
             }

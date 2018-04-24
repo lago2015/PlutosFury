@@ -98,7 +98,7 @@ Moonball Hits
         scoreState = curScoreState;
         //randomly choose location on screen near the score area
         curLocation.y += Random.Range(5f, 10f);
-        curLocation.x += Random.Range(-5f, 5f);
+        curLocation.x += Random.Range(-5f, 10f);
         //each case is specific to the scoring data sent in to apply the right scores
         switch (scoreState)
         {

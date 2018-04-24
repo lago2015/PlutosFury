@@ -14,7 +14,8 @@ public class AIHealth : MonoBehaviour {
     public GameObject Model2;
     public GameObject parent;
     private Collider myCollider;
-   
+    public enum EnemyOptions { TurretSingle,TurretScatter,Spike}
+    public EnemyOptions currentEnemy;
     public float wallBump = 20;
     private Rigidbody myBody;
     private FleeOrPursue RogueScript;
@@ -47,54 +48,32 @@ public class AIHealth : MonoBehaviour {
             {
                 if (CurName.Contains("Player"))
                 {
-
-                    string objectName;
-                    if (transform.parent != null)
+                    switch(currentEnemy)
                     {
-                        objectName = gameObject.transform.parent.name;
-                    }
-                    else
-                    {
-                        objectName = gameObject.name;
-                    }
-
-                    if (objectName.Contains("Turret_AsteroidCannon"))
-                    {
-                        scoringManager.ScoreObtained(WinScoreManager.ScoreList.TurretSingle, transform.position);
-                    }
-                    else if (objectName.Contains("Turret_ScatterCannon"))
-                    {
-                        scoringManager.ScoreObtained(WinScoreManager.ScoreList.TurretScatter, transform.position);
-                    }
-                    else if (objectName.Contains("Spike"))
-                    {
-                        scoringManager.ScoreObtained(WinScoreManager.ScoreList.Spike, transform.position);
+                        case EnemyOptions.Spike:
+                            scoringManager.ScoreObtained(WinScoreManager.ScoreList.Spike, transform.position);
+                            break;
+                        case EnemyOptions.TurretSingle:
+                            scoringManager.ScoreObtained(WinScoreManager.ScoreList.TurretSingle, transform.position);
+                            break;
+                        case EnemyOptions.TurretScatter:
+                            scoringManager.ScoreObtained(WinScoreManager.ScoreList.TurretScatter, transform.position);
+                            break;
                     }
                 }
                 else if(CurName.Contains("MoonBall"))
                 {
-
-                    string objectName;
-                    if (transform.parent != null)
+                    switch (currentEnemy)
                     {
-                        objectName = gameObject.transform.parent.name;
-                    }
-                    else
-                    {
-                        objectName = gameObject.name;
-                    }
-
-                    if (objectName.Contains("Turret_AsteroidCannon"))
-                    {
-                        scoringManager.ScoreObtained(WinScoreManager.ScoreList.MoonballTurretSingle, transform.position);
-                    }
-                    else if (objectName.Contains("Turret_ScatterCannon"))
-                    {
-                        scoringManager.ScoreObtained(WinScoreManager.ScoreList.MoonballTurretScatter, transform.position);
-                    }
-                    else if (objectName.Contains("Spike"))
-                    {
-                        scoringManager.ScoreObtained(WinScoreManager.ScoreList.MoonballSpike, transform.position);
+                        case EnemyOptions.Spike:
+                            scoringManager.ScoreObtained(WinScoreManager.ScoreList.MoonballSpike, transform.position);
+                            break;
+                        case EnemyOptions.TurretSingle:
+                            scoringManager.ScoreObtained(WinScoreManager.ScoreList.MoonballTurretSingle, transform.position);
+                            break;
+                        case EnemyOptions.TurretScatter:
+                            scoringManager.ScoreObtained(WinScoreManager.ScoreList.MoonballTurretScatter, transform.position);
+                            break;
                     }
                 }
             }
@@ -132,7 +111,7 @@ public class AIHealth : MonoBehaviour {
             bool isDashing = col.gameObject.GetComponent<Movement>().DashStatus();
             if (isDashing)
             {
-                IncrementDamage(col.transform.parent.name);
+                IncrementDamage(CurTag);
 
                 if (myBody)
                 {
@@ -168,7 +147,7 @@ public class AIHealth : MonoBehaviour {
 
                 if (isPlayerDashing)
                 {
-                    IncrementDamage(col.transform.parent.name);
+                    IncrementDamage(col.tag);
                 }
             }
         }
@@ -181,7 +160,7 @@ public class AIHealth : MonoBehaviour {
 
             if (moonBall.getAttackMode())
             {
-                IncrementDamage(col.transform.parent.name);
+                IncrementDamage(col.tag);
                 moonBall.OnExplosion();
                 
             } 
