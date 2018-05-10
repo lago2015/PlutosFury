@@ -5,8 +5,7 @@ using UnityEngine.UI;
 [System.Serializable]
 public class OptionsMenu : MonoBehaviour {
 
-	//public float MusicVol = 0.5f;
-	//public float SFXVol = 0.5f;
+	
 	public bool VibrationHit = true;
 	public bool InvertControls = false;
 
@@ -22,30 +21,6 @@ public class OptionsMenu : MonoBehaviour {
     // Use this for initialization
     void Start ()
     {
-        //if (PlayerPrefs.HasKey("MusicVol"))
-        //{
-        //    Music.value = PlayerPrefs.GetFloat("MusicVol");
-        //}
-        //else
-        //{
-        //    if(Music)
-        //    {
-        //        Music.value = MusicVol;
-        //    }
-            
-        //}
-        //if (PlayerPrefs.HasKey("SFXVol"))
-        //{
-        //    SFX.value = PlayerPrefs.GetFloat("SFXVol");
-        //}
-        //else
-        //{
-        //    if(SFX)
-        //    {
-        //        SFX.value = SFXVol;
-        //    }
-        //}
-
         if (PlayerPrefs.HasKey("VibrationHit"))
         {
             if (PlayerPrefs.GetInt("VibrationHit") == 1)

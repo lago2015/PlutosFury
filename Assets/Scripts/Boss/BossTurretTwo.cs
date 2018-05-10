@@ -8,22 +8,69 @@ public class BossTurretTwo : MonoBehaviour
     public Transform[] mineTransform;
     public float mineFireRate;
     public float mineSpeed;
-
+    public enum ShootModes { Semi,FullAuto,Scatter}
+    private ShootModes curShoot;
     public GameObject energyBallPrefab;
     public Transform energyBallTransform;
     public float energyBallFireRate;
-    
+    private int index;
     bool isReloadingMines;
     bool isReloadingEnergyBall;
     float elapseMineTime;
     float elapseEnergyTime;
-   
-	// Update is called once per frame
-	void Update ()
+    public float switchTimer = 10f;
+    public float semiAuto=0.5f;
+    public float fullyAuto=0.25f;
+    public float scatterShots=1f;
+
+    private void Start()
+    {
+        StartCoroutine(CountdownToSwitch());
+    }
+
+    // Update is called once per frame
+    void FixedUpdate ()
     {
         LaunchMines();
         LaunchEnergyBall();
 	}
+
+    void SwitchShootingModes(ShootModes curShoot)
+    {
+        switch(curShoot)
+        {
+            case ShootModes.FullAuto:
+                mineFireRate = fullyAuto;
+                break;
+            case ShootModes.Semi:
+                mineFireRate = semiAuto;
+                break;
+            case ShootModes.Scatter:
+                mineFireRate = scatterShots;
+                break;
+        }
+        StartCoroutine(CountdownToSwitch());
+    }
+
+    IEnumerator CountdownToSwitch()
+    {
+        yield return new WaitForSeconds(switchTimer);
+        index++;
+        
+        if(index==0)
+        {
+            SwitchShootingModes(ShootModes.FullAuto);
+        }
+        else if(index==1)
+        {
+            SwitchShootingModes(ShootModes.Semi);
+        }
+        else if(index==2)
+        {
+            SwitchShootingModes(ShootModes.Scatter);
+            index = -1;
+        }
+    }
 
     public void LaunchMines()
     {
@@ -41,9 +88,7 @@ public class BossTurretTwo : MonoBehaviour
 
                     if (mineRb)
                     {
-
                         mineRb.velocity = Vector3.right * -mineSpeed;
-                        Debug.Log("YESSS");
                     }
                 }
             }

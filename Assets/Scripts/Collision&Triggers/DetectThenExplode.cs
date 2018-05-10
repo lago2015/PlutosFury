@@ -68,7 +68,7 @@ public class DetectThenExplode : MonoBehaviour {
         TriggeredExplosion();
     }
 
-    void OnTriggerEnter(Collider col)
+    void OnCollisionEnter(Collision col)
     {
         string CurTag = col.gameObject.tag;
         //turn off collider to ensure nothing gets called twice
@@ -107,6 +107,13 @@ public class DetectThenExplode : MonoBehaviour {
             //start explosion
             TriggeredExplosion();
         }
+        else if(CurTag=="Neptune")
+        {
+            if(!isRocket)
+            {
+                TriggeredExplosion();
+            }
+        }
         else if (CurTag == "BreakableWall")
         {
             if (isRocket)
@@ -136,10 +143,8 @@ public class DetectThenExplode : MonoBehaviour {
         }
         else if(CurTag=="Wall")
         {
-            if(isRocket)
-            {
-                TriggeredExplosion();
-            }
+            TriggeredExplosion();
+    
         }
     }
 

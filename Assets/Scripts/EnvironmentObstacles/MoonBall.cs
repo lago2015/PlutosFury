@@ -138,7 +138,7 @@ public class MoonBall : MonoBehaviour
             
         }
 
-        if (col.gameObject.tag == "BreakableWall")
+        else if (col.gameObject.tag == "BreakableWall")
         {
             col.gameObject.GetComponent<WallHealth>().IncrementDamage();
             if (canExplodeOnImpact)
@@ -147,11 +147,11 @@ public class MoonBall : MonoBehaviour
             }
         }
 
-        if (col.gameObject.tag == "Wall")
+        else if (col.gameObject.tag == "Wall")
         {
             rb.AddForce(col.contacts[0].normal * wallBounce, ForceMode.VelocityChange);
         }
-        if(col.gameObject.tag=="Obstacle")
+        else if(col.gameObject.tag=="Obstacle")
         {
             if(col.gameObject.name.Contains("DamageWall"))
             {
@@ -161,7 +161,16 @@ public class MoonBall : MonoBehaviour
             }
         }
 
-        if(col.gameObject.GetComponent<AIHealth>())
+        else if(col.gameObject.GetComponent<AIHealth>())
+        {
+            rb.AddForce(col.contacts[0].normal * knockbackSpeed, ForceMode.VelocityChange);
+            if (canExplodeOnImpact)
+            {
+                OnExplosion();
+            }
+        }
+
+        else if(col.gameObject.tag=="Neptune")
         {
             rb.AddForce(col.contacts[0].normal * knockbackSpeed, ForceMode.VelocityChange);
             if (canExplodeOnImpact)

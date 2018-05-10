@@ -103,6 +103,7 @@ public class Movement : MonoBehaviour
     private WinScoreManager winScoreManager;
     private ExperienceManager ExperienceMan;
     private CameraShake CamShake;
+    private LerpToStart lerpScript;
     private FloatingJoystick joystickscript;
     //private TextureSwap modelScript;
     public Animator animComp;
@@ -172,7 +173,7 @@ public class Movement : MonoBehaviour
     // Use this for initialization
     void Awake()
     {
-
+        lerpScript = GetComponent<LerpToStart>();
         GameObject hudObject = GameObject.FindGameObjectWithTag("HUDManager");
         if(hudObject)
         {
@@ -919,6 +920,7 @@ public class Movement : MonoBehaviour
 
         if (curTag == "BigAsteroid")
         {
+            myBody.velocity = Vector3.zero;
             myBody.AddForce(c.contacts[0].normal * OrbBump, ForceMode.VelocityChange);
             if (audioScript)
             {
@@ -935,6 +937,7 @@ public class Movement : MonoBehaviour
             }
             if (ShouldDash)
             {
+                myBody.velocity = Vector3.zero;
                 myBody.AddForce(c.contacts[0].normal * wallBump, ForceMode.VelocityChange);
 
             }
@@ -942,6 +945,7 @@ public class Movement : MonoBehaviour
             {
                 if(isPowerDashing==false)
                 {
+                    myBody.velocity = Vector3.zero;
                     myBody.AddForce(c.contacts[0].normal * wallBump*2, ForceMode.VelocityChange);
                 }
             }
@@ -963,11 +967,13 @@ public class Movement : MonoBehaviour
                 }
                 
             }
+            myBody.velocity = Vector3.zero;
             myBody.AddForce(c.contacts[0].normal * OrbBump, ForceMode.VelocityChange);
             
         }
         else if (curTag == "MoonBall")
         {
+            myBody.velocity = Vector3.zero;
             myBody.AddForce(c.contacts[0].normal * OrbBump, ForceMode.VelocityChange);
             if(ShouldDash)
             {
@@ -977,6 +983,7 @@ public class Movement : MonoBehaviour
 
         else if (curTag == "EnvironmentObstacle" || curTag == "Planet" || curTag == "ShatterPiece")
         {
+            myBody.velocity = Vector3.zero;
             myBody.AddForce(c.contacts[0].normal * obstacleBump, ForceMode.VelocityChange);
             if (!isDamaged)
             {
@@ -1001,6 +1008,18 @@ public class Movement : MonoBehaviour
             }
             
         }
+        else if(curTag=="Neptune")
+        {
+            myBody.AddForce(c.contacts[0].normal * obstacleBump*30, ForceMode.VelocityChange);
+            if(!ShouldDash)
+            {
+                DamagePluto();
+            }
+            if(lerpScript)
+            {
+                lerpScript.EnableLerp();
+            }
+        }
     }
 
 
@@ -1022,6 +1041,7 @@ public class Movement : MonoBehaviour
         MoveSpeed = 0;
         myBody.velocity = Vector3.zero;
         myBody.drag = 100;
+        
         TrailChange(DashState.idle);
         if(isPlayerDead)
         {
@@ -1200,13 +1220,13 @@ public class Movement : MonoBehaviour
     IEnumerator DamageIndicator()
     {
         float dmgTimeout = invincbleTimer*2 / 4;
-        meshComp.material.color = r_Color;
+        rendererComp.material.color = r_Color;
         yield return new WaitForSeconds(dmgTimeout);
-        meshComp.material.color = w_Color;
+        rendererComp.material.color = w_Color;
         yield return new WaitForSeconds(dmgTimeout);
-        meshComp.material.color = r_Color;
+        rendererComp.material.color = r_Color;
         yield return new WaitForSeconds(dmgTimeout);
-        meshComp.material.color = w_Color;
+        rendererComp.material.color = w_Color;
         yield return new WaitForSeconds(dmgTimeout);
     }
 

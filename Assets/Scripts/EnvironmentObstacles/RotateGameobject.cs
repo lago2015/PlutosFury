@@ -10,7 +10,6 @@ public class RotateGameobject : MonoBehaviour {
     public bool isZZero;
     Vector3 Rotation;
     public float rotatePower = 1;
-    public float rotateTimeout=1;
     private Rigidbody myBody;
 	
     void Awake()
@@ -28,8 +27,13 @@ public class RotateGameobject : MonoBehaviour {
         }
         if (SelectX && SelectY)
         {
-            Rotation.x = 220f;
-            Rotation.y = 220f;
+            Rotation.x = 100f;
+            Rotation.y = 100f;
+            if (SelectZ)
+            {
+                Rotation.z = 100f;
+                isZZero = false;
+            }
         }
         else if (SelectX)
         {

@@ -7,24 +7,20 @@ public class AsteroidCollector : MonoBehaviour {
 
     private GameObject player;
     public float bumperSpeed = 5.0f;
-    public double plutoG = 2;
+    public double plutoG = 0.75;
     public Vector3 directionToPluto;
     public double distanceToPluto;
-    public float GravityStrength = 5f;
-    public float maxDistanceForGravity = 50;
+    public float GravityStrength = 1f;
+    public float maxDistanceForGravity = 6;
     public float minForce = 25f;
     public float maxForce = 50f;
     private Rigidbody CurBody;
-    private float curX;
-    private float curY;
-    public bool isConsumable;
-    float AttractionStrength = 5f;
+
     private AsteroidSpawner spawnScript;
     private WinScoreManager winScoreManager;
-    private AudioController audioScript;
+
     void Awake()
     {
-        audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
         GameObject ScoreObject = GameObject.FindGameObjectWithTag("ScoreManager");
         if (ScoreObject)
         {

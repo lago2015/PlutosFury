@@ -13,7 +13,7 @@ public class SinWaveMovement : MonoBehaviour {
     float x;
     float y;
 
-
+    public bool TriggerStart = true;
     float coolDownTimer;
     float attackCoolDown = 1.0f;
 
@@ -23,9 +23,14 @@ public class SinWaveMovement : MonoBehaviour {
     {
         //reset number of ticks
         numberOfTicks = 0;
-        enabled = false;
-
-        //startShot();
+        if(TriggerStart)
+        {
+            enabled = false;
+        }
+        else
+        {
+            canShoot = true;
+        }
     }
 
 

@@ -15,17 +15,16 @@ public class BossChargeAnimations : MonoBehaviour {
 
     private void Start()
     {
-        RandomizeChargeLane();
+        StartCoroutine(WaitForAnimation());
     }
 
     void RandomizeChargeLane()
     {
-        Debug.Log("Current Animation Clip: " + clipIndex);
+
 
         clipIndex = Random.Range(1, 3);
         animComp.SetInteger("LaneNumber", clipIndex);
         curAnimationClip = animComp.GetCurrentAnimatorClipInfo(0).Length;
-        Debug.Log("Current Animation Clip: " + clipIndex);
         StartCoroutine(WaitForAnimation());
     }
 
