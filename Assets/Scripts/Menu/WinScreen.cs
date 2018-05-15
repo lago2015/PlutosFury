@@ -8,7 +8,8 @@ public class WinScreen : MonoBehaviour {
     private int curScore;
     //high score 
     private int highScore;
-
+    private int totalScore;
+    private int totalHighScore;
     //Image for rating system
     public Image[] ratingArray;
     private int curRating;
@@ -20,7 +21,8 @@ public class WinScreen : MonoBehaviour {
     public GameObject WinScreenGroup;
     public Text scoreDisplay;
     public Text highScoreDisplay;
-
+    public Text totalScoreDisplay;
+    public Text totalHighScoreDisplay;
     public Button nextSection;
     public Button RestartLevel;
     public Image fadeOverlay;
@@ -28,6 +30,8 @@ public class WinScreen : MonoBehaviour {
 
     public int newScore(int sessionScore) { return curScore = sessionScore; }
     public int theHighestOfScore(int curHighScore) { return highScore = curHighScore; }
+    public int CurTotalScore(int overallScore) { return totalScore = overallScore; }
+    public int CurTotalHighScore(int overallHighScore) { return totalHighScore = overallHighScore; }
 	// Use this for initialization
 	void Awake () {
 
@@ -53,13 +57,21 @@ public class WinScreen : MonoBehaviour {
     {
         if(scoreDisplay)
         {
-            scoreDisplay.text = "Score: " + curScore;
+            scoreDisplay.text = "Level Score: " + curScore;
         }
         if(highScoreDisplay)
         {
-            highScoreDisplay.text = "High Score " + highScore;
+            highScoreDisplay.text = "Level High Score " + highScore;
         }
-        
+        if(totalScoreDisplay)
+        {
+            totalScoreDisplay.text = "Overall Score " + totalScore;
+        }
+        if(totalHighScoreDisplay)
+        {
+            totalHighScoreDisplay.text = "Overall High Score " + totalHighScore;
+
+        }
 
         fadeOverlay.CrossFadeAlpha(0, 0.5f, true);
         gameFade.CrossFadeAlpha(1, 0.5f, true);

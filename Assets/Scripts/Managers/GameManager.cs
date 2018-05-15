@@ -21,6 +21,8 @@ public class GameManager : MonoBehaviour
 	private GameObject pluto;
     private int curScore;
     private int curHighScore;
+    private int curTotalScore;
+    private int curTotalHighScore;
     private int newRating;
     public float fadeTime;
     public float GameOverDelay = 5f;
@@ -205,7 +207,7 @@ public class GameManager : MonoBehaviour
         if(ScoreManager)
         {
             //save that score to show off to your friends
-            ScoreManager.SaveScore();
+            ScoreManager.SaveScore(true);
 
             //Default health
             ScoreManager.DefaultHealth();
@@ -230,12 +232,14 @@ public class GameManager : MonoBehaviour
         {
             curScore = ScoreManager.ReturnScore();
             curHighScore = ScoreManager.ReturnHighScore();
+            curTotalScore = ScoreManager.ReturnTotalScore();
+            curTotalHighScore = ScoreManager.ReturnTotalHighScore();
             if(ratingScript)
             {
                 newRating = ratingScript.CheckRating(curScore);
             }
             //Save score
-            ScoreManager.SaveScore();
+            ScoreManager.SaveScore(false);
             //Save health and lives
             ScoreManager.SaveHealth();
         }
@@ -247,6 +251,8 @@ public class GameManager : MonoBehaviour
             //Send data for win summary
             canvasScript.SendScore(curScore);
             canvasScript.SendHighScore(curHighScore);
+            canvasScript.SendTotalScore(curTotalScore);
+            canvasScript.SendTotalHighScore(curTotalHighScore);
             canvasScript.SendRating(newRating);
             canvasScript.SendDataToWinScreen();
             //start fade in

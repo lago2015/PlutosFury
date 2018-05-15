@@ -9,6 +9,8 @@ public class LoseScreen : MonoBehaviour {
     public Button MainMenu;
     public Text scoreText;
     public Text highScoreText;
+    public Text totalScoreText;
+    public Text totalHighScoreText;
     public Image fadeOverlay;
 
     public Image gameOverSprite;
@@ -29,12 +31,22 @@ public class LoseScreen : MonoBehaviour {
             if(scoreText!=null)
             {
                 int curScore = scoreScript.ReturnScore();
-                scoreText.text = ("Score: ") + curScore;
+                scoreText.text = ("Level Score: ") + curScore;
             }
             if(highScoreText!=null)
             {
                 int curHighScore = scoreScript.ReturnHighScore();
-                highScoreText.text = ("High Score: ") + curHighScore;
+                highScoreText.text = ("Level High Score: ") + curHighScore;
+            }
+            if(totalScoreText!=null)
+            {
+                int curTotalScore = scoreScript.ReturnTotalScore();
+                totalScoreText.text = ("Overall Score: " + curTotalScore);
+            }
+            if(totalHighScoreText!=null)
+            {
+                int curTotalHighScore = scoreScript.ReturnTotalHighScore();
+                totalHighScoreText.text = ("Overall High Score: " + curTotalHighScore);
             }
         }
     }
@@ -44,6 +56,8 @@ public class LoseScreen : MonoBehaviour {
         gameOverSprite.transform.position.Set(0f, -450f, 0);
         scoreText.canvasRenderer.SetAlpha(0.0f);
         highScoreText.canvasRenderer.SetAlpha(0.0f);
+        totalScoreText.canvasRenderer.SetAlpha(0.0f);
+        totalHighScoreText.canvasRenderer.SetAlpha(0.0f);
         MainMenu.image.canvasRenderer.SetAlpha(0.0f);
         PlayAgain.image.canvasRenderer.SetAlpha(0.0f);
 
@@ -76,6 +90,8 @@ public class LoseScreen : MonoBehaviour {
         PlayAgain.image.CrossFadeAlpha(1, fadeDuration, true);
         scoreText.CrossFadeAlpha(1, fadeDuration, true);
         highScoreText.CrossFadeAlpha(1, fadeDuration, true);
+        totalHighScoreText.CrossFadeAlpha(1, fadeDuration, true);
+        totalScoreText.CrossFadeAlpha(1, fadeDuration, true);
     }
 
     private IEnumerator startFade()

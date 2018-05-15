@@ -19,6 +19,8 @@ public class ResetLives : MonoBehaviour {
     void Start ()
     {
         PlayerPrefs.SetInt("playerLives", 0);
+        PlayerPrefs.SetInt("totalScore", 0);
+        PlayerPrefs.SetInt("healthPref", 0);
 	}
 	
 

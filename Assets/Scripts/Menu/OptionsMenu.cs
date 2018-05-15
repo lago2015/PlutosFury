@@ -79,6 +79,8 @@ public class OptionsMenu : MonoBehaviour {
 	}
 
    
+    
+
     public void WndowAnimation(bool forward)
     {
         if (forward)

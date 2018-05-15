@@ -5,10 +5,11 @@ using System.Collections;
 public class ScoreManager : MonoBehaviour {
 
     private float timeRemaining;
-    public int highScore;
-    public int score;
+    public int highScore;   //used for high score of level
+    public int score;       //current score in level
+    public int totalHighScore;      //high score for overall levels
+    public int totalScore;          //current score for overall levels
     private int playerLives;
-    //public int asteroidsLeft;
     private int Level;
     public int exp;
     public int playerHealth;
@@ -28,10 +29,11 @@ public class ScoreManager : MonoBehaviour {
             HUDScript=hudObject.GetComponent<HUDManager>();
         }
         //setting high score
-        PlayerPrefs.GetInt("scorePref");
         highScore= PlayerPrefs.GetInt("scorePref");
         playerHealth = PlayerPrefs.GetInt("healthPref");
         playerLives = PlayerPrefs.GetInt("playerLives");
+        totalHighScore = PlayerPrefs.GetInt("totalHighScore");
+        totalScore = PlayerPrefs.GetInt("totalScore");
     }
     
 
@@ -57,11 +59,23 @@ public class ScoreManager : MonoBehaviour {
     }
 
     //run this function during game over
-    public void SaveScore()
+    public void SaveScore(bool isGameOver)
     {
         if(score>highScore)
         {
             PlayerPrefs.SetInt("scorePref", score);
+        }
+        if(totalScore>totalHighScore)
+        {
+            PlayerPrefs.SetInt("totalHighScore", totalScore);
+        }
+        else
+        {
+            totalHighScore = PlayerPrefs.GetInt("totalHighScore");
+        }
+        if(isGameOver)
+        {
+            PlayerPrefs.SetInt("totalScore", 0);
         }
     }
 
@@ -116,6 +130,9 @@ public class ScoreManager : MonoBehaviour {
     public int IncreaseScore(int value)
     {
         score += value;
+        totalScore = PlayerPrefs.GetInt("totalScore");
+        totalScore += value;
+        PlayerPrefs.SetInt("totalScore", totalScore);
         if (HUDScript)
         {
             HUDScript.UpdateScore(score);
@@ -142,4 +159,13 @@ public class ScoreManager : MonoBehaviour {
         return score;
     }
 
+    public int ReturnTotalScore()
+    {
+        return totalScore;
+    }
+
+    public int ReturnTotalHighScore()
+    {
+        return totalHighScore;
+    }
 }

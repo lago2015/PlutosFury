@@ -21,14 +21,17 @@ public class CanvasToggle : MonoBehaviour {
     private int curRating;
     private int curScore;
     private int curHighScore;
+    private int curTotalScore;
+    private int curTotalHighScore;
     private RatingSystem ratingScript;
     private Movement playerScript;
     public int SendRating(int newRating) { return curRating = newRating; }
     public int SendScore(int newScore) { return curScore = newScore; }
     public int SendHighScore(int newHighScore) { return curHighScore = newHighScore; }
-
-	// Use this for initialization
-	void Awake ()
+    public int SendTotalScore(int newTotalScore) { return curTotalScore = newTotalScore; }
+    public int SendTotalHighScore(int newTotalHighScore) { return curTotalHighScore = newTotalHighScore; }
+    // Use this for initialization
+    void Awake ()
     {
         ReadySprite.canvasRenderer.SetAlpha(0.0f);
         GoSprite.canvasRenderer.SetAlpha(0.0f);
@@ -141,6 +144,8 @@ public class CanvasToggle : MonoBehaviour {
         winScript.GetRating(curRating);
         winScript.newScore(curScore);
         winScript.theHighestOfScore(curHighScore);
+        winScript.CurTotalScore(curTotalScore);
+        winScript.CurTotalHighScore(curTotalHighScore);
     }
     public void StartFadeIn()
     {

@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 public class LoadTargetSceneButton : MonoBehaviour {
     private Scene curScene;
     public GameObject Menu;
-
+    
     //void Awake()
     //{
     //    DontDestroyOnLoad(gameObject);
@@ -48,6 +48,17 @@ public class LoadTargetSceneButton : MonoBehaviour {
         }
         LoadingScreenManager.LoadScene(num);
         Time.timeScale = 1;
+    }
+
+    public void WaitThenLoad(int num)
+    {
+        StartCoroutine(WaitForAudioCue(num));
+    }
+
+    IEnumerator WaitForAudioCue(int num)
+    {
+        yield return new WaitForSeconds(0.2f);
+        LoadSceneNum(num);
     }
     //load to specific scene base on overload(specifically to main menu)
 	public void LoadSceneNum(int num)
