@@ -174,7 +174,10 @@ public class GameManager : MonoBehaviour
     }
    public IEnumerator GameOver()
     {
-
+        if(audioScript)
+        {
+            audioScript.GameOverVoiceCue();
+        }
 
         yield return new WaitForSeconds(GameOverDelay);
 

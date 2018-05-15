@@ -59,7 +59,6 @@ public class CollisionDetection : MonoBehaviour {
                 {
                     if(!doOnce)
                     {
-                        audioScript.NeptunesHit(transform.position);
                         doOnce = true;
                     }
                 }

@@ -25,8 +25,11 @@ public class AudioController : MonoBehaviour {
     [Header("Intro-Go")]
     public AudioSource GoAudioSource;
 
-    [Header("Complete Level")]
+    [Header("Complete Level Voice Cue")]
     public AudioSource CompleteSource;
+
+    [Header("Game Over Voice Cue")]
+    public AudioSource gameOverVoiceSource;
 
     [Header("Pluto Hit")]
     public AudioSource plutoHitSource;
@@ -131,12 +134,10 @@ public class AudioController : MonoBehaviour {
     public AudioSource GameOverSource;
     public float GameOverDelay = 0.5f;
 
-    [Header("Victory")]
-    public AudioSource VictorySource;
+
 
     //*******Neptune********
-    [Header("NeptuneHit")]
-    public AudioSource NeptuneHitSource;
+
 
     [Header("NeptuneMoonShot")]
     public AudioSource NeptuneMoonShot;
@@ -220,6 +221,17 @@ public class AudioController : MonoBehaviour {
             CompleteSource.minDistance = 1000f;
             CompleteSource.loop = false;
             CompleteSource.Play();
+        }
+    }
+    public void GameOverVoiceCue()
+    {
+        if (gameOverVoiceSource != null)
+        {
+            gameOverVoiceSource.priority = 200;
+            gameOverVoiceSource.volume = 1f;
+            gameOverVoiceSource.minDistance = 1000f;
+            gameOverVoiceSource.loop = false;
+            gameOverVoiceSource.Play();
         }
     }
     public void BackgroundBossMusic()
@@ -636,24 +648,7 @@ public class AudioController : MonoBehaviour {
         }
     }
 
-    /********Neptune and Moon********/
-    public void NeptunesHit(Vector3 pos)
-    {
-        if (timer_02 >= maxHitDelay)
-        {
 
-            if (NeptuneHitSource != null)
-            {
-                NeptuneHitSource.pitch = Random.Range(0.8f, 1f);
-                NeptuneHitSource.volume = Random.Range(0.8f, 1f);
-                NeptuneHitSource.minDistance = 20f;
-                NeptuneHitSource.loop = false;
-                NeptuneHitSource.Play();
-
-                timer_02 = 0f;
-            }
-        }
-    }
     public void NeptunesMoonShot(Vector3 pos)
     {
         if (timer_02 >= maxHitDelay)
