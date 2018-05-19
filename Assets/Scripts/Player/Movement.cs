@@ -929,7 +929,7 @@ public class Movement : MonoBehaviour
         }
 
 
-        else if (curTag == "Wall" || curTag == "LevelWall" || curTag=="Planet")
+        else if (curTag == "Wall" || curTag == "LevelWall")
         {
             if (audioScript)
             {

@@ -76,7 +76,7 @@ public class DetectWaitThenExplode : MonoBehaviour {
             //apply damage to asteroid
             col.gameObject.GetComponent<BigAsteroid>().AsteroidHit(5);
         }
-        else if (CurTag == "EnvironmentObstacle")
+        else if (CurTag == "EnvironmentObstacle"||CurTag=="Obstacle"||CurTag=="Planet")
         {
             //start explosion
             TriggeredExplosion();
@@ -86,7 +86,7 @@ public class DetectWaitThenExplode : MonoBehaviour {
             TriggerExplosionInstantly();
             if(scoreScript)
             {
-
+                scoreScript.ScoreObtained(WinScoreManager.ScoreList.MoonballLandmine,transform.position);
             }
             Vector3 spawnPoint = col.transform.position;
             col.gameObject.GetComponent<MoonBall>().OnExplosionAtPosition(spawnPoint);

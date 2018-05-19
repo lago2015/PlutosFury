@@ -87,7 +87,7 @@ public class Shatter : MonoBehaviour
         // depending on the state of shatter, switch animation to either detach or retract pieces
         if (detach)
         {
-            if(audioScript)
+            if (audioScript)
             {
                 audioScript.ShatterCharge(transform.position);
             }

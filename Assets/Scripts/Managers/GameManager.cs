@@ -32,6 +32,8 @@ public class GameManager : MonoBehaviour
     TextureSwap modelSwitch;
     GameObject audioObject;
     AudioController audioScript;
+    private float delayVoice=0.25f;
+    private float delayMusic;
     AdManager AdManager;
     private GameObject scoreObject;
     ScoreManager ScoreManager;
@@ -174,10 +176,7 @@ public class GameManager : MonoBehaviour
     }
    public IEnumerator GameOver()
     {
-        if(audioScript)
-        {
-            audioScript.GameOverVoiceCue();
-        }
+        
 
         yield return new WaitForSeconds(GameOverDelay);
 
@@ -194,11 +193,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            //start game over audio
-            if (audioScript)
-            {
-                audioScript.GameOver(pluto.transform.position);
-            }
+            StartCoroutine(DelayVoiceThenPlayMusic());
             //enable game over screen
             if (canvasScript)
             {
@@ -215,6 +210,15 @@ public class GameManager : MonoBehaviour
             //Default health
             ScoreManager.DefaultHealth();
         }
+    }
+
+    IEnumerator DelayVoiceThenPlayMusic()
+    {
+        yield return new WaitForSeconds(delayVoice);
+        audioScript.GameOverVoiceCue();
+        delayMusic = audioScript.gameOverVoiceSource.clip.length;
+        yield return new WaitForSeconds(delayMusic);
+        audioScript.GameOver(transform.position);
     }
 
     //same kind of functionality as game over except for a win condition

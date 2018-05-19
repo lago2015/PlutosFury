@@ -436,17 +436,18 @@ public class AudioController : MonoBehaviour {
 
     public void ShieldDing(Vector3 pos)
     {
-        if (timer_02 >= shieldHitDelay)
+        if (ShieldHitSource != null)
         {
-            if (ShieldHitSource != null)
+            if (ShieldHitSource.isPlaying)
             {
-                ShieldHitSource.transform.position = pos;
-                ShieldHitSource.minDistance = 20f;
-                ShieldHitSource.loop = false;
-                ShieldHitSource.Play();
-                timer_01 = 0f;
-
+                ShieldHitSource.Stop();
             }
+            ShieldHitSource.transform.position = pos;
+            ShieldHitSource.minDistance = 20f;
+            ShieldHitSource.loop = false;
+            ShieldHitSource.Play();
+
+
         }
     }
 

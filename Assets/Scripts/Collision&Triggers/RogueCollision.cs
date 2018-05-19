@@ -33,7 +33,6 @@ public class RogueCollision : MonoBehaviour {
         }
         if (Explosion && Model)
         {
-            damageScript = Explosion.GetComponent<DamageOrPowerUp>();
             Explosion.SetActive(false);
             Model.SetActive(true);
 
@@ -119,15 +118,23 @@ public class RogueCollision : MonoBehaviour {
                 {
                     moveScript.DamagePluto();
                 }
+                else
+                {
+                    RogueDamage(col.transform.name);
+                }
                 if (myBody)
                 {
                     myBody.AddForce(col.contacts[0].normal * wallBump, ForceMode.VelocityChange);
                 }
-                if (damageScript)
+                
+            }
+            else
+            {
+                Movement moveScript = col.gameObject.GetComponent<Movement>();                
+                if (moveScript)
                 {
-                    damageScript.didDamage();
+                    moveScript.DamagePluto();
                 }
-                RogueDamage(col.transform.name);
             }
         }
         

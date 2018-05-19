@@ -134,26 +134,7 @@ public class FleeOrPursue : MonoBehaviour {
         }
     }
 
-    IEnumerator CountdownToExplode()
-    {
-        yield return new WaitForSeconds(WaitToExplode);
-        if(collisionScript &&Player)
-        {
-            //Stop any dashing
-            StopCoroutine(ChargeDash());
-            StopCoroutine(DashTransition());
-            DisableDashTrail();
-            //disable trail for dashing
-            StartCoroutine(DashCooldown());
-            //calculate distance between player and rogue
-            float curDistance = Vector3.Distance(transform.position, Player.transform.position);
-            //check if player is close enough, if so explode
-            if (curDistance < DistanceFromPlayerToExplode)
-            {
-                collisionScript.RogueDamage("Player");
-            }
-        }
-    }
+
 
     void PursuePlayer()
     {
@@ -336,6 +317,15 @@ public class FleeOrPursue : MonoBehaviour {
 
     public bool PlayerNotNear()
     {
+        ShouldDash = false;
+        isCharging = false;
+        StopAllCoroutines();
+        animComp.SetBool("isDashing", false);
+        if (trailModel && chargingParticle)
+        {
+            trailModel.SetActive(false);
+            chargingParticle.SetActive(false);
+        }
         return PlayerNear = false;
     }
 }

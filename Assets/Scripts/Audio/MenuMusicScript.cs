@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class MenuMusicScript : MonoBehaviour {
     [Header("BackgroundMusic")]
+    public AudioSource VoiceIntro;
     public AudioSource BgMusicSource;
     public AudioSource LoopSource;
     private float bgMusicDelay;
-
+    private float bgMusicStartDelay;
 
     // Use this for initialization
     void Start () {
@@ -16,8 +17,18 @@ public class MenuMusicScript : MonoBehaviour {
         {
             bgMusicDelay = BgMusicSource.clip.length;
         }
-        BackgroundMusic();
+        if(VoiceIntro!=null)
+        {
+            bgMusicStartDelay = VoiceIntro.clip.length-1f;
+        }
+        StartCoroutine(DelayMusic());
 	}
+
+    IEnumerator DelayMusic()
+    {
+        yield return new WaitForSeconds(bgMusicStartDelay);
+        BackgroundMusic();
+    }
 
     public void BackgroundMusic()
     {

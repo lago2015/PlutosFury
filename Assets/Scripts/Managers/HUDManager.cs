@@ -14,7 +14,7 @@ public class HUDManager : MonoBehaviour {
     //Text to apply to hud
     public Text scoreText;
     public Image[] healthSprites;
-    public Text timerText;
+    //public Text timerText;
     public Text currentLevel;
     public Text playerLives;
     //local variables for hud 
