@@ -988,9 +988,17 @@ public class Movement : MonoBehaviour
             if (!isDamaged)
             {
                 DamagePluto();
+                if (c.gameObject.name == "Spikes")
+                {
+                    if (audioScript)
+                    {
+                        audioScript.SpikeHitPluto(transform.position);
+                    }
+                }
             }
-
+            
         }
+        
         else if (curTag == "Obstacle")
         {
             if (ShouldDash)
@@ -1020,6 +1028,7 @@ public class Movement : MonoBehaviour
                 lerpScript.EnableLerp();
             }
         }
+        
     }
 
 
@@ -1122,14 +1131,14 @@ public class Movement : MonoBehaviour
             {
                 ScoreManager.HealthChange(curHealth);
             }
-            if(winScoreManager&&curHealth==2)
-            {
-                winScoreManager.ScoreObtained(WinScoreManager.ScoreList.MaxHealthBonus, curLocation);
-            }
-            else if(winScoreManager)
-            {
-                winScoreManager.ScoreObtained(WinScoreManager.ScoreList.Health, curLocation);
-            }
+        }
+        if (winScoreManager && curHealth == 2)
+        {
+            winScoreManager.ScoreObtained(WinScoreManager.ScoreList.MaxHealthBonus, curLocation);
+        }
+        else if (winScoreManager)
+        {
+            winScoreManager.ScoreObtained(WinScoreManager.ScoreList.Health, curLocation);
         }
     }
 

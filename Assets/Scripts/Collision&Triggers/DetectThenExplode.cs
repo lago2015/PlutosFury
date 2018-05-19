@@ -35,11 +35,8 @@ public class DetectThenExplode : MonoBehaviour {
 
         if(isLandmine)
         {
-            if(TriggerCollider)
-            {
-                TriggerCollider = GetComponent<SphereCollider>();
-                TriggerCollider.enabled = true;
-            }
+            TriggerCollider = GetComponent<SphereCollider>();
+            TriggerCollider.enabled = true;
         }
         else if(isRocket)
         {
@@ -81,6 +78,7 @@ public class DetectThenExplode : MonoBehaviour {
                 {
                     damageScript.didDamage();
                 }
+
                 col.gameObject.GetComponent<Movement>().DamagePluto();
                 //Start Explosion
                 TriggeredExplosion();
@@ -154,6 +152,14 @@ public class DetectThenExplode : MonoBehaviour {
         if (TriggerCollider)
         {
             TriggerCollider.enabled = false;
+        }
+        else
+        {
+            BoxCollider rocketCollider = GetComponent<BoxCollider>();
+            if(rocketCollider)
+            {
+                rocketCollider.enabled = false;
+            }
         }
         //check if theres a model and explosion
         if (regularState && explosionState)

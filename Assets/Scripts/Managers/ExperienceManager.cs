@@ -101,7 +101,6 @@ public class ExperienceManager : MonoBehaviour
                 {
                     GameObject player = GameObject.FindGameObjectWithTag("Player"); //reference player
                     Vector3 curPos = player.transform.position; //get player location
-                    audioScript.PlutoLevelUp(curPos);   //start level up audio track
                     CurrLevelNum++; //increment Max level player has reached.
                 }
                 //is current level within the number of levels in array

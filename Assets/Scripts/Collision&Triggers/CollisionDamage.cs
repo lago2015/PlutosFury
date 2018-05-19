@@ -4,21 +4,22 @@ using System.Collections;
 public class CollisionDamage : MonoBehaviour {
 
     public bool CheckDash=false;
-
     private AudioController audioScript;
+    
     void Awake()
     {
         audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
     }
 
 
-    void OnTriggerEnter(Collider col)
+    void OnCollisionEnter(Collision col)
     {
         if (col.gameObject.tag == "Player")
         {
-            if (!CheckDash)
+            Movement moveScript = col.gameObject.GetComponent<Movement>();
+            bool isDamaged = moveScript.isDamaged;
+            if(!isDamaged)
             {
-                Movement moveScript = col.gameObject.GetComponent<Movement>();
                 moveScript.DamagePluto();
                 if (audioScript)
                 {

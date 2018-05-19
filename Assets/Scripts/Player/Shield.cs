@@ -34,16 +34,13 @@ public class Shield : MonoBehaviour {
     {
         if (ShieldModel)
         {
-            AudioController Audio = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
-            if(Audio)
+            
+            if (!isShielded && !doOnce)
             {
-                if(!isShielded&&!doOnce)
-                {
-                    Audio.ShieldLive(transform.position);
-                    doOnce = true;
-                }
+                StartCoroutine(DelayAudio());
+                doOnce = true;
             }
-            if(anim)
+            if (anim)
             {
                 anim.SetBool("ShieldActive", true);
                 anim.Play("ShieldActive",0);
@@ -54,6 +51,16 @@ public class Shield : MonoBehaviour {
             curTime = shieldTimeout;
             StartCoroutine(RadialProgress(shieldTimeout));
             StartCoroutine(TimerForShield());
+        }
+    }
+
+    IEnumerator DelayAudio()
+    {
+        yield return new WaitForSeconds(0.15f);
+        AudioController Audio = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
+        if (Audio)
+        {
+            Audio.ShieldLive(transform.position);
         }
     }
 

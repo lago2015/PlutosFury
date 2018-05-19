@@ -14,16 +14,17 @@ public class AIHealth : MonoBehaviour {
     public GameObject Model2;
     public GameObject parent;
     private Collider myCollider;
-    public enum EnemyOptions { TurretSingle,TurretScatter,Spike}
+    public enum EnemyOptions { TurretSingle,TurretScatter,Spike,Shatter}
     public EnemyOptions currentEnemy;
     public float wallBump = 20;
     private Rigidbody myBody;
     private FleeOrPursue RogueScript;
+    private AudioController audioScript;
     private WinScoreManager scoringManager;
     void Awake()
     {
-
-        scoringManager = GameObject.FindGameObjectWithTag("ScoreManager").GetComponent<WinScoreManager>();
+        audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
+        scoringManager = GameObject.FindGameObjectWithTag("ScoreManager").GetComponent<WinScoreManager> ();
         myCollider = GetComponent<Collider>();
         myBody = GetComponent<Rigidbody>();
         if(Explosion&&Model)
@@ -59,6 +60,13 @@ public class AIHealth : MonoBehaviour {
                         case EnemyOptions.TurretScatter:
                             scoringManager.ScoreObtained(WinScoreManager.ScoreList.TurretScatter, transform.position);
                             break;
+                        case EnemyOptions.Shatter:
+                            scoringManager.ScoreObtained(WinScoreManager.ScoreList.Shatter, transform.position);
+                            if(audioScript)
+                            {
+                                audioScript.ShatterExplosion(transform.position);
+                            }
+                            break;
                     }
                 }
                 else if(CurName.Contains("MoonBall"))
@@ -73,6 +81,13 @@ public class AIHealth : MonoBehaviour {
                             break;
                         case EnemyOptions.TurretScatter:
                             scoringManager.ScoreObtained(WinScoreManager.ScoreList.MoonballTurretScatter, transform.position);
+                            break;
+                        case EnemyOptions.Shatter:
+                            scoringManager.ScoreObtained(WinScoreManager.ScoreList.MoonballShatter, transform.position);
+                            if (audioScript)
+                            {
+                                audioScript.ShatterExplosion(transform.position);
+                            }
                             break;
                     }
                 }
@@ -95,8 +110,6 @@ public class AIHealth : MonoBehaviour {
                 {
                     Destroy(transform.parent.gameObject);
                 }
-
-
             }
         }
     }

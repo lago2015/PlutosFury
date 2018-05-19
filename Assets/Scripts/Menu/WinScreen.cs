@@ -15,7 +15,9 @@ public class WinScreen : MonoBehaviour {
     private int curRating;
     //audio script
     private AudioController audioScript;
-
+    public GameObject[] ParticleSpawnPoint;
+    public GameObject[] TwinkleParticle;
+    public GameObject[] StarBurstParticle;
     private LoadTargetSceneButton targetSceneButton;
     private ScoreManager scoreScript;
     public GameObject WinScreenGroup;
@@ -35,6 +37,14 @@ public class WinScreen : MonoBehaviour {
 	// Use this for initialization
 	void Awake () {
 
+        for(int i=0;i<StarBurstParticle.Length-1;i++)
+        {
+            StarBurstParticle[i].SetActive(false);
+        }
+        for (int i = 0; i < TwinkleParticle.Length - 1; i++)
+        {
+            TwinkleParticle[i].SetActive(false);
+        }
         //sectionScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<SectionManager>();
         audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
         targetSceneButton = this.gameObject.GetComponent<LoadTargetSceneButton>();
@@ -51,6 +61,13 @@ public class WinScreen : MonoBehaviour {
         for(int i=0;i<=CurrentRating;i++)
         {
             ratingArray[i].enabled = true;
+            if(TwinkleParticle.Length!=0&&StarBurstParticle.Length!=0)
+            {
+                TwinkleParticle[i].transform.position = ParticleSpawnPoint[i].transform.position;
+                StarBurstParticle[i].transform.position = ParticleSpawnPoint[i].transform.position;
+                TwinkleParticle[i].SetActive(true);
+                StarBurstParticle[i].SetActive(true);
+            }
         }
     }
     public void FadeIn()

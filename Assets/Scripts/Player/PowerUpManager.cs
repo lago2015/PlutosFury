@@ -25,7 +25,7 @@ public class PowerUpManager : MonoBehaviour {
         if (moveScript&& shieldScript&& audioScript)
         {
             audioScript.PlutoPowerDashReady(curpos);
-            audioScript.ShieldLive(curpos);
+            //audioScript.ShieldLive(curpos);
             //moveScript.ActivateDashCharge();
             shieldScript.ShieldPluto();
             //StartCoroutine(PlutoCharging());

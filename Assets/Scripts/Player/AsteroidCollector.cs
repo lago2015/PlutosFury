@@ -15,10 +15,10 @@ public class AsteroidCollector : MonoBehaviour {
     public float minForce = 25f;
     public float maxForce = 50f;
     private Rigidbody CurBody;
-
+    private Vector3 forceOnMe;
     private AsteroidSpawner spawnScript;
     private WinScoreManager winScoreManager;
-
+    private double strength;
     void Awake()
     {
         GameObject ScoreObject = GameObject.FindGameObjectWithTag("ScoreManager");
@@ -58,8 +58,8 @@ public class AsteroidCollector : MonoBehaviour {
             else
             {
 
-                double strength = plutoG * GravityStrength / distanceToPluto * distanceToPluto;
-                Vector3 forceOnMe = directionToPluto * (float)strength;
+                strength = plutoG * GravityStrength / distanceToPluto * distanceToPluto;
+                forceOnMe = directionToPluto * (float)strength;
                 if (!float.IsNaN(forceOnMe.x) ||
                     !float.IsNaN(forceOnMe.y) ||
                     !float.IsNaN(forceOnMe.z))
@@ -67,6 +67,7 @@ public class AsteroidCollector : MonoBehaviour {
                     CurBody.AddForce(-forceOnMe);
                     curAsteroid.transform.position = new Vector3(curAsteroid.transform.position.x, curAsteroid.transform.position.y, 0);
                 }
+                forceOnMe = Vector3.zero;
             }
         }
     }

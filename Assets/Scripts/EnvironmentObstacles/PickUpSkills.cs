@@ -13,11 +13,16 @@ public class PickUpSkills : MonoBehaviour {
     private Inflation InflateScript;
     private HUDManager hudScript;
     private bool pickupObtained;
-
+    private AudioController audioScript;
     void Awake()
     {
         GameObject playerRef = GameObject.FindGameObjectWithTag("Player");
-        switch(curSkill)
+        GameObject audioObject = GameObject.FindGameObjectWithTag("AudioController");
+        if (audioObject)
+        {
+            audioScript = audioObject.GetComponent<AudioController>();
+        }
+        switch (curSkill)
         {
             case Skills.Star:
                 ShieldScript = playerRef.GetComponent<Shield>();
@@ -31,6 +36,7 @@ public class PickUpSkills : MonoBehaviour {
             case Skills.Health:
                 playerScript = playerRef.GetComponent<Movement>();
                 healthController = GetComponent<HealthObtainedController>();
+
                 break;
             case Skills.Shockwave:
                 PowerUpScript = playerRef.GetComponent<PowerUpManager>();
@@ -38,6 +44,7 @@ public class PickUpSkills : MonoBehaviour {
                 break;
             case Skills.LifeUp:
                 playerScript = playerRef.GetComponent<Movement>();
+                healthController = GetComponent<HealthObtainedController>();
 
                 break;
         }
@@ -97,6 +104,10 @@ public class PickUpSkills : MonoBehaviour {
                     {
                         healthController.CreateFloatingHealth(playerScript.transform.position);
                     }
+                    if(audioScript)
+                    {
+                        audioScript.PlutoHealthUp(transform.position);
+                    }
                     Destroy(gameObject);
 
                 }
@@ -115,6 +126,14 @@ public class PickUpSkills : MonoBehaviour {
                 {
                     pickupObtained = true;
                     playerScript.LifeUp(transform.position);
+                    if (healthController)
+                    {
+                        healthController.CreateFloatingHealth(playerScript.transform.position);
+                    }
+                    if(audioScript)
+                    {
+                        audioScript.PlutoLifeUp(transform.position);
+                    }
                     Destroy(gameObject);
                 }
                 break;

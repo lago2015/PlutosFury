@@ -65,9 +65,14 @@ public class AudioController : MonoBehaviour {
     public AudioSource powerDashChargingSrc;
     public float powerChargingDelay = 0.1f;
 
-    [Header("PlutoLevelUp")]
-    public AudioSource plutoLevelUp;
+    [Header("PlutoLifeUp")]
+    public AudioSource plutoLifeUp;
     public float levelDelay = 0.5f;
+
+    [Header("PlutoHealthPickUp")]
+    public AudioSource plutoHealthUp;
+    public float HealthUpDelay = 0.5f;
+
 
     [Header("ShieldActive")]
     public AudioSource ShieldActive;
@@ -86,6 +91,12 @@ public class AudioController : MonoBehaviour {
 
     [Header("RogueDeath")]
     public AudioSource RogueDeathSrc;
+
+    [Header("ShatterCharge")]
+    public AudioSource shatterChargeSrc;
+
+    [Header("ShatterExplosion")]
+    public AudioSource shatterExplosionSrc;
 
     [Header("Wall Bounce")]
     public AudioSource wallBounceSource;
@@ -377,22 +388,36 @@ public class AudioController : MonoBehaviour {
         }
     }
 
-    public void PlutoLevelUp(Vector3 pos)
+    public void PlutoLifeUp(Vector3 pos)
     {
         if (timer_01 >= levelDelay)
         {
-            if (plutoLevelUp != null)
+            if (plutoLifeUp != null)
             {
-                plutoLevelUp.transform.position = pos;
-                plutoLevelUp.minDistance = 20f;
-                plutoLevelUp.loop = false;
-                plutoLevelUp.Play();
+                plutoLifeUp.transform.position = pos;
+                plutoLifeUp.minDistance = 20f;
+                plutoLifeUp.loop = false;
+                plutoLifeUp.Play();
 
                 timer_01 = 0f;
             }
         }
     }
+    public void PlutoHealthUp(Vector3 pos)
+    {
+        if (timer_01 >= levelDelay)
+        {
+            if (plutoHealthUp != null)
+            {
+                plutoHealthUp.transform.position = pos;
+                plutoHealthUp.minDistance = 20f;
+                plutoHealthUp.loop = false;
+                plutoHealthUp.Play();
 
+                timer_01 = 0f;
+            }
+        }
+    }
     public void ShieldLive(Vector3 MyPos)
     {
         if(timer_01>=shieldActiveDelay)
@@ -568,22 +593,48 @@ public class AudioController : MonoBehaviour {
 
     public void SpikeHitPluto(Vector3 pos)
     {
-        if (timer_02 >= SpikeHitPlutoDelay)
+        if (SpikeHitPlutoSource != null)
         {
-
-            if (SpikeHitPlutoSource != null)
+            if(SpikeHitPlutoSource.isPlaying)
             {
-                SpikeHitPlutoSource.pitch = Random.Range(0.8f, 1f);
-                SpikeHitPlutoSource.volume = Random.Range(0.8f, 1f);
-                SpikeHitPlutoSource.minDistance = 20f;
-                SpikeHitPlutoSource.loop = false;
-                SpikeHitPlutoSource.Play();
-
-                timer_02 = 0f;
+                SpikeHitPlutoSource.Stop();
             }
+            SpikeHitPlutoSource.pitch = Random.Range(0.8f, 1f);
+            SpikeHitPlutoSource.volume = Random.Range(0.8f, 1f);
+            SpikeHitPlutoSource.minDistance = 20f;
+            SpikeHitPlutoSource.loop = false;
+            SpikeHitPlutoSource.Play();
+
+            timer_02 = 0f;
         }
     }
 
+    public void ShatterCharge(Vector3 pos)
+    {
+        if (shatterChargeSrc != null)
+        {
+            
+            shatterChargeSrc.pitch = Random.Range(0.8f, 1f);
+            shatterChargeSrc.volume = Random.Range(0.8f, 1f);
+            shatterChargeSrc.minDistance = 20f;
+            shatterChargeSrc.loop = false;
+            shatterChargeSrc.Play();
+
+        }
+    }
+    public void ShatterExplosion(Vector3 pos)
+    {
+        if (shatterExplosionSrc != null)
+        {
+
+            shatterExplosionSrc.pitch = Random.Range(0.8f, 1f);
+            shatterExplosionSrc.volume = Random.Range(0.8f, 1f);
+            shatterExplosionSrc.minDistance = 20f;
+            shatterExplosionSrc.loop = false;
+            shatterExplosionSrc.Play();
+
+        }
+    }
     public void MoonAcquiredSound(Vector3 pos)
     {
         if (timer_01 >= MoonAcquiredDelay)

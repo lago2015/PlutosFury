@@ -13,8 +13,12 @@ public class Shatter : MonoBehaviour
     public float rotateSpeed;
     public bool canRotate;
     public GameObject pieces;
+    private AudioController audioScript;
 
-
+    private void Awake()
+    {
+        audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
+    }
 
     // Use this for initialization
     void Start ()
@@ -83,7 +87,10 @@ public class Shatter : MonoBehaviour
         // depending on the state of shatter, switch animation to either detach or retract pieces
         if (detach)
         {
-            
+            if(audioScript)
+            {
+                audioScript.ShatterCharge(transform.position);
+            }
             anim.SetTrigger("Detach");
             detached = true;
         }
