@@ -11,9 +11,9 @@ public class PopUpScore : MonoBehaviour {
     private void Start()
     {
         //Get the clip of the animated text to reference the length of clip
-        AnimatorClipInfo[] clipInfo = animComp.GetCurrentAnimatorClipInfo(0);
+        //AnimatorClipInfo[] clipInfo = animComp.GetCurrentAnimatorClipInfo(0);
         //apply the reference for time of animation to know when to destroy
-        Destroy(gameObject, clipInfo[0].clip.length);
+        //Destroy(gameObject, clipInfo[0].clip.length);
         
     }
 
@@ -21,5 +21,8 @@ public class PopUpScore : MonoBehaviour {
     public void SetText(string text)
     {
         textComp.text = text;
+        
     }
+
+
 }
