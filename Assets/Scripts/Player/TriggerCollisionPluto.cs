@@ -55,9 +55,6 @@ public class TriggerCollisionPluto : MonoBehaviour {
                 WinScoreManager.ScoreObtained(WinScoreManager.ScoreList.Orb, col.transform.position);
             }
         }
-
-
-        
     }
     private void OnTriggerStay(Collider other)
     {

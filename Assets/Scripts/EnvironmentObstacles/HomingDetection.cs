@@ -56,18 +56,14 @@ public class HomingDetection : MonoBehaviour
                 }
             }
             //Spawn ex points
-            if(ExPointController)
+            if(ExPointController&& interestScript)
             {
                 if(!doOnce)
                 {
                     ExPointController.CreateFloatingExPoint(transform.position);
+                    interestScript.enableScript(true);
                     doOnce = true;
                 }
-                
-            }
-            if(interestScript)
-            {
-                interestScript.enableScript(true);
             }
         }
     }

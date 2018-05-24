@@ -10,15 +10,28 @@ public class DetectWaitThenExplode : MonoBehaviour {
     public GameObject chargeState;
     private DamageOrPowerUp damageScript;
     private HomingProjectile pursuitScript;
+    private AudioController audioScript;
     private WinScoreManager scoreScript;
+    private Movement playerScript;
     private bool doOnce;
     public float WaitTimeToExplode = 1f;
     public Animator animComp;
+    private Vector3 spawnPoint;
     // Use this for initialization
-    void Awake ()
+    void Awake()
     {
         //getter for score script
         scoreScript = GameObject.FindGameObjectWithTag("ScoreManager").GetComponent<WinScoreManager>();
+        GameObject audioObject = GameObject.FindGameObjectWithTag("AudioController");
+        if (audioObject)
+        {
+            audioScript = audioObject.GetComponent<AudioController>();
+        }
+        GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
+        if (playerObject)
+        {
+            playerScript = playerObject.GetComponent<Movement>();
+        }
         //model gameobject
         if (regularState)
         {
@@ -42,7 +55,6 @@ public class DetectWaitThenExplode : MonoBehaviour {
         string CurTag = col.gameObject.tag;
         if (CurTag == "Player")
         {
-            Movement playerScript = col.gameObject.GetComponent<Movement>();
             if(playerScript)
             {
                 bool isDashing = playerScript.DashStatus();
@@ -57,8 +69,6 @@ public class DetectWaitThenExplode : MonoBehaviour {
                 }
                 else
                 {
-                    
-                    
                     //Start Explosion
                     TriggeredExplosion();
                 }
@@ -88,7 +98,7 @@ public class DetectWaitThenExplode : MonoBehaviour {
             {
                 scoreScript.ScoreObtained(WinScoreManager.ScoreList.MoonballLandmine,transform.position);
             }
-            Vector3 spawnPoint = col.transform.position;
+            spawnPoint = col.transform.position;
             col.gameObject.GetComponent<MoonBall>().OnExplosionAtPosition(spawnPoint);
         }
         else if(CurTag=="BreakableWall")
@@ -108,6 +118,7 @@ public class DetectWaitThenExplode : MonoBehaviour {
         {
             pursuitScript.moveSpeed = 0;
         }
+
         animComp.SetBool("isExploding", true);
         //check if theres a model and explosion
         if (regularState && explosionState)
@@ -115,8 +126,11 @@ public class DetectWaitThenExplode : MonoBehaviour {
             //ensure audio gets played once
             if (!doOnce)
             {
-                //get audio controller and play audio
-                GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>().DestructionSmall(transform.position);
+                if (audioScript)
+                {
+                    //get audio controller and play audio
+                    audioScript.DestructionSmall(transform.position);
+                }
                 doOnce = true;
             }
 
@@ -143,8 +157,11 @@ public class DetectWaitThenExplode : MonoBehaviour {
             //ensure audio gets played once
             if (!doOnce)
             {
-                //get audio controller and play audio
-                GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>().DestructionSmall(transform.position);
+                if(audioScript)
+                {
+                    //get audio controller and play audio
+                    audioScript.DestructionSmall(transform.position);
+                }
                 doOnce = true;
             }
             //begin switching models from Normal model to Explosion model

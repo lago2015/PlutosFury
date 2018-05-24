@@ -39,7 +39,6 @@ public class PopUpScoreController : MonoBehaviour
     {
 
         yield return new WaitForSeconds(seconds);
-        Debug.Log("DONE");
         scorePool.PlaceObject(instance);
         instance.SetActive(false);
     }
