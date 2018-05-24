@@ -73,6 +73,7 @@ public class LoseScreen : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
+        /*
         if (gameOverSprite.transform.position.y < 800)
         {
             gameOverSprite.transform.Translate(Vector3.up * 550 * Time.deltaTime, Space.World);
@@ -81,6 +82,7 @@ public class LoseScreen : MonoBehaviour {
         {
             gameOverSprite.transform.position.Set(0, 800, 0);
         }
+        */
 	}
 
     void FadeIn()
