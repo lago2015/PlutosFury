@@ -193,7 +193,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            StartCoroutine(DelayVoiceThenPlayMusic());
+            DelayVoiceThenPlayMusic();
             //enable game over screen
             if (canvasScript)
             {
@@ -212,13 +212,16 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    IEnumerator DelayVoiceThenPlayMusic()
+    void DelayVoiceThenPlayMusic()
     {
-        yield return new WaitForSeconds(delayVoice);
+        //yield return new WaitForSeconds(delayVoice);
         audioScript.GameOverVoiceCue();
-        delayMusic = audioScript.gameOverVoiceSource.clip.length;
-        yield return new WaitForSeconds(delayMusic);
-        audioScript.GameOver(transform.position);
+        if (SceneManager.GetActiveScene().buildIndex < 7)
+        {
+            //delayMusic = audioScript.gameOverVoiceSource.clip.length;
+            //yield return new WaitForSeconds(delayMusic);
+            audioScript.GameOver(transform.position);
+        }
     }
 
     //same kind of functionality as game over except for a win condition
