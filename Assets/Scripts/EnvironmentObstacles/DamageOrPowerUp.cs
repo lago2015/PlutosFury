@@ -158,7 +158,7 @@ public class DamageOrPowerUp : MonoBehaviour {
 
         }
 
-        else if (curString == "BreakableWall")
+        else if (curString == "EnvironmentObstacle"&&col.gameObject.name.Contains("DamageWall"))
         {
             col.gameObject.GetComponent<WallHealth>().IncrementDamage();
         }

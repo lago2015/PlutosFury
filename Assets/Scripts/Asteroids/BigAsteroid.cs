@@ -15,11 +15,23 @@ public class BigAsteroid : MonoBehaviour {
     private bool doOnce;
     private bool isDestroyed;
     AsteroidCollector collecterScript;
+    private AudioController audioScript;
+    private Movement playerScript;
     public bool RockStatus() { return isDestroyed; }
 
     void Awake()
     {
         collecterScript = GameObject.FindGameObjectWithTag("GravityWell").GetComponent<AsteroidCollector>();
+        GameObject audioObject = GameObject.FindGameObjectWithTag("AudioController");
+        if(audioObject)
+        {
+            audioScript = audioObject.GetComponent<AudioController>();
+        }
+        GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
+        if(playerObject)
+        {
+            playerScript = playerObject.GetComponent<Movement>();
+        }
     }
 
     void Start()
@@ -34,16 +46,6 @@ public class BigAsteroid : MonoBehaviour {
 
     public void SpawnAsteroids()
     {
-        //for(int i=0;i<Asteroids.Length;i++)
-        //{
-           
-        //    SpawnPoint =  Random.insideUnitSphere * spawnRadius;
-        //    SpawnPoint = transform.TransformPoint(SpawnPoint);
-        //    Object Asteroid=Instantiate(Asteroids[i], SpawnPoint, Quaternion.identity);
-        //    GameObject ConAsteroid = (GameObject)Asteroid;
-        //    ConAsteroid.GetComponent<BurstBehavior>().GoBurst();
-        //    ConAsteroid.GetComponent<BurstBehavior>().newSpawnedAsteroid(true);
-        //}
         if(AsteroidModel&&Explosion)
         {
             foreach(SphereCollider col in GetComponents<SphereCollider>())
@@ -76,22 +78,28 @@ public class BigAsteroid : MonoBehaviour {
             {
                 if (!doOnce)
                 {
-                    GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>().AsteroidExplosion(transform.position);
+                    if(audioScript)
+                    {
+                        audioScript.AsteroidExplosion(transform.position);
+                    }
                     SpawnAsteroids();
                     doOnce = true;
                 }
             }
         }
-
-        //if(col.gameObject.tag == "MoonBall")
+        //else if(col.gameObject.tag=="Obstacle")
         //{
         //    if (!doOnce)
         //    {
-        //        GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>().AsteroidExplosion(transform.position);
+        //        if (audioScript)
+        //        {
+        //            audioScript.AsteroidExplosion(transform.position);
+        //        }
         //        SpawnAsteroids();
         //        doOnce = true;
         //    }
         //}
+        
     }
 
     public void AsteroidHit(int DamageAmount)
@@ -105,7 +113,10 @@ public class BigAsteroid : MonoBehaviour {
         {
             if(!doOnce)
             {
-                GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>().AsteroidExplosion(transform.position);
+                if (audioScript)
+                {
+                    audioScript.AsteroidExplosion(transform.position);
+                }
                 SpawnAsteroids();
                 doOnce = true;
             }

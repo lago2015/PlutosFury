@@ -159,7 +159,7 @@ public class RogueCollision : MonoBehaviour {
             moonBall.OnExplosion();
         }
 
-        else if(curTag=="BreakableWall")
+        else if(curTag=="BigAsteroid")
         {
             bool RogueDashing = rogueMoveScript.isDashing();
             if (!RogueDashing)
@@ -168,37 +168,26 @@ public class RogueCollision : MonoBehaviour {
                 {
                     myBody.AddForce(col.contacts[0].normal * wallBump, ForceMode.VelocityChange);
                 }
-                
+
+            }
+
+            else
+            {
+                col.gameObject.GetComponent<BigAsteroid>().AsteroidHit(2);
+
             }
         }
-
-    }
-
-    void OnTriggerEnter(Collider col)
-    {
-        if(col.tag == "MoonBall")
+        else if(curTag=="EnvironmentObstacle")
         {
-            MoonBall moonBall = col.GetComponent<MoonBall>();
-
-            if (moonBall.getAttackMode())
+            if(col.gameObject.name.Contains("DamageWall"))
             {
-                bool RogueDashing = rogueMoveScript.isDashing();
-                if (!RogueDashing)
-                {
-                    RogueDamage(col.transform.name);
-                }
-            }
-            moonBall.OnExplosion();
-
-        }
-        else if (col.tag == "BreakableWall")
-        {
-            bool RogueDashing = rogueMoveScript.isDashing();
-            if (RogueDashing)
-            {
+                RogueDamage(" ");
                 col.gameObject.GetComponent<WallHealth>().IncrementDamage();
             }
         }
+
     }
+
+
 
 }

@@ -22,7 +22,7 @@ public class Movement : MonoBehaviour
     public GameObject maxSize;
     private Vector3 smallScale;
     private Vector3 medScale;
-
+    
     //Check for shield
     bool Shielded;
     public bool isDamaged;
@@ -30,7 +30,7 @@ public class Movement : MonoBehaviour
     //buffs and debuffs
     public bool isPowerDashing;
     bool CanFreezePluto;
-
+    private bool isDisabled;
     //Num of asteroids/Health
     private float HealthCap;
     public bool isDead = false;
@@ -94,7 +94,7 @@ public class Movement : MonoBehaviour
     private Camera camera;
     private GameObject joystick;
     public GameObject moonBallHitEffect;
-
+    private GameObject moonball2;
     //Scripts
     private GameObject asteroidSpawn;
     private AsteroidSpawner spawnScript;
@@ -173,6 +173,10 @@ public class Movement : MonoBehaviour
     // Use this for initialization
     void Awake()
     {
+        moonBallHitEffect = Instantiate(moonBallHitEffect, transform.position, Quaternion.identity);
+        moonball2 = Instantiate(moonBallHitEffect, transform.position, Quaternion.identity);
+        moonball2.SetActive(false);
+        moonBallHitEffect.SetActive(false);
         lerpScript = GetComponent<LerpToStart>();
         GameObject hudObject = GameObject.FindGameObjectWithTag("HUDManager");
         if(hudObject)
@@ -376,7 +380,10 @@ public class Movement : MonoBehaviour
     // Update is mainly used for player controls
     void Update()
     {
-
+        if(isDisabled)
+        {
+            MoveSpeed = 0;
+        }
         if (joystickscript && !isDead)
         {
             //Joystick input
@@ -398,11 +405,11 @@ public class Movement : MonoBehaviour
                 lastMove.y = move.y;
             }
            
-            //check if controls are inverted if so invert
-            if (invertControls)
-            {
-                move -= move;
-            }
+            ////check if controls are inverted if so invert
+            //if (invertControls)
+            //{
+            //    move -= move;
+            //}
             //move player
             myBody.AddForce(move * MoveSpeed * Time.deltaTime, ForceMode.VelocityChange);
 
@@ -977,7 +984,19 @@ public class Movement : MonoBehaviour
             myBody.AddForce(c.contacts[0].normal * OrbBump, ForceMode.VelocityChange);
             if(ShouldDash)
             {
-                Instantiate(moonBallHitEffect, c.contacts[0].point,Quaternion.identity);
+                if(!moonBallHitEffect.activeSelf)
+                {
+                    moonBallHitEffect.transform.position = c.contacts[0].point;
+                    moonBallHitEffect.SetActive(true);
+                }
+                else
+                {
+                    if(!moonball2.activeSelf)
+                    {
+                        moonball2.transform.position = c.contacts[0].point;
+                        moonball2.SetActive(true);
+                    }
+                }
             }
         }
 
@@ -985,9 +1004,22 @@ public class Movement : MonoBehaviour
         {
             myBody.velocity = Vector3.zero;
             myBody.AddForce(c.contacts[0].normal * obstacleBump, ForceMode.VelocityChange);
+
             if (!isDamaged)
             {
-                DamagePluto();
+                WallHealth healthScript = c.gameObject.GetComponent<WallHealth>();
+                if (healthScript)
+                {
+                    if (ShouldDash)
+                    {
+                        healthScript.IncrementDamage();
+                        DamagePluto();
+                    }
+                }
+                else
+                {
+                    DamagePluto();
+                }
                 if (c.gameObject.name == "Spikes")
                 {
                     if (audioScript)
@@ -1001,15 +1033,7 @@ public class Movement : MonoBehaviour
         
         else if (curTag == "Obstacle")
         {
-            if (ShouldDash)
-            {
-                WallHealth healthScript = c.gameObject.GetComponent<WallHealth>();
-                if (healthScript)
-                {
-                    healthScript.IncrementDamage();
-                    DamagePluto();
-                }
-            }
+            
             if(c.transform.name!="Seeker")
             {
                 myBody.AddForce(c.contacts[0].normal * obstacleBump, ForceMode.VelocityChange);

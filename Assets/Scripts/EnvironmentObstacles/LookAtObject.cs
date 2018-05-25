@@ -11,7 +11,11 @@ public class LookAtObject : MonoBehaviour {
     private Vector3 startPosition;
     private ShootProjectiles shootScript;
     public float maxDistanceToAttack;
+    private float rotY;
+    private float angle;
+    private Quaternion q;
     private float distanceToPlayer;
+    private Vector3 vectorToTarget;
     void Awake()
     {
         TrigCollider = GetComponent<SphereCollider>();
@@ -20,16 +24,17 @@ public class LookAtObject : MonoBehaviour {
 
     void Start()
     {
-        enabled = false;
         if (gameObject.name.Contains("Turret"))
         {
             Player = GameObject.FindGameObjectWithTag("Player");
         }
 
-        if(AmITurret)
+        if (AmITurret)
         {
             startPosition = transform.position;
         }
+        enabled = false;
+
     }
 
     void FixedUpdate()
@@ -55,13 +60,13 @@ public class LookAtObject : MonoBehaviour {
     void RotateToObject()
     {
         //get y rotation
-        float rotY = transform.rotation.y;
+        rotY = transform.rotation.y;
         
         //calculate distance for rotation
-        Vector3 vectorToTarget = Player.transform.position - transform.position;
+        vectorToTarget = Player.transform.position - transform.position;
         //calculate angle
-        float angle = Mathf.Atan2(vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg;
-        Quaternion q = Quaternion.AngleAxis(angle, Vector3.forward);
+        angle = Mathf.Atan2(vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg;
+        q = Quaternion.AngleAxis(angle, Vector3.forward);
         //apply rotation
         transform.rotation = Quaternion.Slerp(transform.rotation, q, Time.deltaTime * RotationSpeed);
         

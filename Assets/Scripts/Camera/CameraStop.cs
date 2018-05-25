@@ -93,14 +93,14 @@ public class CameraStop : MonoBehaviour {
         }
         if (topLeft.x < minX-OffsetX || botLeft.x < minX - OffsetX)
         {
-            //if (levelWallActive)
-            //{
-            //    transform.position = new Vector3(minX + OffsetX, transform.position.y, transform.position.z);
-            //}
-            //else
-            //{
-            //    transform.position = new Vector3(cachedCameraPosition.x, transform.position.y, transform.position.z);
-            //}
+            if (levelWallActive)
+            {
+                transform.position = new Vector3(minX + OffsetX, transform.position.y, transform.position.z);
+            }
+            else
+            {
+                transform.position = new Vector3(cachedCameraPosition.x, transform.position.y, transform.position.z);
+            }
         }
 
         if (botLeft.y < minY || botRight.y < minY)

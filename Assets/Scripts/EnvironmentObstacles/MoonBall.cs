@@ -129,24 +129,20 @@ public class MoonBall : MonoBehaviour
         // APPLYING BOUNCE BACK TO CERTAIN OBJECTS
         if(col.gameObject.name == "LaserWall" || col.gameObject.tag == "EnvironmentObstacle")
         {
-            Debug.Log("LAAAAZER!");
+            
             rb.AddForce(col.contacts[0].normal * wallBounce, ForceMode.VelocityChange);
             if(canExplodeOnImpact)
             {
                 OnExplosion();
             }
-            
-        }
 
-        else if (col.gameObject.tag == "BreakableWall")
-        {
             col.gameObject.GetComponent<WallHealth>().IncrementDamage();
             if (canExplodeOnImpact)
             {
                 OnExplosion();
             }
         }
-
+        
         else if (col.gameObject.tag == "Wall")
         {
             rb.AddForce(col.contacts[0].normal * wallBounce, ForceMode.VelocityChange);

@@ -11,6 +11,7 @@ public class Shield : MonoBehaviour {
     bool isShielded;
     bool doOnce;
     private SphereCollider MyCollider;
+    public SphereCollider absorbCollider;
     private HUDManager hudScript;
     public bool PlutoShieldStatus() { return isShielded; }
     private Animator anim;
@@ -44,6 +45,10 @@ public class Shield : MonoBehaviour {
             {
                 anim.SetBool("ShieldActive", true);
                 anim.Play("ShieldActive",0);
+            }
+            if(absorbCollider)
+            {
+                absorbCollider.radius = 2.5f;
             }
             ShieldModel.SetActive(true);
             isShielded = true;
@@ -97,6 +102,10 @@ IEnumerator TimerForShield()
         yield return new WaitForSeconds(0.9f);
         ShieldModel.SetActive(false);
         isShielded = false;
+        if(absorbCollider)
+        {
+            absorbCollider.radius = 2f;
+        }
         MyCollider.radius = defaultRadius;
         doOnce = false;
         if(hudScript)

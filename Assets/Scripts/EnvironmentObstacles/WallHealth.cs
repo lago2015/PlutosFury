@@ -34,12 +34,17 @@ public class WallHealth : MonoBehaviour
     {
         if(collision.gameObject.tag=="Obstacle")
         {
-            if(collision.transform.name.Contains("Seeker"))
+            if(collision.transform.name.Contains("Seeker") && pickUpContained!=null)
             {
                 collision.transform.GetChild(3).GetComponent<DetectWaitThenExplode>().TriggeredExplosion();
                 Destroy(pickUpContained);
+            
+            }
+            if(!collision.transform.name.Contains("DamageWall"))
+            {
                 IncrementDamage();
             }
+            
         }
     }
 

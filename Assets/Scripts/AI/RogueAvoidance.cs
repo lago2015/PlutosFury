@@ -39,7 +39,7 @@ public class RogueAvoidance : MonoBehaviour {
             || Physics.Raycast(rightRay.position - (transform.up * 4), direction, out raycastHit, range))
         {
             string curTag = raycastHit.transform.gameObject.tag;
-            if (curTag == ("BreakableWall") || curTag == "Wall")
+            if (curTag == ("BigAsteroid"))
             {
                 dashScript.ActivateDash();
                 isThereAnyThing = true;
@@ -52,7 +52,7 @@ public class RogueAvoidance : MonoBehaviour {
          Physics.Raycast(transform.position - (transform.forward * 6), -transform.up, out raycastHit, lostInterestRange))
         {
             string curTag = raycastHit.transform.gameObject.tag;
-            if (curTag == ("BreakableWall") || curTag == "Wall")
+            if (curTag == ("BigAsteroid"))
             {
                 //Debug.Log("Hit2");
 
