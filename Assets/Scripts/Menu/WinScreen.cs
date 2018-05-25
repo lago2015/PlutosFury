@@ -29,6 +29,8 @@ public class WinScreen : MonoBehaviour {
     public Button RestartLevel;
     public Image fadeOverlay;
     public Image gameFade;
+    public Sprite[] starTextSprites;
+    public GameObject starText;
 
     public int newScore(int sessionScore) { return curScore = sessionScore; }
     public int theHighestOfScore(int curHighScore) { return highScore = curHighScore; }
@@ -69,6 +71,9 @@ public class WinScreen : MonoBehaviour {
                 StarBurstParticle[i].SetActive(true);
             }
         }
+
+        starText.GetComponent<Image>().sprite = starTextSprites[CurrentRating];
+        starText.GetComponent<Animator>().SetTrigger("start");
     }
     public void FadeIn()
     {
