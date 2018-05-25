@@ -1074,7 +1074,7 @@ public class Movement : MonoBehaviour
         MoveSpeed = 0;
         myBody.velocity = Vector3.zero;
         myBody.drag = 100;
-        
+        isDisabled = true;
         TrailChange(DashState.idle);
         if(isPlayerDead)
         {
@@ -1325,6 +1325,7 @@ public class Movement : MonoBehaviour
         isWaiting = false;
         MoveSpeed = DefaultSpeed;
         myBody.drag = normalDrag;
+        isDisabled = false;
     }
     
     public void ResetDrag()
