@@ -13,6 +13,7 @@ public class BossPhaseManager : MonoBehaviour {
         animComp = GetComponent<Animator>();
     }
 
+
     public void TakeDamage()
     {
         if(!doOnce)
@@ -30,6 +31,13 @@ public class BossPhaseManager : MonoBehaviour {
             StartCoroutine(DamageReset());
         }
 
+    }
+    public void StartAnimation()
+    {
+        if(animComp)
+        {
+            animComp.SetBool("StartFirstState", true);
+        }
     }
 
     IEnumerator DamageReset()

@@ -71,9 +71,12 @@ public class WinScreen : MonoBehaviour {
                 StarBurstParticle[i].SetActive(true);
             }
         }
-
-        starText.GetComponent<Image>().sprite = starTextSprites[CurrentRating];
-        starText.GetComponent<Animator>().SetTrigger("start");
+        if(CurrentRating>-1)
+        {
+            starText.GetComponent<Image>().sprite = starTextSprites[CurrentRating];
+            starText.GetComponent<Animator>().SetTrigger("start");
+        }
+        
     }
     public void FadeIn()
     {

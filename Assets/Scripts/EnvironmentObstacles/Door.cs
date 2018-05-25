@@ -6,9 +6,7 @@ public class Door : MonoBehaviour {
 
     private GameManager gameScript;
     private CanvasFade fadeScript;
-
-    public GameObject winScreen;
-    private WinScreen winScreenScript;
+    
 
     public float fadeTime = 2;
     private int keyObtained;
@@ -20,15 +18,15 @@ public class Door : MonoBehaviour {
         //fadeScript = GameObject.FindGameObjectWithTag("Finish").GetComponent<CanvasFade>();
         gameScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<GameManager>();
         //timerScript = GameObject.FindGameObjectWithTag("HUDManager").GetComponent<CountDownStage>();
-        if (winScreen)
-        {
-            winScreenScript = winScreen.GetComponent<WinScreen>();
-        }
+        //if (winScreen)
+        //{
+        //    winScreenScript = winScreen.GetComponent<WinScreen>();
+        //}
 
-        if(winScreen)
-        {
-            winScreen.SetActive(false);
-        }
+        //if(winScreen)
+        //{
+        //    winScreen.SetActive(false);
+        //}
         
     }
 
@@ -44,8 +42,7 @@ public class Door : MonoBehaviour {
                 doorActive = true;
                 //disable gameobjects and save variables
                 gameScript.GameEnded(false);
-                //enable fade in
-                winScreenScript.FadeIn();
+
                 
                 
             }
