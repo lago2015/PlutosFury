@@ -5,8 +5,11 @@ using UnityEngine;
 public class MultiplayerMovement : MonoBehaviour {
 
     public Rigidbody plutoPhysics;
-    public float MoveSpeed;
-    public float DashSpeed;
+    public float moveSpeed;
+    public float dashSpeed;
+
+    public string horizontalInput = "Horizontal";
+    public string verticalInput = "Vertical";
 
     private Vector3 plutoMovement;
     private Vector3 lastMove;
@@ -18,8 +21,8 @@ public class MultiplayerMovement : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        plutoMovement.x = Input.GetAxis("Horizontal");
-        plutoMovement.y = Input.GetAxis("Vertical");
+        plutoMovement.x = Input.GetAxis(horizontalInput);
+        plutoMovement.y = Input.GetAxis(verticalInput);
 
         if (plutoMovement.magnitude > 1)
         {
@@ -35,6 +38,6 @@ public class MultiplayerMovement : MonoBehaviour {
             lastMove.y = plutoMovement.y;
         }
 
-        plutoPhysics.AddForce(plutoMovement * MoveSpeed * Time.deltaTime, ForceMode.VelocityChange);
+        plutoPhysics.AddForce(plutoMovement * moveSpeed * Time.deltaTime, ForceMode.VelocityChange);
     }
 }
