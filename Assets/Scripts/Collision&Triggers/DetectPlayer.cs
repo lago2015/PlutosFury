@@ -21,6 +21,10 @@ public class DetectPlayer : MonoBehaviour {
             if(!ChaseScript)
             {
                 pursueScript = ScriptModel.GetComponent<FleeOrPursue>();
+                if(pursueScript)
+                {
+                    pursueScript.enabled = false;
+                }
             }
             avoidanceScript = ScriptModel.GetComponent<RogueAvoidance>();
         }
@@ -47,6 +51,7 @@ public class DetectPlayer : MonoBehaviour {
                     audioScript.RogueSpotted(transform.position);
                     playOnce = true;
                 }
+                pursueScript.enabled = true;
                 pursueScript.PlayerIsNear();
             }
             if(exPointController)
@@ -70,6 +75,7 @@ public class DetectPlayer : MonoBehaviour {
             }
             if(pursueScript)
             {
+                pursueScript.enabled = false;
                 pursueScript.PlayerNotNear();
             }
             if (avoidanceScript)

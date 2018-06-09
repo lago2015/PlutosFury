@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour
         - is Level wall active in this scene?
         - if timer reaches 0
      */
-
+    public GameObject spawnPoint;
 	private GameObject pluto;
     private int curScore;
     private int curHighScore;
@@ -58,13 +58,21 @@ public class GameManager : MonoBehaviour
         {
             canvasScript = CanvasManager.GetComponent<CanvasToggle>();
         }
-        //reference player
-        pluto = GameObject.FindGameObjectWithTag("Player");
-        if(pluto)
+        ////reference player
+        //pluto = GameObject.FindGameObjectWithTag("Player");
+        //if(pluto)
+        //{
+        //    //modelSwitch = pluto.GetComponent<TextureSwap>();
+        //    playerScript = pluto.GetComponent<Movement>();
+        //}
+        InGameCharacterManager charManager = transform.GetChild(0).GetComponent<InGameCharacterManager>();
+        if(charManager)
         {
-            //modelSwitch = pluto.GetComponent<TextureSwap>();
-            playerScript = pluto.GetComponent<Movement>();
+
+            pluto = Instantiate(charManager.CurrentCharacter(0), spawnPoint.transform.position, Quaternion.identity);
         }
+
+
         //getter for audio controller
         audioObject = GameObject.FindGameObjectWithTag("AudioController");
         if(audioObject)

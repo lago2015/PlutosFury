@@ -30,7 +30,7 @@ public class AsteroidCollector : MonoBehaviour {
         player = GameObject.FindGameObjectWithTag("Player");
     }
 
-    void FixedUpdate()
+    void LateUpdate()
     {
         transform.position = player.transform.position;
     }

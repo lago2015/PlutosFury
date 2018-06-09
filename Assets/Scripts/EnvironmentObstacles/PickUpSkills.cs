@@ -16,12 +16,19 @@ public class PickUpSkills : MonoBehaviour {
     private AudioController audioScript;
     void Awake()
     {
-        GameObject playerRef = GameObject.FindGameObjectWithTag("Player");
         GameObject audioObject = GameObject.FindGameObjectWithTag("AudioController");
         if (audioObject)
         {
             audioScript = audioObject.GetComponent<AudioController>();
         }
+ 
+    }
+
+    private void Start()
+    {
+        GameObject playerRef = GameObject.FindGameObjectWithTag("Player");
+
+        hudScript = GameObject.FindGameObjectWithTag("HUDManager").GetComponent<HUDManager>();
         switch (curSkill)
         {
             case Skills.Star:
@@ -48,12 +55,6 @@ public class PickUpSkills : MonoBehaviour {
 
                 break;
         }
-    }
-
-    private void Start()
-    {
-        hudScript = GameObject.FindGameObjectWithTag("HUDManager").GetComponent<HUDManager>();
-
     }
 
     void OnTriggerEnter(Collider col)

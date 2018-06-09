@@ -24,11 +24,11 @@ public class Shatter : MonoBehaviour
     void Start ()
     {
         anim = GetComponent<Animator>();
-
+        enabled = false;
         targetRotation = new Vector3(0.0f, 0.0f, 0.0f);
 	}
 
-    void Update()
+    void FixedUpdate()
     {
         // check if rotation is not equal to the target rotation shatter needs to rotate to (If it can rotate). This helps reduce the update calls
         if (pieces.transform.rotation != Quaternion.Euler(targetRotation))
@@ -45,7 +45,7 @@ public class Shatter : MonoBehaviour
         {
             // player is in range, detach pieces 
             playerInRange = true;
-
+            enabled = true;
             DetachOrRetract(true);
         }
     }
@@ -55,6 +55,7 @@ public class Shatter : MonoBehaviour
         // if player leaves sensor, player is out of range
         if (collision.tag == "Player")
         {
+            enabled = false;
             playerInRange = false;
         }
     }

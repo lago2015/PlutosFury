@@ -4,9 +4,7 @@ using System.Collections;
 public class AudioController : MonoBehaviour {
     // Singleton instance 
     public static AudioController instance;
-
-    // Audio timers
-    float timer_01, timer_02;
+    
 
     [Header("Background-WinMusic")]
     public AudioSource BgMusicWinSource;
@@ -166,12 +164,7 @@ public class AudioController : MonoBehaviour {
         instance = this;
 	}
 	
-	// Update is called once per frame
-	void Update ()
-    {
-        timer_01 += Time.deltaTime;
-        timer_02 += Time.deltaTime;
-	}
+	
     public void BackgroundWinMusic()
     {
         if (BgMusicWinSource != null)
@@ -188,16 +181,13 @@ public class AudioController : MonoBehaviour {
 
     public void BackgroundMusic()
     {
-        if(timer_02>=bgMusicDelay)
+        if (BgMusicSource != null)
         {
-            if(BgMusicSource!=null)
-            {
-                BgMusicSource.priority = 200;
-                BgMusicSource.volume = 0.25f;
-                BgMusicSource.minDistance = 1000f;
-                BgMusicSource.loop = true;
-                BgMusicSource.Play();
-            }
+            BgMusicSource.priority = 200;
+            BgMusicSource.volume = 0.25f;
+            BgMusicSource.minDistance = 1000f;
+            BgMusicSource.loop = true;
+            BgMusicSource.Play();
         }
     }
 
@@ -247,39 +237,32 @@ public class AudioController : MonoBehaviour {
     }
     public void BackgroundBossMusic()
     {
-        if (timer_02 >= bgMusicDelay)
+        if (BgBossSource != null)
         {
-            if (BgBossSource != null)
+            if (BgMusicSource != null)
             {
-                if (BgMusicSource != null)
-                {
-                    BgMusicSource.Stop();
-                }
-
-                BgBossSource.priority = 200;
-                BgBossSource.volume = 0.25f;
-                BgBossSource.minDistance = 1000f;
-                BgBossSource.loop = true;
-                BgBossSource.Play();
+                BgMusicSource.Stop();
             }
+
+            BgBossSource.priority = 200;
+            BgBossSource.volume = 0.25f;
+            BgBossSource.minDistance = 1000f;
+            BgBossSource.loop = true;
+            BgBossSource.Play();
         }
     }
 
     public void PlutoHit(Vector3 pos)
     {
-        if (timer_02 >= maxHitDelay)
+        if (plutoHitSource != null)
         {
-            
-            if (plutoHitSource != null)
-            {
-                plutoHitSource.pitch = Random.Range(0.8f, 1f);
-                plutoHitSource.volume = Random.Range(0.8f, 1f);
-                plutoHitSource.minDistance = 20f;
-                plutoHitSource.loop = false;
-                plutoHitSource.Play();
+            plutoHitSource.pitch = Random.Range(0.8f, 1f);
+            plutoHitSource.volume = Random.Range(0.8f, 1f);
+            plutoHitSource.minDistance = 20f;
+            plutoHitSource.loop = false;
+            plutoHitSource.Play();
 
-                timer_02 = 0f;
-            }
+         
         }
     }
 
@@ -287,17 +270,13 @@ public class AudioController : MonoBehaviour {
     {
         if (asteroidAbsorbedSrc != null)
         {
-            //if (asteroidAbsorbedSrc.isPlaying)
-            //{
-            //    asteroidAbsorbedSrc.Stop();
-            //}
-
+            
             asteroidAbsorbedSrc.volume = 0.5f;
             asteroidAbsorbedSrc.minDistance = 20f;
             asteroidAbsorbedSrc.loop = false;
             asteroidAbsorbedSrc.Play();
 
-            timer_02 = 0f;
+         
         }
     }
 
@@ -316,33 +295,27 @@ public class AudioController : MonoBehaviour {
 
     public void PlutoPowerDash(Vector3 pos)
     {
-        if (timer_01 >= dash1Delay)
+        if (plutoDash2 != null)
         {
-            if (plutoDash2 != null)
-            {
-                plutoDash2.transform.position = pos;
-                plutoDash2.minDistance = 20f;
-                plutoDash2.loop = false;
-                plutoDash2.Play();
+            plutoDash2.transform.position = pos;
+            plutoDash2.minDistance = 20f;
+            plutoDash2.loop = false;
+            plutoDash2.Play();
 
-                timer_01 = 0f;
-            }
+
         }
     }
 
     public void PlutoPowerChargeStart(Vector3 pos)
     {
-        if (timer_01 >= chargeStartDelay)
+        if (powerChargeStartSrc != null)
         {
-            if (powerChargeStartSrc != null)
-            {
-                powerChargeStartSrc.transform.position = pos;
-                powerChargeStartSrc.minDistance = 20f;
-                powerChargeStartSrc.loop = false;
-                powerChargeStartSrc.Play();
+            powerChargeStartSrc.transform.position = pos;
+            powerChargeStartSrc.minDistance = 20f;
+            powerChargeStartSrc.loop = false;
+            powerChargeStartSrc.Play();
 
-                timer_01 = 0f;
-            }
+
         }
     }
     public void PlutoPowerChargeCancel()
@@ -356,81 +329,55 @@ public class AudioController : MonoBehaviour {
 
     public void PlutoPowerDashReady(Vector3 pos)
     {
-        if (timer_02 >= dash3Delay)
+        if (plutoDashReady != null)
         {
-            if (plutoDashReady != null)
-            {
-                
-                plutoDashReady.transform.position = pos;
-                plutoDashReady.minDistance = 20f;
-                plutoDashReady.loop = false;
-                plutoDashReady.Play();
-
-                timer_02 = 0f;
-            }
+            plutoDashReady.transform.position = pos;
+            plutoDashReady.minDistance = 20f;
+            plutoDashReady.loop = false;
+            plutoDashReady.Play();
         }
     }
 
     public void PlutoDeath(Vector3 pos)
     {
-        if (timer_02 >= deathDelay)
+        if (plutoDeathSource != null)
         {
-            if (plutoDeathSource != null)
-            {
 
-                plutoDeathSource.transform.position = pos;
-                plutoDeathSource.minDistance = 20f;
-                plutoDeathSource.loop = false;
-                plutoDeathSource.Play();
-
-                timer_02 = 0f;
-            }
+            plutoDeathSource.transform.position = pos;
+            plutoDeathSource.minDistance = 20f;
+            plutoDeathSource.loop = false;
+            plutoDeathSource.Play();
         }
     }
 
     public void PlutoLifeUp(Vector3 pos)
     {
-        if (timer_01 >= levelDelay)
+        if (plutoLifeUp != null)
         {
-            if (plutoLifeUp != null)
-            {
-                plutoLifeUp.transform.position = pos;
-                plutoLifeUp.minDistance = 20f;
-                plutoLifeUp.loop = false;
-                plutoLifeUp.Play();
-
-                timer_01 = 0f;
-            }
+            plutoLifeUp.transform.position = pos;
+            plutoLifeUp.minDistance = 20f;
+            plutoLifeUp.loop = false;
+            plutoLifeUp.Play();
         }
     }
     public void PlutoHealthUp(Vector3 pos)
     {
-        if (timer_01 >= levelDelay)
+        if (plutoHealthUp != null)
         {
-            if (plutoHealthUp != null)
-            {
-                plutoHealthUp.transform.position = pos;
-                plutoHealthUp.minDistance = 20f;
-                plutoHealthUp.loop = false;
-                plutoHealthUp.Play();
-
-                timer_01 = 0f;
-            }
+            plutoHealthUp.transform.position = pos;
+            plutoHealthUp.minDistance = 20f;
+            plutoHealthUp.loop = false;
+            plutoHealthUp.Play();
         }
     }
     public void ShieldLive(Vector3 MyPos)
     {
-        if(timer_01>=shieldActiveDelay)
+        if (ShieldActive != null)
         {
-            if(ShieldActive!=null)
-            {
-                ShieldActive.transform.position = MyPos;
-                ShieldActive.minDistance = 20f;
-                ShieldActive.loop = false;
-                ShieldActive.Play();
-                timer_01 = 0f;
-                    
-            }
+            ShieldActive.transform.position = MyPos;
+            ShieldActive.minDistance = 20f;
+            ShieldActive.loop = false;
+            ShieldActive.Play();
         }
     }
 
@@ -461,41 +408,33 @@ public class AudioController : MonoBehaviour {
             WormholeEnterSource.minDistance = 20f;
             WormholeEnterSource.loop = false;
             WormholeEnterSource.Play();
-            timer_01 = 0f;
+  
 
         }
     }
 
     public void WormholeLock(Vector3 MyPos)
     {
-        if (timer_01 >= WormholeDelay)
+        if (WormholeLockedSource != null)
         {
-            if (WormholeLockedSource != null)
-            {
-                WormholeLockedSource.volume = 0.25f;
-                WormholeLockedSource.transform.position = MyPos;
-                WormholeLockedSource.minDistance = 20f;
-                WormholeLockedSource.loop = false;
-                WormholeLockedSource.Play();
-                timer_01 = 0f;
-
-            }
+            WormholeLockedSource.volume = 0.25f;
+            WormholeLockedSource.transform.position = MyPos;
+            WormholeLockedSource.minDistance = 20f;
+            WormholeLockedSource.loop = false;
+            WormholeLockedSource.Play();
         }
     }
 
     public void RogueDash(Vector3 pos)
     {
-        if (timer_01 >= dash1Delay)
+        if (RogueDashSource != null)
         {
-            if (RogueDashSource != null)
-            {
-                RogueDashSource.transform.position = pos;
-                RogueDashSource.minDistance = 20f;
-                RogueDashSource.loop = false;
-                RogueDashSource.Play();
+            RogueDashSource.transform.position = pos;
+            RogueDashSource.minDistance = 20f;
+            RogueDashSource.loop = false;
+            RogueDashSource.Play();
 
-                timer_01 = 0f;
-            }
+
         }
     }
 
@@ -508,7 +447,7 @@ public class AudioController : MonoBehaviour {
             RogueSpottedSrc.loop = false;
             RogueSpottedSrc.Play();
 
-            timer_01 = 0f;
+  
         }
 
     }
@@ -522,21 +461,18 @@ public class AudioController : MonoBehaviour {
             RogueDeathSrc.loop = false;
             RogueDeathSrc.Play();
 
-            timer_01 = 0f;
+  
         }
     }
 
 
     public void WallBounce()
     {
-        if(timer_01>=wallBounceDelay)
+        if (wallBounceSource != null)
         {
-            if(wallBounceSource!=null)
-            {
-                wallBounceSource.minDistance = 20f;
-                wallBounceSource.loop = false;
-                wallBounceSource.Play();
-            }
+            wallBounceSource.minDistance = 20f;
+            wallBounceSource.loop = false;
+            wallBounceSource.Play();
         }
     }
 
@@ -553,42 +489,34 @@ public class AudioController : MonoBehaviour {
 
     public void AsteroidExplosion(Vector3 pos)
     {
-        if (timer_02 >= asteroidExplosionDelay)
+        if (asteroidExplosion != null)
         {
+            asteroidExplosion.pitch = Random.Range(0.8f, 1f);
+            asteroidExplosion.volume = Random.Range(0.8f, 1f);
+            asteroidExplosion.minDistance = 20f;
+            asteroidExplosion.loop = false;
+            asteroidExplosion.Play();
 
-            if (asteroidExplosion != null)
-            {
-                asteroidExplosion.pitch = Random.Range(0.8f, 1f);
-                asteroidExplosion.volume = Random.Range(0.8f, 1f);
-                asteroidExplosion.minDistance = 20f;
-                asteroidExplosion.loop = false;
-                asteroidExplosion.Play();
 
-                timer_02 = 0f;
-            }
         }
     }
 
     public void AsteroidBounce(Vector3 pos)
     {
-        if (timer_02 >= asteroidBounceDelay)
+        if (asteroidBounce != null)
         {
-
-            if (asteroidBounce != null)
+            if (asteroidBounce.isPlaying)
             {
-                if(asteroidBounce.isPlaying)
-                {
-                    asteroidBounce.Stop();
-                }
-
-                asteroidBounce.pitch = Random.Range(0.8f, 1f);
-                
-                asteroidBounce.minDistance = 20f;
-                asteroidBounce.loop = false;
-                asteroidBounce.Play();
-
-                timer_02 = 0f;
+                asteroidBounce.Stop();
             }
+
+            asteroidBounce.pitch = Random.Range(0.8f, 1f);
+
+            asteroidBounce.minDistance = 20f;
+            asteroidBounce.loop = false;
+            asteroidBounce.Play();
+
+
         }
     }
 
@@ -606,7 +534,7 @@ public class AudioController : MonoBehaviour {
             SpikeHitPlutoSource.loop = false;
             SpikeHitPlutoSource.Play();
 
-            timer_02 = 0f;
+          
         }
     }
 
@@ -638,116 +566,92 @@ public class AudioController : MonoBehaviour {
     }
     public void MoonAcquiredSound(Vector3 pos)
     {
-        if (timer_01 >= MoonAcquiredDelay)
+        if (moonAcquiredSource != null)
         {
-            if (moonAcquiredSource != null)
-            {
-                moonAcquiredSource.pitch = Random.Range(0.8f, 1f);
-                moonAcquiredSource.volume = Random.Range(0.8f, 1f);
-                moonAcquiredSource.minDistance = 20f;
-                moonAcquiredSource.loop = false;
-                moonAcquiredSource.Play();
+            moonAcquiredSource.pitch = Random.Range(0.8f, 1f);
+            moonAcquiredSource.volume = Random.Range(0.8f, 1f);
+            moonAcquiredSource.minDistance = 20f;
+            moonAcquiredSource.loop = false;
+            moonAcquiredSource.Play();
 
-                timer_01 = 0f;
-            }
+
         }
     }
 
     public void DestructionSmall(Vector3 pos)
     {
-        if (timer_01 >= wallBounceDelay)
+        if (DestrcSmllSource != null)
         {
-            if (DestrcSmllSource != null)
-            {
-                DestrcSmllSource.transform.position = pos;
-                DestrcSmllSource.minDistance = 20f;
-                DestrcSmllSource.loop = false;
-                DestrcSmllSource.Play();
-            }
+            DestrcSmllSource.transform.position = pos;
+            DestrcSmllSource.minDistance = 20f;
+            DestrcSmllSource.loop = false;
+            DestrcSmllSource.Play();
         }
     }
 
     public void DestructionSmallEnvirObstacle(Vector3 pos)
     {
-        if (timer_01 >= wallBounceDelay)
+        if (DestrcSmllSource != null)
         {
-            if (DestrcSmllSource != null)
-            {
-                DestrcSmllSource.transform.position = pos;
-                DestrcSmllSource.volume = 0.1f;
-                DestrcSmllSource.minDistance = 10f;
-                DestrcSmllSource.loop = false;
-                DestrcSmllSource.Play();
-            }
+            DestrcSmllSource.transform.position = pos;
+            DestrcSmllSource.volume = 0.1f;
+            DestrcSmllSource.minDistance = 10f;
+            DestrcSmllSource.loop = false;
+            DestrcSmllSource.Play();
         }
     }
 
     public void GameOver(Vector3 pos)
     {
-        if (timer_01 >= GameOverDelay)
+        if (GameOverSource != null)
         {
-            if (GameOverSource != null)
+            GameOverSource.transform.position = pos;
+            GameOverSource.minDistance = 20f;
+            GameOverSource.loop = true;
+            if (BgMusicSource)
             {
-                GameOverSource.transform.position = pos;
-                GameOverSource.minDistance = 20f;
-                GameOverSource.loop = true;
-                if(BgMusicSource)
-                {
-                    BgMusicSource.Stop();
-                }
-                GameOverSource.Play();
+                BgMusicSource.Stop();
             }
+            GameOverSource.Play();
         }
     }
 
 
     public void NeptunesMoonShot(Vector3 pos)
     {
-        if (timer_02 >= maxHitDelay)
+        if (NeptuneMoonShot != null)
         {
+            NeptuneMoonShot.pitch = Random.Range(0.8f, 1f);
+            NeptuneMoonShot.volume = Random.Range(0.8f, 1f);
+            NeptuneMoonShot.minDistance = 20f;
+            NeptuneMoonShot.loop = false;
+            NeptuneMoonShot.Play();
 
-            if (NeptuneMoonShot != null)
-            {
-                NeptuneMoonShot.pitch = Random.Range(0.8f, 1f);
-                NeptuneMoonShot.volume = Random.Range(0.8f, 1f);
-                NeptuneMoonShot.minDistance = 20f;
-                NeptuneMoonShot.loop = false;
-                NeptuneMoonShot.Play();
 
-                timer_02 = 0f;
-            }
         }
     }
     public void NeptunesMoonHit(Vector3 pos)
     {
-        if (timer_02 >= maxHitDelay)
+        if (NeptuneMoonHit != null)
         {
+            NeptuneMoonHit.pitch = Random.Range(0.8f, 1f);
+            NeptuneMoonHit.volume = Random.Range(0.8f, 1f);
+            NeptuneMoonHit.minDistance = 20f;
+            NeptuneMoonHit.loop = false;
+            NeptuneMoonHit.Play();
 
-            if (NeptuneMoonHit != null)
-            {
-                NeptuneMoonHit.pitch = Random.Range(0.8f, 1f);
-                NeptuneMoonHit.volume = Random.Range(0.8f, 1f);
-                NeptuneMoonHit.minDistance = 20f;
-                NeptuneMoonHit.loop = false;
-                NeptuneMoonHit.Play();
 
-                timer_02 = 0f;
-            }
         }
     }
     public void NeptunesMoonRetract(Vector3 pos)
     {
-        if (timer_02 >= maxHitDelay)
+        if (NeptuneMoonRetract != null)
         {
+            NeptuneMoonRetract.minDistance = 20f;
+            NeptuneMoonRetract.loop = false;
+            NeptuneMoonRetract.Play();
 
-            if (NeptuneMoonRetract != null)
-            {
-                NeptuneMoonRetract.minDistance = 20f;
-                NeptuneMoonRetract.loop = false;
-                NeptuneMoonRetract.Play();
 
-                timer_02 = 0f;
-            }
         }
     }
 

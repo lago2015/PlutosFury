@@ -47,7 +47,14 @@ public class ButtonIndicator : MonoBehaviour
         {
             isButtDown = false;
         }
-
+        if(Input.GetButtonDown("Fire1"))
+        {
+            isButtDown = true;
+        }
+        if(Input.GetButtonUp("Fire1"))
+        {
+            isButtDown = false;
+        }
         //Check if button or key is down
         if (isButtDown)
         {

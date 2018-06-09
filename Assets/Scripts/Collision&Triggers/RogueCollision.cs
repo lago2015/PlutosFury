@@ -17,6 +17,7 @@ public class RogueCollision : MonoBehaviour {
     private DamageOrPowerUp damageScript;
     private FleeOrPursue rogueMoveScript;
     private Collider myCollider;
+    private Movement playerScript;
     private Rigidbody myBody;
     private AudioController audioScript;
     // Use this for initialization
@@ -24,6 +25,7 @@ public class RogueCollision : MonoBehaviour {
     {
         scoringScript = GameObject.FindGameObjectWithTag("ScoreManager").GetComponent<WinScoreManager>();
         audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
+        playerScript = GameObject.FindGameObjectWithTag("Player").GetComponent<Movement>();
         myCollider = GetComponent<Collider>();
         myBody = GetComponent<Rigidbody>();
 
@@ -112,11 +114,10 @@ public class RogueCollision : MonoBehaviour {
             bool RogueDashing = rogueMoveScript.isDashing();
             if (!RogueDashing)
             {
-                Movement moveScript = col.gameObject.GetComponent<Movement>();
-                bool isDashing = moveScript.DashStatus();
-                if(!isDashing&&moveScript)
+                bool isDashing = playerScript.DashStatus();
+                if(!isDashing&& playerScript)
                 {
-                    moveScript.DamagePluto();
+                    playerScript.DamagePluto();
                 }
                 else
                 {
@@ -130,10 +131,10 @@ public class RogueCollision : MonoBehaviour {
             }
             else
             {
-                Movement moveScript = col.gameObject.GetComponent<Movement>();                
-                if (moveScript)
+                if(playerScript)
                 {
-                    moveScript.DamagePluto();
+                    playerScript.DamagePluto();
+
                 }
             }
         }

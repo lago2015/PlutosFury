@@ -11,13 +11,14 @@ public class ShootProjectiles : MonoBehaviour {
     float elapseTime;
     bool isReloading = false;
     bool PlayerNear;
-    public bool PlayerIsNotNear() { return PlayerNear = false; }
+    public bool PlayerIsNotNear() { enabled = false; return PlayerNear = false; }
     void Awake()
     {
         if(Muzzle)
         {
             Muzzle.SetActive(false);
         }
+        enabled = false;
     }
 
     void FixedUpdate()
@@ -66,6 +67,7 @@ public class ShootProjectiles : MonoBehaviour {
         if(col.gameObject.tag=="Player")
         {
             PlayerNear = true;
+            enabled = true;
         }
     }
 

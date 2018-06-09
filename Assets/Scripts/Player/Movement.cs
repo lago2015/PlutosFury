@@ -22,7 +22,7 @@ public class Movement : MonoBehaviour
     public GameObject maxSize;
     private Vector3 smallScale;
     private Vector3 medScale;
-    
+    public bool controllerConnected = false;
     //Check for shield
     bool Shielded;
     public bool isDamaged;
@@ -387,9 +387,19 @@ public class Movement : MonoBehaviour
         if (joystickscript && !isDead)
         {
             //Joystick input
-            move = Vector3.zero;
-            move.x = joystickscript.horizontal();
-            move.y = joystickscript.vertial();
+            //move = Vector3.zero;
+            if(controllerConnected)
+            {
+
+                move.x = Input.GetAxis("Horizontal");
+                move.y = Input.GetAxis("Vertical");
+            }
+            else
+            {
+
+                move.x = joystickscript.horizontal();
+                move.y = joystickscript.vertial();
+            }
             //normalize input
             if (move.magnitude > 1)
             {
@@ -1000,7 +1010,7 @@ public class Movement : MonoBehaviour
             }
         }
 
-        else if (curTag == "EnvironmentObstacle" || curTag == "Planet" || curTag == "ShatterPiece")
+        else if (curTag == "EnvironmentObstacle" ||  curTag == "ShatterPiece")
         {
             myBody.velocity = Vector3.zero;
             myBody.AddForce(c.contacts[0].normal * obstacleBump, ForceMode.VelocityChange);

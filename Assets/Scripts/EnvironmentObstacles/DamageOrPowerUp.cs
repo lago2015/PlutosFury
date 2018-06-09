@@ -27,7 +27,21 @@ public class DamageOrPowerUp : MonoBehaviour {
     FleeOrPursue dashScript;
     private SphereCollider damageCollider;
     private BoxCollider otherDamageCollider;
-    public bool didDamage() { return Damaged = true; }
+
+
+    public bool didDamage()
+    {
+        if (damageCollider)
+        {
+            damageCollider.enabled = false;
+        }
+
+        if (otherDamageCollider)
+        {
+            otherDamageCollider.enabled = false;
+        }
+        return Damaged = true;
+    }
 
     void Start()
     {
