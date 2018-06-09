@@ -8,7 +8,7 @@ public class MultiplayerMovement : MonoBehaviour {
     public float moveSpeed;
     public float dashSpeed;
     public enum DashState { idle, basicMove, dashMove, chargeStart, chargeComplete, burst }
-    private DashState trailState;
+    public DashState checkMovement;
 
     public float DashCooldownTime = 0.5f;
     private float curDashCooldown = 0f;
@@ -47,18 +47,15 @@ public class MultiplayerMovement : MonoBehaviour {
 
         if (Input.GetButtonDown(dashButton) && Time.time > curDashCooldown)
         {
+            checkMovement = DashState.dashMove;
             curDashCooldown = Time.time + DashCooldownTime;
-            moveSpeed = dashSpeed;
-            Debug.Log("Dash!");
-            plutoPhysics.AddForce(plutoMovement * moveSpeed * Time.deltaTime, ForceMode.VelocityChange);
+            plutoPhysics.AddForce(plutoMovement * dashSpeed * Time.deltaTime, ForceMode.VelocityChange);
         }
         else
         {
-            moveSpeed = defaultMoveSpeed;
-            Debug.Log("can't dash!");
+            checkMovement = DashState.basicMove;
             plutoPhysics.AddForce(plutoMovement * moveSpeed * Time.deltaTime, ForceMode.VelocityChange);
         }
-
         
     }
 }
