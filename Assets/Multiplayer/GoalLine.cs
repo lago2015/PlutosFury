@@ -7,7 +7,7 @@ public class GoalLine : MonoBehaviour
     public int scoringPlayer;
     public Transform ballRespawn;
     public GameObject goalBlock;
-    public GameObject player;
+    public Collider ball;
 
     private MultiplayerManager manager;
 
@@ -15,7 +15,7 @@ public class GoalLine : MonoBehaviour
 	void Start ()
     {
         manager = GameObject.FindObjectOfType<MultiplayerManager>();
-        Physics.IgnoreCollision(goalBlock.GetComponent<Collider>(), player.GetComponent<Collider>());
+        Physics.IgnoreCollision(goalBlock.GetComponent<Collider>(), ball.GetComponent<Collider>());
 	}
 	
 	// Update is called once per frame
@@ -26,7 +26,12 @@ public class GoalLine : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        manager.UpdateScore(scoringPlayer, 1);
-        other.transform.position = ballRespawn.transform.position;
+        if (other.tag == "MoonBall")
+        {
+            manager.UpdateScore(scoringPlayer, 1);
+            other.transform.position = ballRespawn.transform.position;
+
+            other.GetComponent<MoonBall>().MoveBall(new Vector3(0.0f, 0.0f, 0.0f));
+        }
     }
 }

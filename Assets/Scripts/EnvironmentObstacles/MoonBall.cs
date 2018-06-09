@@ -64,6 +64,13 @@ public class MoonBall : MonoBehaviour
         return attackMode;
     }
 
+    // NEW FUNCTION FOR BALL MOVEMENT LOGIC
+    public void MoveBall(Vector3 movementVec)
+    {
+        rb.velocity = movementVec * hitSpeed;
+        rb.AddTorque(movementVec * hitSpeed);
+    }
+
     private void OnTriggerEnter(Collider col)
     {
         if (col.tag == "Player")
@@ -153,7 +160,6 @@ public class MoonBall : MonoBehaviour
             {
                 col.gameObject.GetComponent<WallHealth>().IncrementDamage();
                 OnExplosion();
-
             }
         }
 
