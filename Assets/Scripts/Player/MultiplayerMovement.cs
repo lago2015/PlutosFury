@@ -49,7 +49,7 @@ public class MultiplayerMovement : MonoBehaviour {
         {
             checkMovement = DashState.dashMove;
             curDashCooldown = Time.time + DashCooldownTime;
-            plutoPhysics.AddForce(plutoMovement * dashSpeed * Time.deltaTime, ForceMode.VelocityChange);
+            plutoPhysics.AddForce(plutoMovement * dashSpeed * Time.deltaTime, ForceMode.Impulse);
         }
         else
         {
