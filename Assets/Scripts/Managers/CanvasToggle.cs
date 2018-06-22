@@ -39,7 +39,6 @@ public class CanvasToggle : MonoBehaviour {
         LevelNumberSprite.canvasRenderer.SetAlpha(0.0f);
         ReadySprite.canvasRenderer.SetAlpha(0.0f);
         GoSprite.canvasRenderer.SetAlpha(0.0f);
-        playerScript = GameObject.FindGameObjectWithTag("Player").GetComponent<Movement>();
         GameObject scoreObject = GameObject.FindGameObjectWithTag("ScoreManager");
         if(scoreObject)
         {
@@ -64,7 +63,9 @@ public class CanvasToggle : MonoBehaviour {
 
     private void Start()
     {
-        if(playerScript)
+        playerScript = GameObject.FindGameObjectWithTag("Player").GetComponent<Movement>();
+
+        if (playerScript)
         {
             playerScript.DisableMovement(false);
         }

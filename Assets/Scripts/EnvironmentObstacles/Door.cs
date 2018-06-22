@@ -15,18 +15,10 @@ public class Door : MonoBehaviour {
     private bool doorActive;
     void Awake()
     {
-        //fadeScript = GameObject.FindGameObjectWithTag("Finish").GetComponent<CanvasFade>();
+        
         gameScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<GameManager>();
         //timerScript = GameObject.FindGameObjectWithTag("HUDManager").GetComponent<CountDownStage>();
-        //if (winScreen)
-        //{
-        //    winScreenScript = winScreen.GetComponent<WinScreen>();
-        //}
-
-        //if(winScreen)
-        //{
-        //    winScreen.SetActive(false);
-        //}
+        
         
     }
 

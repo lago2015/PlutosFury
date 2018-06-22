@@ -32,7 +32,19 @@ public class AsteroidCollector : MonoBehaviour {
 
     void LateUpdate()
     {
-        transform.position = player.transform.position;
+        if(player)
+        {
+            transform.position = player.transform.position;
+        }
+        else
+        {
+            player = GameObject.FindGameObjectWithTag("Player");
+            TriggerCollisionPluto trigScript = transform.GetChild(0).GetComponent<TriggerCollisionPluto>();
+            if(trigScript)
+            {
+                trigScript.parentOfPlayer = player;
+            }
+        }
     }
 
     void OnTriggerStay(Collider col)

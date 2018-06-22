@@ -12,11 +12,15 @@ public class DamageOnCollision : MonoBehaviour {
     void Awake()
     {
         scoreScript = GameObject.FindGameObjectWithTag("ScoreManager").GetComponent<WinScoreManager>();
-        playerScript = GameObject.FindGameObjectWithTag("Player").GetComponent<Movement>();
         if(explosionObject)
         {
             explosionObject.SetActive(false);
         }
+    }
+    private void Start()
+    {
+        playerScript = GameObject.FindGameObjectWithTag("Player").GetComponent<Movement>();
+
     }
 
     void OnCollisionEnter(Collision col)

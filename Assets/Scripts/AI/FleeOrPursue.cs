@@ -29,7 +29,7 @@ public class FleeOrPursue : MonoBehaviour {
     public float maxAvoidForce = 100f;
     //components
     AudioController audioScript;
-    Transform Player;
+    Transform PlayerTransform;
     public GameObject myParent;
     public GameObject scriptObject;
     private RogueCollision collisionScript;
@@ -45,24 +45,28 @@ public class FleeOrPursue : MonoBehaviour {
     private bool PlayerNear;
     private readonly int RotationSpeed = 10;
     public bool isDead;
+    public Animator animComp;
+
+    //called from rogue collision script for both functions
     public bool isDashing() { return ShouldDash; }
     public bool yesDead() { return isDead = true; }
-    public Animator animComp;
+
     // Use this for initialization
     void Awake()
     {
         audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
-        Player = GameObject.FindGameObjectWithTag("Player").transform;
         DefaultSpeed = MoveSpeed;
         if (scriptObject)
         {
             collisionScript = scriptObject.GetComponent<RogueCollision>();
         }
         myBody = myParent.GetComponent<Rigidbody>();
+        //Getting the drag to revert back to for slow down of dash
         if (myBody)
         {
             normalDrag = myBody.drag;
         }
+        //turning off all particles at start
         if(chargingParticle)
         {
             chargingParticle.SetActive(false);
@@ -76,8 +80,10 @@ public class FleeOrPursue : MonoBehaviour {
         {
             burstParticle.SetActive(false);
         }
+        //if we want the trigger player near
         if (isTriggered)
         {
+            //if we do want trigger then the collider will make this bool true
             PlayerNear = false;
         }
         else
@@ -89,6 +95,7 @@ public class FleeOrPursue : MonoBehaviour {
     // Update is called once per frame
     void FixedUpdate()
     {
+        //playing the charging animation with the shaking
         if (isCharging)
         {
             if (shake > 0.0f)
@@ -101,6 +108,7 @@ public class FleeOrPursue : MonoBehaviour {
             }
 
         }
+        //Otherwise dont shake
         else
         {
             shake = 0.0f;
@@ -116,26 +124,30 @@ public class FleeOrPursue : MonoBehaviour {
 
             if (!isCharging || ShouldDash)
             {
-                //calculate distance between player and rogue
-                float curDistance = Vector3.Distance(transform.position, Player.transform.position);
-                //check if player is close enough, if not then pursue
-                if (curDistance > DistanceFromPlayerToExplode)
+                if(!PlayerTransform)
                 {
-                    //move rogue forward if hes not charging
-                    transform.parent.position += transform.forward * MoveSpeed * Time.deltaTime;
-                    transform.parent.position = new Vector3(transform.position.x, transform.position.y, 0);
+                    PlayerTransform = GameObject.FindGameObjectWithTag("Player").transform;
                 }
                 else
                 {
-                    //StartCoroutine(CountdownToExplode());
+                    //calculate distance between player and rogue
+                    float curDistance = Vector3.Distance(transform.position, PlayerTransform.transform.position);
+                    //check if player is close enough, if not then pursue
+                    if (curDistance > DistanceFromPlayerToExplode)
+                    {
+                        //move rogue forward if hes not charging
+                        transform.parent.position += transform.forward * MoveSpeed * Time.deltaTime;
+                        transform.parent.position = new Vector3(transform.position.x, transform.position.y, 0);
+                    }
                 }
+                
             }
 
         }
     }
 
 
-
+    //Called from update function if player is near
     void PursuePlayer()
     {
 
@@ -147,37 +159,39 @@ public class FleeOrPursue : MonoBehaviour {
             if (!firstEncounter)
             {
                 firstEncounter = true;
+                //Starting increased drag to slow down rogue
                 StartCoroutine(DashCooldown());
             }
             else
             {
-                if (Player)
+                if (PlayerTransform)
                 {
+                    //Where rotation is applied while pursing
                     if (RotationSpeed > 0)
                     {
-                        Quaternion rotation = Quaternion.LookRotation(Player.transform.position - transform.position);
+                        Quaternion rotation = Quaternion.LookRotation(PlayerTransform.transform.position - transform.position);
 
                         transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * RotationSpeed);
                     }
-
+                    //check if recently dashed and can dash again
                     if (!isExhausted)
                     {
+                        //is rogue charging?
                         if (!isCharging)
                         {
+                            //start charging
                             Dash();
                         }
                     }
-                    //transform.parent.position += transform.forward * MoveSpeed * Time.deltaTime;
-
                 }
             }
 
         }
     }
-    //Called from avoidance script
+    //Called from avoidance script, purpose of avoidance script is to detect orbs and dash into it
     public void ActivateDash()
     {
-        if (Player && !isCharging)
+        if (PlayerTransform && !isCharging)
         {
             MoveSpeed = 0;
             Dash();
@@ -187,13 +201,8 @@ public class FleeOrPursue : MonoBehaviour {
     //Start dash
     public void Dash()
     {
-        //Check if exhausted dash
-        if (!isExhausted)
-        {
-            shake = chargeTime;
-            StartCoroutine(ChargeDash());   //start charge
-            
-        }
+        shake = chargeTime;
+        StartCoroutine(ChargeDash());   //start charge
     }
 
     //Transition between charging and burst models
@@ -208,12 +217,17 @@ public class FleeOrPursue : MonoBehaviour {
         //ensure trail container is off
         trailModel.SetActive(false);
         yield return new WaitForSeconds(chargeTime);
+        //double check if player is still near after charge
         if(PlayerNear)
         {
+            //Start particle system "burst" to show dash has started and change variables for charging
             StartCoroutine(burstTimeout());
-            StartCoroutine(DashTransition());   //Start dash
+            //Change the variables to move faster and showing rogue is dashing
+            StartCoroutine(DashTransition());   
+
+            //Start animating the sprite for dashing
             animComp.SetBool("isDashing", true);
-        }
+        } 
         else
         {
             //Reset Values
@@ -224,29 +238,35 @@ public class FleeOrPursue : MonoBehaviour {
     }
     IEnumerator burstTimeout()
     {
+
+        //enable particle system for burst
         burstParticle.SetActive(true);
+        //change move speed to dash
         MoveSpeed = DashSpeed;
-        ShouldDash = true;  //Update dash status
+        //Update dash status
+        ShouldDash = true;  
 
         yield return new WaitForSeconds(1.1f);
+        //disable particle system for burst
         burstParticle.SetActive(false);
     }
     //Dash function with model switch
     IEnumerator DashTransition()
     {
         yield return new WaitForSeconds(0.2f);
+        //Check if rogue is dead
         if (!isDead)
         {
+            //Enable trail and disable charge particle
             if (trailModel && chargingParticle)
             {
                 trailModel.SetActive(true);
                 chargingParticle.SetActive(false);
             }
         }
-        //audio
         if (audioScript)
         {
-            //apply rogue dash here
+            //play audio
             if (doOnce == false)
             {
                 audioScript.RogueDash(transform.position);
@@ -257,24 +277,18 @@ public class FleeOrPursue : MonoBehaviour {
 
         animComp.SetBool("isDashing", false);
         ShouldDash = false;
+
         //Start Slowdown/Cooldown
         StartCoroutine(DashCooldown());
         StartCoroutine(SlowDown());
         
     }
-    
-    void DisableDashTrail()
-    {
-        if(trailModel)
-        {
-            trailModel.SetActive(false);
-        }
-    }
+   
 
     //Cool down for exhaustion from dash
     IEnumerator DashCooldown()
     {
-
+        //Update cooldown of dash
         isExhausted = true;
         if (!isDead)
         {
@@ -290,37 +304,35 @@ public class FleeOrPursue : MonoBehaviour {
     //Reset velocity by increasing drag
     IEnumerator SlowDown()
     {
+        //apply drag for slow down
         myBody.drag = slowDownDrag;
 
         yield return new WaitForSeconds(0.1f);
+        
+        //Reset values
         doOnce = false;
         MoveSpeed = DefaultSpeed;
         isCharging = false;
         myBody.drag = normalDrag;
 
     }
-    public bool Flee()
-    {
-        return ShouldPursue = false;
-    }
-
-    public bool Pursue()
-    {
-        return ShouldPursue = true;
-    }
-
+    //this is called from DetectPlayer script on the parent for when the player is near
     public bool PlayerIsNear()
     {
        
         return PlayerNear = true;
     }
 
+    //this is the same as PlayerIsNear() from where its being called from but on trigger exit
     public bool PlayerNotNear()
     {
+        //Reset all values
         ShouldDash = false;
         isCharging = false;
-        StopAllCoroutines();
         animComp.SetBool("isDashing", false);
+        //Stop Coroutines
+        StopAllCoroutines();
+        //turn off some particles
         if (trailModel && chargingParticle)
         {
             trailModel.SetActive(false);

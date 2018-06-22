@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class TriggerCollisionPluto : MonoBehaviour {
 
-    private GameObject parentOfPlayer;
+    [HideInInspector]
+    public GameObject parentOfPlayer;
     private Movement moveScript;
     private Rigidbody myBody;
     private float obstacleBump;
@@ -16,8 +17,7 @@ public class TriggerCollisionPluto : MonoBehaviour {
     public bool DashChange(bool curDash) { return ShouldDash = curDash; }
     private void Awake()
     {
-        parentOfPlayer = GameObject.FindGameObjectWithTag("Player");
-        moveScript = parentOfPlayer.GetComponent<Movement>();
+        
         GameObject ScoreObject = GameObject.FindGameObjectWithTag("ScoreManager");
         if (ScoreObject)
         {
@@ -71,7 +71,6 @@ public class TriggerCollisionPluto : MonoBehaviour {
                     WinScoreManager.ScoreObtained(WinScoreManager.ScoreList.BigOrb, other.transform.position);
                 }
             }
-
         }
     }
 }

@@ -309,17 +309,7 @@ public class Movement : MonoBehaviour
         {
             vibrationHit = false;
         }
-        //invert controls enabled/disabled
-        if (PlayerPrefs.GetInt("InvertControls") == 1)
-        {
-            invertControls = true;
-        }
-        else
-        {
-            invertControls = false;
-        }
-
-
+        
     }
 
     void Start()
@@ -353,11 +343,6 @@ public class Movement : MonoBehaviour
         if (isDead)
         {
             TrailChange(DashState.idle);
-
-            //if (modelScript)
-            //{
-            //    modelScript.SwapMaterial(TextureSwap.PlutoState.Lose);
-            //}
         }
         //Checking for dash charge
         if (DashChargeActive)
@@ -415,11 +400,7 @@ public class Movement : MonoBehaviour
                 lastMove.y = move.y;
             }
            
-            ////check if controls are inverted if so invert
-            //if (invertControls)
-            //{
-            //    move -= move;
-            //}
+            
             //move player
             myBody.AddForce(move * MoveSpeed * Time.deltaTime, ForceMode.VelocityChange);
 

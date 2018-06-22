@@ -46,14 +46,7 @@ public class ExperienceManager : MonoBehaviour
         {
             return CurrLevelNum + 1;
         }
-        //if(CurrLevelNum==-1)
-        //{
-        //    return 0;
-        //}
-        //else
-        //{
-        //    return CurrLevelNum;
-        //}
+        
     }
 
     public void ExpAcquired()

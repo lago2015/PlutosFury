@@ -25,7 +25,6 @@ public class RogueCollision : MonoBehaviour {
     {
         scoringScript = GameObject.FindGameObjectWithTag("ScoreManager").GetComponent<WinScoreManager>();
         audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
-        playerScript = GameObject.FindGameObjectWithTag("Player").GetComponent<Movement>();
         myCollider = GetComponent<Collider>();
         myBody = GetComponent<Rigidbody>();
 
@@ -49,6 +48,12 @@ public class RogueCollision : MonoBehaviour {
         }
     }
 
+    private void Start()
+    {
+        playerScript = GameObject.FindGameObjectWithTag("Player").GetComponent<Movement>();
+
+    }
+
     //Apply damage to rogue and check if 
     public void RogueDamage(string CurName)
     {
@@ -60,8 +65,10 @@ public class RogueCollision : MonoBehaviour {
                 audioScript.RogueDeath(transform.position);
             }
             myCollider.enabled = false;
+            //check what object destroyed rogue and apply score
             if(CurName.Contains("Player"))
             {
+                
                 if (scoringScript)
                 {
                     scoringScript.ScoreObtained(WinScoreManager.ScoreList.Rogue, transform.position);
@@ -74,7 +81,7 @@ public class RogueCollision : MonoBehaviour {
                     scoringScript.ScoreObtained(WinScoreManager.ScoreList.MoonballRogue, transform.position);
                 }
             }
-            
+            //start death sequence
             if (Explosion && Model)
             {
                 myCollider.enabled = false;
