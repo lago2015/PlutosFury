@@ -25,7 +25,6 @@ public class CanvasToggle : MonoBehaviour {
     private int curHighScore;
     private int curTotalScore;
     private int curTotalHighScore;
-    private RatingSystem ratingScript;
     private Movement playerScript;
     public int SendRating(int newRating) { return curRating = newRating; }
     public int SendScore(int newScore) { return curScore = newScore; }
@@ -43,7 +42,6 @@ public class CanvasToggle : MonoBehaviour {
         if(scoreObject)
         {
             scoreScript = scoreObject.GetComponent<ScoreManager>();
-            ratingScript = scoreObject.GetComponent<RatingSystem>();
         }
         GameObject audioObject = GameObject.FindGameObjectWithTag("AudioController");
         if(audioObject)

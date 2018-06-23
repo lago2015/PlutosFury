@@ -201,6 +201,8 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
             //ensure damaged once and wait for a few frames to enable damage.
             isDamaged = true;
 
+            //Stop any dash currently being used
+            moveScript.CancelDash();
             //decrement health
             curHealth--;
 
@@ -284,7 +286,7 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
         }
 
 
-        else if (curTag == "Wall" || curTag == "LevelWall")
+        else if (curTag == "Wall")
         {
             if (audioScript)
             {
@@ -354,6 +356,7 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
                     {
                         healthScript.IncrementDamage();
                         DamagePluto();
+
                     }
                 }
                 else

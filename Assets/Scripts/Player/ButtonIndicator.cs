@@ -7,22 +7,17 @@ public class ButtonIndicator : MonoBehaviour
 
     private AudioController audioScript;
     private Movement playerScript;
-    public float PowerDashTimeout;
     public float dashDelay;
     public float curTime;
     public bool curStatus;
     public bool isButtDown;
     private bool buttPressed;
-    public bool isCharged;
+
     public bool doOnce;
     public bool isDashActive;
-    public bool isShockActive;
-    public bool isCharging;
     public bool isExhausted;
     private bool playOnce;
-    private bool playerCharging;
     public bool isDashing;
-    public float delayChargeTimeout=0.25f;
     public float delayTimer;
 
 
@@ -35,7 +30,6 @@ public class ButtonIndicator : MonoBehaviour
         {
             //Getter for delays and timeouts set by user in movement script
             dashDelay = playerScript.DashTimeout;
-            PowerDashTimeout = playerScript.CurPowerDashTimeout();
         }
     }
     
@@ -53,8 +47,7 @@ public class ButtonIndicator : MonoBehaviour
         //Check if button or key is down
         if (isButtDown)
         {
-            isDashActive = isPowerDashActive();
-            if(!isDashActive&&!doOnce)
+            if(!doOnce)
             {
                 playerScript.Dash();
                 doOnce = true;
@@ -73,13 +66,7 @@ public class ButtonIndicator : MonoBehaviour
         return isButtDown = curStatus;
     }
 
-    //Check if player's power dash is active
-    bool isPowerDashActive()
-    {
-        isDashActive = playerScript.DashChargeStatus();
-        return isDashActive;
-    }
-
+    
     //Get current dash time out
     public float dashTimeout()
     {
@@ -93,6 +80,5 @@ public class ButtonIndicator : MonoBehaviour
         yield return new WaitForSeconds(dashDelay);
         playerScript.TrailChange(Movement.DashState.idle);
         isExhausted = false;
-        isCharged = false;
     }
 }

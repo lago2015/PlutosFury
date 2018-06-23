@@ -143,7 +143,6 @@ public class MoonBall : MonoBehaviour
                 OnExplosion();
             }
 
-            //col.gameObject.GetComponent<WallHealth>().IncrementDamage();
             if (canExplodeOnImpact)
             {
                 OnExplosion();

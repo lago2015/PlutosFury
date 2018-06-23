@@ -70,11 +70,10 @@ public class BigAsteroid : MonoBehaviour {
         if(col.gameObject.tag=="Player")
         {
             Movement moveScript = col.gameObject.GetComponent<Movement>();
-            bool isCharged = moveScript.isCharged;
             bool isDashing = moveScript.DashStatus();
             //bool isPowerReady = moveScript.DashChargeStatus();
 
-            if(isDashing==true&&isCharged==true)
+            if(isDashing==true)
             {
                 if (!doOnce)
                 {
@@ -87,18 +86,7 @@ public class BigAsteroid : MonoBehaviour {
                 }
             }
         }
-        //else if(col.gameObject.tag=="Obstacle")
-        //{
-        //    if (!doOnce)
-        //    {
-        //        if (audioScript)
-        //        {
-        //            audioScript.AsteroidExplosion(transform.position);
-        //        }
-        //        SpawnAsteroids();
-        //        doOnce = true;
-        //    }
-        //}
+        
         
     }
 

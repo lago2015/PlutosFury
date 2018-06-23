@@ -41,7 +41,6 @@ public class GameManager : MonoBehaviour
     private GameObject levelWall;
     private GameObject CanvasManager;
     private CanvasToggle canvasScript;
-    private RatingSystem ratingScript;
     void Awake()
     {
         //30 fps set rate
@@ -87,7 +86,6 @@ public class GameManager : MonoBehaviour
         {
             //getter Score Manager
             ScoreManager = scoreObject.GetComponent<ScoreManager>();
-            ratingScript = scoreObject.GetComponent<RatingSystem>();
         }
         //Getter for Ad Manager
         AdManager = GetComponent<AdManager>();
@@ -254,10 +252,7 @@ public class GameManager : MonoBehaviour
             curHighScore = ScoreManager.ReturnHighScore();
             curTotalScore = ScoreManager.ReturnTotalScore();
             curTotalHighScore = ScoreManager.ReturnTotalHighScore();
-            if(ratingScript)
-            {
-                newRating = ratingScript.CheckRating(curScore);
-            }
+            
             //Save score
             ScoreManager.SaveScore(false);
             //Save health and lives
