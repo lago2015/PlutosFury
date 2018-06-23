@@ -30,7 +30,6 @@ public class GameManager : MonoBehaviour
     private bool willPlayAd;
     Movement playerMoveScript;
     PlayerCollisionAndHealth playerCollisionScript;
-    TextureSwap modelSwitch;
     GameObject audioObject;
     AudioController audioScript;
     private float delayVoice=0.25f;

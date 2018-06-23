@@ -167,7 +167,6 @@ public class AIHealth : MonoBehaviour {
 
         if (col.gameObject.tag == "MoonBall")
         {
-            Debug.Log("MOONBALL HIT!");
 
             MoonBall moonBall = col.GetComponent<MoonBall>();
 

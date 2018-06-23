@@ -30,7 +30,6 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
     private ScoreManager ScoreManager;
     private HUDManager hudScript;
     private WinScoreManager winScoreManager;
-    private Shield shieldScript;
     private LerpToStart lerpScript;     //for boss level
     private PlayerAppearance appearanceScript;
     //knockback values
@@ -47,7 +46,6 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
 
     public int CurrentHealth() { return curHealth; }
     public bool DamageStatus() { return isDamaged; }
-    bool ShieldStatus() { Shielded = shieldScript.PlutoShieldStatus(); return Shielded; }
     bool isDashing()
     {
         if (moveScript)
@@ -80,7 +78,6 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
             ScoreManager = ScoreObject.GetComponent<ScoreManager>();
             winScoreManager = ScoreObject.GetComponent<WinScoreManager>();
         }
-        shieldScript = GetComponent<Shield>();
         lerpScript = GetComponent<LerpToStart>();   //for boss level
         appearanceScript = GetComponent<PlayerAppearance>();
 
@@ -201,69 +198,53 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
         //this is to prevent multiple damages during a frame
         if (!isDamaged)
         {
-            //check if player is shielded
-            if (!ShieldStatus())
+            //ensure damaged once and wait for a few frames to enable damage.
+            isDamaged = true;
+
+            //decrement health
+            curHealth--;
+
+            StartCoroutine(DamageIndicator());
+            //feedback on damage
+            if (vibrationHit)
             {
-                //ensure damaged once and wait for a few frames to enable damage.
-                isDamaged = true;
-
-                //decrement health
-                curHealth--;
-
-                StartCoroutine(DamageIndicator());
-                //feedback on damage
-                if (vibrationHit)
-                {
-                    Handheld.Vibrate();
-                }
-                //run game over procedure
-                if (curHealth < 0)
-                {
-                    rendererComp.enabled = false;
-                    isDead = true;
-                    if(appearanceScript)
-                    {
-                        //Start animation and things for death
-                        appearanceScript.PlayerDied();
-                    }
-                    if(moveScript)
-                    {
-                        moveScript.PlayerDied();
-                    }
-                }
-                //small size
-                else 
-                {
-                    StartCoroutine(DamageTransition());
-                }
-                
-                if (hudScript)
-                {
-                    hudScript.UpdateHealth(curHealth);
-                }
-                if (ScoreManager)
-                {
-                    ScoreManager.HealthChange(curHealth);
-                }
-                //audio cue for damage
-                if (audioScript)
-                {
-                    audioScript.PlutoHit(transform.position);
-                }
-                
-                //CamShake.EnableCameraShake();
+                Handheld.Vibrate();
             }
-
+            //run game over procedure
+            if (curHealth < 0)
+            {
+                rendererComp.enabled = false;
+                isDead = true;
+                if (appearanceScript)
+                {
+                    //Start animation and things for death
+                    appearanceScript.PlayerDied();
+                }
+                if (moveScript)
+                {
+                    moveScript.PlayerDied();
+                }
+            }
+            //small size
             else
             {
-
-                if (audioScript)
-                {
-                    audioScript.ShieldDing(transform.position);
-                }
-
-
+                StartCoroutine(DamageTransition());
             }
+
+            if (hudScript)
+            {
+                hudScript.UpdateHealth(curHealth);
+            }
+            if (ScoreManager)
+            {
+                ScoreManager.HealthChange(curHealth);
+            }
+            //audio cue for damage
+            if (audioScript)
+            {
+                audioScript.PlutoHit(transform.position);
+            }
+            
         }
     }
 

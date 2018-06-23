@@ -7,11 +7,8 @@ public class PickUpSkills : MonoBehaviour {
     public Skills curSkill;
     //Script references
     private HealthObtainedController healthController;
-    private PowerUpManager PowerUpScript;
     private PlayerCollisionAndHealth playerCollisionScript;
     private PlayerAppearance appearanceScript;
-    private Shield ShieldScript;
-    private Inflation InflateScript;
     private HUDManager hudScript;
     private bool pickupObtained;
     private AudioController audioScript;
@@ -33,13 +30,12 @@ public class PickUpSkills : MonoBehaviour {
         switch (curSkill)
         {
             case Skills.Star:
-                ShieldScript = playerRef.GetComponent<Shield>();
-                PowerUpScript = playerRef.GetComponent<PowerUpManager>();
+                
                 playerCollisionScript = playerRef.GetComponent<PlayerCollisionAndHealth>();
                 appearanceScript = playerRef.GetComponent<PlayerAppearance>();
                 break;
             case Skills.Inflation:
-                InflateScript = playerRef.GetComponent<Inflation>();
+                
                 playerCollisionScript = playerRef.GetComponent<PlayerCollisionAndHealth>();
 
                 break;
@@ -49,7 +45,7 @@ public class PickUpSkills : MonoBehaviour {
                 appearanceScript = playerRef.GetComponent<PlayerAppearance>();
                 break;
             case Skills.Shockwave:
-                PowerUpScript = playerRef.GetComponent<PowerUpManager>();
+                
                 //add new shockwave script here
                 break;
             case Skills.LifeUp:
@@ -78,28 +74,28 @@ public class PickUpSkills : MonoBehaviour {
 
         switch (curSkill)
         {
-            case Skills.Star:
+            //case Skills.Star:
 
-                if (ShieldScript && playerCollisionScript && !pickupObtained && hudScript && PowerUpScript)
-                {
-                    PowerUpScript.DashPluto(transform.position);
-                    hudScript.isShieldActive(true);
-                    pickupObtained = true;
-                    //playerScript.IndicatePickup();
-                    ShieldScript.ShieldPluto();
-                    Destroy(gameObject);
-                }
-                break;
+            //    if (ShieldScript && playerCollisionScript && !pickupObtained && hudScript && PowerUpScript)
+            //    {
+            //        PowerUpScript.DashPluto(transform.position);
+            //        hudScript.isShieldActive(true);
+            //        pickupObtained = true;
+            //        //playerScript.IndicatePickup();
+            //        ShieldScript.ShieldPluto();
+            //        Destroy(gameObject);
+            //    }
+            //    break;
 
-            case Skills.Inflation:
-                if (InflateScript && !pickupObtained)
-                {
-                    pickupObtained = true;
-                    InflateScript.Inflate();
-                    InflateScript.InflatePluto();
-                    Destroy(gameObject);
-                }
-                break;
+            //case Skills.Inflation:
+            //    if (InflateScript && !pickupObtained)
+            //    {
+            //        pickupObtained = true;
+            //        InflateScript.Inflate();
+            //        InflateScript.InflatePluto();
+            //        Destroy(gameObject);
+            //    }
+            //    break;
             case Skills.Health:
                 if (playerCollisionScript && !pickupObtained)
                 {
@@ -117,15 +113,15 @@ public class PickUpSkills : MonoBehaviour {
 
                 }
                 break;
-            case Skills.Shockwave:
-                if (PowerUpScript && !pickupObtained && hudScript)
-                {
+            //case Skills.Shockwave:
+            //    if (PowerUpScript && !pickupObtained && hudScript)
+            //    {
                     
-                    pickupObtained = true;
-                    PowerUpScript.ShockPluto(transform.position);
-                    Destroy(gameObject);
-                }
-                break;
+            //        pickupObtained = true;
+            //        PowerUpScript.ShockPluto(transform.position);
+            //        Destroy(gameObject);
+            //    }
+            //    break;
             case Skills.LifeUp:
                 if (playerCollisionScript && !pickupObtained)
                 {

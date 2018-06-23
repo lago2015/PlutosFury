@@ -7,7 +7,6 @@ public class ButtonIndicator : MonoBehaviour
 
     private AudioController audioScript;
     private Movement playerScript;
-    private ShockwaveAbility shockwaveScript;
     public float PowerDashTimeout;
     public float dashDelay;
     public float curTime;
@@ -25,6 +24,8 @@ public class ButtonIndicator : MonoBehaviour
     public bool isDashing;
     public float delayChargeTimeout=0.25f;
     public float delayTimer;
+
+
     void Start()
     {
         //getter for audio controller and player movement script
@@ -35,7 +36,6 @@ public class ButtonIndicator : MonoBehaviour
             //Getter for delays and timeouts set by user in movement script
             dashDelay = playerScript.DashTimeout;
             PowerDashTimeout = playerScript.CurPowerDashTimeout();
-            shockwaveScript = playerScript.GetComponent<ShockwaveAbility>();
         }
     }
     
@@ -49,14 +49,7 @@ public class ButtonIndicator : MonoBehaviour
         {
             isButtDown = false;
         }
-        if(Input.GetButtonDown("Fire1"))
-        {
-            isButtDown = true;
-        }
-        if(Input.GetButtonUp("Fire1"))
-        {
-            isButtDown = false;
-        }
+        
         //Check if button or key is down
         if (isButtDown)
         {
@@ -85,12 +78,6 @@ public class ButtonIndicator : MonoBehaviour
     {
         isDashActive = playerScript.DashChargeStatus();
         return isDashActive;
-    }
-    //check for players shock wave status
-    bool isShockwaveActive()
-    {
-        isShockActive = shockwaveScript.ShockChargeStatus();
-        return isShockActive;
     }
 
     //Get current dash time out

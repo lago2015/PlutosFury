@@ -150,7 +150,6 @@ public class CanvasToggle : MonoBehaviour {
 
     public void SendDataToWinScreen()
     {
-        winScript.GetRating(curRating);
         winScript.newScore(curScore);
         winScript.theHighestOfScore(curHighScore);
         winScript.CurTotalScore(curTotalScore);
