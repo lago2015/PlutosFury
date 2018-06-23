@@ -7,6 +7,7 @@ public class ButtonIndicator : MonoBehaviour
 
     private AudioController audioScript;
     private Movement playerScript;
+    private ShockwaveAbility shockwaveScript;
     public float PowerDashTimeout;
     public float dashDelay;
     public float curTime;
@@ -34,6 +35,7 @@ public class ButtonIndicator : MonoBehaviour
             //Getter for delays and timeouts set by user in movement script
             dashDelay = playerScript.DashTimeout;
             PowerDashTimeout = playerScript.CurPowerDashTimeout();
+            shockwaveScript = playerScript.GetComponent<ShockwaveAbility>();
         }
     }
     
@@ -87,7 +89,7 @@ public class ButtonIndicator : MonoBehaviour
     //check for players shock wave status
     bool isShockwaveActive()
     {
-        isShockActive = playerScript.ShockChargeStatus();
+        isShockActive = shockwaveScript.ShockChargeStatus();
         return isShockActive;
     }
 

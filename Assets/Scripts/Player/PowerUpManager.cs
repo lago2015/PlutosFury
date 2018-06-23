@@ -11,12 +11,14 @@ public class PowerUpManager : MonoBehaviour {
     bool chargeOnce;
     private AudioController audioScript;
     private Movement moveScript;
+    private ShockwaveAbility shockwaveScript;
     private Shield shieldScript;
     void Awake()
     {
         shieldScript = GetComponent<Shield>();
         audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
         moveScript = GetComponent<Movement>();
+        shockwaveScript = GetComponent<ShockwaveAbility>();
     }
 
     public void DashPluto(Vector3 curpos)
@@ -77,7 +79,7 @@ public class PowerUpManager : MonoBehaviour {
         }
         if (moveScript)
         {
-            moveScript.ActivateShockCharge();
+            shockwaveScript.ActivateShockCharge();
         }
     }
 
