@@ -11,11 +11,13 @@ public class Shield : MonoBehaviour {
     bool isShielded;
     bool doOnce;
     private SphereCollider MyCollider;
-    public SphereCollider absorbCollider;
+    private SphereCollider absorbCollider;
     private HUDManager hudScript;
     public bool PlutoShieldStatus() { return isShielded; }
     private Animator anim;
-    public Image ShieldProgress;
+    private Image ShieldProgress;
+
+    public void CurrentShieldSprite(Image newSprite) { ShieldProgress = newSprite; }
     void Awake()
     {
         if(ShieldModel)
@@ -30,6 +32,7 @@ public class Shield : MonoBehaviour {
     private void Start()
     {
         hudScript = GameObject.FindGameObjectWithTag("HUDManager").GetComponent<HUDManager>();
+        absorbCollider = GameObject.FindGameObjectWithTag("GravityWell").GetComponent<SphereCollider>();
     }
     public void ShieldPluto()
     {
@@ -54,6 +57,10 @@ public class Shield : MonoBehaviour {
             isShielded = true;
             MyCollider.radius = shieldRadius;
             curTime = shieldTimeout;
+            if(!ShieldProgress)
+            {
+
+            }
             StartCoroutine(RadialProgress(shieldTimeout));
             StartCoroutine(TimerForShield());
         }

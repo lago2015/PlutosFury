@@ -5,7 +5,7 @@ using UnityEngine;
 public class DamageOnCollision : MonoBehaviour {
 
     public GameObject explosionObject;
-    private Movement playerScript;
+    private PlayerCollisionAndHealth playerCollisionScript;
     private bool isDamaged;
     private float DamageCooldown = 0.2f;
     private WinScoreManager scoreScript;
@@ -19,7 +19,7 @@ public class DamageOnCollision : MonoBehaviour {
     }
     private void Start()
     {
-        playerScript = GameObject.FindGameObjectWithTag("Player").GetComponent<Movement>();
+        playerCollisionScript = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerCollisionAndHealth>();
 
     }
 
@@ -31,11 +31,11 @@ public class DamageOnCollision : MonoBehaviour {
         {
             if(!isDamaged)
             {
-                bool playerDamaged = playerScript.DamageStatus();
+                bool playerDamaged = playerCollisionScript.DamageStatus();
                 if (!playerDamaged)
                 {
                     isDamaged = true;
-                    playerScript.DamagePluto();
+                    playerCollisionScript.DamagePluto();
                     StartCoroutine(DamageReset());
                 }
             }

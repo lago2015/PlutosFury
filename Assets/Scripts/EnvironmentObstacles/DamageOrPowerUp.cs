@@ -23,7 +23,8 @@ public class DamageOrPowerUp : MonoBehaviour {
     bool SuperPluto;
     float elapseTime;
     bool PlayerNear = false;
-    Movement PlayerScript;
+    Movement PlayerMoveScript;
+    PlayerCollisionAndHealth PlayerCollisionScript;
     FleeOrPursue dashScript;
     private SphereCollider damageCollider;
     private BoxCollider otherDamageCollider;
@@ -45,7 +46,8 @@ public class DamageOrPowerUp : MonoBehaviour {
 
     void Start()
     {
-        PlayerScript = GameObject.FindGameObjectWithTag("Player").GetComponent<Movement>();
+        PlayerMoveScript = GameObject.FindGameObjectWithTag("Player").GetComponent<Movement>();
+        PlayerCollisionScript = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerCollisionAndHealth>();
         if(SecondaryDamageObject)
         {
             secondDamageScript = SecondaryDamageObject.GetComponent<DamageOrPowerUp>();
@@ -65,7 +67,7 @@ public class DamageOrPowerUp : MonoBehaviour {
             case EffectState.Damage:
                 if (!Damaged)
                 {
-                    PlayerScript.DamagePluto();
+                    PlayerCollisionScript.DamagePluto();
                     Damaged = true;
                     if (damageCollider)
                     {
@@ -99,12 +101,12 @@ public class DamageOrPowerUp : MonoBehaviour {
                 {
                     if (dashScript)
                     {
-                        bool playerDamaged = col.gameObject.GetComponent<Movement>().DamageStatus();
-                        bool plutoDashing = PlayerScript.DashStatus();
+                        bool playerDamaged = PlayerCollisionScript.DamageStatus();
+                        bool plutoDashing = PlayerMoveScript.DashStatus();
 
                         if (!playerDamaged && !plutoDashing)
                         {
-                            PlayerScript.DamagePluto();
+                            PlayerCollisionScript.DamagePluto();
                             Damaged = true;
                             if (damageCollider)
                             {
@@ -125,14 +127,14 @@ public class DamageOrPowerUp : MonoBehaviour {
                     }
                     else
                     {
-                        bool plutoDashing = PlayerScript.DashStatus();
+                        bool plutoDashing = PlayerMoveScript.DashStatus();
 
                         if (!plutoDashing)
                         {
-                            bool playerDamaged = col.gameObject.GetComponent<Movement>().DamageStatus();
+                            bool playerDamaged = PlayerCollisionScript.DamageStatus();
                             if (!playerDamaged)
                             {
-                                PlayerScript.DamagePluto();
+                                PlayerCollisionScript.DamagePluto();
                                 Damaged = true;
                                 if (damageCollider)
                                 {
@@ -161,6 +163,8 @@ public class DamageOrPowerUp : MonoBehaviour {
             {
                 if (!col.isTrigger)
                 {
+                    PlayerMoveScript.KnockbackPlayer(col.ClosestPoint(col.gameObject.transform.position));
+
                     ApplyEffect();
                 }
             }

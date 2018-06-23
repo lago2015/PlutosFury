@@ -266,7 +266,7 @@ public class NeptuneMoon : MonoBehaviour {
                 {
                     audioScript.NeptunesMoonHit(transform.position);
                 }
-                col.gameObject.GetComponent<Movement>().DamagePluto();
+                col.gameObject.GetComponent<PlayerCollisionAndHealth>().DamagePluto();
               
                 doOnce = true;
             }

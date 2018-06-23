@@ -8,7 +8,8 @@ public class PickUpSkills : MonoBehaviour {
     //Script references
     private HealthObtainedController healthController;
     private PowerUpManager PowerUpScript;
-    private Movement playerScript;
+    private PlayerCollisionAndHealth playerCollisionScript;
+    private PlayerAppearance appearanceScript;
     private Shield ShieldScript;
     private Inflation InflateScript;
     private HUDManager hudScript;
@@ -34,24 +35,27 @@ public class PickUpSkills : MonoBehaviour {
             case Skills.Star:
                 ShieldScript = playerRef.GetComponent<Shield>();
                 PowerUpScript = playerRef.GetComponent<PowerUpManager>();
-                playerScript = playerRef.GetComponent<Movement>();
+                playerCollisionScript = playerRef.GetComponent<PlayerCollisionAndHealth>();
+                appearanceScript = playerRef.GetComponent<PlayerAppearance>();
                 break;
             case Skills.Inflation:
                 InflateScript = playerRef.GetComponent<Inflation>();
-                playerScript = playerRef.GetComponent<Movement>();
+                playerCollisionScript = playerRef.GetComponent<PlayerCollisionAndHealth>();
+
                 break;
             case Skills.Health:
-                playerScript = playerRef.GetComponent<Movement>();
+                playerCollisionScript = playerRef.GetComponent<PlayerCollisionAndHealth>();
                 healthController = GetComponent<HealthObtainedController>();
-
+                appearanceScript = playerRef.GetComponent<PlayerAppearance>();
                 break;
             case Skills.Shockwave:
                 PowerUpScript = playerRef.GetComponent<PowerUpManager>();
-                playerScript = playerRef.GetComponent<Movement>();
+                //add new shockwave script here
                 break;
             case Skills.LifeUp:
-                playerScript = playerRef.GetComponent<Movement>();
+                playerCollisionScript = playerRef.GetComponent<PlayerCollisionAndHealth>();
                 healthController = GetComponent<HealthObtainedController>();
+                appearanceScript = playerRef.GetComponent<PlayerAppearance>();
 
                 break;
         }
@@ -67,21 +71,21 @@ public class PickUpSkills : MonoBehaviour {
 
     public void PickUpObtained()
     {
-        if (playerScript)
+        if (appearanceScript)
         {
-            playerScript.BusterChange(Movement.BusterStates.Pickup);
+            appearanceScript.BusterChange(PlayerAppearance.BusterStates.Pickup);
         }
 
         switch (curSkill)
         {
             case Skills.Star:
 
-                if (ShieldScript && playerScript && !pickupObtained && hudScript && PowerUpScript)
+                if (ShieldScript && playerCollisionScript && !pickupObtained && hudScript && PowerUpScript)
                 {
                     PowerUpScript.DashPluto(transform.position);
                     hudScript.isShieldActive(true);
                     pickupObtained = true;
-                    playerScript.IndicatePickup();
+                    //playerScript.IndicatePickup();
                     ShieldScript.ShieldPluto();
                     Destroy(gameObject);
                 }
@@ -97,13 +101,13 @@ public class PickUpSkills : MonoBehaviour {
                 }
                 break;
             case Skills.Health:
-                if (playerScript && !pickupObtained)
+                if (playerCollisionScript && !pickupObtained)
                 {
                     pickupObtained = true;
-                    playerScript.HealthPickup(transform.position);
+                    playerCollisionScript.HealthPickup(transform.position);
                     if(healthController)
                     {
-                        healthController.CreateFloatingHealth(playerScript.transform.position);
+                        healthController.CreateFloatingHealth(playerCollisionScript.transform.position);
                     }
                     if(audioScript)
                     {
@@ -123,13 +127,13 @@ public class PickUpSkills : MonoBehaviour {
                 }
                 break;
             case Skills.LifeUp:
-                if (playerScript && !pickupObtained)
+                if (playerCollisionScript && !pickupObtained)
                 {
                     pickupObtained = true;
-                    playerScript.LifeUp(transform.position);
+                    playerCollisionScript.LifeUp(transform.position);
                     if (healthController)
                     {
-                        healthController.CreateFloatingHealth(playerScript.transform.position);
+                        healthController.CreateFloatingHealth(playerCollisionScript.transform.position);
                     }
                     if(audioScript)
                     {

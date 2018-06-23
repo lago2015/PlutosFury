@@ -16,11 +16,12 @@ public class CollisionDamage : MonoBehaviour {
     {
         if (col.gameObject.tag == "Player")
         {
-            Movement moveScript = col.gameObject.GetComponent<Movement>();
-            bool isDamaged = moveScript.isDamaged;
-            if(!isDamaged)
+            PlayerCollisionAndHealth CollisionScript = col.gameObject.GetComponent<PlayerCollisionAndHealth>();
+            bool isDamaged = CollisionScript.isDamaged;
+            if (!isDamaged)
             {
-                moveScript.DamagePluto();
+                CollisionScript.DamagePluto();
+                col.gameObject.GetComponent<Movement>().KnockbackPlayer(col.ClosestPoint(col.gameObject.transform.position));
                 if (audioScript)
                 {
                     audioScript.SpikeHitPluto(transform.position);
@@ -29,6 +30,6 @@ public class CollisionDamage : MonoBehaviour {
         }
     }
 
-    
+
 
 }

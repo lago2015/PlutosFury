@@ -79,7 +79,7 @@ public class DetectThenExplode : MonoBehaviour {
                     damageScript.didDamage();
                 }
 
-                col.gameObject.GetComponent<Movement>().DamagePluto();
+                col.gameObject.GetComponent<PlayerCollisionAndHealth>().DamagePluto();
                 //Start Explosion
                 TriggeredExplosion();
             }

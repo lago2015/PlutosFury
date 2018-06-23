@@ -7,20 +7,23 @@ public class OnOffLaserWallCollider : MonoBehaviour {
     public bool Damaged;
     public float DamageCooldown;
     private SpriteRenderer laserSprite;
-    Movement PlayerScript;
+    private Movement PlayerMoveScript;
+    private PlayerCollisionAndHealth PlayerCollisionScript;
     private BoxCollider DamageCollider;
     public bool didDamage() { return Damaged = true; }
     public float laserTimeout;
     // Use this for initialization
     void Awake ()
     {
-        PlayerScript = GameObject.FindGameObjectWithTag("Player").GetComponent<Movement>();
+
         DamageCollider = GetComponent<BoxCollider>();
         laserSprite = GetComponent<SpriteRenderer>();
     }
 
     private void Start()
     {
+        PlayerMoveScript = GameObject.FindGameObjectWithTag("Player").GetComponent<Movement>();
+        PlayerCollisionScript = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerCollisionAndHealth>();
         StartCoroutine(TurnOnLaser());
     }
 
@@ -44,7 +47,7 @@ public class OnOffLaserWallCollider : MonoBehaviour {
     {
         if (!Damaged)
         {
-            PlayerScript.DamagePluto();
+            PlayerCollisionScript.DamagePluto();
             Damaged = true;
             
             if (DamageCollider)
@@ -59,14 +62,14 @@ public class OnOffLaserWallCollider : MonoBehaviour {
         string curString = col.gameObject.tag;
         if (curString == "Player")
         {
-            bool plutoDashing = PlayerScript.DashStatus();
+            bool plutoDashing = PlayerMoveScript.DashStatus();
 
             if (!plutoDashing)
             {
-                bool playerDamaged = col.gameObject.GetComponent<Movement>().DamageStatus();
+                bool playerDamaged =PlayerCollisionScript.DamageStatus();
                 if (!playerDamaged)
                 {
-                    PlayerScript.DamagePluto();
+                    PlayerCollisionScript.DamagePluto();
                     Damaged = true;
 
                     if (DamageCollider)

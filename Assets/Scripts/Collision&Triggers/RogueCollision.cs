@@ -17,7 +17,8 @@ public class RogueCollision : MonoBehaviour {
     private DamageOrPowerUp damageScript;
     private FleeOrPursue rogueMoveScript;
     private Collider myCollider;
-    private Movement playerScript;
+    private Movement playerMoveScript;
+    private PlayerCollisionAndHealth playerCollisionScript;
     private Rigidbody myBody;
     private AudioController audioScript;
     // Use this for initialization
@@ -50,8 +51,8 @@ public class RogueCollision : MonoBehaviour {
 
     private void Start()
     {
-        playerScript = GameObject.FindGameObjectWithTag("Player").GetComponent<Movement>();
-
+        playerMoveScript = GameObject.FindGameObjectWithTag("Player").GetComponent<Movement>();
+        playerCollisionScript= GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerCollisionAndHealth>();
     }
 
     //Apply damage to rogue and check if 
@@ -121,10 +122,10 @@ public class RogueCollision : MonoBehaviour {
             bool RogueDashing = rogueMoveScript.isDashing();
             if (!RogueDashing)
             {
-                bool isDashing = playerScript.DashStatus();
-                if(!isDashing&& playerScript)
+                bool isDashing = playerMoveScript.DashStatus();
+                if(!isDashing&& playerMoveScript)
                 {
-                    playerScript.DamagePluto();
+                    playerCollisionScript.DamagePluto();
                 }
                 else
                 {
@@ -138,9 +139,9 @@ public class RogueCollision : MonoBehaviour {
             }
             else
             {
-                if(playerScript)
+                if(playerMoveScript)
                 {
-                    playerScript.DamagePluto();
+                    playerCollisionScript.DamagePluto();
 
                 }
             }
@@ -191,6 +192,14 @@ public class RogueCollision : MonoBehaviour {
             {
                 RogueDamage(" ");
                 col.gameObject.GetComponent<WallHealth>().IncrementDamage();
+            }
+        }
+        else if(curTag=="Wall")
+        {
+            rogueMoveScript.PlayerNotNear();
+            if (myBody)
+            {
+                myBody.AddForce(col.contacts[0].normal * wallBump, ForceMode.VelocityChange);
             }
         }
 

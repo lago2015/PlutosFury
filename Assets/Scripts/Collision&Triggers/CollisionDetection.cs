@@ -75,7 +75,7 @@ public class CollisionDetection : MonoBehaviour {
             }     
             else
             {
-                c.gameObject.GetComponent<Movement>().DamagePluto();
+                c.gameObject.GetComponent<PlayerCollisionAndHealth>().DamagePluto();
                 StartCoroutine(PlayerHit());
             }
             doOnce = false;

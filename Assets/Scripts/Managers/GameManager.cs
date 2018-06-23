@@ -28,7 +28,8 @@ public class GameManager : MonoBehaviour
     public float GameOverDelay = 5f;
     public bool levelWallActive;
     private bool willPlayAd;
-    Movement playerScript;
+    Movement playerMoveScript;
+    PlayerCollisionAndHealth playerCollisionScript;
     TextureSwap modelSwitch;
     GameObject audioObject;
     AudioController audioScript;
@@ -70,6 +71,8 @@ public class GameManager : MonoBehaviour
         {
 
             pluto = Instantiate(charManager.CurrentCharacter(0), spawnPoint.transform.position, Quaternion.identity);
+            playerMoveScript = pluto.GetComponent<Movement>();
+            playerCollisionScript = pluto.GetComponent<PlayerCollisionAndHealth>();
         }
 
 
@@ -114,14 +117,14 @@ public class GameManager : MonoBehaviour
     public void GameEnded(bool isPlayerDead)
     {
         
-        if(playerScript && ScoreManager)
+        if(playerMoveScript && ScoreManager)
         {
             //stop player movement
-            playerScript.DisableMovement(isPlayerDead);
+            playerMoveScript.DisableMovement(isPlayerDead);
             if(!isPlayerDead)
             {
                 //save health for next scene
-                ScoreManager.HealthChange(playerScript.curHealth);
+                ScoreManager.HealthChange(playerCollisionScript.curHealth);
                 StartYouWin();
             }
             else
@@ -168,10 +171,10 @@ public class GameManager : MonoBehaviour
     //if timer reaches 0 then start game over
     public void CountDownFinished()
     {
-        if(playerScript)
+        if(playerMoveScript)
         {
-            playerScript.curHealth = 0;
-            playerScript.DamagePluto();
+            playerCollisionScript.curHealth = 0;
+            playerCollisionScript.DamagePluto();
             StartAdWithMusic();
         }
     }

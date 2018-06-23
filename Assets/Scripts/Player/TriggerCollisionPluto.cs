@@ -6,7 +6,8 @@ public class TriggerCollisionPluto : MonoBehaviour {
 
     [HideInInspector]
     public GameObject parentOfPlayer;
-    private Movement moveScript;
+    private Movement playerMoveScript;
+    private PlayerCollisionAndHealth playerCollisionScript;
     private Rigidbody myBody;
     private float obstacleBump;
     private bool isDead;
@@ -27,14 +28,20 @@ public class TriggerCollisionPluto : MonoBehaviour {
         audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
 
     }
-    
+
+    private void Start()
+    {
+        playerMoveScript = GameObject.FindGameObjectWithTag("Player").GetComponent<Movement>();
+        playerCollisionScript = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerCollisionAndHealth>();
+    }
+
     void OnTriggerEnter(Collider col)
     {
         string curTag = col.gameObject.tag;
         
         if (curTag == "Asteroid")
         {
-            isDead = moveScript.isDead;
+            isDead = playerCollisionScript.isDead;
             //check if player is dead
             if (!isDead)
             {
@@ -45,7 +52,7 @@ public class TriggerCollisionPluto : MonoBehaviour {
                 }
             }
             //return orb to pool
-            moveScript.ReturnAsteroid(col.gameObject);
+            playerMoveScript.ReturnAsteroid(col.gameObject);
             if (ScoreManager)
             {
                 ScoreManager.OrbObtained();

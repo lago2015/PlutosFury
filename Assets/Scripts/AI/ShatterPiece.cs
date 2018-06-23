@@ -9,10 +9,10 @@ public class ShatterPiece : MonoBehaviour
     {
         if(collision.tag == "Player")
         {
-            Movement playerMovement = collision.GetComponent<Movement>();
-            if(playerMovement)
+            PlayerCollisionAndHealth playerCollision = collision.GetComponent<PlayerCollisionAndHealth>();
+            if(playerCollision)
             {
-                playerMovement.DamagePluto();
+                playerCollision.DamagePluto();
             }
         }
     }
