@@ -3,13 +3,7 @@ using System.Collections;
 
 public class ShatterCore : MonoBehaviour
 {
-    private WinScoreManager scoreScript;
 
-	// Use this for initialization
-	void Start ()
-    {
-        scoreScript = GameObject.FindGameObjectWithTag("ScoreManager").GetComponent<WinScoreManager>();
-	}
 
     private void OnTriggerEnter(Collider collision)
     {
@@ -23,18 +17,12 @@ public class ShatterCore : MonoBehaviour
                     transform.parent.GetComponent<Shatter>().OnDeath();
                 }
             }
-            if(scoreScript)
-            {
-                scoreScript.ScoreObtained(WinScoreManager.ScoreList.Shatter, transform.position);
-            }
+            
         }
 
         if(collision.tag == "MoonBall")
         {
-            if(scoreScript)
-            {
-                scoreScript.ScoreObtained(WinScoreManager.ScoreList.MoonballShatter, transform.position);
-            }
+            
             transform.parent.GetComponent<Shatter>().OnDeath();
             MoonBall ballScript = collision.gameObject.GetComponent<MoonBall>();
             ballScript.OnExplosion();

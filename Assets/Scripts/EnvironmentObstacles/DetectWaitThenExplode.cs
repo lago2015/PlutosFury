@@ -11,7 +11,6 @@ public class DetectWaitThenExplode : MonoBehaviour {
     private DamageOrPowerUp damageScript;
     private HomingProjectile pursuitScript;
     private AudioController audioScript;
-    private WinScoreManager scoreScript;
     private Movement playerScript;
     private bool doOnce;
     public float WaitTimeToExplode = 1f;
@@ -21,7 +20,6 @@ public class DetectWaitThenExplode : MonoBehaviour {
     void Awake()
     {
         //getter for score script
-        scoreScript = GameObject.FindGameObjectWithTag("ScoreManager").GetComponent<WinScoreManager>();
         GameObject audioObject = GameObject.FindGameObjectWithTag("AudioController");
         if (audioObject)
         {
@@ -94,10 +92,7 @@ public class DetectWaitThenExplode : MonoBehaviour {
         else if(CurTag=="MoonBall")
         {
             TriggerExplosionInstantly();
-            if(scoreScript)
-            {
-                scoreScript.ScoreObtained(WinScoreManager.ScoreList.MoonballLandmine,transform.position);
-            }
+            
             spawnPoint = col.transform.position;
             col.gameObject.GetComponent<MoonBall>().OnExplosionAtPosition(spawnPoint);
         }

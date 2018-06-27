@@ -64,7 +64,6 @@ public class Movement : MonoBehaviour
     private AsteroidSpawner spawnScript;
     private GameManager gameManager;
     private ScoreManager ScoreManager;
-    private WinScoreManager winScoreManager;
     private ExperienceManager ExperienceMan;
     private CameraShake CamShake;
     private FloatingJoystick joystickscript;
@@ -184,12 +183,7 @@ public class Movement : MonoBehaviour
                 GameObject newGameManager = Instantiate(Resources.Load("GameManager", typeof(GameObject))) as GameObject;
             }
         }
-        GameObject ScoreObject = GameObject.FindGameObjectWithTag("ScoreManager");
-        if (ScoreObject)
-        {
-            ScoreManager = ScoreObject.GetComponent<ScoreManager>();
-            winScoreManager = ScoreObject.GetComponent<WinScoreManager>();
-        }
+        
         
         
     }

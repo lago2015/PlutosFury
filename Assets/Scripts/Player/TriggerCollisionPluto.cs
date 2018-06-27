@@ -14,17 +14,9 @@ public class TriggerCollisionPluto : MonoBehaviour {
     private bool ShouldDash;
     private AudioController audioScript;
     private ScoreManager ScoreManager;
-    private WinScoreManager WinScoreManager;
     public bool DashChange(bool curDash) { return ShouldDash = curDash; }
     private void Awake()
     {
-        
-        GameObject ScoreObject = GameObject.FindGameObjectWithTag("ScoreManager");
-        if (ScoreObject)
-        {
-            ScoreManager = ScoreObject.GetComponent<ScoreManager>();
-            WinScoreManager = ScoreObject.GetComponent<WinScoreManager>();
-        }
         audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
 
     }
@@ -57,10 +49,7 @@ public class TriggerCollisionPluto : MonoBehaviour {
             {
                 ScoreManager.OrbObtained();
             }
-            if (WinScoreManager)
-            {
-                WinScoreManager.ScoreObtained(WinScoreManager.ScoreList.Orb, col.transform.position);
-            }
+            
         }
     }
     private void OnTriggerStay(Collider other)
@@ -71,12 +60,6 @@ public class TriggerCollisionPluto : MonoBehaviour {
             if (ShouldDash)
             {
                 other.gameObject.GetComponent<BigAsteroid>().AsteroidHit(1);
-
-                if (WinScoreManager)
-                {
-                    //update score
-                    WinScoreManager.ScoreObtained(WinScoreManager.ScoreList.BigOrb, other.transform.position);
-                }
             }
         }
     }

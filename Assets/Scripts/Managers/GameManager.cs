@@ -250,8 +250,7 @@ public class GameManager : MonoBehaviour
         {
             curScore = ScoreManager.ReturnScore();
             curHighScore = ScoreManager.ReturnHighScore();
-            curTotalScore = ScoreManager.ReturnTotalScore();
-            curTotalHighScore = ScoreManager.ReturnTotalHighScore();
+            
             
             //Save score
             ScoreManager.SaveScore(false);

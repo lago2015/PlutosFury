@@ -8,10 +8,8 @@ public class DamageOnCollision : MonoBehaviour {
     private PlayerCollisionAndHealth playerCollisionScript;
     private bool isDamaged;
     private float DamageCooldown = 0.2f;
-    private WinScoreManager scoreScript;
     void Awake()
     {
-        scoreScript = GameObject.FindGameObjectWithTag("ScoreManager").GetComponent<WinScoreManager>();
         if(explosionObject)
         {
             explosionObject.SetActive(false);
@@ -42,10 +40,7 @@ public class DamageOnCollision : MonoBehaviour {
         }
         else if(curString=="MoonBall")
         {
-            if (scoreScript)
-            {
-                scoreScript.ScoreObtained(WinScoreManager.ScoreList.MoonballBlockOcker, transform.position);
-            }
+            
             if (explosionObject)
             {
                 GetComponent<SpriteRenderer>().enabled = false;

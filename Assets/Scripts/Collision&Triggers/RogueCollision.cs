@@ -13,7 +13,6 @@ public class RogueCollision : MonoBehaviour {
     public GameObject Model2;
     public GameObject Model3;
 
-    private WinScoreManager scoringScript;
     private DamageOrPowerUp damageScript;
     private FleeOrPursue rogueMoveScript;
     private Collider myCollider;
@@ -24,7 +23,6 @@ public class RogueCollision : MonoBehaviour {
     // Use this for initialization
     void Awake ()
     {
-        scoringScript = GameObject.FindGameObjectWithTag("ScoreManager").GetComponent<WinScoreManager>();
         audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
         myCollider = GetComponent<Collider>();
         myBody = GetComponent<Rigidbody>();
@@ -66,22 +64,7 @@ public class RogueCollision : MonoBehaviour {
                 audioScript.RogueDeath(transform.position);
             }
             myCollider.enabled = false;
-            //check what object destroyed rogue and apply score
-            if(CurName.Contains("Player"))
-            {
-                
-                if (scoringScript)
-                {
-                    scoringScript.ScoreObtained(WinScoreManager.ScoreList.Rogue, transform.position);
-                }
-            }
-            else if(CurName.Contains("MoonBall"))
-            {
-                if (scoringScript)
-                {
-                    scoringScript.ScoreObtained(WinScoreManager.ScoreList.MoonballRogue, transform.position);
-                }
-            }
+            
             //start death sequence
             if (Explosion && Model)
             {
