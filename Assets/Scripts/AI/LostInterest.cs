@@ -12,9 +12,14 @@ public class LostInterest : MonoBehaviour {
     public bool enableScript(bool isActive) { return enabled = isActive; }
     private void Awake()
     {
-        Player = GameObject.FindGameObjectWithTag("Player");
         detectionScript = GetComponent<HomingDetection>();
         enabled = false;
+    }
+
+    private void Start()
+    {
+        Player = GameObject.FindGameObjectWithTag("Player");
+
     }
     private void FixedUpdate()
     {

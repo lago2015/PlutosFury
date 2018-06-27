@@ -20,11 +20,9 @@ public class AIHealth : MonoBehaviour {
     private Rigidbody myBody;
     private FleeOrPursue RogueScript;
     private AudioController audioScript;
-    private WinScoreManager scoringManager;
     void Awake()
     {
         audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
-        scoringManager = GameObject.FindGameObjectWithTag("ScoreManager").GetComponent<WinScoreManager> ();
         myCollider = GetComponent<Collider>();
         myBody = GetComponent<Rigidbody>();
         if(Explosion&&Model)
@@ -45,57 +43,16 @@ public class AIHealth : MonoBehaviour {
         EnemyHealth--;
         if(EnemyHealth<=0)
         {
-            if (scoringManager)
-            {
-                if (CurName.Contains("Player"))
-                {
-                    switch(currentEnemy)
-                    {
-                        case EnemyOptions.Spike:
-                            scoringManager.ScoreObtained(WinScoreManager.ScoreList.Spike, transform.position);
-                            break;
-                        case EnemyOptions.TurretSingle:
-                            scoringManager.ScoreObtained(WinScoreManager.ScoreList.TurretSingle, transform.position);
-                            break;
-                        case EnemyOptions.TurretScatter:
-                            scoringManager.ScoreObtained(WinScoreManager.ScoreList.TurretScatter, transform.position);
-                            break;
-                        case EnemyOptions.Shatter:
-                            scoringManager.ScoreObtained(WinScoreManager.ScoreList.Shatter, transform.position);
-                            if(audioScript)
-                            {
-                                audioScript.ShatterExplosion(transform.position);
-                            }
-                            break;
-                    }
-                }
-                else if(CurName.Contains("MoonBall"))
-                {
-                    switch (currentEnemy)
-                    {
-                        case EnemyOptions.Spike:
-                            scoringManager.ScoreObtained(WinScoreManager.ScoreList.MoonballSpike, transform.position);
-                            break;
-                        case EnemyOptions.TurretSingle:
-                            scoringManager.ScoreObtained(WinScoreManager.ScoreList.MoonballTurretSingle, transform.position);
-                            break;
-                        case EnemyOptions.TurretScatter:
-                            scoringManager.ScoreObtained(WinScoreManager.ScoreList.MoonballTurretScatter, transform.position);
-                            break;
-                        case EnemyOptions.Shatter:
-                            scoringManager.ScoreObtained(WinScoreManager.ScoreList.MoonballShatter, transform.position);
-                            if (audioScript)
-                            {
-                                audioScript.ShatterExplosion(transform.position);
-                            }
-                            break;
-                    }
-                }
-            }
             if (Explosion && Model)
             {
-              // myCollider.enabled = false;
-
+                
+                if(gameObject.name=="Shatter")
+                {
+                    if (audioScript)
+                    {
+                        audioScript.ShatterExplosion(transform.position);
+                    }
+                }
                 Explosion.SetActive(true);
                 Explosion.transform.parent = null;
 

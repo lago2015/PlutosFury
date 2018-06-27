@@ -17,7 +17,7 @@ public class CameraStop : MonoBehaviour {
     public bool cameraPanning;
 	public float dampTime = 0.15f;
 	private Vector3 velocity = Vector3.zero;
-	GameObject target;
+	public GameObject target;
     //Rigidbody targetBody;
     //private float targetMass;
     //private float cachedMass;
@@ -44,7 +44,6 @@ public class CameraStop : MonoBehaviour {
 	// Use this for initialization
 	void Awake () 
 	{
-        target = GameObject.FindGameObjectWithTag("Player");
         spawnScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<AsteroidSpawner>();
         myCamera = GetComponent<Camera>();
         CameraOffset = transform.position.z;
@@ -66,9 +65,14 @@ public class CameraStop : MonoBehaviour {
         //targetBody = target.GetComponent<Rigidbody> ();
         //cachedMass = targetBody.mass;
 	}
-	
- 
-	void FixedUpdate () 
+
+    private void Start()
+    {
+        target = GameObject.FindGameObjectWithTag("Player");
+
+    }
+
+    void FixedUpdate () 
 	{
         if (target)
         {

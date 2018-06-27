@@ -31,22 +31,12 @@ public class LoseScreen : MonoBehaviour {
             if(scoreText!=null)
             {
                 int curScore = scoreScript.ReturnScore();
-                scoreText.text = ("Level Score: ") + curScore;
+                scoreText.text = ("Orbs Obtained in Level: ") + curScore;
             }
             if(highScoreText!=null)
             {
                 int curHighScore = scoreScript.ReturnHighScore();
-                highScoreText.text = ("Level High Score: ") + curHighScore;
-            }
-            if(totalScoreText!=null)
-            {
-                int curTotalScore = scoreScript.ReturnTotalScore();
-                totalScoreText.text = ("Overall Score: " + curTotalScore);
-            }
-            if(totalHighScoreText!=null)
-            {
-                int curTotalHighScore = scoreScript.ReturnTotalHighScore();
-                totalHighScoreText.text = ("Overall High Score: " + curTotalHighScore);
+                highScoreText.text = ("Total Orbs Obtained: ") + curHighScore;
             }
         }
     }
@@ -70,21 +60,7 @@ public class LoseScreen : MonoBehaviour {
         MainMenu.image.canvasRenderer.SetAlpha(0.0f);
     }
 
-	// Update is called once per frame
-	void Update ()
-    {
-        /*
-        if (gameOverSprite.transform.position.y < 800)
-        {
-            gameOverSprite.transform.Translate(Vector3.up * 550 * Time.deltaTime, Space.World);
-        }
-        else
-        {
-            gameOverSprite.transform.position.Set(0, 800, 0);
-        }
-        */
-	}
-
+	
     void FadeIn()
     {
         fadeOverlay.CrossFadeAlpha(0, fadeDuration, true);

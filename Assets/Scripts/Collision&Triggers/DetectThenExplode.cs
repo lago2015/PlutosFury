@@ -4,7 +4,6 @@ using System.Collections;
 public class DetectThenExplode : MonoBehaviour {
 
     //Script is meant for Stationary Landmine and Rocket
-    private WinScoreManager scoreScript;
     public GameObject regularState;
     public GameObject explosionState;
     private SphereCollider TriggerCollider;
@@ -17,7 +16,6 @@ public class DetectThenExplode : MonoBehaviour {
     public float travelTimeRocket = 3;
     void Awake()
     {
-        scoreScript = GameObject.FindGameObjectWithTag("ScoreManager").GetComponent<WinScoreManager>();
         //model gameobject
         if (regularState)
         {
@@ -133,10 +131,7 @@ public class DetectThenExplode : MonoBehaviour {
         }
         else if(CurTag == "MoonBall")
         {
-            if(scoreScript)
-            {
-                scoreScript.ScoreObtained(WinScoreManager.ScoreList.MoonballLandmine,col.transform.position);
-            }
+            
             col.gameObject.GetComponent<MoonBall>().OnExplosionAtPosition(col.transform.position);
             TriggeredExplosion();
         }

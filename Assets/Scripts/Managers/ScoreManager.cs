@@ -5,35 +5,30 @@ using System.Collections;
 public class ScoreManager : MonoBehaviour {
 
     private float timeRemaining;
-    public int highScore;   //used for high score of level
-    public int score;       //current score in level
-    public int totalHighScore;      //high score for overall levels
-    public int totalScore;          //current score for overall levels
+    public int OrbsObtainedTotal;   //used for high score of level
+    public int OrbsObtainedInLevel;       //current score in level
     private int playerLives;
     private int Level;
     public int exp;
     public int playerHealth;
     private WinScreen winScript;
     private HUDManager HUDScript;
-    private WinScoreManager scoreContainerScript;
     private int orbObtained;
     private int healthUp=100;
     public int CurrentHealth() { return playerHealth; }
+
 	// Use this for initialization
 	void Awake ()
     {
-        scoreContainerScript = GetComponent<WinScoreManager>();
         GameObject hudObject = GameObject.FindGameObjectWithTag("HUDManager");
         if(hudObject)
         {
             HUDScript=hudObject.GetComponent<HUDManager>();
         }
         //setting high score
-        highScore= PlayerPrefs.GetInt("scorePref");
+        OrbsObtainedTotal= PlayerPrefs.GetInt("scorePref");
         playerHealth = PlayerPrefs.GetInt("healthPref");
         playerLives = PlayerPrefs.GetInt("playerLives");
-        totalHighScore = PlayerPrefs.GetInt("totalHighScore");
-        totalScore = PlayerPrefs.GetInt("totalScore");
     }
     
 
@@ -61,18 +56,11 @@ public class ScoreManager : MonoBehaviour {
     //run this function during game over
     public void SaveScore(bool isGameOver)
     {
-        if(score>highScore)
+        if(OrbsObtainedInLevel>OrbsObtainedTotal)
         {
-            PlayerPrefs.SetInt("scorePref", score);
+            PlayerPrefs.SetInt("scorePref", OrbsObtainedInLevel);
         }
-        if(totalScore>totalHighScore)
-        {
-            PlayerPrefs.SetInt("totalHighScore", totalScore);
-        }
-        else
-        {
-            totalHighScore = PlayerPrefs.GetInt("totalHighScore");
-        }
+        
         if(isGameOver)
         {
             PlayerPrefs.SetInt("totalScore", 0);
@@ -129,43 +117,28 @@ public class ScoreManager : MonoBehaviour {
     //to increase score
     public int IncreaseScore(int value)
     {
-        score += value;
-        totalScore = PlayerPrefs.GetInt("totalScore");
-        totalScore += value;
-        PlayerPrefs.SetInt("totalScore", totalScore);
+        OrbsObtainedInLevel += value;
+        
         if (HUDScript)
         {
-            HUDScript.UpdateScore(score);
+            HUDScript.UpdateScore(OrbsObtainedInLevel);
         }
-        return score;
+        return OrbsObtainedInLevel;
     }
     public int OrbObtained()
     {
         orbObtained++;
-        if(orbObtained>=healthUp)
-        {
-            healthUp += healthUp;
-            playerLives++;
-        }
+       
 
         return orbObtained;
     }
     public int ReturnHighScore()
     {
-        return highScore;
+        return OrbsObtainedTotal;
     }   
     public int ReturnScore()
     {
-        return score;
+        return OrbsObtainedInLevel;
     }
-
-    public int ReturnTotalScore()
-    {
-        return totalScore;
-    }
-
-    public int ReturnTotalHighScore()
-    {
-        return totalHighScore;
-    }
+    
 }

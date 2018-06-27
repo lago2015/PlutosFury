@@ -17,15 +17,10 @@ public class AsteroidCollector : MonoBehaviour {
     private Rigidbody CurBody;
     private Vector3 forceOnMe;
     private AsteroidSpawner spawnScript;
-    private WinScoreManager winScoreManager;
     private double strength;
     void Awake()
     {
-        GameObject ScoreObject = GameObject.FindGameObjectWithTag("ScoreManager");
-        if (ScoreObject)
-        {
-            winScoreManager = ScoreObject.GetComponent<WinScoreManager>();
-        }
+        
         spawnScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<AsteroidSpawner>();    
         player = GameObject.FindGameObjectWithTag("Player");
     }
@@ -62,10 +57,7 @@ public class AsteroidCollector : MonoBehaviour {
                 {
                     spawnScript.ReturnPooledAsteroid(curAsteroid);
                 }
-                if(winScoreManager)
-                {
-                    winScoreManager.ScoreObtained(WinScoreManager.ScoreList.Orb, transform.position);
-                }
+                
             }
             else
             {

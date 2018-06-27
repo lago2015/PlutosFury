@@ -22,7 +22,7 @@ public class HomingProjectile : MonoBehaviour {
 
     void Awake()
     {
-        Player = GameObject.FindGameObjectWithTag("Player");
+        
         enabled = false;
         explodeScript = GetComponent<DetectWaitThenExplode>();
         TriggerCollider = GetComponent<SphereCollider>();
@@ -32,7 +32,10 @@ public class HomingProjectile : MonoBehaviour {
             startRadius = TriggerCollider.radius;
         }
     }
-
+    private void Start()
+    {
+        Player = GameObject.FindGameObjectWithTag("Player");
+    }
     //move towards the plaey
     void FixedUpdate()
     {

@@ -29,7 +29,6 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
     private AudioController audioScript;
     private ScoreManager ScoreManager;
     private HUDManager hudScript;
-    private WinScoreManager winScoreManager;
     private LerpToStart lerpScript;     //for boss level
     private PlayerAppearance appearanceScript;
     //knockback values
@@ -71,13 +70,7 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
         moonball2.SetActive(false);
         moonBallHitEffect.SetActive(false);
         hudScript = GameObject.FindGameObjectWithTag("HUDManager").GetComponent<HUDManager>();
-        //getters for script references
-        GameObject ScoreObject = GameObject.FindGameObjectWithTag("ScoreManager");
-        if (ScoreObject)
-        {
-            ScoreManager = ScoreObject.GetComponent<ScoreManager>();
-            winScoreManager = ScoreObject.GetComponent<WinScoreManager>();
-        }
+        //Script reference
         lerpScript = GetComponent<LerpToStart>();   //for boss level
         appearanceScript = GetComponent<PlayerAppearance>();
 
@@ -170,14 +163,7 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
                 ScoreManager.HealthChange(curHealth);
             }
         }
-        if (winScoreManager && curHealth == 2)
-        {
-            winScoreManager.ScoreObtained(WinScoreManager.ScoreList.MaxHealthBonus, curLocation);
-        }
-        else if (winScoreManager)
-        {
-            winScoreManager.ScoreObtained(WinScoreManager.ScoreList.Health, curLocation);
-        }
+       
     }
     public void LifeUp(Vector3 curLocation)
     {
@@ -185,10 +171,7 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
         {
             ScoreManager.IncrementLifes();
         }
-        if (winScoreManager)
-        {
-            winScoreManager.ScoreObtained(WinScoreManager.ScoreList.Life, curLocation);
-        }
+        
     }
 
 
@@ -304,11 +287,7 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
         {
             if (isDashing())
             {
-                if (winScoreManager)
-                {
-                    //update score
-                    winScoreManager.ScoreObtained(WinScoreManager.ScoreList.BreakableCube, c.transform.position);
-                }
+                
                 WallHealth healthScript = c.gameObject.GetComponent<WallHealth>();
                 if (healthScript)
                 {
