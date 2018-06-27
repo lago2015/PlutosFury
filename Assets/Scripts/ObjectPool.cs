@@ -28,7 +28,8 @@ public class ObjectPool : MonoBehaviour
         {
             // Create object and store in object list
             GameObject gameObj = Instantiate(prefab, transform.position, Quaternion.identity) as GameObject;
-            gameObj.transform.parent = gameObject.transform;
+            gameObj.transform.SetParent(gameObject.transform);
+            //gameObj.transform.parent = gameObject.transform;
             gameObj.SetActive(false);
             objectList.Add(gameObj);
         }
@@ -74,8 +75,8 @@ public class ObjectPool : MonoBehaviour
     {
         // Put object back into pool
         objectList.Add(gameObj);
+        gameObj.transform.SetParent(this.transform);
         gameObj.transform.position = transform.position;
-        gameObj.transform.parent = this.transform;
-
+        //gameObj.transform.parent = this.transform;
     }
 }

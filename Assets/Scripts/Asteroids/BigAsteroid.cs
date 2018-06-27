@@ -85,9 +85,7 @@ public class BigAsteroid : MonoBehaviour {
                     doOnce = true;
                 }
             }
-        }
-        
-        
+        } 
     }
 
     public void AsteroidHit(int DamageAmount)
@@ -111,5 +109,4 @@ public class BigAsteroid : MonoBehaviour {
             
         }
     }
-
 }

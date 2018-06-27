@@ -322,6 +322,15 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
         }
         else if (curTag == "MoonBall")
         {
+            // Launches Moonball accodring to contact point
+            if (isDashing())
+            {
+                Vector3 dir = c.contacts[0].point - transform.position;
+                dir = dir.normalized;
+                MoonBall ball = c.gameObject.GetComponent<MoonBall>();
+                ball.MoveBall(dir);
+            }
+
             myBody.velocity = Vector3.zero;
             myBody.AddForce(c.contacts[0].normal * OrbBump, ForceMode.VelocityChange);
             if (ShouldDash)

@@ -151,20 +151,10 @@ public class RogueCollision : MonoBehaviour {
         {
             MoonBall moonBall = col.gameObject.GetComponent<MoonBall>();
 
-            if (moonBall.getAttackMode())
-            {
-                bool RogueDashing = rogueMoveScript.isDashing();
-                if (!RogueDashing)
-                {
-                    RogueDamage(col.transform.name);
-                }
-            }
-            else
-            {
-                Vector3 forwardDirection = rogueMoveScript.transform.forward.normalized;
-                bool rogueDashing = rogueMoveScript.isDashing();
-                moonBall.rogueHit(forwardDirection, rogueDashing);
-            }
+            Vector3 forwardDirection = rogueMoveScript.transform.forward.normalized;
+            bool rogueDashing = rogueMoveScript.isDashing();
+            moonBall.rogueHit(forwardDirection, rogueDashing);
+         
             moonBall.OnExplosion();
         }
 

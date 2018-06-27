@@ -146,6 +146,16 @@ public class AIHealth : MonoBehaviour {
 
             myBody.AddForce(col.contacts[0].normal * wallBump, ForceMode.VelocityChange);
         }
+
+        if (col.gameObject.tag == "MoonBall")
+        {
+
+            MoonBall moonBall = col.gameObject.GetComponent<MoonBall>();
+
+            IncrementDamage(col.gameObject.tag);
+            moonBall.OnExplosion();
+
+        }
     }
 
     void OnTriggerEnter(Collider col)
@@ -170,12 +180,9 @@ public class AIHealth : MonoBehaviour {
 
             MoonBall moonBall = col.GetComponent<MoonBall>();
 
-            if (moonBall.getAttackMode())
-            {
-                IncrementDamage(col.tag);
-                moonBall.OnExplosion();
+            IncrementDamage(col.tag);
+            moonBall.OnExplosion();
                 
-            } 
         } 
     }
 }

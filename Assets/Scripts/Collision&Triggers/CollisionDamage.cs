@@ -28,6 +28,11 @@ public class CollisionDamage : MonoBehaviour {
                 }
             }
         }
+
+        if (col.gameObject.tag == "MoonBall")
+        {
+            col.gameObject.GetComponent<MoonBall>().KnockBack(this.gameObject);
+        }
     }
 
 
