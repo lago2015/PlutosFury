@@ -63,7 +63,7 @@ public class Movement : MonoBehaviour
     private AudioController audioScript;
     private AsteroidSpawner spawnScript;
     private GameManager gameManager;
-    private ScoreManager ScoreManager;
+    private PlayerManager ScoreManager;
     private ExperienceManager ExperienceMan;
     private CameraShake CamShake;
     private FloatingJoystick joystickscript;

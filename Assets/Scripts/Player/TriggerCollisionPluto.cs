@@ -13,7 +13,7 @@ public class TriggerCollisionPluto : MonoBehaviour {
     private bool isDead;
     private bool ShouldDash;
     private AudioController audioScript;
-    private ScoreManager ScoreManager;
+    private PlayerManager ScoreManager;
     public bool DashChange(bool curDash) { return ShouldDash = curDash; }
     private void Awake()
     {

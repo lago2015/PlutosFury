@@ -5,12 +5,11 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 public class HUDManager : MonoBehaviour {
 
-    //images for powerups for hud
-    public GameObject shieldSprite;
 
     //Script References for hud
     private CountDownStage timerScript;
-    private ScoreManager scoreScript;
+    private PlayerManager scoreScript;
+    private PlayerLives playerLivesScript;
     //Text to apply to hud
     public Text scoreText;
     public Image[] healthSprites;
@@ -18,6 +17,7 @@ public class HUDManager : MonoBehaviour {
     public Text currentLevel;
     public Text playerLives;
     //local variables for hud 
+    private int curMaxHealth;
     private int currentScore;
     private int currentPlayerLives;
     // Use this for initialization
@@ -29,12 +29,9 @@ public class HUDManager : MonoBehaviour {
         GameObject scoreObject = GameObject.FindGameObjectWithTag("ScoreManager");
         if(scoreObject)
         {
-            scoreScript = scoreObject.GetComponent<ScoreManager>();
+            scoreScript = scoreObject.GetComponent<PlayerManager>();
         }
-        //turn off all power up indicators
-        
-        isShieldActive(false);
-        
+        curMaxHealth = PlayerPrefs.GetInt("CurAddtionalHearts");
 
     }
 
@@ -52,31 +49,35 @@ public class HUDManager : MonoBehaviour {
         }
         if(playerLives&&scoreScript)
         {
-            currentPlayerLives = scoreScript.CurrentLives();
             currentScore = scoreScript.ReturnScore();
-            UpdateLives(currentPlayerLives);
             UpdateScore(currentScore);
         }
+        playerLivesScript = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerLives>();
+        currentPlayerLives = playerLivesScript.CurrentLives();
+        UpdateLives(currentPlayerLives);
+
     }
 
 
-    //Called from players movement script to update text
+    //Called from players collision and health script. ensures the health is 
+    //under the max health then calls Update Health to tell the HUD the new health
     public void UpdateHealth(int newHealth)
     {
-        if(newHealth==0)
+        if (newHealth == 0)
         {
-            for(int i=0;i<=healthSprites.Length-1;++i)
+            for (int i = 0; i <= healthSprites.Length - 1; ++i)
             {
                 healthSprites[i].enabled = false;
-                if(i==0)
+                if (i == 0)
                 {
                     healthSprites[i].enabled = true;
                 }
             }
         }
-        else if(newHealth==1)
+        
+        else if (newHealth == 1)
         {
-            for (int i = 0; i <= healthSprites.Length-1; ++i)
+            for (int i = 0; i <= healthSprites.Length - 1; ++i)
             {
                 healthSprites[i].enabled = false;
                 if (i == 1)
@@ -86,12 +87,39 @@ public class HUDManager : MonoBehaviour {
                 }
             }
         }
-        else if(newHealth==2)
+        else if (newHealth == 2)
         {
-            for (int i = 0; i <= healthSprites.Length-1; ++i)
+            for (int i = 0; i <= healthSprites.Length - 1; ++i)
+            {
+                healthSprites[i].enabled = false;
+                if (i == 2)
+                {
+                    healthSprites[0].enabled = true;
+                    healthSprites[1].enabled = true;
+                    healthSprites[2].enabled = true;
+                }
+            }
+        }
+        else if (newHealth == 3)
+        {
+            for (int i = 0; i <= healthSprites.Length - 1; ++i)
+            {
+                healthSprites[i].enabled = false;
+                if (i == 3)
+                {
+                    healthSprites[0].enabled = true;
+                    healthSprites[1].enabled = true;
+                    healthSprites[2].enabled = true;
+                    healthSprites[3].enabled = true;
+                }
+            }
+        }
+        else if (newHealth == 4)
+        {
+            for (int i = 0; i <= healthSprites.Length - 1; ++i)
             {
                 healthSprites[i].enabled = true;
-                
+
             }
         }
         else if (newHealth == -1)
@@ -107,14 +135,7 @@ public class HUDManager : MonoBehaviour {
     }
 
 
-    //called from pick up script to enable or disable image
-    public void isShieldActive(bool isActive)
-    {
-        if(shieldSprite)
-        {
-            shieldSprite.SetActive(isActive);
-        }
-    }
+    
 
 
     public void UpdateScore(int newScore)

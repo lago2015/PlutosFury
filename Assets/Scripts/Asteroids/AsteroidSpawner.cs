@@ -21,14 +21,14 @@ public class AsteroidSpawner : MonoBehaviour
     public float newMinX(float newMin) { return minX = newMin; }
     public float newMaxX(float newMax) { return maxX = newMax; }
     
-    private ScoreManager scoreScript;
+    private PlayerManager scoreScript;
 
     void Awake()
     {
         GameObject scoreObject = GameObject.FindGameObjectWithTag("ScoreManager");
         if(scoreObject)
         {
-            scoreScript = scoreObject.GetComponent<ScoreManager>();
+            scoreScript = scoreObject.GetComponent<PlayerManager>();
         }
 
 

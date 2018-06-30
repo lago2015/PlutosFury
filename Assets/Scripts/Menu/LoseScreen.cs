@@ -17,11 +17,11 @@ public class LoseScreen : MonoBehaviour {
 
     public float fadeDuration = 0.5f;
 
-    private ScoreManager scoreScript;
+    private PlayerManager scoreScript;
     private void Awake()
     {
         GameObject scoreObject = GameObject.FindGameObjectWithTag("ScoreManager");
-        scoreScript = scoreObject.GetComponent<ScoreManager>();
+        scoreScript = scoreObject.GetComponent<PlayerManager>();
     }
 
     private void OnEnable()

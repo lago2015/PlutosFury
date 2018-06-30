@@ -2,19 +2,23 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class ScoreManager : MonoBehaviour {
+public class PlayerManager : MonoBehaviour {
 
+    //This manager is meant to handle UI elements of health and tracking orbs the player has collected
+
+
+    private int curLevelIndex;
+    private int maxLevel;
     private float timeRemaining;
-    public int OrbsObtainedTotal;   //used for high score of level
-    public int OrbsObtainedInLevel;       //current score in level
-    private int playerLives;
-    private int Level;
-    public int exp;
+    public int OrbsObtainedTotal;   //used for total orbs collected
+    public int OrbsObtainedInLevel;       //total orbs collected in level
     public int playerHealth;
+    private int playerHealthIndex;
+    private int playerMaxHealth = 5;
     private WinScreen winScript;
     private HUDManager HUDScript;
     private int orbObtained;
-    private int healthUp=100;
+    
     public int CurrentHealth() { return playerHealth; }
 
 	// Use this for initialization
@@ -26,21 +30,32 @@ public class ScoreManager : MonoBehaviour {
             HUDScript=hudObject.GetComponent<HUDManager>();
         }
         //setting high score
+        curLevelIndex = PlayerPrefs.GetInt("playerLevel");
         OrbsObtainedTotal= PlayerPrefs.GetInt("scorePref");
         playerHealth = PlayerPrefs.GetInt("healthPref");
-        playerLives = PlayerPrefs.GetInt("playerLives");
     }
     
+    //this function is just to save the level up so for reload we know what level the player is on
+    public void LevelUp()
+    {
+        if(curLevelIndex<maxLevel)
+        {
+            curLevelIndex++;
+            PlayerPrefs.SetInt("playerLevel", curLevelIndex);
+        }
+    }
 
-
+    public void SaveHealth()
+    {
+        if (playerHealth > 0)
+        {
+            PlayerPrefs.SetInt("healthPref", playerHealth);
+        }
+    }
 
     public float SetTimeRemaining(float newTime)
     {
         return timeRemaining = newTime;
-    }
-    public int IncrementCompletedLevel()
-    {
-        return Level++;
     }
 
     public void HealthChange(int newHealth)
@@ -66,49 +81,6 @@ public class ScoreManager : MonoBehaviour {
             PlayerPrefs.SetInt("totalScore", 0);
         }
     }
-
-    public void SaveHealth()
-    {
-        if(playerHealth>0)
-        {
-            PlayerPrefs.SetInt("healthPref", playerHealth);
-        }
-        if(playerLives>0)
-        {
-            PlayerPrefs.SetInt("playerLives", playerLives);
-        }
-    }
-
-    public void ResetLives()
-    {
-        PlayerPrefs.SetInt("playerLives", 0);
-    }
-
-    public int CurrentLives()
-    {
-        return playerLives;
-    }
-
-    public void DecrementLives()
-    {
-        playerLives--;
-        PlayerPrefs.SetInt("playerLives", playerLives);
-        if (HUDScript)
-        {
-            HUDScript.UpdateLives(playerLives);
-        }
-    }
-
-    public void IncrementLifes()
-    {
-        playerLives++;
-        PlayerPrefs.SetInt("playerLives", playerLives);
-        if(HUDScript)
-        {
-            HUDScript.UpdateLives(playerLives);
-        }
-    }
-
     public void DefaultHealth()
     {
         PlayerPrefs.SetInt("healthPref", 0);

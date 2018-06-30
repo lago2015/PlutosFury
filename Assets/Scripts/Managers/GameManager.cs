@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour
     public bool levelWallActive;
     private bool willPlayAd;
     Movement playerMoveScript;
+    PlayerLives playerLivesScript;
     PlayerCollisionAndHealth playerCollisionScript;
     GameObject audioObject;
     AudioController audioScript;
@@ -36,7 +37,7 @@ public class GameManager : MonoBehaviour
     private float delayMusic;
     AdManager AdManager;
     private GameObject scoreObject;
-    ScoreManager ScoreManager;
+    PlayerManager ScoreManager;
     private GameObject startCamTrigger;
     private GameObject levelWall;
     private GameObject CanvasManager;
@@ -71,6 +72,7 @@ public class GameManager : MonoBehaviour
             pluto = Instantiate(charManager.CurrentCharacter(0), spawnPoint.transform.position, Quaternion.identity);
             playerMoveScript = pluto.GetComponent<Movement>();
             playerCollisionScript = pluto.GetComponent<PlayerCollisionAndHealth>();
+            playerLivesScript = pluto.GetComponent<PlayerLives>();
         }
 
 
@@ -85,7 +87,7 @@ public class GameManager : MonoBehaviour
         if(scoreObject)
         {
             //getter Score Manager
-            ScoreManager = scoreObject.GetComponent<ScoreManager>();
+            ScoreManager = scoreObject.GetComponent<PlayerManager>();
         }
         //Getter for Ad Manager
         AdManager = GetComponent<AdManager>();
@@ -188,11 +190,11 @@ public class GameManager : MonoBehaviour
 
         yield return new WaitForSeconds(GameOverDelay);
 
-        int playerLives = ScoreManager.CurrentLives();
+        int playerLives = playerLivesScript.CurrentLives();
         //Check if player has anymore lives and if so restart the level and decrement lives
         if(playerLives>0)
         {
-            ScoreManager.DecrementLives();
+            playerLivesScript.DecrementLives();
             GameObject winObject = GameObject.FindGameObjectWithTag("CanvasManager");
             if (winObject)
             {
@@ -256,6 +258,7 @@ public class GameManager : MonoBehaviour
             ScoreManager.SaveScore(false);
             //Save health and lives
             ScoreManager.SaveHealth();
+            playerLivesScript.SaveLives();
         }
 
         if (canvasScript)

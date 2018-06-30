@@ -13,7 +13,7 @@ public class CanvasToggle : MonoBehaviour {
     public GameObject GameOverCanvas;
     public GameObject WinScreenCanvas;
     private WinScreen winScript;
-    private ScoreManager scoreScript;
+    private PlayerManager scoreScript;
     private AudioController audioScript;
     public float StartReady=1f;
     public float GoAudioLength=1f;
@@ -41,7 +41,7 @@ public class CanvasToggle : MonoBehaviour {
         GameObject scoreObject = GameObject.FindGameObjectWithTag("ScoreManager");
         if(scoreObject)
         {
-            scoreScript = scoreObject.GetComponent<ScoreManager>();
+            scoreScript = scoreObject.GetComponent<PlayerManager>();
         }
         GameObject audioObject = GameObject.FindGameObjectWithTag("AudioController");
         if(audioObject)

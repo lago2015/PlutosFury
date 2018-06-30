@@ -16,7 +16,7 @@ public class WinScreen : MonoBehaviour
     private AudioController audioScript;
     
     private LoadTargetSceneButton targetSceneButton;
-    private ScoreManager scoreScript;
+    private PlayerManager scoreScript;
     public GameObject WinScreenGroup;
     public Text scoreDisplay;
     public Text highScoreDisplay;
@@ -38,7 +38,7 @@ public class WinScreen : MonoBehaviour
     {        
         audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
         targetSceneButton = this.gameObject.GetComponent<LoadTargetSceneButton>();
-        scoreScript = GameObject.FindGameObjectWithTag("ScoreManager").GetComponent<ScoreManager>();
+        scoreScript = GameObject.FindGameObjectWithTag("ScoreManager").GetComponent<PlayerManager>();
         
 	}
     

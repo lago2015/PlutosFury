@@ -5,7 +5,9 @@ using UnityEngine;
 public class PlayerCollisionAndHealth : MonoBehaviour {
     //health properties
     public int curHealth;
-    private int maxHealth = 3;
+    public int curMaxHealth;
+    private int curAddtionalHearts=0;
+    private int CappedMaxHEalth = 2;
     private float HealthCap;
     [HideInInspector]
     public bool isDead = false;
@@ -27,7 +29,8 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
     //Script reference
     private Movement moveScript;
     private AudioController audioScript;
-    private ScoreManager ScoreManager;
+    private PlayerManager ScoreManager;
+    private PlayerLives livesScript;
     private HUDManager hudScript;
     private LerpToStart lerpScript;     //for boss level
     private PlayerAppearance appearanceScript;
@@ -91,26 +94,33 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
         {
             vibrationHit = false;
         }
+
     }
 
     // Use this for initialization
     void Start ()
     {
         moveScript = GetComponent<Movement>();
+        livesScript = GetComponent<PlayerLives>();
+        ScoreManager = GameObject.FindGameObjectWithTag("ScoreManager").GetComponent<PlayerManager>();
+        if (ScoreManager)
+        {
+            //if player has advanced to another level check for health
+            curHealth = ScoreManager.CurrentHealth();
+            
+            //Apply variables to health for character
+            StartingHealth();
+        }
         //Update hud of current health
         if (hudScript)
         {
             hudScript.UpdateHealth(curHealth);
         }
-        if (ScoreManager)
-        {
-            curHealth = ScoreManager.CurrentHealth();
-            StartingHealth();
-        }
     }
 
     private void Update()
     {
+        
         RaycastHit hit;
         if (Physics.Raycast(transform.position, transform.up, out hit, 2f) || Physics.Raycast(transform.position, -transform.up, out hit, 2f) ||
             Physics.Raycast(transform.position, -transform.right, out hit, 2f))
@@ -128,12 +138,12 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
     //but without incrementing health
     void StartingHealth()
     {
-        if (curHealth <= 2)
+        if (curHealth <= curMaxHealth)
         {
 
-            if (curHealth >= 2)
+            if (curHealth >= curMaxHealth)
             {
-                curHealth = 2;
+                curHealth = curMaxHealth;
             }
             //update hud on health
             if (hudScript)
@@ -142,15 +152,22 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
             }
         }
     }
+    public void ApplyNewMaxHearts(int newIndex)
+    {
+        curAddtionalHearts = newIndex;
+        curMaxHealth = 2;
+        curMaxHealth += curAddtionalHearts;
+        
+    }
     public void HealthPickup(Vector3 curLocation)
     {
-        if (curHealth < 2)
+        if (curHealth < curMaxHealth)
         {
             curHealth++;
 
-            if (curHealth >= 2)
+            if (curHealth >= curMaxHealth)
             {
-                curHealth = 2;
+                curHealth = curMaxHealth;
             }
             //update hud on health
             if (hudScript)
@@ -167,9 +184,9 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
     }
     public void LifeUp(Vector3 curLocation)
     {
-        if (ScoreManager)
+        if (livesScript)
         {
-            ScoreManager.IncrementLifes();
+            livesScript.IncrementLifes();
         }
         
     }

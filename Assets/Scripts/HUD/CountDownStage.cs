@@ -19,7 +19,7 @@ public class CountDownStage : MonoBehaviour {
     
     //reference to stop the game
     private GameManager gameManScript;
-    private ScoreManager scoreScript;
+    private PlayerManager scoreScript;
     public void CounterStatusChange(bool isItCounting)
     {
         isCountingDown = isItCounting;
@@ -44,7 +44,7 @@ public class CountDownStage : MonoBehaviour {
         GameObject scoreObject = GameObject.FindGameObjectWithTag("ScoreManager");
         if(scoreObject)
         {
-            scoreScript = scoreObject.GetComponent<ScoreManager>();
+            scoreScript = scoreObject.GetComponent<PlayerManager>();
         }
     }
 
