@@ -21,6 +21,19 @@ public class FloatingJoystick : MonoBehaviour,IDragHandler,IPointerUpHandler,IPo
     private PointerEventData beginTouch;
     private ButtonIndicator dashScript;
 
+    private GameObject player;
+    public GameObject MoonballObject;
+    public float ballLaunchPower = 30;
+    public float spawnCooldown = 3;
+    private float distance;
+    private float minDistance=500;
+    private bool isCoolingDown;
+    private Rigidbody moonballBody;
+    private Vector2 startPos;
+    private Vector2 direction;
+    private Vector3 curPosition;
+    private Vector2 screenPos;
+    private bool directionChosen;
 
     private void Start()
     {
@@ -28,7 +41,7 @@ public class FloatingJoystick : MonoBehaviour,IDragHandler,IPointerUpHandler,IPo
         {
             Debug.LogError("There is no joystick image attached to this script.");
         }
-
+        player = GameObject.FindGameObjectWithTag("Player");
         if (transform.GetChild(0).GetComponent<Image>() == null)
         {
             Debug.LogError("There is no joystick handle image attached to this script.");
@@ -48,22 +61,25 @@ public class FloatingJoystick : MonoBehaviour,IDragHandler,IPointerUpHandler,IPo
             joystickStaysInFixedPosition = false;
             inputVector = Vector3.zero; // resets the inputVector so that output will no longer affect movement of the game object (example, a player character or any desired game object)
             joystickKnobImage.rectTransform.anchoredPosition = Vector3.zero; // resets the handle ("knob") of this joystick back to the center
+            dashScript.changeChargeStatus(false);
         }
-        //check if theres two fingers down for dash
-        else if (Input.touchCount == 2)
-        {
-            bool doOnce = dashScript.doOnce;
-            //if charge hasnt started than start now
-            if (!doOnce)
-            {
-                //activate dash mechanic 
-                dashScript.changeChargeStatus(true);
-            }
-        }
-        else
+        if(Input.touchCount==1)
         {
             dashScript.changeChargeStatus(false);
         }
+        //if(Input.touchCount==2)
+        //{
+        //    if(!directionChosen&& distance <= minDistance)
+        //    {
+        //        scriptDoOnce = dashScript.doOnce;
+        //        //if charge hasnt started than start now
+        //        if (!scriptDoOnce)
+        //        {
+        //                //activate dash mechanic 
+        //                dashScript.changeChargeStatus(true);
+        //        }
+        //    }
+        //}
         
     }
 
@@ -112,9 +128,74 @@ public class FloatingJoystick : MonoBehaviour,IDragHandler,IPointerUpHandler,IPo
                     }
                 }
             }
-
-            
         }
+        if(Input.touchCount==2)
+        {
+            Touch touch = Input.GetTouch(1);
+            switch(touch.phase)
+            {
+                case TouchPhase.Began:
+
+                    startPos = touch.position;
+                    directionChosen = false;
+                    break;
+
+                case TouchPhase.Moved:
+
+                    direction = touch.position - startPos;
+                    distance = Vector2.Distance(touch.position, startPos);
+                    break;
+
+                case TouchPhase.Ended:
+                    if(distance>=minDistance)
+                    {
+                        directionChosen = true;
+                    }
+                    else
+                    {
+                        scriptDoOnce = dashScript.doOnce;
+                        //if charge hasnt started than start now
+                        if (!scriptDoOnce)
+                        {
+                            //activate dash mechanic 
+                            dashScript.changeChargeStatus(true);
+                        }
+                        
+                    }
+                    Debug.Log("Distance: " + distance);
+                    break;
+            }
+            if (directionChosen && !isCoolingDown)
+            {
+                SpawnMoonball(direction);
+            }
+        }
+    }
+    public void SpawnMoonball(Vector2 direction)
+    {
+        if (MoonballObject)
+        {
+            direction=direction.normalized;
+            curPosition = player.transform.position + new Vector3(direction.x,direction.y,0);
+            GameObject newMoonBall = Instantiate(MoonballObject, curPosition, Quaternion.identity);
+            moonballBody = newMoonBall.GetComponent<Rigidbody>();
+            if (moonballBody)
+            {
+                moonballBody.AddForce(direction * ballLaunchPower, ForceMode.VelocityChange);
+            }
+            curPosition = Vector3.zero;
+            startPos = Vector2.zero;
+            direction = Vector2.zero;
+            directionChosen = false;
+        }
+        StartCoroutine(MoonballCooldown());
+    }
+
+    IEnumerator MoonballCooldown()
+    {
+        isCoolingDown = true;
+        yield return new WaitForSeconds(spawnCooldown);
+        isCoolingDown = false;
     }
 
     // this event happens when there is a touch down (or mouse pointer down) on the screen
@@ -134,7 +215,7 @@ public class FloatingJoystick : MonoBehaviour,IDragHandler,IPointerUpHandler,IPo
     // this event happens when the touch (or mouse pointer) comes up and off the screen
     public virtual void OnPointerUp(PointerEventData ped)
     {
-        if(Input.touchCount==1)
+        if (Input.touchCount==1)
         {
             inputVector = Vector3.zero; // resets the inputVector so that output will no longer affect movement of the game object (example, a player character or any desired game object)
             joystickKnobImage.rectTransform.anchoredPosition = Vector3.zero; // resets the handle ("knob") of this joystick back to the center
@@ -142,8 +223,9 @@ public class FloatingJoystick : MonoBehaviour,IDragHandler,IPointerUpHandler,IPo
         else
         {
             joystickStaysInFixedPosition = false;
-
+            dashScript.changeChargeStatus(false);
         }
+
     }
 
     // ouputs the direction vector, use this public function from another script to control movement of a game object (such as a player character or any desired game object)

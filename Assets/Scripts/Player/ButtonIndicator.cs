@@ -13,6 +13,8 @@ public class ButtonIndicator : MonoBehaviour
     public bool isButtDown;
     private bool buttPressed;
 
+
+
     public bool doOnce;
     public bool isDashActive;
     public bool isExhausted;
@@ -31,6 +33,7 @@ public class ButtonIndicator : MonoBehaviour
             //Getter for delays and timeouts set by user in movement script
             dashDelay = playerScript.DashTimeout;
         }
+        
     }
     
     void Update()
@@ -58,7 +61,19 @@ public class ButtonIndicator : MonoBehaviour
             doOnce = false;
         }
     }
-        
+    
+    //public void SpawnMoonball(Vector2 SpawnPosition,Vector2 direction)
+    //{
+    //    if(moonballBody)
+    //    {
+    //        GameObject newMoonBall = Instantiate(MoonballObject, SpawnPosition, Quaternion.identity);
+    //        moonballBody = newMoonBall.GetComponent<Rigidbody>();
+    //        if(moonballBody)
+    //        {
+    //            moonballBody.AddForce(direction * ballLaunchPower, ForceMode.VelocityChange);
+    //        }
+    //    }
+    //}
 
     //Monitors if both finger touch is down
     public bool changeChargeStatus(bool curStatus)
