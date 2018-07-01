@@ -43,6 +43,11 @@ public class WallHealth : MonoBehaviour
             IncrementDamage();
 
         }
+
+        if(collision.gameObject.tag == "MoonBall")
+        {
+            IncrementDamage();
+        }
     }
 
     public void IncrementDamage()

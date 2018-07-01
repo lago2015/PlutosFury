@@ -113,26 +113,17 @@ public class DetectThenExplode : MonoBehaviour {
         }
         else if (CurTag == "BreakableWall")
         {
-            if (isRocket)
-            {
-                Vector3 forwardVec = transform.forward.normalized;
-
-                //Get moonball script
-                MoonBall moonBall = col.gameObject.GetComponent<MoonBall>();
-                if (moonBall)
-                {
-                    moonBall.rocketHit(forwardVec);
-                    moonBall.OnExplosion();
-                }
-            }
-
             //start explosion
             TriggeredExplosion();
         }
         else if(CurTag == "MoonBall")
         {
-            
-            col.gameObject.GetComponent<MoonBall>().OnExplosionAtPosition(col.transform.position);
+            if(isRocket)
+            { 
+                Vector3 dir = col.contacts[0].point - transform.position;
+                col.gameObject.GetComponent<MoonBall>().MoveBall(-dir.normalized, 20.0f);
+            }
+          
             TriggeredExplosion();
         }
         else if(CurTag=="Wall")

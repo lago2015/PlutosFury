@@ -3,17 +3,23 @@ using System.Collections;
 
 public class MoonBall : MonoBehaviour
 {
-    public float hitSpeed;
-    public float wallBounce;
-    public float knockbackSpeed;
-    public float idleSpeed = 10.0f;
-    public float velocityCap;
-    public float velocityMin;
     public GameObject Explosion;
-    public bool canExplodeOnImpact;
+    public float hitSpeed;
+
+    [SerializeField]
+    private float knockbackSpeed;
+    [SerializeField]
+    private float idleSpeed = 10.0f;
+    [SerializeField]
+    private float velocityCap;
+    [SerializeField]
+    private float velocityMin;
+    [SerializeField]
+    private bool canExplodeOnImpact;
+    [SerializeField]
+    private int hitCount = 3;
 
     private Rigidbody rb;
-    private Vector3 newVelocity;
 
     // Use this for initialization
 	void Start ()
@@ -22,32 +28,15 @@ public class MoonBall : MonoBehaviour
         rb = GetComponent<Rigidbody>(); 
 	}
 	
-	// Update is called once per frame
-	void Update ()
-    {
-        // CLAMPING VELOCITY ON X AND Y
-        if (rb.velocity.x >= velocityCap || rb.velocity.x <= velocityMin)
-        {
-            newVelocity = rb.velocity.normalized;
-            newVelocity *= velocityCap;
-            rb.velocity = newVelocity;
-        }
-
-        if (rb.velocity.y >= velocityCap || rb.velocity.y <= velocityMin)
-        {
-            newVelocity = rb.velocity.normalized;
-            newVelocity *= velocityCap;
-            rb.velocity = newVelocity;
-        }
-	}
-
     // NEW FUNCTION FOR BALL MOVEMENT LOGIC
-    public void MoveBall(Vector3 movementVec)
+    public void MoveBall(Vector3 movementVec, float speed)
     {
-        rb.velocity = movementVec * hitSpeed;
-        rb.AddTorque(movementVec * hitSpeed);
+        Debug.Log("HIT");
+        rb.velocity = movementVec * speed;
+        rb.AddTorque(movementVec * speed);
     }
 
+    // This function is for spikes
     public void KnockBack(GameObject obj)
     {
         if (canExplodeOnImpact)
@@ -64,70 +53,37 @@ public class MoonBall : MonoBehaviour
             rb.AddForce(-direction.normalized * 20.0f, ForceMode.VelocityChange);
         }
     }
-   
+
     private void OnCollisionEnter(Collision col)
     {
         // APPLYING BOUNCE BACK TO CERTAIN OBJECTS
-        if(col.gameObject.name == "LaserWall" || col.gameObject.tag == "EnvironmentObstacle")
+        if (col.gameObject.tag == "Wall")
         {
-            
-            rb.AddForce(col.contacts[0].normal * wallBounce, ForceMode.VelocityChange);
-            if(canExplodeOnImpact)
-            {
-                OnExplosion();
-            }
-
+            Bounce(col);
+        }
+        else if (col.gameObject.tag == "EnvironmentObstacle" || col.gameObject.tag == "BreakableWall" || col.gameObject.GetComponent<AIHealth>() || col.gameObject.tag == "Neptune")
+        {
             if (canExplodeOnImpact)
             {
+                // Exploding MoonBall act
                 OnExplosion();
             }
-        }
-        
-        else if (col.gameObject.tag == "Wall")
-        {
-            rb.AddForce(col.contacts[0].normal * wallBounce, ForceMode.VelocityChange);
-        }
-        else if(col.gameObject.tag=="Obstacle" || col.gameObject.tag == "BreakableWall")
-        {
-            if(col.gameObject.name.Contains("DamageWall") || col.gameObject.tag == "BreakableWall")
+            else
             {
-                col.gameObject.GetComponent<WallHealth>().IncrementDamage();
-                OnExplosion();
-            }
-        }
-
-        else if(col.gameObject.GetComponent<AIHealth>())
-        {
-            Debug.Log("HIT MOTHA FUCKA!");
-            rb.AddForce(col.contacts[0].normal * knockbackSpeed, ForceMode.VelocityChange);
-            if (canExplodeOnImpact)
-            {
-                OnExplosion();
-            }
-        }
-
-        else if(col.gameObject.tag=="Neptune")
-        {
-            rb.AddForce(col.contacts[0].normal * knockbackSpeed, ForceMode.VelocityChange);
-            if (canExplodeOnImpact)
-            {
-                OnExplosion();
-            }
-        }
-
-    }
-    public void rocketHit(Vector3 Direction)
-    {
-        // Apply force and rotation to knock back from rocket explosion
-        rb.AddForce(Direction * knockbackSpeed, ForceMode.VelocityChange);
-        rb.AddTorque(Direction * hitSpeed);
-
-        if (canExplodeOnImpact)
-        {
-            OnExplosion();
+                if (--hitCount >= 0)
+                {
+                    Bounce(col);
+                }
+                else
+                {
+                    OnExplosion();
+                }
+          
+            }              
         }
     }
 
+    // This will need work
     public void rogueHit(Vector3 direction,bool isDashing)
     {
         if(isDashing)
@@ -139,7 +95,7 @@ public class MoonBall : MonoBehaviour
         else
         {
             // Apply force and rotation to knock back from rogue
-            rb.AddForce(direction * wallBounce, ForceMode.VelocityChange);
+            rb.AddForce(direction * knockbackSpeed, ForceMode.VelocityChange);
             //rb.AddTorque(direction * hitSpeed);
         }
         if (canExplodeOnImpact)
@@ -151,19 +107,21 @@ public class MoonBall : MonoBehaviour
 
     public void OnExplosion()
     {
-        if(Explosion)
+        if (Explosion)
         {
-            Instantiate(Explosion, transform.position,Quaternion.identity);
+            Instantiate(Explosion, transform.position, Quaternion.identity);
             Destroy(gameObject);
         }
     }
-    public void OnExplosionAtPosition(Vector3 spawnPoint)
+
+    private void Bounce(Collision c)
     {
-        if (Explosion)
-        {
-            Instantiate(Explosion, spawnPoint, Quaternion.identity);
-            Destroy(gameObject);
-        }
+        Vector3 result = Vector3.Reflect(rb.velocity.normalized, c.contacts[0].normal);
+
+        result.Normalize();
+
+        float currentSpeed = rb.velocity.magnitude;
+        rb.velocity = result * currentSpeed;
     }
 
 }

@@ -20,7 +20,7 @@ public class MultiplayerContact : MonoBehaviour
 
                 MoonBall ball = c.gameObject.GetComponent<MoonBall>();
 
-                ball.MoveBall(dir);
+                ball.MoveBall(dir, ball.hitSpeed);
 
                 Debug.Log("HITc!");
             }

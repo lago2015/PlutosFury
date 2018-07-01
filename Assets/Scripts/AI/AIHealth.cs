@@ -106,12 +106,8 @@ public class AIHealth : MonoBehaviour {
 
         if (col.gameObject.tag == "MoonBall")
         {
-
-            MoonBall moonBall = col.gameObject.GetComponent<MoonBall>();
-
+            Debug.Log("HitCOL");
             IncrementDamage(col.gameObject.tag);
-            moonBall.OnExplosion();
-
         }
     }
 
@@ -134,11 +130,8 @@ public class AIHealth : MonoBehaviour {
 
         if (col.gameObject.tag == "MoonBall")
         {
-
-            MoonBall moonBall = col.GetComponent<MoonBall>();
-
+            Debug.Log("Hit Trig");
             IncrementDamage(col.tag);
-            moonBall.OnExplosion();
                 
         } 
     }

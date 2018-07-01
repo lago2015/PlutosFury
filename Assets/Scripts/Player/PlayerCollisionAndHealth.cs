@@ -269,7 +269,6 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
         isDamaged = false;
     }
 
-
     //Basic collision for BASIC PLUTO
     void OnCollisionEnter(Collision c)
     {
@@ -284,8 +283,6 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
                 audioScript.AsteroidBounce(transform.position);
             }
         }
-
-
         else if (curTag == "Wall")
         {
             if (audioScript)
@@ -299,12 +296,11 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
 
             }
         }
-
         else if (curTag == "BreakableWall")
         {
             if (isDashing())
             {
-                
+
                 WallHealth healthScript = c.gameObject.GetComponent<WallHealth>();
                 if (healthScript)
                 {
@@ -318,13 +314,19 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
         }
         else if (curTag == "MoonBall")
         {
+            MoonBall ball = c.gameObject.GetComponent<MoonBall>();
+
             // Launches Moonball accodring to contact point
             if (isDashing())
             {
                 Vector3 dir = c.contacts[0].point - transform.position;
                 dir = dir.normalized;
-                MoonBall ball = c.gameObject.GetComponent<MoonBall>();
-                ball.MoveBall(dir);
+                ball.MoveBall(dir, ball.hitSpeed);
+                moveScript.CancelDash();
+            }
+            else
+            {
+                ball.MoveBall(Vector3.zero, 0.0f);
             }
 
             myBody.velocity = Vector3.zero;
@@ -346,7 +348,6 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
                 }
             }
         }
-
         else if (curTag == "EnvironmentObstacle" || curTag == "ShatterPiece")
         {
             myBody.velocity = Vector3.zero;
@@ -378,7 +379,6 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
             }
 
         }
-
         else if (curTag == "Obstacle")
         {
 
@@ -400,7 +400,5 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
                 lerpScript.EnableLerp();
             }
         }
-
-    }
-    
+    } 
 }

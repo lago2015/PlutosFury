@@ -31,7 +31,9 @@ public class GoalLine : MonoBehaviour
             manager.UpdateScore(scoringPlayer, 1);
             other.transform.position = ballRespawn.transform.position;
 
-            other.GetComponent<MoonBall>().MoveBall(new Vector3(0.0f, 0.0f, 0.0f));
+            MoonBall ball = other.GetComponent<MoonBall>();
+
+            ball.MoveBall(new Vector3(0.0f, 0.0f, 0.0f), ball.hitSpeed );
         }
     }
 }

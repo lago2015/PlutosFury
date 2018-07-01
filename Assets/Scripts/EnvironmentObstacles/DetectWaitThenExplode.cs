@@ -92,9 +92,6 @@ public class DetectWaitThenExplode : MonoBehaviour {
         else if(CurTag=="MoonBall")
         {
             TriggerExplosionInstantly();
-            
-            spawnPoint = col.transform.position;
-            col.gameObject.GetComponent<MoonBall>().OnExplosionAtPosition(spawnPoint);
         }
         else if(CurTag=="BreakableWall")
         {
