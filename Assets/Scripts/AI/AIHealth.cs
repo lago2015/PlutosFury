@@ -106,7 +106,6 @@ public class AIHealth : MonoBehaviour {
 
         if (col.gameObject.tag == "MoonBall")
         {
-            Debug.Log("HitCOL");
             IncrementDamage(col.gameObject.tag);
         }
     }
@@ -130,7 +129,6 @@ public class AIHealth : MonoBehaviour {
 
         if (col.gameObject.tag == "MoonBall")
         {
-            Debug.Log("Hit Trig");
             IncrementDamage(col.tag);
                 
         } 

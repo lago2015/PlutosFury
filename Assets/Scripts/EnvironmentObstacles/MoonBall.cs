@@ -15,9 +15,13 @@ public class MoonBall : MonoBehaviour
     [SerializeField]
     private float velocityMin;
     [SerializeField]
-    private bool canExplodeOnImpact;
+    private bool isShockWave;
+    [SerializeField]
+    private int explosionRadius = 3;
     [SerializeField]
     private int hitCount = 3;
+
+
 
     private Rigidbody rb;
 
@@ -39,7 +43,7 @@ public class MoonBall : MonoBehaviour
     // This function is for spikes
     public void KnockBack(GameObject obj)
     {
-        if (canExplodeOnImpact)
+        if (isShockWave)
         {
             OnExplosion();
         }
@@ -63,9 +67,9 @@ public class MoonBall : MonoBehaviour
         }
         else if (col.gameObject.tag == "EnvironmentObstacle" || col.gameObject.tag == "BreakableWall" || col.gameObject.GetComponent<AIHealth>() || col.gameObject.tag == "Neptune")
         {
-            if (canExplodeOnImpact)
+            if (isShockWave)
             {
-                // Exploding MoonBall act
+                ShockWave();
                 OnExplosion();
             }
             else
@@ -98,7 +102,7 @@ public class MoonBall : MonoBehaviour
             rb.AddForce(direction * knockbackSpeed, ForceMode.VelocityChange);
             //rb.AddTorque(direction * hitSpeed);
         }
-        if (canExplodeOnImpact)
+        if (isShockWave)
         {
             OnExplosion();
         }
@@ -122,6 +126,40 @@ public class MoonBall : MonoBehaviour
 
         float currentSpeed = rb.velocity.magnitude;
         rb.velocity = result * currentSpeed;
+    }
+
+    private void ShockWave()
+    {
+        Vector3 currentPos = transform.position;
+
+        Collider[] colliders = Physics.OverlapSphere(currentPos, explosionRadius);
+
+        foreach (Collider col in colliders)
+        {
+            DetectThenExplode explodeScript = col.GetComponent<DetectThenExplode>();
+            if (explodeScript)
+            {
+                explodeScript.TriggeredExplosion();
+
+            }
+            AIHealth enemyScript = col.GetComponent<AIHealth>();
+            if (enemyScript)
+            {
+                enemyScript.IncrementDamage(this.gameObject.tag);
+
+            }
+            WallHealth wallScript = col.GetComponent<WallHealth>();
+            if (wallScript)
+            {
+                wallScript.IncrementDamage();
+
+            }
+            BigAsteroid asteroidScript = col.GetComponent<BigAsteroid>();
+            if (asteroidScript)
+            {
+                asteroidScript.SpawnAsteroids();
+            }
+        }
     }
 
 }
