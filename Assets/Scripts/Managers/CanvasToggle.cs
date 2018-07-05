@@ -31,6 +31,7 @@ public class CanvasToggle : MonoBehaviour {
     public int SendHighScore(int newHighScore) { return curHighScore = newHighScore; }
     public int SendTotalScore(int newTotalScore) { return curTotalScore = newTotalScore; }
     public int SendTotalHighScore(int newTotalHighScore) { return curTotalHighScore = newTotalHighScore; }
+    public bool tipOnStart;
     // Use this for initialization
     void Awake ()
     {
@@ -67,6 +68,18 @@ public class CanvasToggle : MonoBehaviour {
         {
             playerScript.DisableMovement(false);
         }
+
+        if (tipOnStart)
+        {
+            TutorialTip tip = GameObject.FindObjectOfType<TutorialTip>();
+            tip.TipDown();
+        }
+
+        StartCoroutine(ReadyIntro());
+    }
+
+    public void StartGame()
+    {
         StartCoroutine(ReadyIntro());
     }
 
