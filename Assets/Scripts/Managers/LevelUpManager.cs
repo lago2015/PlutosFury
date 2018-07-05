@@ -36,7 +36,7 @@ public class LevelUpManager : MonoBehaviour {
         curHeartIndex = PlayerPrefs.GetInt("CurAddtionalHearts");
         if(playerHealthScript)
         {
-            playerHealthScript.ApplyNewMaxHearts(curHeartIndex);
+            playerHealthScript.ApplyNewMaxHearts(curHeartIndex+2);
         }
     }
 

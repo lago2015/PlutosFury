@@ -80,7 +80,7 @@ public class GravityPull : MonoBehaviour {
                         {
                             if (AsteroidScript)
                             {
-                                AsteroidScript.SpawnAsteroidHere(transform.position);
+                                //AsteroidScript.SpawnAsteroidHere(transform.position);
                             }
                         }
                         Destroy(gameObject);

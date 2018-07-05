@@ -189,30 +189,16 @@ public class GameManager : MonoBehaviour
         
 
         yield return new WaitForSeconds(GameOverDelay);
+        DelayVoiceThenPlayMusic();
+        //enable game over screen
 
-        int playerLives = playerLivesScript.CurrentLives();
-        //Check if player has anymore lives and if so restart the level and decrement lives
-        if(playerLives>0)
+        if (canvasScript)
         {
-            playerLivesScript.DecrementLives();
-            GameObject winObject = GameObject.FindGameObjectWithTag("CanvasManager");
-            if (winObject)
-            {
-                winObject.GetComponent<LoadTargetSceneButton>().RestartLevel();
-            }
-        }
-        else
-        {
-            DelayVoiceThenPlayMusic();
-            //enable game over screen
-            if (canvasScript)
-            {
-                canvasScript.GameEnded(true);
-            }
+            canvasScript.GameEnded(true);
         }
         //stop time like your a time lord
         //Time.timeScale = 0;
-        if(ScoreManager)
+        if (ScoreManager)
         {
             //save that score to show off to your friends
             ScoreManager.SaveScore(true);
@@ -250,8 +236,12 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(1f);
         if (ScoreManager)
         {
+
+            //increment orb for completion of level
+            ScoreManager.AwardOrbsForCompletion();
+            //grab orb numbers for both obtained in level and total collected
             curScore = ScoreManager.ReturnScore();
-            curHighScore = ScoreManager.ReturnHighScore();
+            curHighScore = PlayerPrefs.GetInt("scorePref");
             
             
             //Save score
@@ -270,7 +260,6 @@ public class GameManager : MonoBehaviour
             canvasScript.SendHighScore(curHighScore);
             canvasScript.SendTotalScore(curTotalScore);
             canvasScript.SendTotalHighScore(curTotalHighScore);
-            canvasScript.SendRating(newRating);
             canvasScript.SendDataToWinScreen();
             //start fade in
             canvasScript.StartFadeIn();

@@ -6,11 +6,7 @@ public class QuitScreen : MonoBehaviour {
     public Animator Anim;
     bool mopen = false;
 
-    // Use this for initialization
-    void Start () {
-		
-	}
-
+    
     public void WndowAnimation(bool forward)
     {
         if (forward)
@@ -39,8 +35,5 @@ public class QuitScreen : MonoBehaviour {
         return mopen;
     }
 
-    // Update is called once per frame
-    void Update () {
-		
-	}
+    
 }

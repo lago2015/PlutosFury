@@ -31,7 +31,7 @@ public class PlayerManager : MonoBehaviour {
         }
         //setting high score
         curLevelIndex = PlayerPrefs.GetInt("playerLevel");
-        OrbsObtainedTotal= PlayerPrefs.GetInt("scorePref");
+        
         playerHealth = PlayerPrefs.GetInt("healthPref");
     }
     
@@ -86,31 +86,28 @@ public class PlayerManager : MonoBehaviour {
         PlayerPrefs.SetInt("healthPref", 0);
     }
 
-    //to increase score
-    public int IncreaseScore(int value)
+    
+    public int OrbObtained()
     {
-        OrbsObtainedInLevel += value;
-        
+        OrbsObtainedInLevel++;
         if (HUDScript)
         {
             HUDScript.UpdateScore(OrbsObtainedInLevel);
         }
+
         return OrbsObtainedInLevel;
     }
-    public int OrbObtained()
-    {
-        orbObtained++;
-       
-
-        return orbObtained;
-    }
-    public int ReturnHighScore()
-    {
-        return OrbsObtainedTotal;
-    }   
     public int ReturnScore()
     {
         return OrbsObtainedInLevel;
+    }
+    //called when level is completed
+    public void AwardOrbsForCompletion()
+    {
+        OrbsObtainedTotal = PlayerPrefs.GetInt("scorePref");
+
+        OrbsObtainedTotal += OrbsObtainedInLevel;
+        PlayerPrefs.SetInt("scorePref", OrbsObtainedTotal);
     }
     
 }

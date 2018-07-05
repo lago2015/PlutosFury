@@ -31,7 +31,7 @@ public class CameraStop : MonoBehaviour {
 	private Vector3 cachedCameraPosition;
     private Vector3 wallTransform;
     private Vector3 BossPosition = new Vector3(583, 0, 0);
-    private float CameraOffset;
+    private Vector3 CameraOffset;
     public Vector3 delta;
 
     private Vector3 point;
@@ -45,12 +45,10 @@ public class CameraStop : MonoBehaviour {
 	void Awake () 
 	{
         spawnScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<AsteroidSpawner>();
-        myCamera = GetComponent<Camera>();
-        CameraOffset = transform.position.z;
-        if(target)
-        {
-            transform.position = new Vector3(target.transform.position.x, target.transform.position.y, CameraOffset);
-        }
+        myCamera =GetComponent<Camera>();
+        CameraOffset.z = transform.position.z;
+        CameraOffset.x = -10;
+        
 		cachedCameraPosition = transform.position;
         curSection = 0;
         if(cameraStopLocations.Length>0)
@@ -69,17 +67,35 @@ public class CameraStop : MonoBehaviour {
     private void Start()
     {
         target = GameObject.FindGameObjectWithTag("Player");
-
+        if (target)
+        {
+            transform.position = new Vector3(target.transform.position.x, target.transform.position.y + CameraOffset.x, CameraOffset.z);
+        }
     }
 
     void FixedUpdate () 
 	{
         if (target)
         {
-            point = GetComponent<Camera>().WorldToViewportPoint(target.transform.position);
-            delta1 = target.transform.position - GetComponent<Camera>().ViewportToWorldPoint(new Vector3(0.5f, 0.5f, point.z));
-            destination = transform.position + delta1;
+            
+            point = myCamera.WorldToViewportPoint(target.transform.position);
+            //to the right of camera
+            if(0.55<point.x&&point.x>0.45)
+            {
+                CameraOffset.x = 10;
+            }
+            //to the left of camera
+            else if(point.x<0.45&&0.55>point.x)
+            {
+                CameraOffset.x = -10;
+            }
+
+            delta1 = target.transform.position - myCamera.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, point.z));
+            destination = transform.position - CameraOffset + delta1;
             transform.position = Vector3.SmoothDamp(transform.position, destination, ref velocity, dampTime);
+            transform.position = new Vector3(transform.position.x, transform.position.y, CameraOffset.z);
+            //point.x = point.x + CameraOffset.x;
+
         }
         //Camera fitting to viewport
         topLeft = Camera.main.ViewportToWorldPoint(new Vector3(0, 1, -Camera.main.transform.position.z));
@@ -115,6 +131,11 @@ public class CameraStop : MonoBehaviour {
             //Clamp Camera along the Y axis
             transform.position = new Vector3(transform.position.x, cachedCameraPosition.y, transform.position.z);
         }
+        if(transform.position.x>minX)
+        {
+            minX = transform.position.x;
+        }
+        cachedCameraPosition.x += CameraOffset.x;
         cachedCameraPosition = transform.position;
     }
  
@@ -131,7 +152,7 @@ public class CameraStop : MonoBehaviour {
     }
     public void MoveCamera(Vector3 curPosition)
     {
-        transform.position = new Vector3(curPosition.x, curPosition.y, CameraOffset);
+        transform.position = new Vector3(curPosition.x, curPosition.y, CameraOffset.z);
     }
     public float ChangeCamMin()
     {
