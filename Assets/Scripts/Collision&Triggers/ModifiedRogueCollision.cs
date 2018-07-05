@@ -104,9 +104,10 @@ public class ModifiedRogueCollision : MonoBehaviour {
     void OnCollisionEnter(Collision col)
     {
         string curTag = col.gameObject.tag;
+        Debug.Log(curTag);
         //check if the player is colliding with the box collider to damage the enemy
-        if (col.collider.GetType() == typeof(BoxCollider))
-        {
+        //if (col.collider.GetType() == typeof(BoxCollider))
+        //{
             if (curTag == "Player")
             {
                 bool RogueDashing = rogueMoveScript.isDashing();
@@ -136,11 +137,11 @@ public class ModifiedRogueCollision : MonoBehaviour {
                     }
                 }
             }
-        }
+        //}
 
         //check if the player is colliding with the spherecollider.
-        else if (col.collider.GetType() == typeof(SphereCollider))
-        {
+        //else if (col.collider.GetType() == typeof(SphereCollider))
+        //{
             if (curTag == "MoonBall")
             {
                 MoonBall moonBall = col.gameObject.GetComponent<MoonBall>();
@@ -188,7 +189,7 @@ public class ModifiedRogueCollision : MonoBehaviour {
             }
 
         }
-    }
+    //}
 
 
 
