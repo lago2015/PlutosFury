@@ -7,8 +7,7 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
     public int curHealth;
     public int curMaxHealth;
     private int curAddtionalHearts=0;
-    private int CappedMaxHEalth = 2;
-    private float HealthCap;
+
     [HideInInspector]
     public bool isDead = false;
     //Player prefs

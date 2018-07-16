@@ -70,7 +70,6 @@ public class LoadTargetSceneButton : MonoBehaviour {
 		}
         if(num==0)
         {
-            PlayerPrefs.SetInt("playerLives", 0);
             PlayerPrefs.SetInt("healthPref", 0);
 
         }

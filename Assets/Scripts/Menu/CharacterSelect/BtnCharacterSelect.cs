@@ -18,6 +18,6 @@ public class BtnCharacterSelect : MonoBehaviour {
     //index is set to the button to the order of characters in the array within character manager
     public void CreateCharacter(int curCharacterIndex)
     {
-        CharacterManager.Instance.CreateCurrentCharacter(CharacterName.text);
+        CharacterManager.Instance.CreateCurrentCharacter();
     }
 }

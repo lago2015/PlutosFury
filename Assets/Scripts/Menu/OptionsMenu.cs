@@ -36,20 +36,7 @@ public class OptionsMenu : MonoBehaviour {
             }
         }
 
-        if (PlayerPrefs.HasKey("InvertControls"))
-        {
-            if (PlayerPrefs.GetInt("InvertControls") == 1)
-            {
-                iControls.isOn = true;
-            }
-            else
-            {
-                if(iControls)
-                {
-                    iControls.isOn = false;
-                }
-            }
-        }
+  
         
 	}
 
@@ -57,7 +44,6 @@ public class OptionsMenu : MonoBehaviour {
 	public void UpdateValues()
     {
 		int VibrationHit;
-		int InvertControls;
 
         PlayerPrefs.SetFloat("musicParam", Music.value);
         PlayerPrefs.SetFloat("sfxParam", SFX.value);
@@ -68,14 +54,9 @@ public class OptionsMenu : MonoBehaviour {
 			VibrationHit = 0;
         }
 
-		if (iControls.isOn) {
-			InvertControls = 1;
-		} else {
-			InvertControls = 0;
-		}
+		
         
 		PlayerPrefs.SetInt ("VibrationHit", VibrationHit);
-		PlayerPrefs.SetInt ("InvertControls", InvertControls);
 	}
 
    

@@ -10,7 +10,6 @@ public class PlayerLives : MonoBehaviour
 
     void Awake()
     {
-        playerLives = PlayerPrefs.GetInt("playerLives");
         GameObject hudObject = GameObject.FindGameObjectWithTag("HUDManager");
         if (hudObject)
         {
@@ -22,7 +21,6 @@ public class PlayerLives : MonoBehaviour
     public void DecrementLives()
     {
         playerLives--;
-        PlayerPrefs.SetInt("playerLives", playerLives);
         if (HUDScript)
         {
             HUDScript.UpdateLives(playerLives);
@@ -32,7 +30,6 @@ public class PlayerLives : MonoBehaviour
     public void IncrementLifes()
     {
         playerLives++;
-        PlayerPrefs.SetInt("playerLives", playerLives);
         if (HUDScript)
         {
             HUDScript.UpdateLives(playerLives);
@@ -42,15 +39,10 @@ public class PlayerLives : MonoBehaviour
     public void SaveLives()
     {
         
-        if (playerLives > 0)
-        {
-            PlayerPrefs.SetInt("playerLives", playerLives);
-        }
     }
 
     public void ResetLives()
     {
-        PlayerPrefs.SetInt("playerLives", 0);
     }
     public int CurrentLives()
     {

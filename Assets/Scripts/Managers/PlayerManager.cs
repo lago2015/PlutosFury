@@ -4,18 +4,19 @@ using System.Collections;
 
 public class PlayerManager : MonoBehaviour {
 
-    //This manager is meant to handle UI elements of health and tracking orbs the player has collected
+    //This manager is meant to handle UI elements of health,moonball and tracking orbs the player has collected
 
 
-    private int curLevelIndex;
     private int maxLevel;
     private float timeRemaining;
     public int OrbsObtainedTotal;   //used for total orbs collected
     public int OrbsObtainedInLevel;       //total orbs collected in level
     public int playerHealth;
-    private int playerHealthIndex;
+    private int playerHeartContainer;
     private int playerMaxHealth = 5;
     private WinScreen winScript;
+    private PlayerCollisionAndHealth playerHealthScript;
+
     private HUDManager HUDScript;
     private int orbObtained;
     
@@ -29,19 +30,16 @@ public class PlayerManager : MonoBehaviour {
         {
             HUDScript=hudObject.GetComponent<HUDManager>();
         }
-        //setting high score
-        curLevelIndex = PlayerPrefs.GetInt("playerLevel");
-        
+
         playerHealth = PlayerPrefs.GetInt("healthPref");
     }
-    
-    //this function is just to save the level up so for reload we know what level the player is on
-    public void LevelUp()
+
+    void StartingHearts()
     {
-        if(curLevelIndex<maxLevel)
+        playerHeartContainer = PlayerPrefs.GetInt("CurAddtionalHearts");
+        if (playerHealthScript)
         {
-            curLevelIndex++;
-            PlayerPrefs.SetInt("playerLevel", curLevelIndex);
+            playerHealthScript.ApplyNewMaxHearts(playerHeartContainer + 2);
         }
     }
 
@@ -73,12 +71,14 @@ public class PlayerManager : MonoBehaviour {
     {
         if(OrbsObtainedInLevel>OrbsObtainedTotal)
         {
-            PlayerPrefs.SetInt("scorePref", OrbsObtainedInLevel);
+            PlayerPrefs.SetInt("scorePref", OrbsObtainedInLevel+OrbsObtainedTotal);
         }
         
         if(isGameOver)
         {
-            PlayerPrefs.SetInt("totalScore", 0);
+            PlayerPrefs.SetInt("scorePref", OrbsObtainedTotal);
+            OrbsObtainedInLevel = 0;
+
         }
     }
     public void DefaultHealth()

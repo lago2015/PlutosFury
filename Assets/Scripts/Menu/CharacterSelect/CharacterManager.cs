@@ -75,7 +75,7 @@ namespace CharacterSelector.Scripts
             }
         }
 
-        public void CreateCurrentCharacter(string name)
+        public void CreateCurrentCharacter()
         {
             _currentCharacter = Instantiate<CharacterInfo>(_currentCharacterType, 
                 SpawnPoint.transform.position, Quaternion.identity);
@@ -83,7 +83,7 @@ namespace CharacterSelector.Scripts
             MoveObjectToCanvas(_currentCharacter);
             PlayerPrefs.SetInt("Player"+playerNumber+"CharacterIndex", curIngameIndex);
             _currentCharacter.gameObject.SetActive(false);
-            _currentCharacter.Name = name;
+            
 
             
         }
