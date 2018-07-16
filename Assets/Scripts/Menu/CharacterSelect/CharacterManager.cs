@@ -12,8 +12,6 @@ namespace CharacterSelector.Scripts
         private int curIngameIndex;
         public GameObject SpawnPoint;
 
-        private int _currentIndex = 0;
-        public int playerNumber=1;
         private CharacterInfo _currentCharacterType = null;
 
         private CharacterInfo _currentCharacter = null;
@@ -27,14 +25,14 @@ namespace CharacterSelector.Scripts
 
         private void Awake()
         {
-            curIngameIndex = PlayerPrefs.GetInt("Player" + playerNumber + "CharacterIndex", 0);
+            curIngameIndex = PlayerPrefs.GetInt("PlayerCharacterIndex");
         }
 
         public void Start()
         {
             if (SpawnPoint != null)
             {
-                SetCurrentCharacterType(_currentIndex);
+                SetCurrentCharacterType(curIngameIndex);
             }
         }
 
@@ -50,7 +48,7 @@ namespace CharacterSelector.Scripts
                 SpawnPoint.transform.position, Quaternion.identity);
 
             MoveObjectToCanvas(_currentCharacterType);
-            _currentIndex = index;
+            curIngameIndex = index;
         }
 
         void MoveObjectToCanvas(CharacterInfo currObject)
@@ -81,7 +79,7 @@ namespace CharacterSelector.Scripts
                 SpawnPoint.transform.position, Quaternion.identity);
 
             MoveObjectToCanvas(_currentCharacter);
-            PlayerPrefs.SetInt("Player"+playerNumber+"CharacterIndex", curIngameIndex);
+            PlayerPrefs.SetInt("PlayerCharacterIndex", curIngameIndex);
             _currentCharacter.gameObject.SetActive(false);
             
 

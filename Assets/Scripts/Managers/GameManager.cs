@@ -68,8 +68,8 @@ public class GameManager : MonoBehaviour
         InGameCharacterManager charManager = transform.GetChild(0).GetComponent<InGameCharacterManager>();
         if(charManager)
         {
-
-            pluto = Instantiate(charManager.CurrentCharacter(0), spawnPoint.transform.position, Quaternion.identity);
+            int curIndex = PlayerPrefs.GetInt("PlayerCharacterIndex");
+            pluto = Instantiate(charManager.CurrentCharacter(curIndex), spawnPoint.transform.position, Quaternion.identity);
             playerMoveScript = pluto.GetComponent<Movement>();
             playerCollisionScript = pluto.GetComponent<PlayerCollisionAndHealth>();
             playerLivesScript = pluto.GetComponent<PlayerLives>();

@@ -8,6 +8,7 @@ public class InGameCharacterManager : MonoBehaviour {
     public GameObject[] InGameCharacters;
     private int curIngameIndex;
     private int curNumberPlayers;
+    
     //Number of players in
     public int NumOfPlayers(int curPlayers)
     {
@@ -15,7 +16,7 @@ public class InGameCharacterManager : MonoBehaviour {
     }
     public GameObject CurrentCharacter(int numberOfSpawns)
     {
-        curIngameIndex = PlayerPrefs.GetInt("Player" + numberOfSpawns + "CharacterIndex");
+        curIngameIndex = PlayerPrefs.GetInt("PlayerCharacterIndex");
         return InGameCharacters[curIngameIndex];
     }
 

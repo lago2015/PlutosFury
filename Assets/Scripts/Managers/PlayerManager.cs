@@ -6,7 +6,7 @@ public class PlayerManager : MonoBehaviour {
 
     //This manager is meant to handle UI elements of health,moonball and tracking orbs the player has collected
 
-
+    public int OrbGameoverReward = 250;
     private int maxLevel;
     private float timeRemaining;
     public int OrbsObtainedTotal;   //used for total orbs collected
@@ -69,17 +69,17 @@ public class PlayerManager : MonoBehaviour {
     //run this function during game over
     public void SaveScore(bool isGameOver)
     {
-        if(OrbsObtainedInLevel>OrbsObtainedTotal)
-        {
-            PlayerPrefs.SetInt("scorePref", OrbsObtainedInLevel+OrbsObtainedTotal);
-        }
-        
         if(isGameOver)
         {
+            OrbsObtainedTotal += OrbGameoverReward;
             PlayerPrefs.SetInt("scorePref", OrbsObtainedTotal);
-            OrbsObtainedInLevel = 0;
-
         }
+        else
+        {
+            OrbsObtainedTotal += OrbsObtainedInLevel;
+            PlayerPrefs.SetInt("scorePref", OrbsObtainedTotal);
+        }
+        OrbsObtainedInLevel = 0;
     }
     public void DefaultHealth()
     {
