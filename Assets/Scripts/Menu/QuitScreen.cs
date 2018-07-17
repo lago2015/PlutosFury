@@ -13,21 +13,21 @@ public class QuitScreen : MonoBehaviour {
         {
             if (forward == mopen)
             {
-                Debug.Log("Stuck");
+                //Debug.Log("Stuck");
                 return;
             }
 
             Anim.SetBool("show", true);
-            Debug.Log("Open");
+            //Debug.Log("Open");
         }
         else
         {
             Anim.SetBool("show", false);
-            Debug.Log("Close");
+            //Debug.Log("Close");
         }
         mopen = forward;
 
-        Debug.Log(mopen);
+        //Debug.Log(mopen);
     }
 
     public bool isOpen()

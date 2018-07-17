@@ -34,7 +34,7 @@ public class FloatingJoystick : MonoBehaviour,IDragHandler,IPointerUpHandler,IPo
     private Vector3 curPosition;
     private Vector2 screenPos;
     private bool directionChosen;
-
+    private GameObject previousMoonball;
     private int CurMoonballAmount;
     private MoonballManager moonballManagerScript;
 
@@ -171,9 +171,19 @@ public class FloatingJoystick : MonoBehaviour,IDragHandler,IPointerUpHandler,IPo
         {
             if (MoonballObject)
             {
+                
                 direction = direction.normalized;
                 curPosition = player.transform.position + new Vector3(direction.x, direction.y, 0);
                 GameObject newMoonBall = Instantiate(MoonballObject, curPosition, Quaternion.identity);
+                if (!previousMoonball)
+                {
+                    previousMoonball = newMoonBall;
+                }
+                else
+                {
+                    previousMoonball.GetComponent<MoonBall>().OnExplosion();
+                    previousMoonball = newMoonBall;
+                }
                 moonballBody = newMoonBall.GetComponent<Rigidbody>();
                 newMoonBall.GetComponent<MoonBall>().DisableCollider();
                 if (moonballBody)

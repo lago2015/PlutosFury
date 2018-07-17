@@ -102,25 +102,27 @@ public class SkinShopManager : MonoBehaviour
         //otherwise do not available sound and text pop up saying not enough orbs
         else
         {
-            StopAllCoroutines();
-            if (isPlaying)
-            {
-                notEnoughOrbsText.Play("TextAppearThenFade", -1, 0);
+            //StopAllCoroutines();
+            //if (isPlaying)
+            //{
+            //    notEnoughOrbsText.Play("TextAppearThenFade", -1, 0);
+            //    notEnoughOrbsText.SetBool("TextActive", true);
+            //}
+            //else
+            //{
+            //    isPlaying = true;
+            //    notEnoughOrbsText.SetBool("TextActive", true);
+            //    notEnoughOrbsText.Play("TextAppearThenFade");
+            //}
+            //StartCoroutine(CountdownForAnimation());
+            notEnoughOrbsText.Play("TextAppearThenFade", -1, 0);
 
-            }
-            else
-            {
-                isPlaying = true;
-                notEnoughOrbsText.SetBool("TextActive", true);
-                notEnoughOrbsText.Play("TextAppearThenFade");
-            }
-            StartCoroutine(CountdownForAnimation());
         }
     }
 
     IEnumerator CountdownForAnimation()
     {
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(60);
         isPlaying = false;
         notEnoughOrbsText.SetBool("TextActive", false);
         

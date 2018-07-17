@@ -6,6 +6,7 @@ public class ShopManager : MonoBehaviour {
 
     private PlayerShopManager playerShopManager;
     private SkinShopManager skinShopManager;
+    private PlayerMoonballManager moonballManager;
     private GameObject managerObject;
     private int curItem;
     private int skinToBuy;
@@ -16,6 +17,7 @@ public class ShopManager : MonoBehaviour {
         {
             playerShopManager = managerObject.GetComponent<PlayerShopManager>();
             skinShopManager = managerObject.GetComponent<SkinShopManager>();
+            moonballManager = managerObject.GetComponent<PlayerMoonballManager>();
         }
     }
 
@@ -23,21 +25,28 @@ public class ShopManager : MonoBehaviour {
     {
         switch (curItem)
         {
-            //this case is for player skin
+            //player skin
             case 0:
                 skinShopManager.BuySkin(skinToBuy);
                 break;
 
-            //this case is for player consumables
+            //player consumables
             case 1:
                 playerShopManager.BuyAHeart();
                 break;
 
-            //this case is for player upgrade
+            //player upgrade
             case 2:
                 playerShopManager.BuyAHeartContainer();
                 break;
-
+            //Moonball consumables
+            case 3:
+                moonballManager.BuyAMoonball();
+                break;
+            //Moonball Container upgrade
+            case 4:
+                moonballManager.BuyAMoonballContainer();
+                break;
         }
     }
 
