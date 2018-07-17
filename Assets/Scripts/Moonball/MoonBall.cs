@@ -5,7 +5,7 @@ public class MoonBall : MonoBehaviour
 {
     public GameObject Explosion;
     public float hitSpeed;
-
+    private SphereCollider colliderComp;
     [SerializeField]
     private float knockbackSpeed;
     [SerializeField]
@@ -31,6 +31,20 @@ public class MoonBall : MonoBehaviour
         // Get rigibody component
         rb = GetComponent<Rigidbody>(); 
 	}
+
+    public void DisableCollider()
+    {
+        colliderComp = GetComponent<SphereCollider>();
+        colliderComp.enabled = false;
+        StartCoroutine(DisableColliderCounter());
+    }
+
+    IEnumerator DisableColliderCounter()
+    {
+        yield return new WaitForSeconds(0.3f);
+        colliderComp.enabled = true;
+        colliderComp = null;
+    }
 	
     // NEW FUNCTION FOR BALL MOVEMENT LOGIC
     public void MoveBall(Vector3 movementVec, float speed)

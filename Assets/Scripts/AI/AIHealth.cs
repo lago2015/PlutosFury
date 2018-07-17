@@ -13,7 +13,6 @@ public class AIHealth : MonoBehaviour {
     public GameObject Model;
     public GameObject Model2;
     public GameObject parent;
-    private Collider myCollider;
     public enum EnemyOptions { TurretSingle,TurretScatter,Spike,Shatter}
     public EnemyOptions currentEnemy;
     public float wallBump = 20;
@@ -23,7 +22,6 @@ public class AIHealth : MonoBehaviour {
     void Awake()
     {
         audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
-        myCollider = GetComponent<Collider>();
         myBody = GetComponent<Rigidbody>();
         if(Explosion&&Model)
         {

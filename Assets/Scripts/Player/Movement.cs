@@ -14,8 +14,6 @@ public class Movement : MonoBehaviour
     bool CanFreezePluto;
     private bool isDisabled;
     private bool isDead;
-
-
     //******Dash Variables
     //Dash States
     public enum DashState { idle, basicMove, dashMove, chargeStart, chargeComplete, burst }
@@ -30,10 +28,7 @@ public class Movement : MonoBehaviour
 
     /////Time outs
     public float DashTimeout = 2f;
-
-
-
-    /////Cooldowns
+    ///Cooldowns
     private float DashCooldownTime = 0.5f;
 
     /////checks
@@ -544,16 +539,7 @@ public class Movement : MonoBehaviour
     }
 
     
-    //Just stop pluto in his tracks
-    public void FreezePluto()
-    {
-        if(!CanFreezePluto)
-        {
-            myBody.velocity = Vector3.zero;
-            MoveSpeed = 0;
-            
-        }
-    }
+    
     //Resume function when pluto is done being frozen or slowed
     public void ResumePluto()
     {

@@ -35,6 +35,9 @@ public class FloatingJoystick : MonoBehaviour,IDragHandler,IPointerUpHandler,IPo
     private Vector2 screenPos;
     private bool directionChosen;
 
+    private int CurMoonballAmount;
+    private MoonballManager moonballManagerScript;
+
     private void Start()
     {
         if (GetComponent<Image>() == null)
@@ -42,6 +45,10 @@ public class FloatingJoystick : MonoBehaviour,IDragHandler,IPointerUpHandler,IPo
             Debug.LogError("There is no joystick image attached to this script.");
         }
         player = GameObject.FindGameObjectWithTag("Player");
+        if(player)
+        {
+            moonballManagerScript = player.GetComponent<MoonballManager>();
+        }
         if (transform.GetChild(0).GetComponent<Image>() == null)
         {
             Debug.LogError("There is no joystick handle image attached to this script.");
@@ -67,20 +74,6 @@ public class FloatingJoystick : MonoBehaviour,IDragHandler,IPointerUpHandler,IPo
         {
             dashScript.changeChargeStatus(false);
         }
-        //if(Input.touchCount==2)
-        //{
-        //    if(!directionChosen&& distance <= minDistance)
-        //    {
-        //        scriptDoOnce = dashScript.doOnce;
-        //        //if charge hasnt started than start now
-        //        if (!scriptDoOnce)
-        //        {
-        //                //activate dash mechanic 
-        //                dashScript.changeChargeStatus(true);
-        //        }
-        //    }
-        //}
-        
     }
 
     // this event happens when there is a drag on screen
@@ -160,9 +153,9 @@ public class FloatingJoystick : MonoBehaviour,IDragHandler,IPointerUpHandler,IPo
                             //activate dash mechanic 
                             dashScript.changeChargeStatus(true);
                         }
-                        
+                        directionChosen = false;
                     }
-                    Debug.Log("Distance: " + distance);
+                    //Debug.Log("Distance: " + distance);
                     break;
             }
             if (directionChosen && !isCoolingDown)
@@ -173,22 +166,31 @@ public class FloatingJoystick : MonoBehaviour,IDragHandler,IPointerUpHandler,IPo
     }
     public void SpawnMoonball(Vector2 direction)
     {
-        if (MoonballObject)
+        CurMoonballAmount = PlayerPrefs.GetInt("moonBallAmount");
+        if(CurMoonballAmount>0)
         {
-            direction=direction.normalized;
-            curPosition = player.transform.position + new Vector3(direction.x,direction.y,0);
-            GameObject newMoonBall = Instantiate(MoonballObject, curPosition, Quaternion.identity);
-            moonballBody = newMoonBall.GetComponent<Rigidbody>();
-            if (moonballBody)
+            if (MoonballObject)
             {
-                moonballBody.AddForce(direction * ballLaunchPower, ForceMode.VelocityChange);
+                direction = direction.normalized;
+                curPosition = player.transform.position + new Vector3(direction.x, direction.y, 0);
+                GameObject newMoonBall = Instantiate(MoonballObject, curPosition, Quaternion.identity);
+                moonballBody = newMoonBall.GetComponent<Rigidbody>();
+                newMoonBall.GetComponent<MoonBall>().DisableCollider();
+                if (moonballBody)
+                {
+                    moonballBody.AddForce(direction * ballLaunchPower, ForceMode.VelocityChange);
+                }
+                curPosition = Vector3.zero;
+                startPos = Vector2.zero;
+                direction = Vector2.zero;
+                directionChosen = false;
+
             }
-            curPosition = Vector3.zero;
-            startPos = Vector2.zero;
-            direction = Vector2.zero;
-            directionChosen = false;
+
+            moonballManagerScript.DecrementBalls();
+            StartCoroutine(MoonballCooldown());
+
         }
-        StartCoroutine(MoonballCooldown());
     }
 
     IEnumerator MoonballCooldown()

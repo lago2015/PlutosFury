@@ -29,7 +29,7 @@ public class GameManager : MonoBehaviour
     public bool levelWallActive;
     private bool willPlayAd;
     Movement playerMoveScript;
-    PlayerLives playerLivesScript;
+    MoonballManager moonBallManScript;
     PlayerCollisionAndHealth playerCollisionScript;
     GameObject audioObject;
     AudioController audioScript;
@@ -42,6 +42,7 @@ public class GameManager : MonoBehaviour
     private GameObject levelWall;
     private GameObject CanvasManager;
     private CanvasToggle canvasScript;
+
     void Awake()
     {
         //30 fps set rate
@@ -58,13 +59,7 @@ public class GameManager : MonoBehaviour
         {
             canvasScript = CanvasManager.GetComponent<CanvasToggle>();
         }
-        ////reference player
-        //pluto = GameObject.FindGameObjectWithTag("Player");
-        //if(pluto)
-        //{
-        //    //modelSwitch = pluto.GetComponent<TextureSwap>();
-        //    playerScript = pluto.GetComponent<Movement>();
-        //}
+        
         InGameCharacterManager charManager = transform.GetChild(0).GetComponent<InGameCharacterManager>();
         if(charManager)
         {
@@ -72,7 +67,7 @@ public class GameManager : MonoBehaviour
             pluto = Instantiate(charManager.CurrentCharacter(curIndex), spawnPoint.transform.position, Quaternion.identity);
             playerMoveScript = pluto.GetComponent<Movement>();
             playerCollisionScript = pluto.GetComponent<PlayerCollisionAndHealth>();
-            playerLivesScript = pluto.GetComponent<PlayerLives>();
+            moonBallManScript = pluto.GetComponent<MoonballManager>();
         }
 
 
@@ -191,7 +186,7 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(GameOverDelay);
         DelayVoiceThenPlayMusic();
         //enable game over screen
-
+        moonBallManScript.SaveCurrentBalls();
         if (canvasScript)
         {
             canvasScript.GameEnded(true);
@@ -231,8 +226,7 @@ public class GameManager : MonoBehaviour
         {
             audioScript.CompleteLevel();
         }
-        //modelSwitch.SwapMaterial(TextureSwap.PlutoState.Win);
-
+        
         yield return new WaitForSeconds(1f);
         if (ScoreManager)
         {
@@ -248,7 +242,7 @@ public class GameManager : MonoBehaviour
             ScoreManager.SaveScore(false);
             //Save health and lives
             ScoreManager.SaveHealth();
-            playerLivesScript.SaveLives();
+            moonBallManScript.SaveCurrentBalls();
         }
 
         if (canvasScript)

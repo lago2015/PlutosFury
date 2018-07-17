@@ -23,18 +23,11 @@ public class PlayerLives : MonoBehaviour
         playerLives--;
         if (HUDScript)
         {
-            HUDScript.UpdateLives(playerLives);
+            HUDScript.UpdateBalls(playerLives);
         }
     }
 
-    public void IncrementLifes()
-    {
-        playerLives++;
-        if (HUDScript)
-        {
-            HUDScript.UpdateLives(playerLives);
-        }
-    }
+ 
 
     public void SaveLives()
     {

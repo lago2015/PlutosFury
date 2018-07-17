@@ -3,12 +3,13 @@ using System.Collections;
 
 public class PickUpSkills : MonoBehaviour {
 
-    public enum Skills { Star, Inflation, Health,Shockwave,LifeUp}
+    public enum Skills { Health,Moonball}
     public Skills curSkill;
     //Script references
     private HealthObtainedController healthController;
     private PlayerCollisionAndHealth playerCollisionScript;
     private PlayerAppearance appearanceScript;
+    private MoonballManager moonballManScript;
     private HUDManager hudScript;
     private bool pickupObtained;
     private AudioController audioScript;
@@ -29,28 +30,15 @@ public class PickUpSkills : MonoBehaviour {
         hudScript = GameObject.FindGameObjectWithTag("HUDManager").GetComponent<HUDManager>();
         switch (curSkill)
         {
-            case Skills.Star:
-                
-                playerCollisionScript = playerRef.GetComponent<PlayerCollisionAndHealth>();
-                appearanceScript = playerRef.GetComponent<PlayerAppearance>();
-                break;
-            case Skills.Inflation:
-                
-                playerCollisionScript = playerRef.GetComponent<PlayerCollisionAndHealth>();
-
-                break;
+            
             case Skills.Health:
                 playerCollisionScript = playerRef.GetComponent<PlayerCollisionAndHealth>();
                 healthController = GetComponent<HealthObtainedController>();
                 appearanceScript = playerRef.GetComponent<PlayerAppearance>();
                 break;
-            case Skills.Shockwave:
-                
-                //add new shockwave script here
-                break;
-            case Skills.LifeUp:
-                playerCollisionScript = playerRef.GetComponent<PlayerCollisionAndHealth>();
-                healthController = GetComponent<HealthObtainedController>();
+            
+            case Skills.Moonball:
+                moonballManScript = playerRef.GetComponent<MoonballManager>();
                 appearanceScript = playerRef.GetComponent<PlayerAppearance>();
 
                 break;
@@ -74,28 +62,6 @@ public class PickUpSkills : MonoBehaviour {
 
         switch (curSkill)
         {
-            //case Skills.Star:
-
-            //    if (ShieldScript && playerCollisionScript && !pickupObtained && hudScript && PowerUpScript)
-            //    {
-            //        PowerUpScript.DashPluto(transform.position);
-            //        hudScript.isShieldActive(true);
-            //        pickupObtained = true;
-            //        //playerScript.IndicatePickup();
-            //        ShieldScript.ShieldPluto();
-            //        Destroy(gameObject);
-            //    }
-            //    break;
-
-            //case Skills.Inflation:
-            //    if (InflateScript && !pickupObtained)
-            //    {
-            //        pickupObtained = true;
-            //        InflateScript.Inflate();
-            //        InflateScript.InflatePluto();
-            //        Destroy(gameObject);
-            //    }
-            //    break;
             case Skills.Health:
                 if (playerCollisionScript && !pickupObtained)
                 {
@@ -113,23 +79,14 @@ public class PickUpSkills : MonoBehaviour {
 
                 }
                 break;
-            //case Skills.Shockwave:
-            //    if (PowerUpScript && !pickupObtained && hudScript)
-            //    {
-                    
-            //        pickupObtained = true;
-            //        PowerUpScript.ShockPluto(transform.position);
-            //        Destroy(gameObject);
-            //    }
-            //    break;
-            case Skills.LifeUp:
-                if (playerCollisionScript && !pickupObtained)
+            
+            case Skills.Moonball:
+                if (moonballManScript && !pickupObtained)
                 {
                     pickupObtained = true;
-                    playerCollisionScript.LifeUp(transform.position);
-                    if (healthController)
+                    if(moonballManScript)
                     {
-                        healthController.CreateFloatingHealth(playerCollisionScript.transform.position);
+                        moonballManScript.IncrementBalls();
                     }
                     if(audioScript)
                     {

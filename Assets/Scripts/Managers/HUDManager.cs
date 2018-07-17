@@ -9,7 +9,7 @@ public class HUDManager : MonoBehaviour {
     //Script References for hud
     private CountDownStage timerScript;
     private PlayerManager scoreScript;
-    private PlayerLives playerLivesScript;
+    private MoonballManager playerBallsScript;
     //Text to apply to hud
     public Text scoreText;
     public Image[] healthSprites;
@@ -19,7 +19,7 @@ public class HUDManager : MonoBehaviour {
     //local variables for hud 
     private int curMaxHealth;
     private int currentScore;
-    private int currentPlayerLives;
+    private int currentMoonballAmount;
     // Use this for initialization
     void Awake()
     {
@@ -32,7 +32,7 @@ public class HUDManager : MonoBehaviour {
             scoreScript = scoreObject.GetComponent<PlayerManager>();
         }
         curMaxHealth = PlayerPrefs.GetInt("CurAddtionalHearts");
-
+        
     }
 
     private void Start()
@@ -52,9 +52,9 @@ public class HUDManager : MonoBehaviour {
             currentScore = scoreScript.ReturnScore();
             UpdateScore(currentScore);
         }
-        playerLivesScript = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerLives>();
-        currentPlayerLives = playerLivesScript.CurrentLives();
-        UpdateLives(currentPlayerLives);
+        playerBallsScript = GameObject.FindGameObjectWithTag("Player").GetComponent<MoonballManager>();
+        currentMoonballAmount = playerBallsScript.CurrentMoonballsAmount();
+        UpdateBalls(currentMoonballAmount);
 
     }
 
@@ -146,11 +146,11 @@ public class HUDManager : MonoBehaviour {
         }
     }
 
-    public void UpdateLives(int newLives)
+    public void UpdateBalls(int newBalls)
     {
         if (scoreScript)
         {
-            playerLives.text = ("x " + newLives);
+            playerLives.text = ("x " + newBalls);
         }
     }
 }

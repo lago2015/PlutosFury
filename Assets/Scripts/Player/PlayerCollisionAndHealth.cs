@@ -181,14 +181,6 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
         }
        
     }
-    public void LifeUp(Vector3 curLocation)
-    {
-        if (livesScript)
-        {
-            livesScript.IncrementLifes();
-        }
-        
-    }
 
 
     //Resets plutos health to 0

@@ -14,7 +14,7 @@ public class PlayerShopManager : MonoBehaviour {
     public Button BuyHeartButton;
     public Button BuyHeartContainerButton;
     private UpdateOrbAmount orbTextScript;
-
+    public Text notEnoughOrbsText;
     private void Awake()
     {
         //get current heart container saved
@@ -55,6 +55,11 @@ public class PlayerShopManager : MonoBehaviour {
         {
             BuyHeartButton.interactable = true;
         }
+        //if capped for heart containers then disable button
+        if (curHeartContainer == 4)
+        {
+            BuyHeartContainerButton.interactable = false;
+        }
     }
     //Reset all player preferences for testing***************
     public void ResetValues()
@@ -72,6 +77,7 @@ public class PlayerShopManager : MonoBehaviour {
         curOrbs = PlayerPrefs.GetInt("scorePref");
         curOrbs += 1000;
         PlayerPrefs.SetInt("scorePref", curOrbs);
+        orbTextScript.ChangeOrbAmount();
     }
 
     //function to buy a heart container

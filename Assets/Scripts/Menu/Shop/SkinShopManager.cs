@@ -23,8 +23,10 @@ public class SkinShopManager : MonoBehaviour
     public GameObject[] SkinsToBuy;
     public Button[] BuySkinsButtons;
     private UpdateOrbAmount orbTextScript;
-
-
+    private int curSkinNumber;
+    public Animator notEnoughOrbsText;
+    private bool isPlaying;
+    private float animationClip;
     private void Awake()
     {
         skin0Bought = PlayerPrefs.GetInt("skin0");
@@ -79,24 +81,49 @@ public class SkinShopManager : MonoBehaviour
             SkinsToBuy[3].SetActive(true);
             BuySkinsButtons[3].interactable = true;
         }
+        notEnoughOrbsText.SetBool("TextActive", false);
+        
     }
 
-    public void BuySkin(int skinNumber)
+    
+    public void BuySkin(int curSkin)
     {
         curOrbs = PlayerPrefs.GetInt("scorePref");
         
-        if(curOrbs>=PriceOfSkin)
+        if(curOrbs>=PriceOfSkin && curSkin != -1)
         {
-            PlayerPrefs.SetInt("skin" + skinNumber, 1);
-            SkinsToBuy[skinNumber].SetActive(false);
-            BuySkinsButtons[skinNumber].interactable = false;
+            PlayerPrefs.SetInt("skin" + curSkin, 1);
+            SkinsToBuy[curSkin].SetActive(false);
+            BuySkinsButtons[curSkin].interactable = false;
             curOrbs -= PriceOfSkin;
             PlayerPrefs.SetInt("scorePref", curOrbs);
             orbTextScript.ChangeOrbAmount();
         }
         //otherwise do not available sound and text pop up saying not enough orbs
-        
+        else
+        {
+            StopAllCoroutines();
+            if (isPlaying)
+            {
+                notEnoughOrbsText.Play("TextAppearThenFade", -1, 0);
+
+            }
+            else
+            {
+                isPlaying = true;
+                notEnoughOrbsText.SetBool("TextActive", true);
+                notEnoughOrbsText.Play("TextAppearThenFade");
+            }
+            StartCoroutine(CountdownForAnimation());
+        }
     }
 
+    IEnumerator CountdownForAnimation()
+    {
+        yield return new WaitForSeconds(5);
+        isPlaying = false;
+        notEnoughOrbsText.SetBool("TextActive", false);
+        
+    }
 
 }
