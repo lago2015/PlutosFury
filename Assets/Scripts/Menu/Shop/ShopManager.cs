@@ -23,7 +23,7 @@ public class ShopManager : MonoBehaviour {
 
     public void BuyItem()
     {
-        switch (curItem)
+       switch (curItem)
         {
             //player skin
             case 0:
@@ -47,7 +47,7 @@ public class ShopManager : MonoBehaviour {
             case 4:
                 moonballManager.BuyAMoonballContainer();
                 break;
-        }
+        } 
     }
 
     public void ConfirmSkinPurchase(int curSkin)

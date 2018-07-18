@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerShopManager : MonoBehaviour {
+public class PlayerShopManager : MonoBehaviour
+{
     public int curHeartIndex;
     private int curOrbs;
     public int curHeartContainer;
@@ -16,6 +17,7 @@ public class PlayerShopManager : MonoBehaviour {
     private UpdateOrbAmount orbTextScript;
     public Animator notEnoughOrbsText;
     private bool isPlaying;
+
     private void Awake()
     {
         //get current heart container saved

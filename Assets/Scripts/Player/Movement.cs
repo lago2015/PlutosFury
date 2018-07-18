@@ -178,9 +178,6 @@ public class Movement : MonoBehaviour
                 GameObject newGameManager = Instantiate(Resources.Load("GameManager", typeof(GameObject))) as GameObject;
             }
         }
-        
-        
-        
     }
 
     

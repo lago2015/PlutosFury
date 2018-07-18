@@ -24,16 +24,14 @@ public class LookAtObject : MonoBehaviour {
 
     void Start()
     {
-        if (gameObject.name.Contains("Turret"))
-        {
-            Player = GameObject.FindGameObjectWithTag("Player");
-        }
+        Player = GameObject.FindGameObjectWithTag("Player");
+
 
         if (AmITurret)
         {
-            startPosition = transform.position;
+            startPosition = transform.localPosition;
         }
-        enabled = false;
+       // enabled = false;
 
     }
 
@@ -48,11 +46,14 @@ public class LookAtObject : MonoBehaviour {
         distanceToPlayer = Vector3.Distance(transform.position, Player.transform.position);
         if(distanceToPlayer>=maxDistanceToAttack)
         {
-            TrigCollider.enabled = true;
-            enabled = false;
-            if(shootScript)
+            if(TrigCollider)
             {
-                shootScript.PlayerIsNotNear();
+                TrigCollider.enabled = true;
+                enabled = false;
+                if (shootScript)
+                {
+                    shootScript.PlayerIsNotNear();
+                }
             }
         }
     }
@@ -73,10 +74,10 @@ public class LookAtObject : MonoBehaviour {
         //ensure turret stays with base of turret
         if (AmITurret)
         {
-            transform.position = startPosition;
+            transform.localPosition = startPosition;
         }
     }
-
+    
     //Discovered player
     void OnTriggerEnter(Collider col)
     {

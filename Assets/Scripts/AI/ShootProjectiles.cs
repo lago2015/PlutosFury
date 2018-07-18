@@ -10,8 +10,18 @@ public class ShootProjectiles : MonoBehaviour {
     public float FireRate;
     float elapseTime;
     bool isReloading = false;
-    bool PlayerNear;
+    public bool PlayerNear;
     public bool PlayerIsNotNear() { enabled = false; return PlayerNear = false; }
+
+    public bool isPlayerNear(bool isHere)
+    {
+        return PlayerNear = isHere;
+    }
+
+    private void OnEnable()
+    {
+        elapseTime = 0;
+    }
     void Awake()
     {
         if(Muzzle)

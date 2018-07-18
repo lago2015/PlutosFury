@@ -5,8 +5,12 @@ public class DetectPlayer : MonoBehaviour {
 
     //***For Rogue Enemy
     private ExPointController exPointController;
+    private SphereCollider TrigCollider;
+
     public GameObject ScriptModel;
+    public LookAtObject rotationScript;
     private ChasePlayer ChaseScript;
+    private MovingTurret chooterScript;
     private FleeOrPursue pursueScript;
     private RogueAvoidance avoidanceScript;
     private bool playOnce;
@@ -25,9 +29,15 @@ public class DetectPlayer : MonoBehaviour {
                 {
                     pursueScript.enabled = false;
                 }
+                else
+                {
+                    chooterScript = ScriptModel.GetComponent<MovingTurret>();
+                    chooterScript.enabled = false;
+                }
             }
             avoidanceScript = ScriptModel.GetComponent<RogueAvoidance>();
         }
+        TrigCollider = GetComponent<SphereCollider>();
     }
 
     /* This is meant for Boss Planet Detection*/
@@ -54,6 +64,17 @@ public class DetectPlayer : MonoBehaviour {
                 pursueScript.enabled = true;
                 pursueScript.PlayerIsNear();
             }
+            if(chooterScript)
+            {
+                chooterScript.enabled = true;
+                chooterScript.PlayerIsNear();
+                rotationScript.enabled = true;
+                if(TrigCollider)
+                {
+                    TrigCollider.enabled = false;
+                }
+            }
+            
             if(exPointController)
             {
                 exPointController.CreateFloatingExPoint(transform.position);
@@ -77,6 +98,16 @@ public class DetectPlayer : MonoBehaviour {
             {
                 pursueScript.enabled = false;
                 pursueScript.PlayerNotNear();
+            }
+            if (chooterScript)
+            {
+                chooterScript.enabled = false;
+                chooterScript.PlayerNotNear();
+                rotationScript.enabled = false;
+                if(TrigCollider)
+                {
+                    TrigCollider.enabled = true;
+                }
             }
             if (avoidanceScript)
             {
