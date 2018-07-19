@@ -18,9 +18,12 @@ public class SkinShopManager : MonoBehaviour
     private int skin1Bought;
     private int skin2Bought;
     private int skin3Bought;
+    private int moonSkin0;
+    private int moonSkin1;
+    private int moonSkin2;
+    private int moonSkin3;
     private int curOrbs;
     public int PriceOfSkin = 1000;
-    public GameObject[] SkinsToBuy;
     public Button[] BuySkinsButtons;
     private UpdateOrbAmount orbTextScript;
     private int curSkinNumber;
@@ -33,53 +36,100 @@ public class SkinShopManager : MonoBehaviour
         skin1Bought = PlayerPrefs.GetInt("skin1");
         skin2Bought = PlayerPrefs.GetInt("skin2");
         skin3Bought = PlayerPrefs.GetInt("skin3");
+        moonSkin0 = PlayerPrefs.GetInt("skin4");
+        moonSkin1 = PlayerPrefs.GetInt("skin5");
+        moonSkin2 = PlayerPrefs.GetInt("skin6");
+        moonSkin3 = PlayerPrefs.GetInt("skin7");
         orbTextScript = GameObject.FindGameObjectWithTag("Finish").GetComponent<UpdateOrbAmount>();
         if(skin0Bought==1)
         {
-            SkinsToBuy[0].SetActive(false);
             BuySkinsButtons[0].interactable = false;
         }
         else
         {
 
-            SkinsToBuy[0].SetActive(true);
             BuySkinsButtons[0].interactable = true;
         }
 
         if (skin1Bought == 1)
         {
-            SkinsToBuy[1].SetActive(false);
+
             BuySkinsButtons[1].interactable = false;
         }
         else
         {
 
-            SkinsToBuy[1].SetActive(true);
+
             BuySkinsButtons[1].interactable = true;
         }
 
         if (skin2Bought == 1)
         {
-            SkinsToBuy[2].SetActive(false);
+
             BuySkinsButtons[2].interactable = false;
         }
         else
         {
 
-            SkinsToBuy[2].SetActive(true);
+
             BuySkinsButtons[2].interactable = true;
         }
 
         if (skin3Bought == 1)
         {
-            SkinsToBuy[3].SetActive(false);
+
             BuySkinsButtons[3].interactable = false;
         }
         else
         {
 
-            SkinsToBuy[3].SetActive(true);
+
             BuySkinsButtons[3].interactable = true;
+        }
+        //****************Moonball skins**********************
+        if (moonSkin0 == 1)
+        {
+
+            BuySkinsButtons[4].interactable = false;
+        }
+        else
+        {
+
+
+            BuySkinsButtons[4].interactable = true;
+        }
+        if (moonSkin1 == 1)
+        {
+
+            BuySkinsButtons[5].interactable = false;
+        }
+        else
+        {
+
+
+            BuySkinsButtons[5].interactable = true;
+        }
+        if (moonSkin2 == 1)
+        {
+
+            BuySkinsButtons[6].interactable = false;
+        }
+        else
+        {
+
+
+            BuySkinsButtons[6].interactable = true;
+        }
+        if (moonSkin3 == 1)
+        {
+
+            BuySkinsButtons[7].interactable = false;
+        }
+        else
+        {
+
+
+            BuySkinsButtons[7].interactable = true;
         }
         notEnoughOrbsText.SetBool("TextActive", false);
         
@@ -93,7 +143,7 @@ public class SkinShopManager : MonoBehaviour
         if(curOrbs>=PriceOfSkin && curSkin != -1)
         {
             PlayerPrefs.SetInt("skin" + curSkin, 1);
-            SkinsToBuy[curSkin].SetActive(false);
+
             BuySkinsButtons[curSkin].interactable = false;
             curOrbs -= PriceOfSkin;
             PlayerPrefs.SetInt("scorePref", curOrbs);
@@ -102,19 +152,7 @@ public class SkinShopManager : MonoBehaviour
         //otherwise do not available sound and text pop up saying not enough orbs
         else
         {
-            //StopAllCoroutines();
-            //if (isPlaying)
-            //{
-            //    notEnoughOrbsText.Play("TextAppearThenFade", -1, 0);
-            //    notEnoughOrbsText.SetBool("TextActive", true);
-            //}
-            //else
-            //{
-            //    isPlaying = true;
-            //    notEnoughOrbsText.SetBool("TextActive", true);
-            //    notEnoughOrbsText.Play("TextAppearThenFade");
-            //}
-            //StartCoroutine(CountdownForAnimation());
+            
             notEnoughOrbsText.Play("TextAppearThenFade", -1, 0);
 
         }

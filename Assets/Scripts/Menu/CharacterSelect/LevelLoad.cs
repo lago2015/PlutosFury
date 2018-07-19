@@ -18,7 +18,7 @@ public class LevelLoad : MonoBehaviour {
     void Start () {
 
         CharacterInfo currentCharacter = CharacterManager.Instance.GetCurrentCharacter();
-
+        CharacterInfo currentMoonball = CharacterManager.Instance.GetCurrentMoonball();
         currentCharacter.transform.position = SpawnPoint.transform.position;
 
         currentCharacter.gameObject.SetActive(true);

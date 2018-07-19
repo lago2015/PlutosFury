@@ -16,6 +16,8 @@ public class DetectWaitThenExplode : MonoBehaviour {
     public float WaitTimeToExplode = 1f;
     public Animator animComp;
     private Vector3 spawnPoint;
+    private bool isLerping;
+    private bool isDashing;
     // Use this for initialization
     void Awake()
     {
@@ -53,22 +55,26 @@ public class DetectWaitThenExplode : MonoBehaviour {
         string CurTag = col.gameObject.tag;
         if (CurTag == "Player")
         {
-            if(playerScript)
+            if (playerScript)
             {
-                bool isDashing = playerScript.DashStatus();
-                if(isDashing)
+                isDashing = playerScript.DashStatus();
+                if (isDashing)
                 {
-                    if (damageScript)
+                    isLerping = pursuitScript.AmILerping();
+                    if(!isLerping)
                     {
-                        damageScript.didDamage();
+                        if (damageScript)
+                        {
+                            damageScript.didDamage();
+                        }
+                        WaitTimeToExplode = 0;
+                        TriggerExplosionInstantly();
                     }
-                    WaitTimeToExplode = 0;
-                    TriggerExplosionInstantly();
                 }
                 else
                 {
-                    //Start Explosion
-                    TriggeredExplosion();
+
+                    pursuitScript.EnableLerp();
                 }
             }
         }
