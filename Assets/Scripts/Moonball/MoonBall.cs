@@ -128,6 +128,7 @@ public class MoonBall : MonoBehaviour
         if (Explosion)
         {
             Instantiate(Explosion, transform.position, Quaternion.identity);
+
             Destroy(gameObject);
         }
     }

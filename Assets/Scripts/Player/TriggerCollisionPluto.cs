@@ -60,6 +60,7 @@ public class TriggerCollisionPluto : MonoBehaviour {
             if (ShouldDash)
             {
                 other.gameObject.GetComponent<BigAsteroid>().AsteroidHit(1);
+                GameObject.FindObjectOfType<Movement>().OrbCombo();
             }
         }
     }

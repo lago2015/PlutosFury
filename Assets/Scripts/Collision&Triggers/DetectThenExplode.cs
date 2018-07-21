@@ -123,6 +123,10 @@ public class DetectThenExplode : MonoBehaviour {
                 Vector3 dir = col.contacts[0].point - transform.position;
                 col.gameObject.GetComponent<MoonBall>().MoveBall(-dir.normalized, 20.0f);
             }
+            else
+            {
+                GameObject.FindObjectOfType<ComboTextManager>().CreateComboText(2);
+            }
           
             TriggeredExplosion();
         }

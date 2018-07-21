@@ -43,7 +43,6 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
     private bool ShouldDash;
 
     //getter functions to check damage
-    
 
     public int CurrentHealth() { return curHealth; }
     public bool DamageStatus() { return isDamaged; }

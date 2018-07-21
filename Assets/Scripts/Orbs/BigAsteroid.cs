@@ -79,8 +79,7 @@ public class BigAsteroid : MonoBehaviour {
             Movement moveScript = col.gameObject.GetComponent<Movement>();
             bool isDashing = moveScript.DashStatus();
             //bool isPowerReady = moveScript.DashChargeStatus();
-
-            if(isDashing==true)
+            if (isDashing==true)
             {
                 if (!doOnce)
                 {
@@ -88,7 +87,9 @@ public class BigAsteroid : MonoBehaviour {
                     {
                         audioScript.AsteroidExplosion(transform.position);
                     }
+                    
                     SpawnAsteroids();
+             
                     doOnce = true;
                 }
             }
@@ -110,6 +111,7 @@ public class BigAsteroid : MonoBehaviour {
                 {
                     audioScript.AsteroidExplosion(transform.position);
                 }
+                        
                 SpawnAsteroids();
                 doOnce = true;
             }

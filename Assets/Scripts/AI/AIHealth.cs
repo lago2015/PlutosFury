@@ -41,6 +41,11 @@ public class AIHealth : MonoBehaviour {
         EnemyHealth--;
         if(EnemyHealth<=0)
         {
+            if (CurName == "MoonBall")
+            {
+                GameObject.FindObjectOfType<ComboTextManager>().CreateComboText(1);
+            }
+
             if (Explosion && Model)
             {
                 

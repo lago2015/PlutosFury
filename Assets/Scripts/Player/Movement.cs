@@ -8,6 +8,7 @@ public class Movement : MonoBehaviour
 {
     
     public bool startAtBeginning;
+    private int orbCount = 0;
     
     public bool controllerConnected = false;
     //buffs and debuffs
@@ -424,6 +425,7 @@ public class Movement : MonoBehaviour
 
                 StartCoroutine(DashTransition());   //Start dash
             }
+
         }
     }
 
@@ -460,6 +462,7 @@ public class Movement : MonoBehaviour
         }
         gameObject.layer = 8;
 
+        orbCount = 0;
     }
 
     //Cool down for exhaustion from dash
@@ -551,7 +554,16 @@ public class Movement : MonoBehaviour
     {
         myBody.drag = normalDrag;
     }
-   
 
+    public void OrbCombo()
+    {
+        Debug.Log("Hes");
+
+        if(++orbCount >= 5)
+        {
+            GameObject.FindObjectOfType<ComboTextManager>().CreateComboText(0);
+            orbCount = 0;
+        }
+    }
     
 }
