@@ -7,10 +7,21 @@ public class InGameCharacterManager : MonoBehaviour {
 
     public GameObject[] InGameCharacters;
     public GameObject[] InGameMoonballs;
+    
     private int curIngameIndex;
     private int curBallIndex;
     private int curNumberPlayers;
     
+    private FloatingJoystick joystickScript;
+
+    private void Awake()
+    {
+        joystickScript = GameObject.FindGameObjectWithTag("GameController").GetComponent<FloatingJoystick>();
+        curBallIndex = PlayerPrefs.GetInt("PlayerMoonballIndex");
+        
+        joystickScript.currentMoonball(InGameMoonballs[curBallIndex]);
+    }
+
     //Number of players in
     public int NumOfPlayers(int curPlayers)
     {
@@ -27,6 +38,7 @@ public class InGameCharacterManager : MonoBehaviour {
     public GameObject CurrentMoonball(int numberOfSpawns)
     {
         curBallIndex = PlayerPrefs.GetInt("PlayerMoonballIndex");
+        
         return InGameMoonballs[curBallIndex];
     }
 

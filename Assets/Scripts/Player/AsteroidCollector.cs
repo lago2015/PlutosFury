@@ -5,7 +5,8 @@ using System.Collections;
 
 public class AsteroidCollector : MonoBehaviour {
 
-    private GameObject player;
+    private GameObject ObjectToFollow;
+    private bool followPlayer=true;
     public float bumperSpeed = 5.0f;
     public double plutoG = 0.75;
     public Vector3 directionToPluto;
@@ -18,26 +19,36 @@ public class AsteroidCollector : MonoBehaviour {
     private Vector3 forceOnMe;
     private AsteroidSpawner spawnScript;
     private double strength;
-    void Awake()
+
+    public GameObject FollowBall(GameObject curBall)
     {
-        
-        spawnScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<AsteroidSpawner>();    
-        player = GameObject.FindGameObjectWithTag("Player");
+        followPlayer = false;
+        return ObjectToFollow = curBall;
+    }
+    
+
+    private void Start()
+    {
+        spawnScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<AsteroidSpawner>();
+        if (followPlayer)
+        {
+            ObjectToFollow = GameObject.FindGameObjectWithTag("Player");
+        }
     }
 
     void LateUpdate()
     {
-        if(player)
+        if(ObjectToFollow)
         {
-            transform.position = player.transform.position;
+            transform.position = ObjectToFollow.transform.position;
         }
         else
         {
-            player = GameObject.FindGameObjectWithTag("Player");
+            ObjectToFollow = GameObject.FindGameObjectWithTag("Player");
             TriggerCollisionPluto trigScript = transform.GetChild(0).GetComponent<TriggerCollisionPluto>();
             if(trigScript)
             {
-                trigScript.parentOfPlayer = player;
+                trigScript.parentOfPlayer = ObjectToFollow;
             }
         }
     }

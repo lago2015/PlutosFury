@@ -85,6 +85,7 @@ public class LookAtObject : MonoBehaviour {
         {
             if(AmITurret)
             {
+                TrigCollider.radius = 2;
                 TrigCollider.enabled = false;
                 enabled = true;
             }

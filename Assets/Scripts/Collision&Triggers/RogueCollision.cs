@@ -4,7 +4,7 @@ using System.Collections;
 public class RogueCollision : MonoBehaviour {
 
     //This script is both collision and health for Rogue
-
+    public int orbDrop=3;
     public int EnemyHealth = 1;
     public float wallBump = 20;
     public GameObject pursueModel;
@@ -17,6 +17,8 @@ public class RogueCollision : MonoBehaviour {
     private FleeOrPursue rogueMoveScript;
     private Collider myCollider;
     private Movement playerMoveScript;
+    private AsteroidSpawner orbScript;
+    
     private PlayerCollisionAndHealth playerCollisionScript;
     private Rigidbody myBody;
     private AudioController audioScript;
@@ -26,7 +28,7 @@ public class RogueCollision : MonoBehaviour {
         audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
         myCollider = GetComponent<Collider>();
         myBody = GetComponent<Rigidbody>();
-
+        orbScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<AsteroidSpawner>();
         if (pursueModel)
         {
             rogueMoveScript = pursueModel.GetComponent<FleeOrPursue>();
@@ -54,7 +56,7 @@ public class RogueCollision : MonoBehaviour {
     }
 
     //Apply damage to rogue and check if 
-    public void RogueDamage(string CurName)
+    public void RogueDamage()
     {
         EnemyHealth--;
         if (EnemyHealth <= 0)
@@ -64,7 +66,12 @@ public class RogueCollision : MonoBehaviour {
                 audioScript.RogueDeath(transform.position);
             }
             myCollider.enabled = false;
-            
+            //spawn orbs
+            if(orbScript)
+            {
+                orbScript.SpawnAsteroidHere(orbDrop, transform.position);
+            }
+
             //start death sequence
             if (Explosion && Model)
             {
@@ -112,7 +119,7 @@ public class RogueCollision : MonoBehaviour {
                 }
                 else
                 {
-                    RogueDamage(col.transform.name);
+                    RogueDamage();
                 }
                 if (myBody)
                 {
@@ -163,7 +170,7 @@ public class RogueCollision : MonoBehaviour {
         {
             if(col.gameObject.name.Contains("DamageWall"))
             {
-                RogueDamage(" ");
+                RogueDamage();
                 col.gameObject.GetComponent<WallHealth>().IncrementDamage();
             }
         }

@@ -61,6 +61,11 @@ public class DetectPlayer : MonoBehaviour {
                     audioScript.RogueSpotted(transform.position);
                     playOnce = true;
                 }
+                if(TrigCollider)
+                {
+                    TrigCollider.enabled = false;
+                    TrigCollider.radius = 2;
+                }
                 pursueScript.enabled = true;
                 pursueScript.PlayerIsNear();
             }
@@ -71,18 +76,16 @@ public class DetectPlayer : MonoBehaviour {
                 rotationScript.enabled = true;
                 if(TrigCollider)
                 {
-                    TrigCollider.enabled = false;
+                    TrigCollider.radius = 2;
+                    
                 }
             }
             
             if(exPointController)
             {
                 exPointController.CreateFloatingExPoint(transform.position);
-            }
-            
+            }   
         }
-        
-
     }
     void OnTriggerExit(Collider col)
     {
@@ -104,10 +107,7 @@ public class DetectPlayer : MonoBehaviour {
                 chooterScript.enabled = false;
                 chooterScript.PlayerNotNear();
                 rotationScript.enabled = false;
-                if(TrigCollider)
-                {
-                    TrigCollider.enabled = true;
-                }
+                
             }
             if (avoidanceScript)
             {

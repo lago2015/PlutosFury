@@ -38,6 +38,8 @@ public class FloatingJoystick : MonoBehaviour,IDragHandler,IPointerUpHandler,IPo
     private int CurMoonballAmount;
     private MoonballManager moonballManagerScript;
 
+    public GameObject currentMoonball(GameObject curBall) { return MoonballObject = curBall; }
+
     private void Start()
     {
         if (GetComponent<Image>() == null)

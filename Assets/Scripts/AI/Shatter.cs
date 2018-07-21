@@ -9,7 +9,7 @@ public class Shatter : MonoBehaviour
     private bool playerInRange;
     private bool detached = false;
     private Vector3 targetRotation;
-
+    private SphereCollider colliderComp;
     public float rotateSpeed;
     public bool canRotate;
     public GameObject pieces;
@@ -18,6 +18,7 @@ public class Shatter : MonoBehaviour
     private void Awake()
     {
         audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
+        colliderComp = GetComponent<SphereCollider>();
     }
 
     // Use this for initialization
@@ -47,6 +48,7 @@ public class Shatter : MonoBehaviour
             playerInRange = true;
             enabled = true;
             DetachOrRetract(true);
+            colliderComp.enabled = false;
         }
     }
 

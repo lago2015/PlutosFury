@@ -11,9 +11,11 @@ public class DetectWaitThenExplode : MonoBehaviour {
     private DamageOrPowerUp damageScript;
     private HomingProjectile pursuitScript;
     private AudioController audioScript;
+    private AsteroidSpawner orbScript;
     private Movement playerScript;
     private bool doOnce;
     public float WaitTimeToExplode = 1f;
+    public int orbDrop=2;
     public Animator animComp;
     private Vector3 spawnPoint;
     private bool isLerping;
@@ -21,6 +23,7 @@ public class DetectWaitThenExplode : MonoBehaviour {
     // Use this for initialization
     void Awake()
     {
+        orbScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<AsteroidSpawner>();
         //getter for score script
         GameObject audioObject = GameObject.FindGameObjectWithTag("AudioController");
         if (audioObject)
@@ -110,36 +113,43 @@ public class DetectWaitThenExplode : MonoBehaviour {
         }
 
     }
-    void TriggerExplosionInstantly()
+    public void TriggerExplosionInstantly()
     {
-        if (pursuitScript)
+        if(!isLerping)
         {
-            pursuitScript.moveSpeed = 0;
-        }
-
-        animComp.SetBool("isExploding", true);
-        //check if theres a model and explosion
-        if (regularState && explosionState)
-        {
-            //ensure audio gets played once
-            if (!doOnce)
+            if (pursuitScript)
             {
-                if (audioScript)
+                pursuitScript.moveSpeed = 0;
+            }
+            if(orbScript)
+            {
+                orbScript.SpawnAsteroidHere(orbDrop, transform.position);
+            }
+            animComp.SetBool("isExploding", true);
+            //check if theres a model and explosion
+            if (regularState && explosionState)
+            {
+                //ensure audio gets played once
+                if (!doOnce)
                 {
-                    //get audio controller and play audio
-                    audioScript.DestructionSmall(transform.position);
+                    if (audioScript)
+                    {
+                        //get audio controller and play audio
+                        audioScript.DestructionSmall(transform.position);
+                    }
+                    doOnce = true;
                 }
-                doOnce = true;
-            }
 
-            //turn off model gameobject
-            regularState.SetActive(false);
-            //activate explosion gameobject
-            if (explosionState)
-            {
-                explosionState.SetActive(true);
+                //turn off model gameobject
+                regularState.SetActive(false);
+                //activate explosion gameobject
+                if (explosionState)
+                {
+                    explosionState.SetActive(true);
+                }
             }
         }
+        
     }
 
     public void TriggeredExplosion()

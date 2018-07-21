@@ -12,7 +12,7 @@ public class PlayerManager : MonoBehaviour {
     public int OrbsObtainedTotal;   //used for total orbs collected
     public int OrbsObtainedInLevel;       //total orbs collected in level
     public int playerHealth;
-    private int playerHeartContainer;
+    public int playerHeartContainer;
     private int playerMaxHealth = 5;
     private WinScreen winScript;
     private PlayerCollisionAndHealth playerHealthScript;
@@ -30,8 +30,14 @@ public class PlayerManager : MonoBehaviour {
         {
             HUDScript=hudObject.GetComponent<HUDManager>();
         }
-
+        
         playerHealth = PlayerPrefs.GetInt("healthPref");
+    }
+
+    private void Start()
+    {
+        playerHealthScript = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerCollisionAndHealth>();
+        StartingHearts();
     }
 
     void StartingHearts()

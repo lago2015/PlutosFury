@@ -14,16 +14,23 @@ public class PlayerMoonballManager : MonoBehaviour {
     public Button BuyMoonballButton;
     public Button BuyMoonballContainerButton;
     private UpdateOrbAmount orbTextScript;
-    public Animator notEnoughOrbsText;
+    private NotEnoughOrbsAnimation notEnoughOrbsText;
     private bool isPlaying;
+
+    public Text testText;
     private void Awake()
     {
         //get current heart container saved
-        curMoonballContainer = PlayerPrefs.GetInt("CurAddtionalHearts");
+        curMoonballContainer = PlayerPrefs.GetInt("CurAddtionalBalls");
         //Get current hearts saved
         curMoonballIndex = PlayerPrefs.GetInt("moonBallAmount");
         orbTextScript = GameObject.FindGameObjectWithTag("Finish").GetComponent<UpdateOrbAmount>();
-
+        //ensure moonball isnt greater than container
+        if (curMoonballIndex > curMoonballContainer)
+        {
+            curMoonballIndex = curMoonballContainer;
+            PlayerPrefs.GetInt("moonBallAmount", curMoonballIndex);
+        }
         //enable amount of available heart containers the player has in saved file
         for (int i = 0; i <= MoonballImageContainer.Length - 1; i++)
         {
@@ -48,7 +55,7 @@ public class PlayerMoonballManager : MonoBehaviour {
                 CurrentMoonballSavedContainer[i].SetActive(false);
             }
         }
-        if (curMoonballIndex == curMoonballContainer)
+        if (curMoonballIndex >= curMoonballContainer)
         {
             BuyMoonballButton.interactable = false;
         }
@@ -61,6 +68,7 @@ public class PlayerMoonballManager : MonoBehaviour {
         {
             BuyMoonballContainerButton.interactable = false;
         }
+        notEnoughOrbsText = GameObject.FindGameObjectWithTag("Respawn").GetComponent<NotEnoughOrbsAnimation>();
     }
 
 
@@ -69,7 +77,7 @@ public class PlayerMoonballManager : MonoBehaviour {
     {
         //get orb reference then see if player has enough to buy
         curOrbs = PlayerPrefs.GetInt("scorePref");
-        if (curOrbs >= heartContainerPrices[curMoonballContainer - 1])
+        if (curOrbs >= heartContainerPrices[curMoonballContainer-1])
         {
             //update orb amount then save
             curOrbs -= heartContainerPrices[curMoonballContainer - 1];
@@ -81,14 +89,14 @@ public class PlayerMoonballManager : MonoBehaviour {
             //update image for screen to show heart has been bought
             MoonballImageContainer[curMoonballContainer].SetActive(true);
             //save amount of additional hearts player has bought
-            PlayerPrefs.SetInt("CurAddtionalHearts", curMoonballContainer);
+            PlayerPrefs.SetInt("CurAddtionalBalls", curMoonballContainer);
             //check if buying a heart button is disabled due to max hearts being bought and re enable the button
             if (BuyMoonballButton.IsInteractable() == false)
             {
                 BuyMoonballButton.interactable = true;
             }
             //if capped for heart containers then disable button
-            if (curMoonballContainer == 4)
+            if (curMoonballContainer ==4)
             {
                 BuyMoonballContainerButton.interactable = false;
             }
@@ -96,22 +104,9 @@ public class PlayerMoonballManager : MonoBehaviour {
         //otherwise do not available sound and text pop up saying not enough orbs
         else
         {
-            StopAllCoroutines();
-            if (isPlaying)
-            {
-                notEnoughOrbsText.Play("TextAppearThenFade", -1, 0);
+            notEnoughOrbsText.PlayAnimation();
 
-            }
-            else
-            {
-                isPlaying = true;
-                notEnoughOrbsText.SetBool("TextActive", true);
-                notEnoughOrbsText.Play("TextAppearThenFade",-1,0);
-            }
-            StartCoroutine(CountdownForAnimation());
         }
-
-
     }
 
     IEnumerator CountdownForAnimation()
@@ -127,14 +122,22 @@ public class PlayerMoonballManager : MonoBehaviour {
         curOrbs = PlayerPrefs.GetInt("scorePref");
         if (curOrbs >= perMoonballPrice)
         {
-            curOrbs -= perMoonballPrice;
-            PlayerPrefs.SetInt("scorePref", curOrbs);
-            orbTextScript.ChangeOrbAmount();
+            if(curMoonballIndex<curMoonballContainer)
+            {
+                curOrbs -= perMoonballPrice;
+                PlayerPrefs.SetInt("scorePref", curOrbs);
+                orbTextScript.ChangeOrbAmount();
 
-            curMoonballIndex++;
-            CurrentMoonballSavedContainer[curMoonballIndex].SetActive(true);
-            PlayerPrefs.SetInt("healthPref", curMoonballIndex);
+                curMoonballIndex++;
+                CurrentMoonballSavedContainer[curMoonballIndex].SetActive(true);
+                PlayerPrefs.SetInt("moonBallAmount", curMoonballIndex);
 
+            }
+            else
+            {
+                notEnoughOrbsText.PlayAnimation();
+
+            }
             if (curMoonballIndex == curMoonballContainer)
             {
                 BuyMoonballButton.interactable = false;
@@ -143,19 +146,8 @@ public class PlayerMoonballManager : MonoBehaviour {
         //otherwise do not available sound and text pop up saying not enough orbs
         else
         {
-            StopAllCoroutines();
-            if (isPlaying)
-            {
-                notEnoughOrbsText.Play("TextAppearThenFade", -1, 0);
+            //notEnoughOrbsText.PlayAnimation();
 
-            }
-            else
-            {
-                isPlaying = true;
-                notEnoughOrbsText.SetBool("TextActive", true);
-                notEnoughOrbsText.Play("TextAppearThenFade");
-            }
-            StartCoroutine(CountdownForAnimation());
         }
 
 

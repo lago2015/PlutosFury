@@ -27,7 +27,7 @@ public class SkinShopManager : MonoBehaviour
     public Button[] BuySkinsButtons;
     private UpdateOrbAmount orbTextScript;
     private int curSkinNumber;
-    public Animator notEnoughOrbsText;
+    private NotEnoughOrbsAnimation notEnoughOrbsText;
     private bool isPlaying;
     private float animationClip;
     private void Awake()
@@ -131,7 +131,8 @@ public class SkinShopManager : MonoBehaviour
 
             BuySkinsButtons[7].interactable = true;
         }
-        notEnoughOrbsText.SetBool("TextActive", false);
+        notEnoughOrbsText = GameObject.FindGameObjectWithTag("Respawn").GetComponent<NotEnoughOrbsAnimation>();
+        //notEnoughOrbsText.SetBool("TextActive", false);
         
     }
 
@@ -152,18 +153,12 @@ public class SkinShopManager : MonoBehaviour
         //otherwise do not available sound and text pop up saying not enough orbs
         else
         {
-            
-            notEnoughOrbsText.Play("TextAppearThenFade", -1, 0);
+
+            //notEnoughOrbsText.PlayAnimation();
+
 
         }
     }
-
-    IEnumerator CountdownForAnimation()
-    {
-        yield return new WaitForSeconds(60);
-        isPlaying = false;
-        notEnoughOrbsText.SetBool("TextActive", false);
-        
-    }
+    
 
 }

@@ -51,6 +51,7 @@ public class HomingDetection : MonoBehaviour
                 moveScript.activateMovement(true);
                 if(TriggerCollider)
                 {
+                    TriggerCollider.radius = 2;
                     TriggerCollider.enabled = false;
                     
                 }

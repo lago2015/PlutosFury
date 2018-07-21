@@ -84,24 +84,30 @@ public class AsteroidSpawner : MonoBehaviour
     }
 
     //This function is called from large orbs to give it the "broken into pieces" effect
-    public void SpawnAsteroidHere(Transform spawnPoint)
+    public void SpawnAsteroidHere(int NumberOfSpawns,Vector3 spawnPoint)
     {
-        GameObject asteroid = GetPooledAsteroid();
-        if(asteroid==null)
+        for(int i=0;i<NumberOfSpawns;i++)
         {
-            return;
+            GameObject asteroid = GetPooledAsteroid();
+            if (asteroid == null)
+            {
+                return;
+            }
+            curObjectPosition = spawnPoint;
+            curObjectPosition.x = Random.Range(curObjectPosition.x + SpawnRadius, curObjectPosition.x - SpawnRadius);
+            curObjectPosition.y = Random.Range(curObjectPosition.y + SpawnRadius, curObjectPosition.y - SpawnRadius);
+
+            //curObjectPosition = transform.TransformPoint(curObjectPosition);
+            asteroid.transform.position =curObjectPosition;
+
+            //enable burst behavior to make orb pop outta gameobjects
+            asteroid.GetComponent<BurstBehavior>().GoBurst();
+            //assign the orb to the new spawn point
+
+            //enable
+            asteroid.SetActive(true);
+
         }
-        curObjectPosition = spawnPoint.position;
-        spawnPoint.localPosition = Random.insideUnitSphere * SpawnRadius;
-        spawnPoint.position = spawnPoint.TransformPoint(spawnPoint.localPosition);
-        asteroid.transform.position = spawnPoint.position;
-        asteroid.transform.rotation = spawnPoint.rotation;
-        //enable burst behavior to make orb pop outta gameobjects
-        asteroid.GetComponent<BurstBehavior>().GoBurst();
-        //assign the orb to the new spawn point
-        
-        //enable
-        asteroid.SetActive(true);
 
     }
 

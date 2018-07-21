@@ -15,9 +15,9 @@ public class PlayerShopManager : MonoBehaviour
     public Button BuyHeartButton;
     public Button BuyHeartContainerButton;
     private UpdateOrbAmount orbTextScript;
-    public Animator notEnoughOrbsText;
+    private NotEnoughOrbsAnimation notEnoughOrbsText;
     private bool isPlaying;
-
+    private GameObject animatorObject;
     private void Awake()
     {
         //get current heart container saved
@@ -25,6 +25,12 @@ public class PlayerShopManager : MonoBehaviour
         //Get current hearts saved
         curHeartIndex = PlayerPrefs.GetInt("healthPref");
         orbTextScript = GameObject.FindGameObjectWithTag("Finish").GetComponent<UpdateOrbAmount>();
+        //ensure health isnt greater than container
+        if(curHeartIndex>curHeartContainer)
+        {
+            curHeartIndex = curHeartContainer;
+            PlayerPrefs.GetInt("healthPref", curHeartIndex);
+        }
 
         //enable amount of available heart containers the player has in saved file
         for (int i = 0; i <= HeartImageContainer.Length-1; i++)
@@ -63,16 +69,25 @@ public class PlayerShopManager : MonoBehaviour
         {
             BuyHeartContainerButton.interactable = false;
         }
+        notEnoughOrbsText = GameObject.FindGameObjectWithTag("Respawn").GetComponent<NotEnoughOrbsAnimation>();
     }
     //Reset all player preferences for testing***************
     public void ResetValues()
     {
         PlayerPrefs.SetInt("CurAddtionalHearts", 1);
         PlayerPrefs.SetInt("healthPref", 1);
+        PlayerPrefs.SetInt("CurAddtionalBalls", 1);
+        PlayerPrefs.SetInt("moonBallAmount", 0);
         PlayerPrefs.SetInt("skin0", 0);
         PlayerPrefs.SetInt("skin1", 0);
         PlayerPrefs.SetInt("skin2", 0);
         PlayerPrefs.SetInt("skin3", 0);
+        PlayerPrefs.SetInt("skin4", 0);
+        PlayerPrefs.SetInt("skin5", 0);
+        PlayerPrefs.SetInt("skin6", 0);
+        PlayerPrefs.SetInt("skin7", 0);
+        PlayerPrefs.SetInt("MoonballUpgrade0", 0);
+        PlayerPrefs.SetInt("MoonballUpgrade1", 0);
     }
 
     public void AddOrbs()
@@ -115,44 +130,36 @@ public class PlayerShopManager : MonoBehaviour
         //otherwise do not available sound and text pop up saying not enough orbs
         else
         {
-            StopAllCoroutines();
-            if (isPlaying)
-            {
-                notEnoughOrbsText.Play("TextAppearThenFade", -1, 0);
+            notEnoughOrbsText.PlayAnimation();
 
-            }
-            else
-            {
-                isPlaying = true;
-                notEnoughOrbsText.SetBool("TextActive", true);
-                notEnoughOrbsText.Play("TextAppearThenFade");
-            }
-            StartCoroutine(CountdownForAnimation());
         }
 
 
     }
 
-    IEnumerator CountdownForAnimation()
-    {
-        yield return new WaitForSeconds(10);
-        isPlaying = false;
-        notEnoughOrbsText.SetBool("TextActive", false);
 
-    }
 
     public void BuyAHeart()
     {
         curOrbs = PlayerPrefs.GetInt("scorePref");
         if(curOrbs>=perHeartPrice)
         {
-            curOrbs -= perHeartPrice;
-            PlayerPrefs.SetInt("scorePref", curOrbs);
-            orbTextScript.ChangeOrbAmount();
+            if (curHeartIndex < curHeartContainer)
+            {
+                curOrbs -= perHeartPrice;
+                PlayerPrefs.SetInt("scorePref", curOrbs);
+                orbTextScript.ChangeOrbAmount();
 
-            curHeartIndex++;
-            CurrentHeartSavedContainer[curHeartIndex].SetActive(true);
-            PlayerPrefs.SetInt("healthPref", curHeartIndex);
+                curHeartIndex++;
+                CurrentHeartSavedContainer[curHeartIndex].SetActive(true);
+                PlayerPrefs.SetInt("healthPref", curHeartIndex);
+
+            }
+            else
+            {
+                notEnoughOrbsText.PlayAnimation();
+
+            }
 
             if (curHeartIndex == curHeartContainer)
             {
@@ -162,19 +169,8 @@ public class PlayerShopManager : MonoBehaviour
         //otherwise do not available sound and text pop up saying not enough orbs
         else
         {
-            StopAllCoroutines();
-            if (isPlaying)
-            {
-                notEnoughOrbsText.Play("TextAppearThenFade", -1, 0);
+            //notEnoughOrbsText.PlayAnimation();
 
-            }
-            else
-            {
-                isPlaying = true;
-                notEnoughOrbsText.SetBool("TextActive", true);
-                notEnoughOrbsText.Play("TextAppearThenFade");
-            }
-            StartCoroutine(CountdownForAnimation());
         }
 
 
