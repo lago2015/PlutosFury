@@ -9,11 +9,15 @@ public class DetectThenExplode : MonoBehaviour {
     private SphereCollider TriggerCollider;
     private DamageOrPowerUp damageScript;
     private Rigidbody mybody;
+    private AsteroidSpawner orbScript;
+
     private ProjectileMovement rocketScript;
     private bool doOnce;
     public bool isRocket;
     public bool isLandmine;
     public float travelTimeRocket = 3;
+    public int orbDrop = 4;
+
     void Awake()
     {
         //model gameobject
@@ -35,6 +39,8 @@ public class DetectThenExplode : MonoBehaviour {
         {
             TriggerCollider = GetComponent<SphereCollider>();
             TriggerCollider.enabled = true;
+            orbScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<AsteroidSpawner>();
+
         }
         else if(isRocket)
         {
@@ -123,11 +129,14 @@ public class DetectThenExplode : MonoBehaviour {
                 Vector3 dir = col.contacts[0].point - transform.position;
                 col.gameObject.GetComponent<MoonBall>().MoveBall(-dir.normalized, 20.0f);
             }
-            else
+            else if(isLandmine)
             {
+
                 GameObject.FindObjectOfType<ComboTextManager>().CreateComboText(2);
+                orbScript.SpawnAsteroidHere(orbDrop, transform.position);
+
             }
-          
+
             TriggeredExplosion();
         }
         else if(CurTag=="Wall")

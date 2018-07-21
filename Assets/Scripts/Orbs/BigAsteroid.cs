@@ -18,7 +18,7 @@ public class BigAsteroid : MonoBehaviour {
     AsteroidCollector collecterScript;
     private AudioController audioScript;
     private Movement playerScript;
-    private SpawnPointsForOrbs spawnPointScript;
+    private AsteroidSpawner spawnPointScript;
     public bool RockStatus() { return isDestroyed; }
     private Vector3 spawnPoint;
     void Awake()
@@ -34,7 +34,7 @@ public class BigAsteroid : MonoBehaviour {
         {
             playerScript = playerObject.GetComponent<Movement>();
         }
-        spawnPointScript = transform.GetChild(0).GetComponent<SpawnPointsForOrbs>();
+        spawnPointScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<AsteroidSpawner>();
     }
 
     void Start()
@@ -57,7 +57,7 @@ public class BigAsteroid : MonoBehaviour {
             }
             if(spawnPointScript)
             {
-                spawnPointScript.SpawnOrbs(orbDrop);
+                spawnPointScript.SpawnAsteroidHere(orbDrop, transform.position);
             }
             AsteroidModel.SetActive(false);
             Explosion.SetActive(true);

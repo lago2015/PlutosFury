@@ -153,7 +153,6 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
     public void ApplyNewMaxHearts(int newIndex)
     {
         curAddtionalHearts = newIndex;
-        curMaxHealth = 2;
         curMaxHealth += curAddtionalHearts;
         
     }

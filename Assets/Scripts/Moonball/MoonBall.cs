@@ -22,12 +22,49 @@ public class MoonBall : MonoBehaviour
     private int hitCount = 3;
 
 
-
+    public GameObject gravityWell;
+    private GameObject newGravWell;
+    public bool GravWellEnabled;
+    public bool CheckUpgrades = false;
+    private int upgrade1Index;
+    private int upgrade2Index;
     private Rigidbody rb;
 
-    // Use this for initialization
-	void Start ()
+
+    private void Awake()
     {
+        if (CheckUpgrades)
+        {
+            upgrade1Index = PlayerPrefs.GetInt("MoonballUpgrade0");
+            upgrade2Index = PlayerPrefs.GetInt("MoonballUpgrade1");
+            if (upgrade1Index == 1)
+            {
+                isShockWave = true;
+            }
+            else
+            {
+                isShockWave = false;
+            }
+            if (upgrade2Index == 1)
+            {
+                GravWellEnabled = true;
+            }
+            else
+            {
+                GravWellEnabled = false;
+            }
+        }
+    }
+
+
+    // Use this for initialization
+    void Start ()
+    {
+        if (GravWellEnabled)
+        {
+            newGravWell = Instantiate(gravityWell, transform.position, Quaternion.identity);
+            newGravWell.GetComponent<AsteroidCollector>().FollowBall(gameObject);
+        }
         // Get rigibody component
         rb = GetComponent<Rigidbody>(); 
 	}
@@ -118,6 +155,8 @@ public class MoonBall : MonoBehaviour
         }
         if (isShockWave)
         {
+            ShockWave();
+
             OnExplosion();
         }
     }
@@ -155,24 +194,31 @@ public class MoonBall : MonoBehaviour
             if (explodeScript)
             {
                 explodeScript.TriggeredExplosion();
-
+                break;
+            }
+            DetectWaitThenExplode explodeThenWaitScript = col.GetComponent<DetectWaitThenExplode>();
+            if (explodeThenWaitScript)
+            {
+                explodeThenWaitScript.TriggerExplosionInstantly();
+                break;
             }
             AIHealth enemyScript = col.GetComponent<AIHealth>();
             if (enemyScript)
             {
                 enemyScript.IncrementDamage(this.gameObject.tag);
-
+                break;
             }
-            WallHealth wallScript = col.GetComponent<WallHealth>();
-            if (wallScript)
+            RogueCollision rogueScript = col.GetComponent<RogueCollision>();
+            if (rogueScript)
             {
-                wallScript.IncrementDamage();
-
+                rogueScript.RogueDamage();
+                break;
             }
             BigAsteroid asteroidScript = col.GetComponent<BigAsteroid>();
             if (asteroidScript)
             {
                 asteroidScript.SpawnAsteroids();
+                break;
             }
         }
     }

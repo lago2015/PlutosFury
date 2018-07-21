@@ -13,15 +13,24 @@ public class AIHealth : MonoBehaviour {
     public GameObject Model;
     public GameObject Model2;
     public GameObject parent;
-    public enum EnemyOptions { TurretSingle,TurretScatter,Spike,Shatter}
+    public enum EnemyOptions { TurretSingle, TurretScatter, Spike, Shatter, Hunter }
     public EnemyOptions currentEnemy;
     public float wallBump = 20;
     private Rigidbody myBody;
     private FleeOrPursue RogueScript;
     private AudioController audioScript;
+
+    public int singleTurretOrbDrop = 2;
+    public int scatterTurretOrbDrop = 3;
+    public int spikeOrbDrop = 2;
+    public int shatterOrbDrop = 3;
+    public int hunterOrbDrop = 3;
+    private AsteroidSpawner orbScript;
     void Awake()
     {
         audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
+        orbScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<AsteroidSpawner>();
+
         myBody = GetComponent<Rigidbody>();
         if(Explosion&&Model)
         {
@@ -45,7 +54,34 @@ public class AIHealth : MonoBehaviour {
             {
                 GameObject.FindObjectOfType<ComboTextManager>().CreateComboText(1);
             }
+            if (orbScript)
+            {
+                switch (currentEnemy)
+                {
+                    case EnemyOptions.TurretSingle:
+                        orbScript.SpawnAsteroidHere(singleTurretOrbDrop, transform.position);
+                        break;
+                    case EnemyOptions.TurretScatter:
+                        orbScript.SpawnAsteroidHere(scatterTurretOrbDrop, transform.position);
 
+                        break;
+                    case EnemyOptions.Spike:
+                        orbScript.SpawnAsteroidHere(spikeOrbDrop, transform.position);
+
+                        break;
+                    case EnemyOptions.Shatter:
+                        orbScript.SpawnAsteroidHere(shatterOrbDrop, transform.position);
+                        if (audioScript)
+                        {
+                            audioScript.ShatterExplosion(transform.position);
+                        }
+                        break;
+                    case EnemyOptions.Hunter:
+                        orbScript.SpawnAsteroidHere(hunterOrbDrop, transform.position);
+
+                        break;
+                }
+            }
             if (Explosion && Model)
             {
                 
