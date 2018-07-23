@@ -13,6 +13,7 @@ public class DetectWaitThenExplode : MonoBehaviour {
     private AudioController audioScript;
     private AsteroidSpawner orbScript;
     private Movement playerScript;
+    private SphereCollider damageCollider;
     private bool doOnce;
     public float WaitTimeToExplode = 1f;
     public int orbDrop=2;
@@ -23,6 +24,7 @@ public class DetectWaitThenExplode : MonoBehaviour {
     // Use this for initialization
     void Awake()
     {
+        damageCollider = GetComponent<SphereCollider>();
         orbScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<AsteroidSpawner>();
         //getter for score script
         GameObject audioObject = GameObject.FindGameObjectWithTag("AudioController");
@@ -71,6 +73,7 @@ public class DetectWaitThenExplode : MonoBehaviour {
                             damageScript.didDamage();
                         }
                         WaitTimeToExplode = 0;
+                        playerScript.KnockbackPlayer(col.contacts[0].normal);
                         TriggerExplosionInstantly();
                     }
                 }
@@ -117,6 +120,10 @@ public class DetectWaitThenExplode : MonoBehaviour {
     {
         if(!isLerping)
         {
+            if(damageCollider)
+            {
+                damageCollider.enabled = false;
+            }
             if (pursuitScript)
             {
                 pursuitScript.moveSpeed = 0;

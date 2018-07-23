@@ -510,10 +510,7 @@ public class Movement : MonoBehaviour
         myBody.AddForce(Direction.normalized * soccerKnockback, ForceMode.VelocityChange);
         
     }
-    
 
-
-    
     //function is called when game has ended and this stops player movement
     //and identify the player as dead for other scripts to read like 
     //end game behaviors (winner or game over)
@@ -537,9 +534,6 @@ public class Movement : MonoBehaviour
         myBody.drag = 2;
 
     }
-
-    
-    
     //Resume function when pluto is done being frozen or slowed
     public void ResumePluto()
     {
@@ -561,8 +555,13 @@ public class Movement : MonoBehaviour
 
         if(++orbCount >= 5)
         {
-            GameObject.FindObjectOfType<ComboTextManager>().CreateComboText(0);
-            orbCount = 0;
+            ComboTextManager ComboObject = GameObject.FindObjectOfType<ComboTextManager>();
+            if(ComboObject)
+            {
+                ComboObject.CreateComboText(0);
+                orbCount = 0;
+            }
+            
         }
     }
     

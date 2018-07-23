@@ -42,7 +42,10 @@ public class TutorialTip : MonoBehaviour
         {
             Time.timeScale = 0;
             anim.SetTrigger("down");
-            GetComponentInChildren<Text>().text = tutorialText[textIndex];
+            if(tutorialText[textIndex]!=null)
+            {
+                GetComponentInChildren<Text>().text = tutorialText[textIndex];
+            }
             isDown = true;
         }
     }

@@ -130,18 +130,23 @@ public class FloatingJoystick : MonoBehaviour,IDragHandler,IPointerUpHandler,IPo
             switch(touch.phase)
             {
                 case TouchPhase.Began:
-
+                    //getting start position of touch in pixel coordinates
                     startPos = touch.position;
+                    //resetting values 
                     directionChosen = false;
+                    distance = 0;
+
                     break;
 
                 case TouchPhase.Moved:
-
+                    //get direction for moonball to spawn
                     direction = touch.position - startPos;
+                    //get distance of start and current touch
                     distance = Vector2.Distance(touch.position, startPos);
                     break;
 
                 case TouchPhase.Ended:
+                    //if distance is long enough then spawn moonball otherwise dash
                     if(distance>=minDistance)
                     {
                         directionChosen = true;
@@ -157,12 +162,23 @@ public class FloatingJoystick : MonoBehaviour,IDragHandler,IPointerUpHandler,IPo
                         }
                         directionChosen = false;
                     }
-                    //Debug.Log("Distance: " + distance);
+                    Debug.Log("Distance: " + distance);
                     break;
             }
             if (directionChosen && !isCoolingDown)
             {
                 SpawnMoonball(direction);
+            }
+            else
+            {
+                scriptDoOnce = dashScript.doOnce;
+                //if charge hasnt started than start now
+                if (!scriptDoOnce)
+                {
+                    //activate dash mechanic 
+                    dashScript.changeChargeStatus(true);
+                }
+
             }
         }
     }

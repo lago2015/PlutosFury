@@ -15,10 +15,11 @@ public class TriggerCollisionPluto : MonoBehaviour {
     private AudioController audioScript;
     private PlayerManager ScoreManager;
     public bool DashChange(bool curDash) { return ShouldDash = curDash; }
+
+
     private void Awake()
     {
         audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
-
     }
 
     private void Start()
@@ -43,6 +44,8 @@ public class TriggerCollisionPluto : MonoBehaviour {
                     audioScript.AsteroidAbsorbed(transform.position);
                 }
             }
+            col.gameObject.GetComponent<BurstBehavior>().isOrbConsumed();
+
             //return orb to pool
             playerMoveScript.ReturnAsteroid(col.gameObject);
             if (ScoreManager)

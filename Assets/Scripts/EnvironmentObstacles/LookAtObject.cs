@@ -25,8 +25,6 @@ public class LookAtObject : MonoBehaviour {
     void Start()
     {
         Player = GameObject.FindGameObjectWithTag("Player");
-
-
         if (AmITurret)
         {
             startPosition = transform.localPosition;
@@ -85,7 +83,7 @@ public class LookAtObject : MonoBehaviour {
         {
             if(AmITurret)
             {
-                TrigCollider.radius = 2;
+                //TrigCollider.radius = 2;
                 TrigCollider.enabled = false;
                 enabled = true;
             }

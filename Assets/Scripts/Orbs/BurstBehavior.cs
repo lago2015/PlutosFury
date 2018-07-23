@@ -14,15 +14,20 @@ public class BurstBehavior : MonoBehaviour {
     private Rigidbody myBody;
     public SpriteRenderer spriteComp;
     private AsteroidSpawner spawnerScript;
-
+    public bool isConsumed;
     private Color visibleColor;
     private Color nearInvisibleColor;
     private bool isNewAsteroid=true;
-    public bool ReadyToConsume;
+    private Coroutine StartBurstVar;
+    private Coroutine OrbExpiringVar;
+
     public bool newSpawnedAsteroid(bool isNew) { return isNewAsteroid = isNew; }
     public bool asteroidStatus() { return isNewAsteroid; }
+    public bool isOrbConsumed() { return isConsumed = true; }
+
     void Awake()
     {
+        
         myBody = GetComponent<Rigidbody>();
         myCollider = GetComponent<SphereCollider>();
         spawnerScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<AsteroidSpawner>();
@@ -31,25 +36,38 @@ public class BurstBehavior : MonoBehaviour {
         nearInvisibleColor.a = 0.7f;
     }
 
+    private void OnDisable()
+    {
+        if (isConsumed)
+        {
+            StopCoroutine(StartBurstVar);
+            StopCoroutine(OrbExpiringVar);
+            spriteComp.color = visibleColor;
+            ResetVelocity();
+        }
+    }
+
     void OnEnable()
     {
+        spriteComp.color = visibleColor;
+
+        isConsumed = false;
         if(ShouldBurst)
         {
-            StartCoroutine(StartBurst());
+            StartBurstVar=StartCoroutine(StartBurst());
         }
-        StartCoroutine(OrbExpiring());
+        OrbExpiringVar=StartCoroutine(this.OrbExpiring());
     }
     
     IEnumerator StartBurst()
     {
         gameObject.tag = "Untagged";
-        //myBody.AddForce(transform.forward * moveSpeed, ForceMode.Impulse);
-        //myCollider.enabled = false;
+        myCollider.enabled = false;
         transform.position += moveSpeed * transform.forward * Time.deltaTime;
         transform.position = new Vector3(transform.position.x, transform.position.y, 0);
         yield return new WaitForSeconds(BurstTimeout);
-        //myCollider.enabled = true;
-        //ResetVelocity();
+        myCollider.enabled = true;
+        ResetVelocity();
         ChangeTag();
     }
 
@@ -58,7 +76,6 @@ public class BurstBehavior : MonoBehaviour {
         curLifeTime = lifeTime * 2 / 9;
         yield return new WaitForSeconds(startDisappearTime);
         spriteComp.color = nearInvisibleColor;
-        
         yield return new WaitForSeconds(curLifeTime);
         spriteComp.color = visibleColor;
         yield return new WaitForSeconds(curLifeTime);

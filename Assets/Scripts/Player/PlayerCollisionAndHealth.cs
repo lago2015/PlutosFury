@@ -7,7 +7,7 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
     public int curHealth;
     public int curMaxHealth;
     private int curAddtionalHearts=0;
-
+    public bool godMode;
     [HideInInspector]
     public bool isDead = false;
     //Player prefs
@@ -192,8 +192,11 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
 
             //Stop any dash currently being used
             moveScript.CancelDash();
-            //decrement health
-            curHealth--;
+            if(!godMode)
+            {
+                //decrement health
+                curHealth--;
+            }
 
             StartCoroutine(DamageIndicator());
             //feedback on damage

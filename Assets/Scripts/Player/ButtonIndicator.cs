@@ -62,18 +62,7 @@ public class ButtonIndicator : MonoBehaviour
         }
     }
     
-    //public void SpawnMoonball(Vector2 SpawnPosition,Vector2 direction)
-    //{
-    //    if(moonballBody)
-    //    {
-    //        GameObject newMoonBall = Instantiate(MoonballObject, SpawnPosition, Quaternion.identity);
-    //        moonballBody = newMoonBall.GetComponent<Rigidbody>();
-    //        if(moonballBody)
-    //        {
-    //            moonballBody.AddForce(direction * ballLaunchPower, ForceMode.VelocityChange);
-    //        }
-    //    }
-    //}
+    
 
     //Monitors if both finger touch is down
     public bool changeChargeStatus(bool curStatus)

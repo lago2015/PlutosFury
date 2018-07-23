@@ -15,13 +15,13 @@ public class ShootProjectiles : MonoBehaviour {
 
     public bool isPlayerNear(bool isHere)
     {
+        if(isHere)
+        {
+            elapseTime = 0;
+        }
         return PlayerNear = isHere;
     }
 
-    private void OnEnable()
-    {
-        elapseTime = 0;
-    }
     void Awake()
     {
         if(Muzzle)
@@ -43,11 +43,13 @@ public class ShootProjectiles : MonoBehaviour {
             elapseTime += Time.deltaTime;
             if (elapseTime >= FireRate)
             {
+
                 int PosLength = ProjectilePos.Length;
                 for (int i = 0; i < PosLength; i++)
                 {
                     if (!isReloading)
                     {
+
                         Instantiate(Projectile, ProjectilePos[i].transform.position, ProjectilePos[i].transform.rotation);
                         Muzzle.SetActive(true);
                         StartCoroutine(MuzzleShot()); 
@@ -55,11 +57,9 @@ public class ShootProjectiles : MonoBehaviour {
                 }
                 isReloading = true;
                 elapseTime = 0;
-
             }
             else
             {
-                
                 isReloading = false;
             }
 
