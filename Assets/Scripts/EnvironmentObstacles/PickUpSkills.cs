@@ -90,7 +90,7 @@ public class PickUpSkills : MonoBehaviour {
                     }
                     if(audioScript)
                     {
-                        audioScript.PlutoLifeUp(transform.position);
+                        audioScript.PlutoHealthUp(transform.position);
                     }
                     Destroy(gameObject);
                 }

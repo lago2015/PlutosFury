@@ -28,7 +28,6 @@ public class AIHealth : MonoBehaviour {
     private AsteroidSpawner orbScript;
     void Awake()
     {
-        audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
         orbScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<AsteroidSpawner>();
 
         myBody = GetComponent<Rigidbody>();
@@ -43,7 +42,11 @@ public class AIHealth : MonoBehaviour {
             Model2.SetActive(true);
         }
     }
+    private void Start()
+    {
+        audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
 
+    }
     public void IncrementDamage(string CurName)
     {
        
@@ -52,7 +55,12 @@ public class AIHealth : MonoBehaviour {
         {
             if (CurName == "MoonBall")
             {
-                GameObject.FindObjectOfType<ComboTextManager>().CreateComboText(1);
+                
+                ComboTextManager comboObject = GameObject.FindObjectOfType<ComboTextManager>();
+                if(comboObject)
+                {
+                    comboObject.CreateComboText(1);
+                }
             }
             if (orbScript)
             {

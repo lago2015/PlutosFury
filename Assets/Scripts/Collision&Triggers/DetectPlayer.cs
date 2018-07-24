@@ -17,7 +17,6 @@ public class DetectPlayer : MonoBehaviour {
     private AudioController audioScript;
     void Awake()
     {
-        audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
         exPointController = GetComponent<ExPointController>();
         if (ScriptModel)
         {
@@ -39,7 +38,11 @@ public class DetectPlayer : MonoBehaviour {
         }
         TrigCollider = GetComponent<SphereCollider>();
     }
+    private void Start()
+    {
+        audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
 
+    }
     /* This is meant for Boss Planet Detection*/
     void OnTriggerEnter(Collider col)
     {

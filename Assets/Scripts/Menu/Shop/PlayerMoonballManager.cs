@@ -68,7 +68,7 @@ public class PlayerMoonballManager : MonoBehaviour {
         {
             BuyMoonballContainerButton.interactable = false;
         }
-        notEnoughOrbsText = GameObject.FindGameObjectWithTag("Respawn").GetComponent<NotEnoughOrbsAnimation>();
+        //notEnoughOrbsText = GameObject.FindGameObjectWithTag("Respawn").GetComponent<NotEnoughOrbsAnimation>();
     }
 
 
@@ -104,7 +104,7 @@ public class PlayerMoonballManager : MonoBehaviour {
         //otherwise do not available sound and text pop up saying not enough orbs
         else
         {
-            notEnoughOrbsText.PlayAnimation();
+            //notEnoughOrbsText.PlayAnimation();
 
         }
     }
@@ -135,7 +135,7 @@ public class PlayerMoonballManager : MonoBehaviour {
             }
             else
             {
-                notEnoughOrbsText.PlayAnimation();
+                //notEnoughOrbsText.PlayAnimation();
 
             }
             if (curMoonballIndex == curMoonballContainer)

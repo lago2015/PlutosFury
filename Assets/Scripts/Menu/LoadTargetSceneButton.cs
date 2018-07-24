@@ -68,12 +68,7 @@ public class LoadTargetSceneButton : MonoBehaviour {
 			Debug.Log ("Scene not loaded properly");
 			return;
 		}
-        if(num==0)
-        {
-            PlayerPrefs.SetInt("healthPref", 0);
-
-        }
-
+       
         if (Menu)
         {
             Menu.SetActive(false);

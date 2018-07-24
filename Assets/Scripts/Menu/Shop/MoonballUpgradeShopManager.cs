@@ -68,7 +68,7 @@ public class MoonballUpgradeShopManager : MonoBehaviour
                 //otherwise do not available sound and text pop up saying not enough orbs
                 else
                 {
-                    notEnoughOrbsText.PlayAnimation();
+                    //notEnoughOrbsText.PlayAnimation();
                 }
                 break;
             //gravity well

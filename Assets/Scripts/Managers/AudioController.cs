@@ -3,161 +3,284 @@ using System.Collections;
 
 public class AudioController : MonoBehaviour {
     // Singleton instance 
+    [SerializeField]
     public static AudioController instance;
-    
-
+    [SerializeField]
     [Header("Background-WinMusic")]
     public AudioSource BgMusicWinSource;
-
-
+    [SerializeField]
     [Header("BackgroundMusic")]
     public AudioSource BgMusicSource;
     public float bgMusicDelay;
 
-    [Header("BackgroundBossMusic")]
-    public AudioSource BgBossSource;
-
+    [SerializeField]
     [Header("Intro-Ready")]
     public AudioSource ReadyAudioSource;
 
+    [SerializeField]
     [Header("Intro-Go")]
     public AudioSource GoAudioSource;
-
+    [SerializeField]
     [Header("Complete Level Voice Cue")]
     public AudioSource CompleteSource;
-
+    [SerializeField]
     [Header("Game Over Voice Cue")]
     public AudioSource gameOverVoiceSource;
-
+    [SerializeField]
     [Header("Pluto Hit")]
     public AudioSource plutoHitSource;
     public float hitDelay;
     public float maxHitDelay;
-
+    [SerializeField]
     [Header("Asteroid Absorbed")]
     public AudioSource asteroidAbsorbedSrc;
     public float absorbDelay=0.5f;
-    
-
+    [SerializeField]
     [Header("Pluto Death")]
     public AudioSource plutoDeathSource;
     public float deathDelay = 0.5f;
-
+    [SerializeField]
     [Header("Dash")]
     public AudioSource plutoDash1;
     public float dash1Delay = 0.5f;
-
-    [Header("PowerDash")]
-    public AudioSource plutoDash2;
-    public float dash2Delay = 0.5f;
-
-    [Header("PowerDashReady")]
-    public AudioSource plutoDashReady;
-    public float dash3Delay = 0.5f;
-
-    [Header("PowerChargeStart")]
-    public AudioSource powerChargeStartSrc;
-    public float chargeStartDelay = 0.2f;
-
-    [Header("PowerDashCharging")]
-    public AudioSource powerDashChargingSrc;
-    public float powerChargingDelay = 0.1f;
-
-    [Header("PlutoLifeUp")]
-    public AudioSource plutoLifeUp;
-    public float levelDelay = 0.5f;
-
+    [SerializeField]
     [Header("PlutoHealthPickUp")]
     public AudioSource plutoHealthUp;
     public float HealthUpDelay = 0.5f;
-
-
-    [Header("ShieldActive")]
-    public AudioSource ShieldActive;
-    public float shieldActiveDelay = 0.5f;
-
-    [Header("ShieldHit")]
-    public AudioSource ShieldHitSource;
-    public float shieldHitDelay = 0.7f;
-
-
+    [SerializeField]
     [Header("RogueDash")]
     public AudioSource RogueDashSource;
-
+    [SerializeField]
     [Header("RogueSpotted")]
     public AudioSource RogueSpottedSrc;
-
+    [SerializeField]
     [Header("RogueDeath")]
     public AudioSource RogueDeathSrc;
-
+    [SerializeField]
     [Header("ShatterCharge")]
     public AudioSource shatterChargeSrc;
-
+    [SerializeField]
     [Header("ShatterExplosion")]
     public AudioSource shatterExplosionSrc;
-
+    [SerializeField]
     [Header("Wall Bounce")]
     public AudioSource wallBounceSource;
     public float wallBounceDelay = 0.2f;
-
-
-    [Header("Lazer Bounce")]
-    public AudioSource LazerBounceSource;
-    
-
+    [SerializeField]
     [Header("DestructionSml")]
     public AudioSource DestrcSmllSource;
     public float DestructSmllDelay = 0.5f;
-
-
+    [SerializeField]
     [Header("WormholeEnter")]
     public AudioSource WormholeEnterSource;
-
-    [Header("WormholeLocked")]
-    public AudioSource WormholeLockedSource;
-    public float WormholeDelay = 0.5f;
-
-    [Header("MoonAcquired")]
-    public AudioSource moonAcquiredSource;
-    public float MoonAcquiredDelay = 0.5f;
-
-    //*************Spike****************
-
-    [Header("SpikeHitPluto")]
+    [SerializeField]
+    [Header("MetalSpikeHitPluto")]
     public AudioSource SpikeHitPlutoSource;
     public float SpikeHitPlutoDelay = 0.5f;
-
-    //*********Asteroids****************
-
+    [SerializeField]
     [Header("AsteroidExplosion")]
     public AudioSource asteroidExplosion;
     public float asteroidExplosionDelay = 0.5f;
-
+    [SerializeField]
     [Header("AsteroidBounce")]
     public AudioSource asteroidBounce;
     public float asteroidBounceDelay = 0.5f;
-
+    [SerializeField]
     //********UI**************
-
     [Header("GameOver")]
     public AudioSource GameOverSource;
     public float GameOverDelay = 0.5f;
 
+    [SerializeField]
+    //current object to transfer to be a child 
+    private GameObject curObject;
+    
+    //crazy idea to create audio prefabs on awake
+    //private void Awake()
+    //{
+    //    if(BgMusicSource)
+    //    {
+    //        curObject = Instantiate(BgMusicSource.gameObject);
+    //        BgMusicSource = curObject.GetComponent<AudioSource>();
+    //        curObject.transform.parent = transform;
+    //        curObject = null;
+    //    }
+    //    if(BgMusicWinSource)
+    //    {
+    //        curObject = Instantiate(BgMusicWinSource.gameObject);
+    //        BgMusicWinSource = curObject.GetComponent<AudioSource>();
+    //        curObject.transform.parent = transform;
+    //        curObject = null;
+    //    }
+        
+    //    if (ReadyAudioSource)
+    //    {
+    //        curObject = Instantiate(ReadyAudioSource.gameObject);
+    //        ReadyAudioSource = curObject.GetComponent<AudioSource>();
 
+    //        curObject.transform.parent = transform;
+    //        curObject = null;
+    //    }
+    //    if (GoAudioSource)
+    //    {
+    //        curObject = Instantiate(GoAudioSource.gameObject);
+    //        GoAudioSource = curObject.GetComponent<AudioSource>();
 
-    //*******Neptune********
+    //        curObject.transform.parent = transform;
+    //        curObject = null;
+    //    }
+    //    if (CompleteSource)
+    //    {
+    //        curObject = Instantiate(CompleteSource.gameObject);
+    //        CompleteSource = curObject.GetComponent<AudioSource>();
 
+    //        curObject.transform.parent = transform;
+    //        curObject = null;
+    //    }
+    //    if (gameOverVoiceSource)
+    //    {
+    //        curObject = Instantiate(gameOverVoiceSource.gameObject);
+    //        gameOverVoiceSource = curObject.GetComponent<AudioSource>();
 
-    [Header("NeptuneMoonShot")]
-    public AudioSource NeptuneMoonShot;
-    public float moonShotDelay = 0.5f;
+    //        curObject.transform.parent = transform;
+    //        curObject = null;
+    //    }
+    //    if (plutoHitSource)
+    //    {
+    //        curObject = Instantiate(plutoHitSource.gameObject);
+    //        plutoHitSource = curObject.GetComponent<AudioSource>();
 
-    [Header("NeptuneMoonHit")]
-    public AudioSource NeptuneMoonHit;
+    //        curObject.transform.parent = transform;
+    //        curObject = null;
+    //    }
+    //    if (asteroidAbsorbedSrc)
+    //    {
+    //        curObject = Instantiate(asteroidAbsorbedSrc.gameObject);
+    //        asteroidAbsorbedSrc = curObject.GetComponent<AudioSource>();
 
-    [Header("NeptuneMoonRetract")]
-    public AudioSource NeptuneMoonRetract;
-    public float MoonRetractDelay = 0.5f;
+    //        curObject.transform.parent = transform;
+    //        curObject = null;
+    //    }
+    //    if (plutoDeathSource)
+    //    {
+    //        curObject = Instantiate(plutoDeathSource.gameObject);
+    //        plutoDeathSource = curObject.GetComponent<AudioSource>();
+
+    //        curObject.transform.parent = transform;
+    //        curObject = null;
+    //    }
+    //    if (plutoDash1)
+    //    {
+    //        curObject = Instantiate(plutoDash1.gameObject);
+    //        plutoDash1 = curObject.GetComponent<AudioSource>();
+
+    //        curObject.transform.parent = transform;
+    //        curObject = null;
+    //    }
+    //    if (plutoHealthUp)
+    //    {
+    //        curObject = Instantiate(plutoHealthUp.gameObject);
+    //        plutoHealthUp = curObject.GetComponent<AudioSource>();
+
+    //        curObject.transform.parent = transform;
+    //        curObject = null;
+    //    }
+    //    if (RogueDashSource)
+    //    {
+    //        curObject = Instantiate(RogueDashSource.gameObject);
+    //        RogueDashSource = curObject.GetComponent<AudioSource>();
+
+    //        curObject.transform.parent = transform;
+    //        curObject = null;
+    //    }
+    //    if (RogueDeathSrc)
+    //    {
+    //        curObject = Instantiate(RogueDeathSrc.gameObject);
+    //        RogueDeathSrc = curObject.GetComponent<AudioSource>();
+
+    //        curObject.transform.parent = transform;
+    //        curObject = null;
+    //    }
+    //    if (RogueSpottedSrc)
+    //    {
+    //        curObject = Instantiate(RogueSpottedSrc.gameObject);
+    //        RogueSpottedSrc = curObject.GetComponent<AudioSource>();
+    //        curObject.transform.parent = transform;
+    //        curObject = null;
+    //    }
+    //    if (shatterChargeSrc)
+    //    {
+    //        curObject = Instantiate(shatterChargeSrc.gameObject);
+    //        shatterChargeSrc = curObject.GetComponent<AudioSource>();
+
+    //        curObject.transform.parent = transform;
+    //        curObject = null;
+    //    }
+    //    if (shatterExplosionSrc)
+    //    {
+    //        curObject = Instantiate(shatterExplosionSrc.gameObject);
+    //        shatterExplosionSrc = curObject.GetComponent<AudioSource>();
+
+    //        curObject.transform.parent = transform;
+    //        curObject = null;
+    //    }
+    //    if (wallBounceSource)
+    //    {
+    //        curObject = Instantiate(wallBounceSource.gameObject);
+    //        wallBounceSource = curObject.GetComponent<AudioSource>();
+
+    //        curObject.transform.parent = transform;
+    //        curObject = null;
+    //    }
+    //    if (DestrcSmllSource)
+    //    {
+    //        curObject = Instantiate(shatterExplosionSrc.gameObject);
+    //        DestrcSmllSource = curObject.GetComponent<AudioSource>();
+
+    //        curObject.transform.parent = transform;
+    //        curObject = null;
+    //    }
+    //    if (WormholeEnterSource)
+    //    {
+    //        curObject = Instantiate(shatterExplosionSrc.gameObject);
+    //        WormholeEnterSource = curObject.GetComponent<AudioSource>();
+
+    //        curObject.transform.parent = transform;
+    //        curObject = null;
+    //    }
+    //    if (SpikeHitPlutoSource)
+    //    {
+    //        curObject = Instantiate(SpikeHitPlutoSource.gameObject);
+    //        SpikeHitPlutoSource = curObject.GetComponent<AudioSource>();
+
+    //        curObject.transform.parent = transform;
+    //        curObject = null;
+    //    }
+    //    if (asteroidExplosion)
+    //    {
+    //        curObject = Instantiate(asteroidExplosion.gameObject);
+    //        asteroidExplosion = curObject.GetComponent<AudioSource>();
+
+    //        curObject.transform.parent = transform;
+    //        curObject = null;
+    //    }
+    //    if (asteroidBounce)
+    //    {
+    //        curObject = Instantiate(asteroidBounce.gameObject);
+    //        asteroidBounce = curObject.GetComponent<AudioSource>();
+
+    //        curObject.transform.parent = transform;
+    //        curObject = null;
+    //    }
+    //    if (GameOverSource)
+    //    {
+    //        curObject = Instantiate(GameOverSource.gameObject);
+    //        GameOverSource = curObject.GetComponent<AudioSource>();
+
+    //        curObject.transform.parent = transform;
+    //        curObject = null;
+    //    }
+    //}
 
     // Use this for initialization
     void Start () {
@@ -235,22 +358,6 @@ public class AudioController : MonoBehaviour {
             gameOverVoiceSource.Play();
         }
     }
-    public void BackgroundBossMusic()
-    {
-        if (BgBossSource != null)
-        {
-            if (BgMusicSource != null)
-            {
-                BgMusicSource.Stop();
-            }
-
-            BgBossSource.priority = 200;
-            BgBossSource.volume = 0.25f;
-            BgBossSource.minDistance = 1000f;
-            BgBossSource.loop = true;
-            BgBossSource.Play();
-        }
-    }
 
     public void PlutoHit(Vector3 pos)
     {
@@ -293,50 +400,7 @@ public class AudioController : MonoBehaviour {
         }
     }
 
-    public void PlutoPowerDash(Vector3 pos)
-    {
-        if (plutoDash2 != null)
-        {
-            plutoDash2.transform.position = pos;
-            plutoDash2.minDistance = 20f;
-            plutoDash2.loop = false;
-            plutoDash2.Play();
 
-
-        }
-    }
-
-    public void PlutoPowerChargeStart(Vector3 pos)
-    {
-        if (powerChargeStartSrc != null)
-        {
-            powerChargeStartSrc.transform.position = pos;
-            powerChargeStartSrc.minDistance = 20f;
-            powerChargeStartSrc.loop = false;
-            powerChargeStartSrc.Play();
-
-
-        }
-    }
-    public void PlutoPowerChargeCancel()
-    {
-        if(powerDashChargingSrc!=null && powerChargeStartSrc != null)
-        {
-            powerDashChargingSrc.Stop();
-            powerChargeStartSrc.Stop();
-        }
-    }
-
-    public void PlutoPowerDashReady(Vector3 pos)
-    {
-        if (plutoDashReady != null)
-        {
-            plutoDashReady.transform.position = pos;
-            plutoDashReady.minDistance = 20f;
-            plutoDashReady.loop = false;
-            plutoDashReady.Play();
-        }
-    }
 
     public void PlutoDeath(Vector3 pos)
     {
@@ -350,16 +414,7 @@ public class AudioController : MonoBehaviour {
         }
     }
 
-    public void PlutoLifeUp(Vector3 pos)
-    {
-        if (plutoLifeUp != null)
-        {
-            plutoLifeUp.transform.position = pos;
-            plutoLifeUp.minDistance = 20f;
-            plutoLifeUp.loop = false;
-            plutoLifeUp.Play();
-        }
-    }
+
     public void PlutoHealthUp(Vector3 pos)
     {
         if (plutoHealthUp != null)
@@ -370,35 +425,6 @@ public class AudioController : MonoBehaviour {
             plutoHealthUp.Play();
         }
     }
-    public void ShieldLive(Vector3 MyPos)
-    {
-        if (ShieldActive != null)
-        {
-            ShieldActive.transform.position = MyPos;
-            ShieldActive.minDistance = 20f;
-            ShieldActive.loop = false;
-            ShieldActive.Play();
-        }
-    }
-
-    public void ShieldDing(Vector3 pos)
-    {
-        if (ShieldHitSource != null)
-        {
-            if (ShieldHitSource.isPlaying)
-            {
-                ShieldHitSource.Stop();
-            }
-            ShieldHitSource.transform.position = pos;
-            ShieldHitSource.minDistance = 20f;
-            ShieldHitSource.loop = false;
-            ShieldHitSource.Play();
-
-
-        }
-    }
-
-
 
     public void WormholeEntered(Vector3 MyPos)
     {
@@ -413,17 +439,6 @@ public class AudioController : MonoBehaviour {
         }
     }
 
-    public void WormholeLock(Vector3 MyPos)
-    {
-        if (WormholeLockedSource != null)
-        {
-            WormholeLockedSource.volume = 0.25f;
-            WormholeLockedSource.transform.position = MyPos;
-            WormholeLockedSource.minDistance = 20f;
-            WormholeLockedSource.loop = false;
-            WormholeLockedSource.Play();
-        }
-    }
 
     public void RogueDash(Vector3 pos)
     {
@@ -476,15 +491,7 @@ public class AudioController : MonoBehaviour {
         }
     }
 
-    public void LazerBounce()
-    {
-        if (LazerBounceSource != null)
-        {
-            LazerBounceSource.minDistance = 20f;
-            LazerBounceSource.loop = false;
-            LazerBounceSource.Play();
-        }
-    }
+
 
 
     public void AsteroidExplosion(Vector3 pos)
@@ -564,19 +571,6 @@ public class AudioController : MonoBehaviour {
 
         }
     }
-    public void MoonAcquiredSound(Vector3 pos)
-    {
-        if (moonAcquiredSource != null)
-        {
-            moonAcquiredSource.pitch = Random.Range(0.8f, 1f);
-            moonAcquiredSource.volume = Random.Range(0.8f, 1f);
-            moonAcquiredSource.minDistance = 20f;
-            moonAcquiredSource.loop = false;
-            moonAcquiredSource.Play();
-
-
-        }
-    }
 
     public void DestructionSmall(Vector3 pos)
     {
@@ -617,43 +611,6 @@ public class AudioController : MonoBehaviour {
     }
 
 
-    public void NeptunesMoonShot(Vector3 pos)
-    {
-        if (NeptuneMoonShot != null)
-        {
-            NeptuneMoonShot.pitch = Random.Range(0.8f, 1f);
-            NeptuneMoonShot.volume = Random.Range(0.8f, 1f);
-            NeptuneMoonShot.minDistance = 20f;
-            NeptuneMoonShot.loop = false;
-            NeptuneMoonShot.Play();
-
-
-        }
-    }
-    public void NeptunesMoonHit(Vector3 pos)
-    {
-        if (NeptuneMoonHit != null)
-        {
-            NeptuneMoonHit.pitch = Random.Range(0.8f, 1f);
-            NeptuneMoonHit.volume = Random.Range(0.8f, 1f);
-            NeptuneMoonHit.minDistance = 20f;
-            NeptuneMoonHit.loop = false;
-            NeptuneMoonHit.Play();
-
-
-        }
-    }
-    public void NeptunesMoonRetract(Vector3 pos)
-    {
-        if (NeptuneMoonRetract != null)
-        {
-            NeptuneMoonRetract.minDistance = 20f;
-            NeptuneMoonRetract.loop = false;
-            NeptuneMoonRetract.Play();
-
-
-        }
-    }
 
 
 }

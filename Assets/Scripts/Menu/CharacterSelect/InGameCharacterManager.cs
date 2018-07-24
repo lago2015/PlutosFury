@@ -7,7 +7,8 @@ public class InGameCharacterManager : MonoBehaviour {
 
     public GameObject[] InGameCharacters;
     public GameObject[] InGameMoonballs;
-    
+    public GameObject AsteroidCollectorPlayers;
+    public GameObject floatingJoystickController;
     private int curIngameIndex;
     private int curBallIndex;
     private int curNumberPlayers;

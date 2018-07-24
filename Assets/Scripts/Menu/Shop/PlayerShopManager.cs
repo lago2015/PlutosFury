@@ -130,7 +130,7 @@ public class PlayerShopManager : MonoBehaviour
         //otherwise do not available sound and text pop up saying not enough orbs
         else
         {
-            notEnoughOrbsText.PlayAnimation();
+            //notEnoughOrbsText.PlayAnimation();
 
         }
 
@@ -157,7 +157,7 @@ public class PlayerShopManager : MonoBehaviour
             }
             else
             {
-                notEnoughOrbsText.PlayAnimation();
+                //notEnoughOrbsText.PlayAnimation();
 
             }
 

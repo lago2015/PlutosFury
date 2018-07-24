@@ -6,50 +6,59 @@ using UnityEngine.Events;
 
 public class Movement : MonoBehaviour
 {
-    
+    [SerializeField]
     public bool startAtBeginning;
+    [SerializeField]
     private int orbCount = 0;
-    
+    [SerializeField]
     public bool controllerConnected = false;
+    [SerializeField]
     //buffs and debuffs
     bool CanFreezePluto;
+    [SerializeField]
     private bool isDisabled;
+    [SerializeField]
     private bool isDead;
     //******Dash Variables
     //Dash States
+    [SerializeField]
     public enum DashState { idle, basicMove, dashMove, chargeStart, chargeComplete, burst }
+    [SerializeField]
     private DashState trailState;
+    [SerializeField]
     private GameObject curTrail;
     //dash trail rotation
+    [SerializeField]
     private Quaternion trailRot;
+    [SerializeField]
     private Quaternion lastTrailRot;
+    [SerializeField]
     //trail checks
     private bool moveOn;
+    [SerializeField]
     private bool dashOn;
-
+    [SerializeField]
     /////Time outs
     public float DashTimeout = 2f;
+    [SerializeField]
     ///Cooldowns
     private float DashCooldownTime = 0.5f;
-
+    [SerializeField]
     /////checks
     private bool playOnce;
     private bool isExhausted = false;
-    private bool startOnce;
+
     public bool ShouldDash;
     private bool dashOnce;
     /////Speeds
     private float DefaultSpeed;
     public float MoveSpeed;
     public float DashSpeed;
-    private int DashDamage;
     //Rigidbody drag floats
     public float slowDownDrag;
     private float normalDrag;
-    //radius of power dash collider
-    private float powerDashRadius = 3;
     //Components
-    private Touch curTouch;
+
     public Rigidbody myBody;
     private GameObject joystick;
     private GameObject asteroidSpawn;
@@ -60,7 +69,6 @@ public class Movement : MonoBehaviour
     private AsteroidSpawner spawnScript;
     private GameManager gameManager;
     private PlayerManager ScoreManager;
-    private ExperienceManager ExperienceMan;
     private CameraShake CamShake;
     private FloatingJoystick joystickscript;
     private PlayerCollisionAndHealth collisionScript;
@@ -87,6 +95,22 @@ public class Movement : MonoBehaviour
     private bool isWaiting;
     private Vector3 lastMove;
     private Vector3 newVelocity;
+
+    public void ReferenceAbsorbScript(GameObject scriptObject)
+    {
+        if(scriptObject)
+        {
+            triggerScript = scriptObject.transform.GetChild(0).GetComponent<TriggerCollisionPluto>();
+        }
+    }
+
+    public void ReferenceAudio(GameObject scriptObject)
+    {
+        if(scriptObject)
+        {
+            audioScript = scriptObject.GetComponent<AudioController>();
+        }
+    }
 
     //functions for power dash
     public void cancelCharge() { TrailChange(DashState.idle); }
@@ -119,11 +143,8 @@ public class Movement : MonoBehaviour
         {
             buttonScript = buttonObject.GetComponent<ButtonIndicator>();
         }
-        GameObject AsteroidCollectorChild = GameObject.FindGameObjectWithTag("GravityWell").transform.GetChild(0).gameObject;
-        if(AsteroidCollectorChild)
-        {
-            triggerScript = AsteroidCollectorChild.GetComponent<TriggerCollisionPluto>();
-        }
+        
+        
         trailState = DashState.basicMove;
 
         collisionScript = GetComponent<PlayerCollisionAndHealth>();
@@ -140,7 +161,6 @@ public class Movement : MonoBehaviour
         
         //dash script
         //Audio Controller
-        audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
 
         //For physic things
         myBody = GetComponent<Rigidbody>();
@@ -327,7 +347,6 @@ public class Movement : MonoBehaviour
                         ResumePluto();
                     }
                     ShouldDash = false;
-                    startOnce = false;
                     moveOn = false;
 
                     ShouldDash = false;
@@ -404,7 +423,6 @@ public class Movement : MonoBehaviour
             if (!dashOnce)
             {
                 //update dash variables
-                DashDamage = 1;
                 MoveSpeed = DashSpeed;
                 ShouldDash = true;  //Update dash status
 

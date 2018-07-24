@@ -9,14 +9,14 @@ public class PlayerManager : MonoBehaviour {
     public int OrbGameoverReward = 250;
     private int maxLevel;
     private float timeRemaining;
-    public int OrbsObtainedTotal;   //used for total orbs collected
-    public int OrbsObtainedInLevel;       //total orbs collected in level
+    private int OrbsObtainedTotal;   //used for total orbs collected
+    private int OrbsObtainedInLevel;       //total orbs collected in level
+    [HideInInspector]
     public int playerHealth;
-    public int playerHeartContainer;
+    private int playerHeartContainer;
     private int playerMaxHealth = 5;
     private WinScreen winScript;
     private PlayerCollisionAndHealth playerHealthScript;
-
     private HUDManager HUDScript;
     private int orbObtained;
     
@@ -87,6 +87,7 @@ public class PlayerManager : MonoBehaviour {
         }
         OrbsObtainedInLevel = 0;
     }
+    //For game over and about to get into game over to ensure health is 0
     public void DefaultHealth()
     {
         PlayerPrefs.SetInt("healthPref", 0);

@@ -96,6 +96,7 @@ public class CanvasToggle : MonoBehaviour {
         }
         StartCoroutine(SpriteFadeOut());
     }
+
     IEnumerator SpriteFadeOut()
     {
         yield return new WaitForSeconds(ReadySpriteFadeIn);

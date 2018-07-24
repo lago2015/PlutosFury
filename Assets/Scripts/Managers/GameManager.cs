@@ -18,24 +18,23 @@ public class GameManager : MonoBehaviour
         - if timer reaches 0
      */
     public GameObject spawnPoint;
+    public GameObject audioManager;
 	private GameObject pluto;
+    private GameObject collectorObject;
+    private GameObject joystickController;
     private int curScore;
     private int curHighScore;
-    private int curTotalScore;
-    private int curTotalHighScore;
-    private int newRating;
+    
     public float fadeTime;
     public float GameOverDelay = 5f;
     public bool levelWallActive;
-    private bool willPlayAd;
+    private int curTotalScore;
     Movement playerMoveScript;
     MoonballManager moonBallManScript;
     PlayerCollisionAndHealth playerCollisionScript;
     GameObject audioObject;
     AudioController audioScript;
-    private float delayVoice=0.25f;
-    private float delayMusic;
-    AdManager AdManager;
+    
     private GameObject scoreObject;
     PlayerManager ScoreManager;
     private GameObject startCamTrigger;
@@ -53,7 +52,11 @@ public class GameManager : MonoBehaviour
         Screen.autorotateToPortrait = false;
         Screen.autorotateToPortraitUpsideDown = false;
         Screen.orientation = ScreenOrientation.AutoRotation;
-
+        if (audioManager)
+        {
+            audioObject = Instantiate(audioManager, Vector3.zero, Quaternion.identity);
+            audioScript = audioObject.GetComponent<AudioController>();
+        }
         CanvasManager = GameObject.FindGameObjectWithTag("CanvasManager");
         if(CanvasManager)
         {
@@ -61,22 +64,27 @@ public class GameManager : MonoBehaviour
         }
         
         InGameCharacterManager charManager = transform.GetChild(0).GetComponent<InGameCharacterManager>();
+        //Spawn all player components
         if(charManager)
         {
+            //Get current index for current player
             int curIndex = PlayerPrefs.GetInt("PlayerCharacterIndex");
             pluto = Instantiate(charManager.CurrentCharacter(curIndex), spawnPoint.transform.position, Quaternion.identity);
             playerMoveScript = pluto.GetComponent<Movement>();
             playerCollisionScript = pluto.GetComponent<PlayerCollisionAndHealth>();
+            //Get moonball manager
             moonBallManScript = pluto.GetComponent<MoonballManager>();
+            //asteroid collector
+            collectorObject=Instantiate(charManager.AsteroidCollectorPlayers, spawnPoint.transform.position, Quaternion.identity);
+            //floating joystick controller
+            joystickController=Instantiate(charManager.floatingJoystickController, Vector3.zero, Quaternion.identity);
+            playerMoveScript.ReferenceAbsorbScript(collectorObject);
+            playerMoveScript.ReferenceAudio(audioObject);
         }
 
 
-        //getter for audio controller
-        audioObject = GameObject.FindGameObjectWithTag("AudioController");
-        if(audioObject)
-        {
-            audioScript = audioObject.GetComponent<AudioController>();
-        }
+
+        
 
         scoreObject = GameObject.FindGameObjectWithTag("ScoreManager");
         if(scoreObject)
@@ -85,7 +93,6 @@ public class GameManager : MonoBehaviour
             ScoreManager = scoreObject.GetComponent<PlayerManager>();
         }
         //Getter for Ad Manager
-        AdManager = GetComponent<AdManager>();
         //Getters if level wall is active
         startCamTrigger = GameObject.FindGameObjectWithTag("Respawn");
         levelWall = GameObject.FindGameObjectWithTag("LevelWall");
@@ -129,8 +136,7 @@ public class GameManager : MonoBehaviour
                 ScoreManager.HealthChange(0);
             }
         }
-        //play ad
-        StartAdWithMusic();
+
 
     }
 
@@ -148,19 +154,6 @@ public class GameManager : MonoBehaviour
             GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraStop>().isWallActive(levelWallActive);
         }
     }
-    public void PlayAd()
-    {
-        int value = Random.Range(0, 10);
-
-        if (value < 2)
-        {
-            willPlayAd = true;
-        }
-        else
-        {
-            willPlayAd = false;
-        }
-    }
 
     //if timer reaches 0 then start game over
     public void CountDownFinished()
@@ -169,16 +162,10 @@ public class GameManager : MonoBehaviour
         {
             playerCollisionScript.curHealth = 0;
             playerCollisionScript.DamagePluto();
-            StartAdWithMusic();
         }
     }
 
-    //Start game over with time scale going 0, possible chance for ad to play
-    //and start game over music
-    public void StartAdWithMusic()
-    {
-        PlayAd();
-    }
+
    public IEnumerator GameOver()
     {
         
@@ -253,7 +240,6 @@ public class GameManager : MonoBehaviour
             canvasScript.SendScore(curScore);
             canvasScript.SendHighScore(curHighScore);
             canvasScript.SendTotalScore(curTotalScore);
-            canvasScript.SendTotalHighScore(curTotalHighScore);
             canvasScript.SendDataToWinScreen();
             //start fade in
             canvasScript.StartFadeIn();

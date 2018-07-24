@@ -182,7 +182,7 @@ public class NeptuneMoon : MonoBehaviour {
             {
                 if(!shootOnce)
                 {
-                    audioScript.NeptunesMoonShot(transform.position);
+                    //audioScript.NeptunesMoonShot(transform.position);
                     shootOnce = true;
                 }
             }
@@ -219,7 +219,7 @@ public class NeptuneMoon : MonoBehaviour {
 	{
         if(audioScript)
         {
-            audioScript.NeptunesMoonRetract(transform.position);
+            //audioScript.NeptunesMoonRetract(transform.position);
         }
         if(!resetTime)
         {
@@ -264,7 +264,7 @@ public class NeptuneMoon : MonoBehaviour {
             {
                 if(audioScript)
                 {
-                    audioScript.NeptunesMoonHit(transform.position);
+                    //audioScript.NeptunesMoonHit(transform.position);
                 }
                 col.gameObject.GetComponent<PlayerCollisionAndHealth>().DamagePluto();
               

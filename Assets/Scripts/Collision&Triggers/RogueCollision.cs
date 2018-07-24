@@ -25,7 +25,6 @@ public class RogueCollision : MonoBehaviour {
     // Use this for initialization
     void Awake ()
     {
-        audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
         myCollider = GetComponent<Collider>();
         myBody = GetComponent<Rigidbody>();
         orbScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<AsteroidSpawner>();
@@ -51,6 +50,8 @@ public class RogueCollision : MonoBehaviour {
 
     private void Start()
     {
+        audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
+
         playerMoveScript = GameObject.FindGameObjectWithTag("Player").GetComponent<Movement>();
         playerCollisionScript= GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerCollisionAndHealth>();
     }

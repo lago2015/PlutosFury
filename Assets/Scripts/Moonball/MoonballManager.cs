@@ -51,7 +51,7 @@ public class MoonballManager : MonoBehaviour {
 
     public int CurrentMoonballsAmount()
     {
-        return moonballNum+1;
+        return moonballNum;
     }
 
 }

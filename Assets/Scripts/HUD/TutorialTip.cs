@@ -14,17 +14,16 @@ public class TutorialTip : MonoBehaviour
 
     public bool tutorialOn = true;
 
-    // Use this for initialization
-    void Start()
+    private void Awake()
     {
         // Gets reference to animator and sets the update mode so it will run when gametime is paused
         anim = GetComponent<Animator>();
         anim.updateMode = UnityEngine.AnimatorUpdateMode.UnscaledTime;
 
     }
-	
-	// Update is called once per frame
-	void Update ()
+
+    // Update is called once per frame
+    void Update ()
     {
 		if (isDown)
         {

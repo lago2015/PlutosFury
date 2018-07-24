@@ -19,7 +19,7 @@ public class OptionsMenu : MonoBehaviour {
     bool mopen = false;
 
     // Use this for initialization
-    void Start ()
+    void Awake ()
     {
         if (PlayerPrefs.HasKey("VibrationHit"))
         {

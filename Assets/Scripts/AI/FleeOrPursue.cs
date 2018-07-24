@@ -54,7 +54,6 @@ public class FleeOrPursue : MonoBehaviour {
     // Use this for initialization
     void Awake()
     {
-        audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
         DefaultSpeed = MoveSpeed;
         if (scriptObject)
         {
@@ -91,7 +90,11 @@ public class FleeOrPursue : MonoBehaviour {
             PlayerNear = true;
         }
     }
-    
+    private void Start()
+    {
+        audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
+
+    }
     // Update is called once per frame
     void FixedUpdate()
     {

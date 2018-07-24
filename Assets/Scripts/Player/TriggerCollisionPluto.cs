@@ -17,13 +17,11 @@ public class TriggerCollisionPluto : MonoBehaviour {
     public bool DashChange(bool curDash) { return ShouldDash = curDash; }
 
 
-    private void Awake()
-    {
-        audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
-    }
 
     private void Start()
     {
+        audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
+
         playerMoveScript = GameObject.FindGameObjectWithTag("Player").GetComponent<Movement>();
         playerCollisionScript = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerCollisionAndHealth>();
     }

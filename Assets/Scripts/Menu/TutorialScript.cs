@@ -6,32 +6,28 @@ public class TutorialScript : MonoBehaviour {
     public Animator Anim;
     bool mopen = false;
 
-    // Use this for initialization
-    void Start () {
-		
-	}
-
+    
     public void WndowAnimation(bool forward)
     {
         if (forward)
         {
             if (forward == mopen)
             {
-                Debug.Log("Stuck");
+                //Debug.Log("Stuck");
                 return;
             }
 
             Anim.SetBool("show", true);
-            Debug.Log("Open");
+            //Debug.Log("Open");
         }
         else
         {
             Anim.SetBool("show", false);
-            Debug.Log("Close");
+            //Debug.Log("Close");
         }
         mopen = forward;
 
-        Debug.Log(mopen);
+        //Debug.Log(mopen);
     }
 
     public bool isOpen()
@@ -39,8 +35,5 @@ public class TutorialScript : MonoBehaviour {
         return mopen;
     }
 
-    // Update is called once per frame
-    void Update () {
-		
-	}
+    
 }

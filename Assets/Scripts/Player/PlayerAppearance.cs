@@ -24,12 +24,12 @@ public class PlayerAppearance : MonoBehaviour {
         {
             prefab.SetActive(false);
         }
-        audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
         gameManager = GameObject.FindGameObjectWithTag("Spawner").GetComponent<GameManager>();
     }
     private void Start()
     {
         moveScript = GetComponent<Movement>();
+        audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
 
     }
     public void PlayerDied()

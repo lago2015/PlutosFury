@@ -162,7 +162,7 @@ public class FloatingJoystick : MonoBehaviour,IDragHandler,IPointerUpHandler,IPo
                         }
                         directionChosen = false;
                     }
-                    Debug.Log("Distance: " + distance);
+                    //Debug.Log("Distance: " + distance);
                     break;
             }
             if (directionChosen && !isCoolingDown)

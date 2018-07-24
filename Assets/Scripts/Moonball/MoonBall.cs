@@ -160,8 +160,6 @@ public class MoonBall : MonoBehaviour
             OnExplosion();
         }
     }
-
-
     public void OnExplosion()
     {
         if (Explosion)

@@ -21,24 +21,21 @@ public class BigAsteroid : MonoBehaviour {
     private AsteroidSpawner spawnPointScript;
     public bool RockStatus() { return isDestroyed; }
     private Vector3 spawnPoint;
-    void Awake()
+    
+    void Start()
     {
         collecterScript = GameObject.FindGameObjectWithTag("GravityWell").GetComponent<AsteroidCollector>();
         GameObject audioObject = GameObject.FindGameObjectWithTag("AudioController");
-        if(audioObject)
+        if (audioObject)
         {
             audioScript = audioObject.GetComponent<AudioController>();
         }
         GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
-        if(playerObject)
+        if (playerObject)
         {
             playerScript = playerObject.GetComponent<Movement>();
         }
         spawnPointScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<AsteroidSpawner>();
-    }
-
-    void Start()
-    {
         Collider = GetComponent<SphereCollider>();
         if(Explosion)
         {
