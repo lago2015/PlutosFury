@@ -81,4 +81,15 @@ public class LoadTargetSceneButton : MonoBehaviour {
     {
         SceneManager.LoadScene(0);
     }
+    /// <summary>
+    /// Quit
+    /// </summary>
+    public void QuitApp()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+		Application.Quit();
+#endif
+    }
 }

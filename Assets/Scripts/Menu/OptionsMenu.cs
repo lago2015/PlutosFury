@@ -68,21 +68,20 @@ public class OptionsMenu : MonoBehaviour {
         {
             if (forward == mopen)
             {
-                Debug.Log("Stuck");
+
                 return;        
             }
 
             Anim.SetBool("show", true);
-            Debug.Log("Open");
+
         }
         else
         {
             Anim.SetBool("show", false);
-            Debug.Log("Close");
+
         }
         mopen = forward;
 
-        Debug.Log(mopen);
     }
 
     public bool isOpen()

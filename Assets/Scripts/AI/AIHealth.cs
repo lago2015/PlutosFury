@@ -44,6 +44,12 @@ public class AIHealth : MonoBehaviour {
     }
     private void Start()
     {
+        StartCoroutine(GetAudio());
+    }
+
+    IEnumerator GetAudio()
+    {
+        yield return new WaitForSeconds(0.2f);
         audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
 
     }

@@ -50,14 +50,19 @@ public class RogueCollision : MonoBehaviour {
         }
     }
 
+ 
     private void Start()
     {
-        audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
-
-        playerMoveScript = GameObject.FindGameObjectWithTag("Player").GetComponent<Movement>();
-        playerCollisionScript= GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerCollisionAndHealth>();
+        StartCoroutine(GetAudio());
     }
 
+    IEnumerator GetAudio()
+    {
+        yield return new WaitForSeconds(0.2f);
+        audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
+        playerMoveScript = GameObject.FindGameObjectWithTag("Player").GetComponent<Movement>();
+        playerCollisionScript = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerCollisionAndHealth>();
+    }
     //Apply damage to rogue and check if 
     public void RogueDamage()
     {
