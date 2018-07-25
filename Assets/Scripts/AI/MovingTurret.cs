@@ -27,8 +27,8 @@ public class MovingTurret : MonoBehaviour {
     AudioController audioScript;
     Transform PlayerTransform;
     public GameObject myParent;
-    public ShootProjectiles shootingScript;
-    
+    public ShootProjectiles shootingScript1;
+    public ShootProjectiles shootingScript2;
     public GameObject trailModel;
     public GameObject chargingParticle;
     
@@ -43,11 +43,15 @@ public class MovingTurret : MonoBehaviour {
     // Use this for initialization
     void Awake()
     {
-        if(shootingScript)
+        if(shootingScript1)
         {
-            shootingScript.enabled = false;
+            shootingScript1.enabled = false;
         }
-        
+        if (shootingScript2)
+        {
+            shootingScript2.enabled = false;
+        }
+
         //turning off all particles at start
         if (chargingParticle)
         {
@@ -214,10 +218,15 @@ public class MovingTurret : MonoBehaviour {
     {
 
         yield return new WaitForSeconds(0.2f);
-        if(shootingScript)
+        if(shootingScript1)
         {
-            shootingScript.enabled = true;
-            shootingScript.isPlayerNear(true);    
+            shootingScript1.enabled = true;
+            shootingScript1.isPlayerNear(true);    
+        }
+        if (shootingScript2)
+        {
+            shootingScript2.enabled = true;
+            shootingScript2.isPlayerNear(true);
         }
         //Check if rogue is dead
         if (!isDead)
@@ -230,8 +239,13 @@ public class MovingTurret : MonoBehaviour {
             }
         }
         yield return new WaitForSeconds(durationToShoot);
-        shootingScript.enabled = false;
-        shootingScript.isPlayerNear(false);
+        shootingScript1.enabled = false;
+        shootingScript1.isPlayerNear(false);
+        if (shootingScript2)
+        {
+            shootingScript2.enabled = false;
+            shootingScript2.isPlayerNear(false);
+        }
         ShouldShoot = false;
         isCharging = false;
 
