@@ -56,15 +56,7 @@ public class PlayerAppearance : MonoBehaviour {
                     StartCoroutine(BusterTransition(busterStates[0]));
                 }
                 break;
-            //turn off after shockwave so delay
-            case BusterStates.Shockwave:
-                if (busterStates[1])
-                {
-                    busterStates[1].SetActive(true);
-                    StartCoroutine(BusterTransition(busterStates[1]));
-
-                }
-                break;
+            
             //doesnt turn off
             case BusterStates.Death:
                 if (busterStates[2])

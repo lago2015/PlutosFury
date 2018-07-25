@@ -33,6 +33,7 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
     private HUDManager hudScript;
     private LerpToStart lerpScript;     //for boss level
     private PlayerAppearance appearanceScript;
+    private ExPointController bonusController;
     //knockback values
     public float wallBump = 20.0f;
     public float OrbBump = 10f;
@@ -70,11 +71,10 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
         moonball2 = Instantiate(moonBallHitEffect, transform.position, Quaternion.identity);
         moonball2.SetActive(false);
         moonBallHitEffect.SetActive(false);
-        hudScript = GameObject.FindGameObjectWithTag("HUDManager").GetComponent<HUDManager>();
         //Script reference
         lerpScript = GetComponent<LerpToStart>();   //for boss level
         appearanceScript = GetComponent<PlayerAppearance>();
-
+        bonusController=GetComponent<ExPointController>();
         //Setting colors
         w_Color = Color.white;
         r_Color = Color.red;
@@ -98,6 +98,7 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
     // Use this for initialization
     void Start ()
     {
+        hudScript = GameObject.FindGameObjectWithTag("HUDManager").GetComponent<HUDManager>();
         moveScript = GetComponent<Movement>();
         livesScript = GetComponent<PlayerLives>();
         ScoreManager = GameObject.FindGameObjectWithTag("ScoreManager").GetComponent<PlayerManager>();
@@ -177,6 +178,10 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
             {
                 ScoreManager.HealthChange(curHealth);
             }
+        }
+        else if(bonusController)
+        {
+            bonusController.CreateFloatingExPoint(transform.position);
         }
        
     }

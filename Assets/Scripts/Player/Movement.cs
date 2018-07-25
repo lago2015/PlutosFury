@@ -129,7 +129,7 @@ public class Movement : MonoBehaviour
     }
 
     // Use this for initialization
-    void Awake()
+    void Start()
     {
         
         GameObject hudObject = GameObject.FindGameObjectWithTag("HUDManager");
@@ -144,24 +144,11 @@ public class Movement : MonoBehaviour
             buttonScript = buttonObject.GetComponent<ButtonIndicator>();
         }
         
-        
         trailState = DashState.basicMove;
 
         collisionScript = GetComponent<PlayerCollisionAndHealth>();
         appearanceScript = GetComponent<PlayerAppearance>();
         
-        
-        
-        //Dash Button
-        dashButt = GameObject.FindGameObjectWithTag("DashButt").GetComponent<ButtonIndicator>();
-        if (!dashButt)
-        {
-            Debug.Log("No Dash Button");
-        }
-        
-        //dash script
-        //Audio Controller
-
         //For physic things
         myBody = GetComponent<Rigidbody>();
         if (myBody)
@@ -177,7 +164,12 @@ public class Movement : MonoBehaviour
             CamShake = camObject.GetComponent<CameraShake>();
         }
 
-
+        //Dash Button
+        dashButt = GameObject.FindGameObjectWithTag("DashButt").GetComponent<ButtonIndicator>();
+        if (!dashButt)
+        {
+            Debug.Log("No Dash Button");
+        }
         //Look if there is a joystick
         if (!joystick)
         {
@@ -334,7 +326,11 @@ public class Movement : MonoBehaviour
         trailState = nextState;
         foreach (GameObject col in trailContainer)
         {
-            col.SetActive(false);
+            if(col)
+            {
+                col.SetActive(false);
+            }
+            
         }
         if(!isWaiting)
         {

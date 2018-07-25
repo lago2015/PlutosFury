@@ -7,13 +7,16 @@ public class MoonballManager : MonoBehaviour {
     private int moonballNum;
     private int moonballMaxContainer;
     private HUDManager HUDScript;
-
+    private ExPointController bonusController;
+    private GameObject hudObject;
     void Awake()
     {
-        GameObject hudObject = GameObject.FindGameObjectWithTag("HUDManager");
+        bonusController = GetComponent<ExPointController>();
+        hudObject = GameObject.FindGameObjectWithTag("HUDManager");
         if (hudObject)
         {
             HUDScript = hudObject.GetComponent<HUDManager>();
+            hudObject = null;
         }
         moonballMaxContainer = 2;
         moonballMaxContainer += PlayerPrefs.GetInt("CurAddtionalBalls");
@@ -47,6 +50,11 @@ public class MoonballManager : MonoBehaviour {
             }
             SaveCurrentBalls();
         }
+        else if(bonusController)
+        {
+            bonusController.CreateFloatingExPoint(transform.position);
+        }
+
     }
 
     public int CurrentMoonballsAmount()
