@@ -24,7 +24,7 @@ public class FleeOrPursue : MonoBehaviour {
     private bool firstEncounter = false;
     private float DefaultSpeed;
     private float normalDrag;
-    Vector3 avoidance;
+    
     public float maxDistAvoidance = 20f;
     public float maxAvoidForce = 100f;
     //components
@@ -37,7 +37,7 @@ public class FleeOrPursue : MonoBehaviour {
     public GameObject chargingParticle;
     public GameObject burstParticle;
     private Rigidbody myBody;
-    private bool isAlive;
+    
     public bool isTriggered;
     public bool ShouldPursue;// chase player or not
     private bool isCharging;
@@ -59,11 +59,15 @@ public class FleeOrPursue : MonoBehaviour {
         {
             collisionScript = scriptObject.GetComponent<RogueCollision>();
         }
-        myBody = myParent.GetComponent<Rigidbody>();
+        myBody = myParent.transform.GetChild(0).GetComponent<Rigidbody>();
         //Getting the drag to revert back to for slow down of dash
         if (myBody)
         {
             normalDrag = myBody.drag;
+        }
+        else
+        {
+            myBody = myParent.GetComponent<Rigidbody>();
         }
         //turning off all particles at start
         if(chargingParticle)
@@ -149,6 +153,26 @@ public class FleeOrPursue : MonoBehaviour {
         }
     }
 
+    public void HitPlayerCooldown()
+    {
+        animComp.SetBool("isDashing", false);
+        //turn off some particles
+        if (trailModel && chargingParticle)
+        {
+            trailModel.SetActive(false);
+            chargingParticle.SetActive(false);
+        }
+        StartCoroutine(HitCooldown());
+    }
+
+    IEnumerator HitCooldown()
+    {
+        ShouldPursue = false;
+        PlayerNear = false;
+        yield return new WaitForSeconds(2.5f);
+        ShouldPursue = true;
+        PlayerNear = true;
+    }
 
     //Called from update function if player is near
     void PursuePlayer()

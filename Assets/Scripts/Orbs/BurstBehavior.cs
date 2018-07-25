@@ -98,6 +98,11 @@ public class BurstBehavior : MonoBehaviour {
         spawnerScript.ReturnPooledAsteroid(gameObject);
     }
 
+    public void ReturnToPool()
+    {
+        spawnerScript.ReturnPooledAsteroid(gameObject);
+    }
+
     void ChangeTag()
     {
         gameObject.tag = "Asteroid";

@@ -28,10 +28,13 @@ public class CollisionDetection : MonoBehaviour {
             defaultForce = chaseScript.force;
         }
         myBody = GetComponent<Rigidbody>();
-        audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
         managerScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<GameManager>();
     }
+    private void Start()
+    {
+        audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
 
+    }
     void OnCollisionEnter(Collision c)
     {
         string curTag = c.gameObject.tag;

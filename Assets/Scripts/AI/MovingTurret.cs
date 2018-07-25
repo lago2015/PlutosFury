@@ -21,7 +21,6 @@ public class MovingTurret : MonoBehaviour {
     public bool ShouldShoot;
     private bool firstEncounter = false;
 
-    Vector3 avoidance;
     public float maxDistAvoidance = 20f;
     public float maxAvoidForce = 100f;
     //components
@@ -33,12 +32,10 @@ public class MovingTurret : MonoBehaviour {
     public GameObject trailModel;
     public GameObject chargingParticle;
     
-    private bool isAlive;
     public bool isDead;
     public bool isTriggered;
     public bool ShouldPursue;// chase player or not
     private bool isCharging;
-    private bool doOnce;
     public bool PlayerNear;
     public int RotationSpeed = 10;
     
@@ -46,7 +43,6 @@ public class MovingTurret : MonoBehaviour {
     // Use this for initialization
     void Awake()
     {
-        audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
         if(shootingScript)
         {
             shootingScript.enabled = false;
@@ -73,6 +69,11 @@ public class MovingTurret : MonoBehaviour {
         {
             PlayerNear = true;
         }
+    }
+
+    private void Start()
+    {
+        audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
     }
 
     // Update is called once per frame
@@ -254,10 +255,7 @@ public class MovingTurret : MonoBehaviour {
         }
         yield return new WaitForSeconds(chargeCooldownTime);
         isExhausted = false;
-        //Reset values
-        doOnce = false;
         
-
     }
 
     

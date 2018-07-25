@@ -172,7 +172,7 @@ public class DamageOrPowerUp : MonoBehaviour {
         }
         else if (curString == "BigAsteroid")
         {
-            col.gameObject.GetComponent<BigAsteroid>().AsteroidHit(5);
+            col.gameObject.GetComponent<BigAsteroid>().AsteroidHit(5,false);
 
         }
 

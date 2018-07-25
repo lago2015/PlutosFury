@@ -75,7 +75,7 @@ public class Movement : MonoBehaviour
     private PlayerAppearance appearanceScript;
     private ButtonIndicator buttonScript;
     private HUDManager hudScript;
-    private TriggerCollisionPluto triggerScript;
+    public TriggerCollisionPluto triggerScript;
 
     //Appearance Components
     [Tooltip("0=default, 1=dash, 2=chargeStart, 3=chargeComplete, 4=burst")]
@@ -569,7 +569,7 @@ public class Movement : MonoBehaviour
 
     public void OrbCombo()
     {
-        Debug.Log("Hes");
+        //Debug.Log("Hes");
 
         if(++orbCount >= 5)
         {

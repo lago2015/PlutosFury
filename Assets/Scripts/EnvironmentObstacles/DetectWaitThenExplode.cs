@@ -27,11 +27,7 @@ public class DetectWaitThenExplode : MonoBehaviour {
         damageCollider = GetComponent<SphereCollider>();
         orbScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<AsteroidSpawner>();
         //getter for score script
-        GameObject audioObject = GameObject.FindGameObjectWithTag("AudioController");
-        if (audioObject)
-        {
-            audioScript = audioObject.GetComponent<AudioController>();
-        }
+        
         GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
         if (playerObject)
         {
@@ -54,7 +50,14 @@ public class DetectWaitThenExplode : MonoBehaviour {
         pursuitScript = GetComponent<HomingProjectile>();
         chargeState.SetActive(false);
     }
-
+    private void Start()
+    {
+        GameObject audioObject = GameObject.FindGameObjectWithTag("AudioController");
+        if (audioObject)
+        {
+            audioScript = audioObject.GetComponent<AudioController>();
+        }
+    }
     void OnCollisionEnter(Collision col)
     {
         string CurTag = col.gameObject.tag;
@@ -94,7 +97,7 @@ public class DetectWaitThenExplode : MonoBehaviour {
                 damageScript.didDamage();
             }
             //apply damage to asteroid
-            col.gameObject.GetComponent<BigAsteroid>().AsteroidHit(5);
+            col.gameObject.GetComponent<BigAsteroid>().AsteroidHit(5, false);
         }
         else if (CurTag == "EnvironmentObstacle"||CurTag=="Obstacle"||CurTag=="Planet")
         {

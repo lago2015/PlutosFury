@@ -36,6 +36,7 @@ public class DetectPlayer : MonoBehaviour {
             }
             avoidanceScript = ScriptModel.GetComponent<RogueAvoidance>();
         }
+
         TrigCollider = GetComponent<SphereCollider>();
     }
     private void Start()
@@ -67,7 +68,7 @@ public class DetectPlayer : MonoBehaviour {
                 if(TrigCollider)
                 {
                     TrigCollider.enabled = false;
-                    TrigCollider.radius = 2;
+                    TrigCollider.radius = 1;
                 }
                 pursueScript.enabled = true;
                 pursueScript.PlayerIsNear();
@@ -77,11 +78,7 @@ public class DetectPlayer : MonoBehaviour {
                 chooterScript.enabled = true;
                 chooterScript.PlayerIsNear();
                 rotationScript.enabled = true;
-                if(TrigCollider)
-                {
-                    TrigCollider.radius = 2;
-                    
-                }
+                
             }
             
             if(exPointController)

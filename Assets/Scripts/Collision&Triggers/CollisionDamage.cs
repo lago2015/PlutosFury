@@ -2,11 +2,11 @@
 using System.Collections;
 
 public class CollisionDamage : MonoBehaviour {
-
+    public FleeOrPursue pursueScript;
     public bool CheckDash=false;
     private AudioController audioScript;
     
-    void Awake()
+    void Start()
     {
         audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
     }
@@ -20,6 +20,10 @@ public class CollisionDamage : MonoBehaviour {
             bool isDamaged = CollisionScript.isDamaged;
             if (!isDamaged)
             {
+                if(pursueScript)
+                {
+                    pursueScript.HitPlayerCooldown();
+                }
                 CollisionScript.DamagePluto();
                 col.gameObject.GetComponent<Movement>().KnockbackPlayer(col.ClosestPoint(col.gameObject.transform.position));
                 if (audioScript)
@@ -35,7 +39,7 @@ public class CollisionDamage : MonoBehaviour {
         }
         if(col.gameObject.tag=="BigAsteroid")
         {
-            col.gameObject.GetComponent<BigAsteroid>().AsteroidHit(5);
+            col.gameObject.GetComponent<BigAsteroid>().AsteroidHit(5,false);
         }
     }
 

@@ -13,7 +13,7 @@ public class MoonballTriggerScript : MonoBehaviour {
             {
                 orbCollider.enabled = false;
             }
-            other.gameObject.GetComponent<BigAsteroid>().AsteroidHit(5);
+            other.gameObject.GetComponent<BigAsteroid>().AsteroidHit(5, true);
         }
     }
 }

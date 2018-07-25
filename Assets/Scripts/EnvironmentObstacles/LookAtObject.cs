@@ -5,7 +5,6 @@ public class LookAtObject : MonoBehaviour {
 
     GameObject Player;
     private SphereCollider TrigCollider;
-    bool ObjectNear;
     public bool AmITurret;
     public float RotationSpeed = 5;
     private Vector3 startPosition;
@@ -83,9 +82,10 @@ public class LookAtObject : MonoBehaviour {
         {
             if(AmITurret)
             {
-                //TrigCollider.radius = 2;
                 TrigCollider.enabled = false;
                 enabled = true;
+                //TrigCollider.radius = 2;
+
             }
         }
     }

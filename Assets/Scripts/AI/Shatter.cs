@@ -17,7 +17,6 @@ public class Shatter : MonoBehaviour
 
     private void Awake()
     {
-        audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
         colliderComp = GetComponent<SphereCollider>();
     }
 
@@ -27,7 +26,9 @@ public class Shatter : MonoBehaviour
         anim = GetComponent<Animator>();
         enabled = false;
         targetRotation = new Vector3(0.0f, 0.0f, 0.0f);
-	}
+        audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
+
+    }
 
     void FixedUpdate()
     {

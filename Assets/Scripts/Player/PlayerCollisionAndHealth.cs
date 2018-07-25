@@ -101,6 +101,7 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
         moveScript = GetComponent<Movement>();
         livesScript = GetComponent<PlayerLives>();
         ScoreManager = GameObject.FindGameObjectWithTag("ScoreManager").GetComponent<PlayerManager>();
+        audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
         if (ScoreManager)
         {
             //if player has advanced to another level check for health
@@ -158,7 +159,7 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
     }
     public void HealthPickup(Vector3 curLocation)
     {
-        if (curHealth < curMaxHealth)
+        if (curHealth > curMaxHealth)
         {
             curHealth++;
 
@@ -371,7 +372,7 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
             }
 
         }
-        else if (curTag == "Obstacle")
+        else if (curTag == "Obstacle" || curTag=="Planet")
         {
 
             if (c.transform.name != "Seeker")

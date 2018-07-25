@@ -44,11 +44,7 @@ public class CanvasToggle : MonoBehaviour {
         {
             scoreScript = scoreObject.GetComponent<PlayerManager>();
         }
-        GameObject audioObject = GameObject.FindGameObjectWithTag("AudioController");
-        if(audioObject)
-        {
-            audioScript = audioObject.GetComponent<AudioController>();
-        }
+        
         //get canvas script to enable fading
         if(WinScreenCanvas)
         {
@@ -62,6 +58,11 @@ public class CanvasToggle : MonoBehaviour {
 
     private void Start()
     {
+        GameObject audioObject = GameObject.FindGameObjectWithTag("AudioController");
+        if (audioObject)
+        {
+            audioScript = audioObject.GetComponent<AudioController>();
+        }
         playerScript = GameObject.FindGameObjectWithTag("Player").GetComponent<Movement>();
 
         if (playerScript)

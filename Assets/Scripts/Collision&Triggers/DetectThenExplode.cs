@@ -99,7 +99,7 @@ public class DetectThenExplode : MonoBehaviour {
                 damageScript.didDamage();
             }
             //apply damage to asteroid
-            col.gameObject.GetComponent<BigAsteroid>().AsteroidHit(5);
+            col.gameObject.GetComponent<BigAsteroid>().AsteroidHit(5, false);
         }
         else if (CurTag == "EnvironmentObstacle"||CurTag=="Obstacle")
         {

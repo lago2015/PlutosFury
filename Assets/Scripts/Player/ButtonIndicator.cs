@@ -5,7 +5,6 @@ using UnityEngine.EventSystems; //required when using Event Data
 public class ButtonIndicator : MonoBehaviour
     {
 
-    private AudioController audioScript;
     private Movement playerScript;
     public float dashDelay;
     public float curTime;
@@ -18,7 +17,6 @@ public class ButtonIndicator : MonoBehaviour
     public bool doOnce;
     public bool isDashActive;
     public bool isExhausted;
-    private bool playOnce;
     public bool isDashing;
     public float delayTimer;
 
@@ -26,7 +24,6 @@ public class ButtonIndicator : MonoBehaviour
     void Start()
     {
         //getter for audio controller and player movement script
-        audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
         playerScript = GameObject.FindGameObjectWithTag("Player").GetComponent<Movement>();
         if(playerScript)
         {

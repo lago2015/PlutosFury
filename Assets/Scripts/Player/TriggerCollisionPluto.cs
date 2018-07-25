@@ -8,8 +8,6 @@ public class TriggerCollisionPluto : MonoBehaviour {
     public GameObject parentOfPlayer;
     private Movement playerMoveScript;
     private PlayerCollisionAndHealth playerCollisionScript;
-    private Rigidbody myBody;
-    private float obstacleBump;
     private bool isDead;
     private bool ShouldDash;
     private AudioController audioScript;
@@ -21,7 +19,7 @@ public class TriggerCollisionPluto : MonoBehaviour {
     private void Start()
     {
         audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
-
+        ScoreManager = GameObject.FindGameObjectWithTag("ScoreManager").GetComponent<PlayerManager>();
         playerMoveScript = GameObject.FindGameObjectWithTag("Player").GetComponent<Movement>();
         playerCollisionScript = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerCollisionAndHealth>();
     }
@@ -60,7 +58,7 @@ public class TriggerCollisionPluto : MonoBehaviour {
         {
             if (ShouldDash)
             {
-                other.gameObject.GetComponent<BigAsteroid>().AsteroidHit(1);
+                other.gameObject.GetComponent<BigAsteroid>().AsteroidHit(1, true);
                 GameObject.FindObjectOfType<Movement>().OrbCombo();
             }
         }

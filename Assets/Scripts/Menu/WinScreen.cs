@@ -36,12 +36,15 @@ public class WinScreen : MonoBehaviour
 	// Use this for initialization
 	void Awake ()
     {        
-        audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
         targetSceneButton = this.gameObject.GetComponent<LoadTargetSceneButton>();
         scoreScript = GameObject.FindGameObjectWithTag("ScoreManager").GetComponent<PlayerManager>();
         
 	}
-    
+    private void Start()
+    {
+        audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
+
+    }
     public void FadeIn()
     {
         if(scoreDisplay)

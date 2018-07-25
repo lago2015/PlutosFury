@@ -13,7 +13,6 @@ public class RogueCollision : MonoBehaviour {
     public GameObject Model2;
     public GameObject Model3;
 
-    private DamageOrPowerUp damageScript;
     private FleeOrPursue rogueMoveScript;
     private Collider myCollider;
     private Movement playerMoveScript;
@@ -40,7 +39,10 @@ public class RogueCollision : MonoBehaviour {
         }
         if (Model2)
         {
-            Model2.SetActive(true);
+            if(!Model2.name.Contains("Charge"))
+            {
+                Model2.SetActive(true);
+            }
         }
         if (Model3)
         {
@@ -133,7 +135,7 @@ public class RogueCollision : MonoBehaviour {
                 if(playerMoveScript)
                 {
                     playerCollisionScript.DamagePluto();
-
+                    rogueMoveScript.HitPlayerCooldown();
                 }
             }
         }
@@ -163,7 +165,7 @@ public class RogueCollision : MonoBehaviour {
 
             else
             {
-                col.gameObject.GetComponent<BigAsteroid>().AsteroidHit(2);
+                col.gameObject.GetComponent<BigAsteroid>().AsteroidHit(2,false);
 
             }
         }

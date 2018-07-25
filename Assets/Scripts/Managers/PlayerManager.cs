@@ -7,18 +7,16 @@ public class PlayerManager : MonoBehaviour {
     //This manager is meant to handle UI elements of health,moonball and tracking orbs the player has collected
 
     public int OrbGameoverReward = 250;
-    private int maxLevel;
     private float timeRemaining;
     private int OrbsObtainedTotal;   //used for total orbs collected
     private int OrbsObtainedInLevel;       //total orbs collected in level
     [HideInInspector]
     public int playerHealth;
     private int playerHeartContainer;
-    private int playerMaxHealth = 5;
-    private WinScreen winScript;
+
     private PlayerCollisionAndHealth playerHealthScript;
     private HUDManager HUDScript;
-    private int orbObtained;
+
     
     public int CurrentHealth() { return playerHealth; }
 

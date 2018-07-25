@@ -13,18 +13,15 @@ public class PickUpSkills : MonoBehaviour {
     private HUDManager hudScript;
     private bool pickupObtained;
     private AudioController audioScript;
-    void Awake()
+    
+
+    private void Start()
     {
         GameObject audioObject = GameObject.FindGameObjectWithTag("AudioController");
         if (audioObject)
         {
             audioScript = audioObject.GetComponent<AudioController>();
         }
- 
-    }
-
-    private void Start()
-    {
         GameObject playerRef = GameObject.FindGameObjectWithTag("Player");
 
         hudScript = GameObject.FindGameObjectWithTag("HUDManager").GetComponent<HUDManager>();

@@ -11,7 +11,6 @@ public class BigAsteroid : MonoBehaviour {
     public int curHits;
     public int HitPoints;
     private int orbDrop=2;
-    private Vector3 SpawnPoint;
     private float DestroyTimeout=2;
     private bool doOnce;
     private bool isDestroyed;
@@ -20,7 +19,6 @@ public class BigAsteroid : MonoBehaviour {
     private Movement playerScript;
     private AsteroidSpawner spawnPointScript;
     public bool RockStatus() { return isDestroyed; }
-    private Vector3 spawnPoint;
     
     void Start()
     {
@@ -46,20 +44,10 @@ public class BigAsteroid : MonoBehaviour {
 
     public void SpawnAsteroids()
     {
-        if(AsteroidModel&&Explosion)
+        
+        if (spawnPointScript )
         {
-            foreach(SphereCollider col in GetComponents<SphereCollider>())
-            {
-                col.enabled = false;
-            }
-            if(spawnPointScript)
-            {
-                spawnPointScript.SpawnAsteroidHere(orbDrop, transform.position);
-            }
-            AsteroidModel.SetActive(false);
-            Explosion.SetActive(true);
-            isDestroyed = true;
-            StartCoroutine(DestroyCountdown());
+            spawnPointScript.SpawnAsteroidHere(orbDrop, transform.position);
         }
     }
 
@@ -69,31 +57,9 @@ public class BigAsteroid : MonoBehaviour {
         Destroy(gameObject);
     }
 
-    void OnCollisionEnter(Collision col)
-    {
-        if(col.gameObject.tag=="Player")
-        {
-            Movement moveScript = col.gameObject.GetComponent<Movement>();
-            bool isDashing = moveScript.DashStatus();
-            //bool isPowerReady = moveScript.DashChargeStatus();
-            if (isDashing==true)
-            {
-                if (!doOnce)
-                {
-                    if(audioScript)
-                    {
-                        audioScript.AsteroidExplosion(transform.position);
-                    }
-                    
-                    SpawnAsteroids();
-             
-                    doOnce = true;
-                }
-            }
-        } 
-    }
+    
 
-    public void AsteroidHit(int DamageAmount)
+    public void AsteroidHit(int DamageAmount,bool isPlayer)
     {
         if(DamageAmount==0)
         {
@@ -108,8 +74,22 @@ public class BigAsteroid : MonoBehaviour {
                 {
                     audioScript.AsteroidExplosion(transform.position);
                 }
-                        
-                SpawnAsteroids();
+                if(isPlayer)
+                {
+                    SpawnAsteroids();
+                }
+                if (AsteroidModel && Explosion)
+                {
+                    foreach (SphereCollider col in GetComponents<SphereCollider>())
+                    {
+                        col.enabled = false;
+                    }
+
+                    AsteroidModel.SetActive(false);
+                    Explosion.SetActive(true);
+                    isDestroyed = true;
+                    StartCoroutine(DestroyCountdown());
+                }
                 doOnce = true;
             }
             

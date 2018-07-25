@@ -52,11 +52,7 @@ public class GameManager : MonoBehaviour
         Screen.autorotateToPortrait = false;
         Screen.autorotateToPortraitUpsideDown = false;
         Screen.orientation = ScreenOrientation.AutoRotation;
-        if (audioManager)
-        {
-            audioObject = Instantiate(audioManager, Vector3.zero, Quaternion.identity);
-            audioScript = audioObject.GetComponent<AudioController>();
-        }
+        
         CanvasManager = GameObject.FindGameObjectWithTag("CanvasManager");
         if(CanvasManager)
         {
@@ -107,7 +103,12 @@ public class GameManager : MonoBehaviour
     }
 	void Start ()
     {
-        if(audioScript)
+        if (audioManager)
+        {
+            audioObject = Instantiate(audioManager, Vector3.zero, Quaternion.identity);
+            audioScript = audioObject.GetComponent<AudioController>();
+        }
+        if (audioScript)
         {
             //enable background music
             audioScript.BackgroundMusic();
