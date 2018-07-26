@@ -35,16 +35,29 @@ public class OptionsMenu : MonoBehaviour {
                 }
             }
         }
+        if (PlayerPrefs.HasKey("godMode"))
+        {
+            if (PlayerPrefs.GetInt("godMode") == 1)
+            {
+                vHit.isOn = true;
+            }
+            else
+            {
+                if (vHit)
+                {
+                    vHit.isOn = false;
+                }
+            }
+        }
 
-  
-        
-	}
+
+    }
 
 
 	public void UpdateValues()
     {
 		int VibrationHit;
-
+        int InvertControls;
         PlayerPrefs.SetFloat("musicParam", Music.value);
         PlayerPrefs.SetFloat("sfxParam", SFX.value);
 
@@ -54,10 +67,18 @@ public class OptionsMenu : MonoBehaviour {
 			VibrationHit = 0;
         }
 
-		
-        
-		PlayerPrefs.SetInt ("VibrationHit", VibrationHit);
-	}
+        if (iControls.isOn)
+        {
+            InvertControls = 1;
+        }
+        else
+        {
+            InvertControls = 0;
+        }
+
+        PlayerPrefs.SetInt ("VibrationHit", VibrationHit);
+        PlayerPrefs.SetInt("godMode", InvertControls);
+    }
 
    
     

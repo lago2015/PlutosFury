@@ -81,7 +81,14 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
 
         //set status of player
         isDead = false;
-
+        if(PlayerPrefs.GetInt("godMode")==1)
+        {
+            godMode = true;
+        }
+        else
+        {
+            godMode = false;
+        }
         //setting option menu fields
         //vibration enabled/disabled
         if (PlayerPrefs.GetInt("VibrationHit") == 1)

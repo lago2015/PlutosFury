@@ -69,10 +69,10 @@ public class LoadTargetSceneButton : MonoBehaviour {
 			return;
 		}
        
-        if (Menu)
-        {
-            Menu.SetActive(false);
-        }
+        //if (Menu)
+        //{
+        //    Menu.SetActive(false);
+        //}
         LoadingScreenManager.LoadScene (num);
         Time.timeScale = 1;
     }
