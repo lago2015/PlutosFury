@@ -10,7 +10,7 @@ public class ExPointController : MonoBehaviour {
     private ExPoint animScript;
     private void Awake()
     {
-        if(exPointObject)
+        if (exPointObject)
         {
             exPointObject = Instantiate(exPointObject, transform.position, Quaternion.identity);
             exPointChild = exPointObject.transform.GetChild(0).gameObject;
@@ -18,22 +18,19 @@ public class ExPointController : MonoBehaviour {
             exPointObject.SetActive(false);
         }
     }
-
     public void CreateFloatingExPoint(Vector3 Location)
     {
         exPointObject.transform.position = Location;
         exPointObject.SetActive(true);
-        if(exPointChild.activeInHierarchy)
+        if (exPointChild.activeInHierarchy)
         {
             exPointChild.SetActive(false);
             exPointChild.SetActive(true);
         }
         else
         {
-
             exPointChild.SetActive(true);
         }
-        
-    }
 
+    }
 }

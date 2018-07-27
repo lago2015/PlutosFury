@@ -69,10 +69,10 @@ public class LoadTargetSceneButton : MonoBehaviour {
 			return;
 		}
        
-        //if (Menu)
-        //{
-        //    Menu.SetActive(false);
-        //}
+        if (Menu)
+        {
+            Menu.SetActive(false);
+        }
         LoadingScreenManager.LoadScene (num);
         Time.timeScale = 1;
     }
@@ -80,16 +80,5 @@ public class LoadTargetSceneButton : MonoBehaviour {
     public void LoadToMainMenu()
     {
         SceneManager.LoadScene(0);
-    }
-    /// <summary>
-    /// Quit
-    /// </summary>
-    public void QuitApp()
-    {
-#if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-#else
-		Application.Quit();
-#endif
     }
 }

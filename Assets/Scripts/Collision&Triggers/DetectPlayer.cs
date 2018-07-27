@@ -41,16 +41,9 @@ public class DetectPlayer : MonoBehaviour {
     }
     private void Start()
     {
-        StartCoroutine(GetAudio());
-    }
-
-    IEnumerator GetAudio()
-    {
-        yield return new WaitForSeconds(0.2f);
         audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
 
     }
-
     /* This is meant for Boss Planet Detection*/
     void OnTriggerEnter(Collider col)
     {

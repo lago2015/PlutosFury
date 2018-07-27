@@ -56,10 +56,10 @@ public class PlayerAppearance : MonoBehaviour {
                     StartCoroutine(BusterTransition(busterStates[0]));
                 }
                 break;
-            
+    
             //doesnt turn off
             case BusterStates.Death:
-                if (busterStates[2])
+                if (busterStates[1])
                 {
                     moveScript.DisableMovement(true);
 
@@ -70,7 +70,7 @@ public class PlayerAppearance : MonoBehaviour {
                             col.isTrigger = true;
                         }
                     }
-                    busterStates[2].SetActive(true);
+                    busterStates[1].SetActive(true);
                 }
                 break;
         }

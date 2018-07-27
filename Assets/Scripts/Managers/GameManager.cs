@@ -58,7 +58,11 @@ public class GameManager : MonoBehaviour
         {
             canvasScript = CanvasManager.GetComponent<CanvasToggle>();
         }
-        
+        if (audioManager)
+        {
+            audioObject = Instantiate(audioManager, Vector3.zero, Quaternion.identity);
+            audioScript = audioObject.GetComponent<AudioController>();
+        }
         InGameCharacterManager charManager = transform.GetChild(0).GetComponent<InGameCharacterManager>();
         //Spawn all player components
         if(charManager)
@@ -103,11 +107,7 @@ public class GameManager : MonoBehaviour
     }
 	void Start ()
     {
-        if (audioManager)
-        {
-            audioObject = Instantiate(audioManager, Vector3.zero, Quaternion.identity);
-            audioScript = audioObject.GetComponent<AudioController>();
-        }
+       
         if (audioScript)
         {
             //enable background music

@@ -18,12 +18,15 @@ public class InGameCharacterManager : MonoBehaviour {
     private void Awake()
     {
         curBallIndex = PlayerPrefs.GetInt("PlayerMoonballIndex");
+        
     }
 
     private void Start()
     {
         joystickScript = GameObject.FindGameObjectWithTag("GameController").GetComponent<FloatingJoystick>();
+
         joystickScript.currentMoonball(InGameMoonballs[curBallIndex]);
+
     }
 
     //Number of players in
