@@ -88,6 +88,8 @@ public class PlayerShopManager : MonoBehaviour
         PlayerPrefs.SetInt("skin7", 0);
         PlayerPrefs.SetInt("MoonballUpgrade0", 0);
         PlayerPrefs.SetInt("MoonballUpgrade1", 0);
+        PlayerPrefs.SetInt(0 + "Unlocked", 2);
+        PlayerPrefs.SetInt(1 + "Unlocked", 7);
     }
 
     public void AddOrbs()
