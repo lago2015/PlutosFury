@@ -41,95 +41,83 @@ public class SkinShopManager : MonoBehaviour
         moonSkin2 = PlayerPrefs.GetInt("skin6");
         moonSkin3 = PlayerPrefs.GetInt("skin7");
         orbTextScript = GameObject.FindGameObjectWithTag("Finish").GetComponent<UpdateOrbAmount>();
-        if(skin0Bought==1)
-        {
-            BuySkinsButtons[0].interactable = false;
-        }
-        else
-        {
 
-            BuySkinsButtons[0].interactable = true;
-        }
+
+        BuySkinsButtons[0].interactable = true;
+
 
         if (skin1Bought == 1)
         {
 
-            BuySkinsButtons[1].interactable = false;
+            BuySkinsButtons[1].interactable = true;
         }
         else
         {
 
 
-            BuySkinsButtons[1].interactable = true;
+            BuySkinsButtons[1].interactable = false;
         }
 
         if (skin2Bought == 1)
         {
 
-            BuySkinsButtons[2].interactable = false;
+            BuySkinsButtons[2].interactable = true;
         }
         else
         {
 
 
-            BuySkinsButtons[2].interactable = true;
+            BuySkinsButtons[2].interactable = false;
         }
 
         if (skin3Bought == 1)
         {
 
-            BuySkinsButtons[3].interactable = false;
-        }
-        else
-        {
-
-
             BuySkinsButtons[3].interactable = true;
         }
-        //****************Moonball skins**********************
-        if (moonSkin0 == 1)
-        {
-
-            BuySkinsButtons[4].interactable = false;
-        }
         else
         {
 
 
-            BuySkinsButtons[4].interactable = true;
+            BuySkinsButtons[3].interactable = false;
         }
+        //****************Moonball skins**********************
+
+        BuySkinsButtons[4].interactable = true;
+
+
         if (moonSkin1 == 1)
         {
 
-            BuySkinsButtons[5].interactable = false;
+            BuySkinsButtons[5].interactable = true;
         }
         else
         {
 
 
-            BuySkinsButtons[5].interactable = true;
+            BuySkinsButtons[5].interactable = false;
         }
         if (moonSkin2 == 1)
         {
 
-            BuySkinsButtons[6].interactable = false;
+            BuySkinsButtons[6].interactable = true;
         }
         else
         {
 
 
-            BuySkinsButtons[6].interactable = true;
+            BuySkinsButtons[6].interactable = false;
         }
         if (moonSkin3 == 1)
         {
 
-            BuySkinsButtons[7].interactable = false;
+            BuySkinsButtons[7].interactable = true;
         }
         else
         {
 
 
-            BuySkinsButtons[7].interactable = true;
+            BuySkinsButtons[7].interactable = false;
         }
         notEnoughOrbsText = GameObject.FindGameObjectWithTag("Respawn").GetComponent<NotEnoughOrbsAnimation>();
         //notEnoughOrbsText.SetBool("TextActive", false);

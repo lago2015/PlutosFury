@@ -17,7 +17,6 @@ public class PlayerMoonballManager : MonoBehaviour {
     private NotEnoughOrbsAnimation notEnoughOrbsText;
     private bool isPlaying;
 
-    public Text testText;
     private void Awake()
     {
         //get current heart container saved
@@ -77,10 +76,10 @@ public class PlayerMoonballManager : MonoBehaviour {
     {
         //get orb reference then see if player has enough to buy
         curOrbs = PlayerPrefs.GetInt("scorePref");
-        if (curOrbs >= heartContainerPrices[curMoonballContainer-1])
+        if (curOrbs >= heartContainerPrices[curMoonballContainer])
         {
             //update orb amount then save
-            curOrbs -= heartContainerPrices[curMoonballContainer - 1];
+            curOrbs -= heartContainerPrices[curMoonballContainer];
             PlayerPrefs.SetInt("scorePref", curOrbs);
             //up heart container
             curMoonballContainer++;
