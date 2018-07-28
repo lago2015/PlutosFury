@@ -9,6 +9,7 @@ public class PlayerManager : MonoBehaviour {
     public int OrbGameoverReward = 250;
     private float timeRemaining;
     private int OrbsObtainedTotal;   //used for total orbs collected
+    [SerializeField]
     private int OrbsObtainedInLevel;       //total orbs collected in level
     [HideInInspector]
     public int playerHealth;
@@ -17,8 +18,12 @@ public class PlayerManager : MonoBehaviour {
     private PlayerCollisionAndHealth playerHealthScript;
     private HUDManager HUDScript;
 
+    public int niceCombo;
+    public int coolCombo;
+    public int awesomeCombo;
     
     public int CurrentHealth() { return playerHealth; }
+    public int ScoreInLevel() { return OrbsObtainedInLevel; }
 
 	// Use this for initialization
 	void Awake ()
