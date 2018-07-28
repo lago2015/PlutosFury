@@ -21,7 +21,7 @@ public class OrbCalculator : MonoBehaviour
     private int bonusTotal;
     private int playerOldTotal;
     private int playerNewTotal;
-  
+
 
     private Text currentAddText;
     private Text currentSubtractText;
@@ -36,17 +36,26 @@ public class OrbCalculator : MonoBehaviour
 
     bool isTallying = false;
 
-	// Use this for initialization
-	void Start ()
+    public bool CompleteLevel;
+
+    // Use this for initialization
+    void Start()
     {
         // Initialize all the text
-        InitializeScoreNumbers();
+        if (CompleteLevel)
+        {
+            InitializeScoreNumbers();
+        }
+        else
+        {
+            GameOver();
+        }
         SetTallyMarksOrbs();
-       
-	}
-	
-	// Update is called once per frame
-	void Update ()
+
+    }
+
+    // Update is called once per frame
+    void Update()
     {
         if (isTallying)
         {
@@ -56,12 +65,12 @@ public class OrbCalculator : MonoBehaviour
             currentAddText.text = currentAddNumber.ToString();
             currentSubtractText.text = currentSubtractNumber.ToString();
 
-            if (currentAddNumber >= numberTo)
+            if (currentAddNumber >= numberTo && currentSubtractNumber <= 0)
             {
                 isTallying = false;
             }
         }
-	}
+    }
 
     // Need to get the orbs obtain in level
     public void InitializeScoreNumbers()
@@ -99,10 +108,17 @@ public class OrbCalculator : MonoBehaviour
     public void SetTallyMarksOrbs()
     {
         // Set the correct current variables for interpolation
-        numberTo = levelOrb;
+        if (CompleteLevel)
+        {
+            numberTo = levelOrb;
+        }
+        else
+        {
+            numberTo = 0;
+        }
         numberFrom = 0;
-        numberSubtractFrom = numberTo;
-        currentSubtractNumber = numberTo;
+        numberSubtractFrom = levelOrb;
+        currentSubtractNumber = levelOrb;
         currentAddNumber = 0;
         currentAddText = calcOrbText;
         currentSubtractText = levelOrbText;
@@ -123,5 +139,22 @@ public class OrbCalculator : MonoBehaviour
         isTallying = true;
     }
 
-    // function to skip all animations and lerps
+    public void GameOver()
+    {
+        PlayerManager stats = GameObject.FindObjectOfType<PlayerManager>();
+
+        levelOrb = stats.ScoreInLevel();
+        playerOldTotal = PlayerPrefs.GetInt("scorePref");
+        bonusTotal = stats.OrbGameoverReward;
+        playerNewTotal = playerOldTotal + bonusTotal;
+
+        bonusTotalText.text = bonusTotal.ToString();
+        playerTotalText.text = playerOldTotal.ToString();
+
+        duration = 0.5f;
+
+        //PlayerPrefs.SetInt("scorePref", playerTotal);
+
+        // function to skip all animations and lerps
+    }
 }
