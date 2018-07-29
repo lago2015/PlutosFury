@@ -49,8 +49,11 @@ public class ShootProjectiles : MonoBehaviour {
                 {
                     if (!isReloading)
                     {
-
-                        Instantiate(Projectile, ProjectilePos[i].transform.position, ProjectilePos[i].transform.rotation);
+                        GameObject proj = GameObject.FindObjectOfType<ObjectPoolManager>().FindObject("Rocket");
+                        proj.transform.position = ProjectilePos[i].transform.position;
+                        proj.transform.rotation = ProjectilePos[i].transform.rotation;
+                        proj.SetActive(true);
+                        //Instantiate(Projectile, ProjectilePos[i].transform.position, ProjectilePos[i].transform.rotation);
                         Muzzle.SetActive(true);
                         StartCoroutine(MuzzleShot()); 
                     }

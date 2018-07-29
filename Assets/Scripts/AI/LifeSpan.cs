@@ -9,9 +9,22 @@ public class LifeSpan : MonoBehaviour {
     bool DamagePlayer;
     public GameObject Explosion;
     public GameObject parent;
+    public bool rocketbomb;
+
     void Start()
     {
-        StartCoroutine(CountdownToLife());
+        if (!rocketbomb)
+        {
+            StartCoroutine(CountdownToLife());
+        }
+    }
+
+    void OnEnable()
+    {
+        if (rocketbomb)
+        {
+            StartCoroutine(CountdownToLife());
+        }
     }
 
     IEnumerator CountdownToLife()
@@ -27,7 +40,16 @@ public class LifeSpan : MonoBehaviour {
         }
         else
         {
-            Destroy(gameObject);
+            if (rocketbomb)
+            {
+                GameObject.FindObjectOfType<ObjectPoolManager>().PutBackObject("Explosion", gameObject);
+                gameObject.SetActive(false);
+                Debug.Log("Boom!");
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
         }
     }
     
