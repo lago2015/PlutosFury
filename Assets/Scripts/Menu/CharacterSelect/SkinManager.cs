@@ -26,39 +26,60 @@ public class SkinManager : MonoBehaviour {
         moonSkin1 = PlayerPrefs.GetInt("skin5");
         moonSkin2 = PlayerPrefs.GetInt("skin6");
         moonSkin3 = PlayerPrefs.GetInt("skin7");
-        if (skin0Bought == 1)
-        {
-            characterButtons[0].interactable = true;
-        }
+        //first character
+        characterButtons[0].interactable = true;
+        //first moonball
+        characterButtons[4].interactable = true;
 
         if (skin1Bought == 1)
         {
             characterButtons[1].interactable = true;
+        }
+        else
+        {
+            characterButtons[1].interactable = false;
         }
 
         if (skin2Bought == 1)
         {
             characterButtons[2].interactable = true;
         }
+        else
+        {
+            characterButtons[2].interactable = false;
+        }
         if (skin3Bought == 1)
         {
             characterButtons[3].interactable = true;
         }
-        if (moonSkin0 == 1)
+        else
         {
-            characterButtons[4].interactable = true;
+            characterButtons[3].interactable = false;
         }
+        
         if (moonSkin1 == 1)
         {
             characterButtons[5].interactable = true;
+        }
+        else
+        {
+            characterButtons[5].interactable = false;
         }
         if (moonSkin2 == 1)
         {
             characterButtons[6].interactable = true;
         }
+        else
+        {
+            characterButtons[6].interactable = false;
+        }
         if (moonSkin3 == 1)
         {
             characterButtons[7].interactable = true;
+        }
+        else
+        {
+            characterButtons[7].interactable = false;
         }
 
     }
@@ -73,39 +94,60 @@ public class SkinManager : MonoBehaviour {
         moonSkin1 = PlayerPrefs.GetInt("skin5");
         moonSkin2 = PlayerPrefs.GetInt("skin6");
         moonSkin3 = PlayerPrefs.GetInt("skin7");
-        if (skin0Bought==1)
-        {
-            characterButtons[0].interactable = true;
-        }
 
+        //first character
+        characterButtons[0].interactable = true;
+        //first moonball
+        characterButtons[4].interactable = true;
         if (skin1Bought == 1)
         {
             characterButtons[1].interactable = true;
+        }
+        else
+        {
+            characterButtons[1].interactable = false;
         }
 
         if (skin2Bought == 1)
         {
             characterButtons[2].interactable = true;
         }
+        else
+        {
+            characterButtons[2].interactable = false;
+        }
         if (skin3Bought == 1)
         {
             characterButtons[3].interactable = true;
         }
-        if (moonSkin0 == 1)
+        else
         {
-            characterButtons[4].interactable = true;
+            characterButtons[3].interactable = false;
         }
+
         if (moonSkin1 == 1)
         {
             characterButtons[5].interactable = true;
+        }
+        else
+        {
+            characterButtons[5].interactable = false;
         }
         if (moonSkin2 == 1)
         {
             characterButtons[6].interactable = true;
         }
+        else
+        {
+            characterButtons[6].interactable = false;
+        }
         if (moonSkin3 == 1)
         {
             characterButtons[7].interactable = true;
+        }
+        else
+        {
+            characterButtons[7].interactable = false;
         }
     }
 
