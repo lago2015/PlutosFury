@@ -7,7 +7,7 @@ public class BossPhaseManager : MonoBehaviour {
     public int curIndex;
     private bool doOnce;
     private Animator animComp;
-    public Animator backgroundAnim;
+
     private void Awake()
     {
         animComp = GetComponent<Animator>();
@@ -23,10 +23,7 @@ public class BossPhaseManager : MonoBehaviour {
             {
                 animComp.SetInteger("CurState", curIndex);
             }
-            if(backgroundAnim)
-            {
-                backgroundAnim.SetInteger("CurPhase", curIndex);
-            }
+            
             doOnce = true;
             StartCoroutine(DamageReset());
         }

@@ -108,11 +108,7 @@ public class GameManager : MonoBehaviour
 	void Start ()
     {
        
-        if (audioScript)
-        {
-            //enable background music
-            audioScript.BackgroundMusic();
-        }
+        
 	}
     //function called from wormhole (aka door script) 
     //to retrieve or disable any gameobjects in scene 

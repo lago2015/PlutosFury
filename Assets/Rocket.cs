@@ -87,7 +87,7 @@ public class Rocket : MonoBehaviour {
         explosion.transform.position = transform.position;
         explosion.SetActive(true);
 
-        if (damage)
+        if (damage&&explosion)
         {
             explosion.GetComponentInChildren<DamageOrPowerUp>().didDamage();
         }

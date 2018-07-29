@@ -8,12 +8,7 @@ public class AudioController : MonoBehaviour {
     [SerializeField]
     [Header("Background-WinMusic")]
     public AudioSource BgMusicWinSource;
-    [SerializeField]
-    [Header("BackgroundMusic")]
-    public AudioSource BgMusicSource;
-    public float bgMusicDelay;
-
-    [SerializeField]
+    [SerializeField] 
     [Header("Intro-Ready")]
     public AudioSource ReadyAudioSource;
 
@@ -292,7 +287,7 @@ public class AudioController : MonoBehaviour {
     {
         if (BgMusicWinSource != null)
         {
-            BgMusicSource.Stop();
+            //BgMusicSource.Stop();
             BgMusicWinSource.priority = 200;
             BgMusicWinSource.volume = 0.25f;
             BgMusicWinSource.minDistance = 1000f;
@@ -301,19 +296,7 @@ public class AudioController : MonoBehaviour {
         }
     }
 
-
-    public void BackgroundMusic()
-    {
-        if (BgMusicSource != null)
-        {
-            BgMusicSource.priority = 200;
-            BgMusicSource.volume = 0.25f;
-            BgMusicSource.minDistance = 1000f;
-            BgMusicSource.loop = true;
-            BgMusicSource.Play();
-        }
-    }
-
+    
     public void StartReadyIntro()
     {
         if (ReadyAudioSource != null)
@@ -602,10 +585,7 @@ public class AudioController : MonoBehaviour {
             GameOverSource.transform.position = pos;
             GameOverSource.minDistance = 20f;
             GameOverSource.loop = true;
-            if (BgMusicSource)
-            {
-                BgMusicSource.Stop();
-            }
+            
             GameOverSource.Play();
         }
     }
