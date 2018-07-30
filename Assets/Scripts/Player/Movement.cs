@@ -567,7 +567,7 @@ public class Movement : MonoBehaviour
     {
         //Debug.Log("Hes");
 
-        if(++orbCount >= 5)
+        if(++orbCount >= 10)
         {
             ComboTextManager ComboObject = GameObject.FindObjectOfType<ComboTextManager>();
             if(ComboObject)

@@ -5,7 +5,7 @@ public class DetectThenExplode : MonoBehaviour {
 
     //Script is meant for Stationary Landmine and Rocket
     public GameObject regularState;
-    public GameObject explosionState;
+   // public GameObject explosionState;
     private SphereCollider TriggerCollider;
     private DamageOrPowerUp damageScript;
     private Rigidbody mybody;
@@ -13,9 +13,8 @@ public class DetectThenExplode : MonoBehaviour {
 
     private ProjectileMovement rocketScript;
     private bool doOnce;
-    public bool isRocket;
+   // public bool isRocket;
     public bool isLandmine;
-    public float travelTimeRocket = 3;
     public int orbDrop = 4;
 
     void Awake()
@@ -27,13 +26,7 @@ public class DetectThenExplode : MonoBehaviour {
             regularState.SetActive(true);
         }
         //explosion gameobject
-        if (explosionState)
-        {
-            //Getting damage script to notify if damage has been applied
-            damageScript = explosionState.GetComponent<DamageOrPowerUp>();
-
-            explosionState.SetActive(false);
-        }
+       
 
         if(isLandmine)
         {
@@ -42,32 +35,9 @@ public class DetectThenExplode : MonoBehaviour {
             orbScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<AsteroidSpawner>();
 
         }
-        else if(isRocket)
-        {
-            mybody = GetComponent<Rigidbody>();
-            //Getter to stop movement upon impact
-            rocketScript = GetComponent<ProjectileMovement>();
-        }
-
     }
-    //Start rockets life span
-    void Start()
-    {
-        if(isRocket)
-        {
-            StartCoroutine(LaunchTime());
-        }
+ 
 
-    }
-
-    //duration of rockets life span
-    IEnumerator LaunchTime()
-    {
-        
-        yield return new WaitForSeconds(travelTimeRocket);
-
-        TriggeredExplosion();
-    }
 
     void OnCollisionEnter(Collision col)
     {
@@ -112,10 +82,7 @@ public class DetectThenExplode : MonoBehaviour {
         }
         else if(CurTag=="Neptune")
         {
-            if(!isRocket)
-            {
-                TriggeredExplosion();
-            }
+           TriggeredExplosion();  
         }
         else if (CurTag == "BreakableWall")
         {
@@ -124,12 +91,8 @@ public class DetectThenExplode : MonoBehaviour {
         }
         else if(CurTag == "MoonBall")
         {
-            if(isRocket)
-            { 
-                Vector3 dir = col.contacts[0].point - transform.position;
-                col.gameObject.GetComponent<MoonBall>().MoveBall(-dir.normalized, 20.0f);
-            }
-            else if(isLandmine)
+            
+            if(isLandmine)
             {
 
                 GameObject.FindObjectOfType<ComboTextManager>().CreateComboText(2);
@@ -153,16 +116,8 @@ public class DetectThenExplode : MonoBehaviour {
         {
             TriggerCollider.enabled = false;
         }
-        else
-        {
-            BoxCollider rocketCollider = GetComponent<BoxCollider>();
-            if(rocketCollider)
-            {
-                rocketCollider.enabled = false;
-            }
-        }
         //check if theres a model and explosion
-        if (regularState && explosionState)
+        if (regularState)
         {
             //ensure audio gets played once
             if (!doOnce)
@@ -172,11 +127,17 @@ public class DetectThenExplode : MonoBehaviour {
                 doOnce = true;
             }
             //begin switching models from Normal model to Explosion model
-            StartCoroutine(SwitchModels());
+            // StartCoroutine(SwitchModels());
+
+            GameObject explosion = GameObject.FindObjectOfType<ObjectPoolManager>().FindObject("BigExplosion");
+            explosion.transform.position = transform.position;
+            explosion.SetActive(true);
+
+            Destroy(gameObject);
         }
     }
 
-    IEnumerator SwitchModels()
+   /* IEnumerator SwitchModels()
     {
         //turn off model gameobject
         regularState.SetActive(false);
@@ -201,4 +162,5 @@ public class DetectThenExplode : MonoBehaviour {
         }
         enabled = false;
     }
+    */
 }

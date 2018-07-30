@@ -6,7 +6,6 @@ public class DetectWaitThenExplode : MonoBehaviour {
 
 
     public GameObject regularState;
-    public GameObject explosionState;
     public GameObject chargeState;
     private DamageOrPowerUp damageScript;
     private HomingProjectile pursuitScript;
@@ -39,14 +38,7 @@ public class DetectWaitThenExplode : MonoBehaviour {
             //ensure model is on at start
             regularState.SetActive(true);
         }
-        //explosion gameobject
-        if (explosionState)
-        {
-            //Getting damage script to notify if damage has been applied
-            damageScript = explosionState.GetComponent<DamageOrPowerUp>();
-
-            explosionState.SetActive(false);
-        }
+      
         pursuitScript = GetComponent<HomingProjectile>();
         chargeState.SetActive(false);
     }
@@ -137,7 +129,7 @@ public class DetectWaitThenExplode : MonoBehaviour {
             }
             animComp.SetBool("isExploding", true);
             //check if theres a model and explosion
-            if (regularState && explosionState)
+            if (regularState)
             {
                 //ensure audio gets played once
                 if (!doOnce)
@@ -153,10 +145,6 @@ public class DetectWaitThenExplode : MonoBehaviour {
                 //turn off model gameobject
                 regularState.SetActive(false);
                 //activate explosion gameobject
-                if (explosionState)
-                {
-                    explosionState.SetActive(true);
-                }
             }
         }
         
@@ -170,7 +158,7 @@ public class DetectWaitThenExplode : MonoBehaviour {
             pursuitScript.moveSpeed = 0;
         }
         //check if theres a model and explosion
-        if (regularState && explosionState)
+        if (regularState)
         {
             //ensure audio gets played once
             if (!doOnce)
@@ -182,10 +170,13 @@ public class DetectWaitThenExplode : MonoBehaviour {
                 }
                 doOnce = true;
             }
+
+           
             //begin switching models from Normal model to Explosion model
-            StartCoroutine(SwitchModels());
+           StartCoroutine(SwitchModels());
         }
     }
+
     IEnumerator SwitchModels()
     {
         chargeState.SetActive(true);
@@ -194,9 +185,11 @@ public class DetectWaitThenExplode : MonoBehaviour {
         //turn off model gameobject
         regularState.SetActive(false);
         //activate explosion gameobject
-        if (explosionState)
-        {
-            explosionState.SetActive(true);
-        }
+        GameObject explosion = GameObject.FindObjectOfType<ObjectPoolManager>().FindObject("DamageExplosion");
+        explosion.transform.position = transform.position;
+        explosion.SetActive(true);
+
+        Destroy(gameObject);
     }
+    
 }

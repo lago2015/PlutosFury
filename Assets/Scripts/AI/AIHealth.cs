@@ -88,17 +88,26 @@ public class AIHealth : MonoBehaviour {
                 }
             }
 
+            
+
             GameObject explosion = GameObject.FindObjectOfType<ObjectPoolManager>().FindObject(explosionPoolName);
             explosion.transform.position = transform.position;
             explosion.SetActive(true);
-            Destroy(gameObject);
+            if (parent)
+            {
+                Destroy(parent);
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
             
         }
     }
 
     void OnCollisionEnter(Collision col)
     {
-        
+        Debug.Log("What");
         string CurTag = col.gameObject.tag;
 
         if (CurTag == "Player")
