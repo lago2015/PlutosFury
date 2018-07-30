@@ -9,11 +9,11 @@ public class LifeSpan : MonoBehaviour {
     bool DamagePlayer;
     public GameObject Explosion;
     public GameObject parent;
-    public bool rocketbomb;
+    public string poolName;
 
     void Start()
     {
-        if (!rocketbomb)
+        if (poolName.Length == 0)
         {
             StartCoroutine(CountdownToLife());
         }
@@ -21,7 +21,7 @@ public class LifeSpan : MonoBehaviour {
 
     void OnEnable()
     {
-        if (rocketbomb)
+        if (poolName.Length > 0)
         {
             StartCoroutine(CountdownToLife());
         }
@@ -40,11 +40,10 @@ public class LifeSpan : MonoBehaviour {
         }
         else
         {
-            if (rocketbomb)
+            if (poolName.Length > 0)
             {
-                GameObject.FindObjectOfType<ObjectPoolManager>().PutBackObject("Explosion", gameObject);
+                GameObject.FindObjectOfType<ObjectPoolManager>().PutBackObject(poolName, gameObject);
                 gameObject.SetActive(false);
-                Debug.Log("Boom!");
             }
             else
             {

@@ -237,7 +237,7 @@ public class GameManager : MonoBehaviour
             canvasScript.SendScore(curScore);
             canvasScript.SendHighScore(curHighScore);
             canvasScript.SendTotalScore(curTotalScore);
-            canvasScript.SendDataToWinScreen();
+            //canvasScript.SendDataToWinScreen();
             //start fade in
             canvasScript.StartFadeIn();
 

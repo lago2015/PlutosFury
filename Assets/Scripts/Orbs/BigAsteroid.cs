@@ -4,15 +4,12 @@ using System.Collections;
 public class BigAsteroid : MonoBehaviour {
 
     //public GameObject[] Asteroids;
-    public GameObject Explosion;
-    public GameObject AsteroidModel;
     private SphereCollider Collider;
     public float spawnRadius = 2;
     public int curHits;
     public int HitPoints;
     private int orbDrop=2;
     private float DestroyTimeout=2;
-    private bool doOnce;
     private bool isDestroyed;
     AsteroidCollector collecterScript;
     private AudioController audioScript;
@@ -35,11 +32,6 @@ public class BigAsteroid : MonoBehaviour {
         }
         spawnPointScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<AsteroidSpawner>();
         Collider = GetComponent<SphereCollider>();
-        if(Explosion)
-        {
-            Explosion.SetActive(false);
-        }
-        doOnce = false;
     }
 
     public void SpawnAsteroids()
@@ -51,13 +43,6 @@ public class BigAsteroid : MonoBehaviour {
         }
     }
 
-    IEnumerator DestroyCountdown()
-    {
-        yield return new WaitForSeconds(DestroyTimeout);
-        Destroy(gameObject);
-    }
-
-    
 
     public void AsteroidHit(int DamageAmount,bool isPlayer)
     {
@@ -68,31 +53,26 @@ public class BigAsteroid : MonoBehaviour {
         curHits += DamageAmount;
         if(curHits>=HitPoints)
         {
-            if(!doOnce)
+            if (audioScript)
             {
-                if (audioScript)
-                {
-                    audioScript.AsteroidExplosion(transform.position);
-                }
-                if(isPlayer)
-                {
-                    SpawnAsteroids();
-                }
-                if (AsteroidModel && Explosion)
-                {
-                    foreach (SphereCollider col in GetComponents<SphereCollider>())
-                    {
-                        col.enabled = false;
-                    }
-
-                    AsteroidModel.SetActive(false);
-                    Explosion.SetActive(true);
-                    isDestroyed = true;
-                    StartCoroutine(DestroyCountdown());
-                }
-                doOnce = true;
+                audioScript.AsteroidExplosion(transform.position);
             }
-            
+            if(isPlayer)
+            {
+                SpawnAsteroids();
+            }
+          
+            foreach (SphereCollider col in GetComponents<SphereCollider>())
+            {
+                col.enabled = false;
+            }
+
+               
+            GameObject explosion = GameObject.FindObjectOfType<ObjectPoolManager>().FindObject("AsteroidExplosion");
+            explosion.transform.position = transform.position;
+            explosion.SetActive(true);
+            isDestroyed = true;
+            Destroy(this.gameObject);               
         }
     }
 }

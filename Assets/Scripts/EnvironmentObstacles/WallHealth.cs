@@ -12,6 +12,7 @@ public class WallHealth : MonoBehaviour
     private Collider Mycollider;
     public GameObject pickUpContained;
     private Collider pickUpCollider;
+    public string explosionPoolName;
     // Use this for initialization
     void Awake ()
     {
@@ -60,10 +61,13 @@ public class WallHealth : MonoBehaviour
             {
                 Mycollider.enabled = false;
             }
-            if (Explosion && Model)
+            if (Model)
             {
-                Explosion.SetActive(true);
-                Model.SetActive(false);
+                GameObject explosion = GameObject.FindObjectOfType<ObjectPoolManager>().FindObject(explosionPoolName);
+                explosion.transform.position = transform.position;
+                explosion.SetActive(true);
+                //Explosion.SetActive(true);
+               // Model.SetActive(false);
                 if(pickUpContained)
                 {
                     pickUpContained.GetComponent<PickUpSkills>().PickUpObtained();
@@ -71,7 +75,7 @@ public class WallHealth : MonoBehaviour
                 
                 //Explosion.transform.parent = null;
                 //Destroy gameobject at the end of explosions duration to play
-                Destroy(gameObject, Explosion.GetComponent<ParticleSystem>().main.duration);   
+                Destroy(gameObject);   
             }
         }
     }

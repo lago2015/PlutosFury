@@ -140,7 +140,7 @@ public class CanvasToggle : MonoBehaviour {
     public void GameEnded(bool isGameOver)
     {
 
-        hudCanvas.SetActive(false);
+       // hudCanvas.SetActive(false);
 
         if(isGameOver)
         {
@@ -161,13 +161,14 @@ public class CanvasToggle : MonoBehaviour {
         }
     }
 
-    public void SendDataToWinScreen()
+    /*public void SendDataToWinScreen()
     {
         winScript.newScore(curScore);
         winScript.theHighestOfScore(curHighScore);
         winScript.CurTotalScore(curTotalScore);
         winScript.CurTotalHighScore(curTotalHighScore);
     }
+    */
     public void StartFadeIn()
     {
         if (winScript&&audioScript)

@@ -83,7 +83,7 @@ public class Rocket : MonoBehaviour {
     {
         ObjectPoolManager pool = GameObject.FindObjectOfType<ObjectPoolManager>();
 
-        GameObject explosion = pool.FindObject("Explosion");
+        GameObject explosion = pool.FindObject("SmallExplosion");
         explosion.transform.position = transform.position;
         explosion.SetActive(true);
 

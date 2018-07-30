@@ -9,9 +9,6 @@ public class AIHealth : MonoBehaviour {
     */
 
     public int EnemyHealth=3;
-    public GameObject Explosion;
-    public GameObject Model;
-    public GameObject Model2;
     public GameObject parent;
     public enum EnemyOptions { TurretSingle, TurretScatter, Spike, Shatter, Hunter }
     public EnemyOptions currentEnemy;
@@ -25,22 +22,14 @@ public class AIHealth : MonoBehaviour {
     public int spikeOrbDrop = 2;
     public int shatterOrbDrop = 3;
     public int hunterOrbDrop = 3;
+    public string explosionPoolName;
     private AsteroidSpawner orbScript;
     void Awake()
     {
         orbScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<AsteroidSpawner>();
 
         myBody = GetComponent<Rigidbody>();
-        if(Explosion&&Model)
-        {
-            Explosion.SetActive(false);
-            Model.SetActive(true);
-
-        }
-        if(Model2)
-        {
-            Model2.SetActive(true);
-        }
+      
     }
     private void Start()
     {
@@ -90,31 +79,20 @@ public class AIHealth : MonoBehaviour {
                         break;
                 }
             }
-            if (Explosion && Model)
+          
+            if(gameObject.name=="Shatter")
             {
-                
-                if(gameObject.name=="Shatter")
+                if (audioScript)
                 {
-                    if (audioScript)
-                    {
-                        audioScript.ShatterExplosion(transform.position);
-                    }
-                }
-                Explosion.SetActive(true);
-                Explosion.transform.parent = null;
-
-                Destroy(Explosion, Explosion.GetComponent<ParticleSystem>().main.duration);
-
-                
-                if(parent!=null)
-                {
-                    Destroy(parent);
-                }
-                else if (transform.parent != null)
-                {
-                    Destroy(transform.parent.gameObject);
+                    audioScript.ShatterExplosion(transform.position);
                 }
             }
+
+            GameObject explosion = GameObject.FindObjectOfType<ObjectPoolManager>().FindObject(explosionPoolName);
+            explosion.transform.position = transform.position;
+            explosion.SetActive(true);
+            Destroy(gameObject);
+            
         }
     }
 

@@ -8,10 +8,6 @@ public class RogueCollision : MonoBehaviour {
     public int EnemyHealth = 1;
     public float wallBump = 20;
     public GameObject pursueModel;
-    public GameObject Explosion;
-    public GameObject Model;
-    public GameObject Model2;
-    public GameObject Model3;
 
     private FleeOrPursue rogueMoveScript;
     private Collider myCollider;
@@ -31,23 +27,7 @@ public class RogueCollision : MonoBehaviour {
         {
             rogueMoveScript = pursueModel.GetComponent<FleeOrPursue>();
         }
-        if (Explosion && Model)
-        {
-            Explosion.SetActive(false);
-            Model.SetActive(true);
-
-        }
-        if (Model2)
-        {
-            if(!Model2.name.Contains("Charge"))
-            {
-                Model2.SetActive(true);
-            }
-        }
-        if (Model3)
-        {
-            Model3.SetActive(true);
-        }
+       
     }
 
     private void Start()
@@ -76,34 +56,13 @@ public class RogueCollision : MonoBehaviour {
             }
 
             //start death sequence
-            if (Explosion && Model)
-            {
-                myCollider.enabled = false;
-                Explosion.SetActive(true);
-                Model.SetActive(false);
+          
+            myCollider.enabled = false;
+            GameObject explosion = GameObject.FindObjectOfType<ObjectPoolManager>().FindObject("BigExplosion");
+            explosion.transform.position = transform.position;
+            explosion.SetActive(true);
 
-                if (rogueMoveScript)
-                {
-                    rogueMoveScript.yesDead();
-                }
-                if (Model2)
-                {
-                    Model2.SetActive(false);
-                }
-                if (pursueModel)
-                {
-                    pursueModel.SetActive(false);
-                }
-                if (Model3)
-                {
-                    Model3.SetActive(false);
-                }
-
-            }
-            else
-            {
-                Destroy(transform.parent.gameObject);
-            }
+            Destroy(gameObject);
         }
     }
 
