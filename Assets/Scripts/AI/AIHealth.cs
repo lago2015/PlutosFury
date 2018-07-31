@@ -106,7 +106,6 @@ public class AIHealth : MonoBehaviour {
 
     void OnCollisionEnter(Collision col)
     {
-        Debug.Log("What");
         string CurTag = col.gameObject.tag;
 
         if (CurTag == "Player")

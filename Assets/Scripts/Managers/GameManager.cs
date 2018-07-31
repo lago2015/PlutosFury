@@ -180,7 +180,7 @@ public class GameManager : MonoBehaviour
         if (ScoreManager)
         {
             //save that score to show off to your friends
-            ScoreManager.SaveScore(true);
+            //ScoreManager.SaveScore(true);
 
             //Default health
             ScoreManager.DefaultHealth();
@@ -223,7 +223,7 @@ public class GameManager : MonoBehaviour
             
             
             //Save score
-            ScoreManager.SaveScore(false);
+           // ScoreManager.SaveScore(false);
             //Save health and lives
             ScoreManager.SaveHealth();
             moonBallManScript.SaveCurrentBalls();

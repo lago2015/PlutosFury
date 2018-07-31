@@ -13,6 +13,7 @@ public class OrbCalculator : MonoBehaviour
     public Text awesomeNumText;
     public Text bonusTotalText;
     public Text playerTotalText;
+    public GameObject continueBtn;
 
     private int levelOrb;
     private int niceNum;
@@ -68,6 +69,7 @@ public class OrbCalculator : MonoBehaviour
             if (currentAddNumber >= numberTo && currentSubtractNumber <= 0)
             {
                 isTallying = false;
+                continueBtn.SetActive(true);
             }
         }
     }

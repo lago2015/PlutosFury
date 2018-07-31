@@ -166,7 +166,9 @@ public class MoonBall : MonoBehaviour
         {
             Instantiate(Explosion, transform.position, Quaternion.identity);
 
-            Destroy(gameObject);
+            GameObject.FindObjectOfType<ObjectPoolManager>().PutBackObject("MoonBall", gameObject);
+
+           // Destroy(gameObject);
         }
     }
 

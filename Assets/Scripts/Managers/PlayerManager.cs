@@ -76,7 +76,7 @@ public class PlayerManager : MonoBehaviour {
     }
 
     //run this function during game over
-    public void SaveScore(bool isGameOver)
+    /*public void SaveScore(bool isGameOver)
     {
         if(isGameOver)
         {
@@ -88,8 +88,8 @@ public class PlayerManager : MonoBehaviour {
             OrbsObtainedTotal += OrbsObtainedInLevel;
             PlayerPrefs.SetInt("scorePref", OrbsObtainedTotal);
         }
-        OrbsObtainedInLevel = 0;
     }
+    */
     //For game over and about to get into game over to ensure health is 0
     public void DefaultHealth()
     {
