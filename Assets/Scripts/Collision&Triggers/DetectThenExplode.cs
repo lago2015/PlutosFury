@@ -3,9 +3,7 @@ using System.Collections;
 
 public class DetectThenExplode : MonoBehaviour {
 
-    //Script is meant for Stationary Landmine and Rocket
-    public GameObject regularState;
-   // public GameObject explosionState;
+    //Script is meant for Stationary Landmine
     private SphereCollider TriggerCollider;
     private DamageOrPowerUp damageScript;
     private Rigidbody mybody;
@@ -13,21 +11,12 @@ public class DetectThenExplode : MonoBehaviour {
 
     private ProjectileMovement rocketScript;
     private bool doOnce;
-   // public bool isRocket;
+
     public bool isLandmine;
     public int orbDrop = 4;
 
     void Awake()
     {
-        //model gameobject
-        if (regularState)
-        {
-            //ensure model is on at start
-            regularState.SetActive(true);
-        }
-        //explosion gameobject
-       
-
         if(isLandmine)
         {
             TriggerCollider = GetComponent<SphereCollider>();
@@ -37,8 +26,6 @@ public class DetectThenExplode : MonoBehaviour {
         }
     }
  
-
-
     void OnCollisionEnter(Collision col)
     {
         string CurTag = col.gameObject.tag;
@@ -109,58 +96,26 @@ public class DetectThenExplode : MonoBehaviour {
         }
     }
 
-    
     public void TriggeredExplosion()
     {
         if (TriggerCollider)
         {
             TriggerCollider.enabled = false;
         }
-        //check if theres a model and explosion
-        if (regularState)
-        {
-            //ensure audio gets played once
-            if (!doOnce)
-            {
-                //get audio controller and play audio
-                GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>().DestructionSmall(transform.position);
-                doOnce = true;
-            }
-            //begin switching models from Normal model to Explosion model
-            // StartCoroutine(SwitchModels());
-
-            GameObject explosion = GameObject.FindObjectOfType<ObjectPoolManager>().FindObject("BigExplosion");
-            explosion.transform.position = transform.position;
-            explosion.SetActive(true);
-
-            Destroy(gameObject);
-        }
-    }
-
-   /* IEnumerator SwitchModels()
-    {
-        //turn off model gameobject
-        regularState.SetActive(false);
-        //update movement to stop moving.
-        if (rocketScript)
-        {
-            rocketScript.StopMovement();
-        }
-        //Make sure the explosion stops in place by zeroing velocity
-        if (mybody)
-        {
-            mybody.velocity = Vector3.zero;
-        }
-
-        yield return new WaitForSeconds(0.05f);
         
-     
-        //activate explosion gameobject
-        if (explosionState)
+        //ensure audio gets played once
+        if (!doOnce)
         {
-            explosionState.SetActive(true);
+            //get audio controller and play audio
+            GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>().DestructionSmall(transform.position);
+            doOnce = true;
         }
-        enabled = false;
+
+        // Using Object Pool Manager to grab explosion to play and destroy enemy
+        GameObject explosion = GameObject.FindObjectOfType<ObjectPoolManager>().FindObject("BigExplosion");
+        explosion.transform.position = transform.position;
+        explosion.SetActive(true);
+
+        Destroy(gameObject); 
     }
-    */
 }

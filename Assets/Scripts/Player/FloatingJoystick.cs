@@ -192,7 +192,10 @@ public class FloatingJoystick : MonoBehaviour,IDragHandler,IPointerUpHandler,IPo
                 
                 direction = direction.normalized;
                 curPosition = player.transform.position + new Vector3(direction.x, direction.y, 0);
-                GameObject newMoonBall = Instantiate(MoonballObject, curPosition, Quaternion.identity);
+                GameObject newMoonBall = GameObject.FindObjectOfType<ObjectPoolManager>().FindObject("MoonBall");
+                newMoonBall.transform.position = curPosition;
+                newMoonBall.SetActive(true);
+               // GameObject newMoonBall = Instantiate(MoonballObject, curPosition, Quaternion.identity);
                 if (!previousMoonball)
                 {
                     previousMoonball = newMoonBall;

@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DetectWaitThenExplode : MonoBehaviour {
+public class DetectWaitThenExplode : MonoBehaviour
+{
 
-
-    public GameObject regularState;
     public GameObject chargeState;
     private DamageOrPowerUp damageScript;
     private HomingProjectile pursuitScript;
@@ -26,19 +25,7 @@ public class DetectWaitThenExplode : MonoBehaviour {
         damageCollider = GetComponent<SphereCollider>();
         orbScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<AsteroidSpawner>();
         //getter for score script
-        
-        GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
-        if (playerObject)
-        {
-            playerScript = playerObject.GetComponent<Movement>();
-        }
-        //model gameobject
-        if (regularState)
-        {
-            //ensure model is on at start
-            regularState.SetActive(true);
-        }
-      
+
         pursuitScript = GetComponent<HomingProjectile>();
         chargeState.SetActive(false);
     }
@@ -49,14 +36,22 @@ public class DetectWaitThenExplode : MonoBehaviour {
         {
             audioScript = audioObject.GetComponent<AudioController>();
         }
+
+        GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
+        if (playerObject)
+        {
+            Debug.Log("foundPlayer");
+            playerScript = playerObject.GetComponent<Movement>();
+        }
     }
     void OnCollisionEnter(Collision col)
     {
         string CurTag = col.gameObject.tag;
         if (CurTag == "Player")
-        {
+        { 
             if (playerScript)
             {
+              
                 isDashing = playerScript.DashStatus();
                 if (isDashing)
                 {
@@ -67,6 +62,9 @@ public class DetectWaitThenExplode : MonoBehaviour {
                         {
                             damageScript.didDamage();
                         }
+
+                        
+
                         WaitTimeToExplode = 0;
                         playerScript.KnockbackPlayer(col.contacts[0].normal);
                         TriggerExplosionInstantly();
@@ -128,9 +126,7 @@ public class DetectWaitThenExplode : MonoBehaviour {
                 orbScript.SpawnAsteroidHere(orbDrop, transform.position);
             }
             animComp.SetBool("isExploding", true);
-            //check if theres a model and explosion
-            if (regularState)
-            {
+          
                 //ensure audio gets played once
                 if (!doOnce)
                 {
@@ -142,10 +138,12 @@ public class DetectWaitThenExplode : MonoBehaviour {
                     doOnce = true;
                 }
 
-                //turn off model gameobject
-                regularState.SetActive(false);
                 //activate explosion gameobject
-            }
+                GameObject explosion = GameObject.FindObjectOfType<ObjectPoolManager>().FindObject("BigExplosion");
+                explosion.transform.position = transform.position;
+                explosion.SetActive(true);
+
+                Destroy(gameObject);
         }
         
     }
@@ -157,24 +155,21 @@ public class DetectWaitThenExplode : MonoBehaviour {
         {
             pursuitScript.moveSpeed = 0;
         }
-        //check if theres a model and explosion
-        if (regularState)
+    
+        //ensure audio gets played once
+        if (!doOnce)
         {
-            //ensure audio gets played once
-            if (!doOnce)
+            if(audioScript)
             {
-                if(audioScript)
-                {
-                    //get audio controller and play audio
-                    audioScript.DestructionSmall(transform.position);
-                }
-                doOnce = true;
+                //get audio controller and play audio
+                audioScript.DestructionSmall(transform.position);
             }
+            doOnce = true;
+        }
 
            
-            //begin switching models from Normal model to Explosion model
-           StartCoroutine(SwitchModels());
-        }
+        //begin switching models from Normal model to Explosion model
+        StartCoroutine(SwitchModels());    
     }
 
     IEnumerator SwitchModels()
@@ -182,9 +177,8 @@ public class DetectWaitThenExplode : MonoBehaviour {
         chargeState.SetActive(true);
         yield return new WaitForSeconds(WaitTimeToExplode);
         chargeState.SetActive(false);
-        //turn off model gameobject
-        regularState.SetActive(false);
-        //activate explosion gameobject
+
+        // Using Object Pool Manager to grab explosion to play and destroy enemy
         GameObject explosion = GameObject.FindObjectOfType<ObjectPoolManager>().FindObject("DamageExplosion");
         explosion.transform.position = transform.position;
         explosion.SetActive(true);

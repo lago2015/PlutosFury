@@ -55,6 +55,7 @@ public class ShootProjectiles : MonoBehaviour {
                         proj.SetActive(true);
                         //Instantiate(Projectile, ProjectilePos[i].transform.position, ProjectilePos[i].transform.rotation);
                         Muzzle.SetActive(true);
+                        
                         StartCoroutine(MuzzleShot()); 
                     }
                 }

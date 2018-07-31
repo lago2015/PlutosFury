@@ -88,8 +88,7 @@ public class AIHealth : MonoBehaviour {
                 }
             }
 
-            
-
+            // Using Object Pool Manager to grab explosion to play and destroy enemy
             GameObject explosion = GameObject.FindObjectOfType<ObjectPoolManager>().FindObject(explosionPoolName);
             explosion.transform.position = transform.position;
             explosion.SetActive(true);
@@ -107,7 +106,6 @@ public class AIHealth : MonoBehaviour {
 
     void OnCollisionEnter(Collision col)
     {
-        Debug.Log("What");
         string CurTag = col.gameObject.tag;
 
         if (CurTag == "Player")
