@@ -55,9 +55,7 @@ public class RogueCollision : MonoBehaviour {
                 orbScript.SpawnAsteroidHere(orbDrop, transform.position);
             }
 
-            //start death sequence
-          
-            myCollider.enabled = false;
+            // Using Object Pool Manager to grab explosion to play and destroy enemy
             GameObject explosion = GameObject.FindObjectOfType<ObjectPoolManager>().FindObject("BigExplosion");
             explosion.transform.position = transform.position;
             explosion.SetActive(true);
