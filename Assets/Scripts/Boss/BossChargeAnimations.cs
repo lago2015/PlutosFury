@@ -10,16 +10,18 @@ public class BossChargeAnimations : MonoBehaviour {
     private float curAnimationClip;
     private float curWaitTime;
     private bool isDead;
+    private Coroutine myCorutine;
     private void Awake()
     {
         animComp = GetComponent<Animator>();
+        animComp.enabled = false;
     }
 
     private void OnEnable()
     {
         curWaitTime = Random.Range(5, 9);
         curAnimationClip = animComp.GetCurrentAnimatorClipInfo(0).Length;
-        StartCoroutine(WaitForAnimation());
+        myCorutine=StartCoroutine(WaitForAnimation());
     }
 
     void RandomizeChargeLane()
@@ -30,13 +32,13 @@ public class BossChargeAnimations : MonoBehaviour {
             animComp.SetInteger("LaneNumber", clipIndex);       //start animation
             curAnimationClip = animComp.GetCurrentAnimatorClipInfo(0).Length;   //get length of clip for wait time
             curWaitTime = Random.Range(5, 9);       //randomize idle wait time
-            StartCoroutine(WaitForAnimation());
+            myCorutine=StartCoroutine(WaitForAnimation());
         }
     }
 
     public void PlayBossDeadAnimation()
     {
-        StopCoroutine(WaitForAnimation());  //Stop any boss movements
+        StopCoroutine(myCorutine);  //Stop any boss movements
         isDead = true;      //ensure the script knows the boss is dead
         animComp.SetInteger("LaneNumber", 4);       //set boss animation to death
         curAnimationClip = animComp.GetCurrentAnimatorClipInfo(0).Length;

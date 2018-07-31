@@ -7,7 +7,6 @@ public class PlayerManager : MonoBehaviour {
     //This manager is meant to handle UI elements of health,moonball and tracking orbs the player has collected
 
     public int OrbGameoverReward = 250;
-    private float timeRemaining;
     private int OrbsObtainedTotal;   //used for total orbs collected
     [SerializeField]
     private int OrbsObtainedInLevel;       //total orbs collected in level
@@ -59,11 +58,7 @@ public class PlayerManager : MonoBehaviour {
             PlayerPrefs.SetInt("healthPref", playerHealth);
         }
     }
-
-    public float SetTimeRemaining(float newTime)
-    {
-        return timeRemaining = newTime;
-    }
+    
 
     public void HealthChange(int newHealth)
     {

@@ -31,8 +31,6 @@ public class FleeOrPursue : MonoBehaviour {
     AudioController audioScript;
     Transform PlayerTransform;
     public GameObject myParent;
-    public GameObject scriptObject;
-    private RogueCollision collisionScript;
     public GameObject trailModel;
     public GameObject chargingParticle;
     public GameObject burstParticle;
@@ -55,10 +53,7 @@ public class FleeOrPursue : MonoBehaviour {
     void Awake()
     {
         DefaultSpeed = MoveSpeed;
-        if (scriptObject)
-        {
-            collisionScript = scriptObject.GetComponent<RogueCollision>();
-        }
+        
         myBody = myParent.transform.GetChild(0).GetComponent<Rigidbody>();
         //Getting the drag to revert back to for slow down of dash
         if (myBody)

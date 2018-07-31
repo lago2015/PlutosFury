@@ -14,14 +14,13 @@ public class MoonballUpgradeShopManager : MonoBehaviour
     public int priceOfUpgrade2 = 3000;
     private int curOrbs;
     private UpdateOrbAmount orbTextScript;
-    private NotEnoughOrbsAnimation notEnoughOrbsText;
     private bool isPlaying;
 
     private void Awake()
     {
         CheckUpgrades();
         orbTextScript = GameObject.FindGameObjectWithTag("Finish").GetComponent<UpdateOrbAmount>();
-        notEnoughOrbsText = GameObject.FindGameObjectWithTag("Respawn").GetComponent<NotEnoughOrbsAnimation>();
+
 
     }
 

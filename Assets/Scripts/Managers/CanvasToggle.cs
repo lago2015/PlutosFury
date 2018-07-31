@@ -5,6 +5,8 @@ using System.Collections.Generic;
 
 public class CanvasToggle : MonoBehaviour {
 
+
+
     public Image LevelSprite;
     public Image LevelNumberSprite;
     public Image ReadySprite;
@@ -13,24 +15,19 @@ public class CanvasToggle : MonoBehaviour {
     public GameObject GameOverCanvas;
     public GameObject WinScreenCanvas;
     private WinScreen winScript;
-    private PlayerManager scoreScript;
+    
     private AudioController audioScript;
     public float StartReady=1f;
     public float GoAudioLength=1f;
     public float ReadySpriteFadeIn = 1;
     public float goSpriteFadeIn = 1;
     public float goSpriteFadeOut = 1;
-    private int curRating;
-    private int curScore;
-    private int curHighScore;
-    private int curTotalScore;
-    private int curTotalHighScore;
+    
+    
     private Movement playerScript;
-    public int SendRating(int newRating) { return curRating = newRating; }
-    public int SendScore(int newScore) { return curScore = newScore; }
-    public int SendHighScore(int newHighScore) { return curHighScore = newHighScore; }
-    public int SendTotalScore(int newTotalScore) { return curTotalScore = newTotalScore; }
-    public int SendTotalHighScore(int newTotalHighScore) { return curTotalHighScore = newTotalHighScore; }
+    
+    
+
     public bool tipOnStart;
     // Use this for initialization
     void Awake ()
@@ -39,11 +36,7 @@ public class CanvasToggle : MonoBehaviour {
         LevelNumberSprite.canvasRenderer.SetAlpha(0.0f);
         ReadySprite.canvasRenderer.SetAlpha(0.0f);
         GoSprite.canvasRenderer.SetAlpha(0.0f);
-        GameObject scoreObject = GameObject.FindGameObjectWithTag("ScoreManager");
-        if(scoreObject)
-        {
-            scoreScript = scoreObject.GetComponent<PlayerManager>();
-        }
+        
         
         //get canvas script to enable fading
         if(WinScreenCanvas)
@@ -160,15 +153,7 @@ public class CanvasToggle : MonoBehaviour {
             WinScreenCanvas.SetActive(true);
         }
     }
-
-    /*public void SendDataToWinScreen()
-    {
-        winScript.newScore(curScore);
-        winScript.theHighestOfScore(curHighScore);
-        winScript.CurTotalScore(curTotalScore);
-        winScript.CurTotalHighScore(curTotalHighScore);
-    }
-    */
+    
     public void StartFadeIn()
     {
         if (winScript&&audioScript)

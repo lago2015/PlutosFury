@@ -8,8 +8,7 @@ public class MoonBall : MonoBehaviour
     private SphereCollider colliderComp;
     [SerializeField]
     private float knockbackSpeed;
-    [SerializeField]
-    private float idleSpeed = 10.0f;
+    
     [SerializeField]
     private float velocityCap;
     [SerializeField]

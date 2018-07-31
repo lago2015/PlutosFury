@@ -21,9 +21,7 @@ public class GameManager : MonoBehaviour
     public GameObject audioManager;
 	private GameObject pluto;
     private GameObject collectorObject;
-    private GameObject joystickController;
-    private int curScore;
-    private int curHighScore;
+    
     
     public float fadeTime;
     public float GameOverDelay = 5f;
@@ -77,7 +75,7 @@ public class GameManager : MonoBehaviour
             //asteroid collector
             collectorObject=Instantiate(charManager.AsteroidCollectorPlayers, spawnPoint.transform.position, Quaternion.identity);
             //floating joystick controller
-            joystickController=Instantiate(charManager.floatingJoystickController, Vector3.zero, Quaternion.identity);
+            Instantiate(charManager.floatingJoystickController, Vector3.zero, Quaternion.identity);
             playerMoveScript.ReferenceAbsorbScript(collectorObject);
             playerMoveScript.ReferenceAudio(audioObject);
         }
@@ -105,11 +103,6 @@ public class GameManager : MonoBehaviour
 
         
     }
-	void Start ()
-    {
-       
-        
-	}
     //function called from wormhole (aka door script) 
     //to retrieve or disable any gameobjects in scene 
     public void GameEnded(bool isPlayerDead)
@@ -214,30 +207,18 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(1f);
         if (ScoreManager)
         {
-
             //increment orb for completion of level
             ScoreManager.AwardOrbsForCompletion();
-            //grab orb numbers for both obtained in level and total collected
-            curScore = ScoreManager.ReturnScore();
-            curHighScore = PlayerPrefs.GetInt("scorePref");
             
-            
-            //Save score
-           // ScoreManager.SaveScore(false);
-            //Save health and lives
+            //Save health and moonballs
             ScoreManager.SaveHealth();
             moonBallManScript.SaveCurrentBalls();
         }
 
         if (canvasScript)
         {
-            //turn on gameobject
+            //turn off gameobject
             canvasScript.GameEnded(false);  
-            //Send data for win summary
-            canvasScript.SendScore(curScore);
-            canvasScript.SendHighScore(curHighScore);
-            canvasScript.SendTotalScore(curTotalScore);
-            //canvasScript.SendDataToWinScreen();
             //start fade in
             canvasScript.StartFadeIn();
 

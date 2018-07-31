@@ -11,7 +11,6 @@ public class InGameCharacterManager : MonoBehaviour {
     public GameObject floatingJoystickController;
     private int curIngameIndex;
     private int curBallIndex;
-    private int curNumberPlayers;
     
     private FloatingJoystick joystickScript;
 
@@ -29,11 +28,7 @@ public class InGameCharacterManager : MonoBehaviour {
 
     }
 
-    //Number of players in
-    public int NumOfPlayers(int curPlayers)
-    {
-        return curNumberPlayers=curPlayers;
-    }
+    
     //This function is to know what skin is currently saved for the player
     public GameObject CurrentCharacter(int numberOfSpawns)
     {

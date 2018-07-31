@@ -9,26 +9,21 @@ public class BigAsteroid : MonoBehaviour {
     public int curHits;
     public int HitPoints;
     private int orbDrop=2;
-    private float DestroyTimeout=2;
+    
     private bool isDestroyed;
-    AsteroidCollector collecterScript;
+    
     private AudioController audioScript;
-    private Movement playerScript;
+    
     private AsteroidSpawner spawnPointScript;
     public bool RockStatus() { return isDestroyed; }
     
     void Start()
     {
-        collecterScript = GameObject.FindGameObjectWithTag("GravityWell").GetComponent<AsteroidCollector>();
+    
         GameObject audioObject = GameObject.FindGameObjectWithTag("AudioController");
         if (audioObject)
         {
             audioScript = audioObject.GetComponent<AudioController>();
-        }
-        GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
-        if (playerObject)
-        {
-            playerScript = playerObject.GetComponent<Movement>();
         }
         spawnPointScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<AsteroidSpawner>();
         Collider = GetComponent<SphereCollider>();
@@ -62,9 +57,9 @@ public class BigAsteroid : MonoBehaviour {
                 SpawnAsteroids();
             }
           
-            foreach (SphereCollider col in GetComponents<SphereCollider>())
+            if(Collider)
             {
-                col.enabled = false;
+                Collider.enabled = false;
             }
 
                

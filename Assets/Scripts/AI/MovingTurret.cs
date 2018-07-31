@@ -24,7 +24,7 @@ public class MovingTurret : MonoBehaviour {
     public float maxDistAvoidance = 20f;
     public float maxAvoidForce = 100f;
     //components
-    AudioController audioScript;
+    //private AudioController audioScript;          //going to add this in when charge audio sfx is ready
     Transform PlayerTransform;
     public GameObject myParent;
     public ShootProjectiles shootingScript1;
@@ -75,10 +75,10 @@ public class MovingTurret : MonoBehaviour {
         }
     }
 
-    private void Start()
-    {
-        audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
-    }
+    //private void Start()
+    //{
+    //    audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
+    //}
 
     // Update is called once per frame
     void FixedUpdate()

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
-
+using UnityEngine.SceneManagement;
 public class MenuScript : MonoBehaviour
 {
 	/*****Main Menu, Sub-Menus, Buttons and Texts*****/
@@ -15,7 +15,8 @@ public class MenuScript : MonoBehaviour
 
     //Audio Variables
     public AudioClip[] sounds;
-    AudioSource audio;
+    [HideInInspector]
+    private new AudioSource audio;
 
 	void Start ()
 	{
@@ -77,7 +78,8 @@ public class MenuScript : MonoBehaviour
 	{
         //audio.clip = sounds[0];
         //audio.Play();
-		Application.LoadLevel(1);
+        SceneManager.LoadScene(1);
+		
 	}
 
 }

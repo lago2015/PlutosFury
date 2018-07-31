@@ -3,6 +3,9 @@ using System.Collections;
 
 public class HomingProjectile : MonoBehaviour {
 
+    //this script is intended for Expander. Goes towards player and expands then explodes
+
+
     public float moveSpeed = 5.0f;
     public bool ShouldMove = false;
 
@@ -10,7 +13,6 @@ public class HomingProjectile : MonoBehaviour {
     private GameObject Player;
     
     private SphereCollider TriggerCollider;
-    private float startRadius;
     public float DistanceFromPlayerToExplode = 7f;
     private DetectWaitThenExplode explodeScript;
 
@@ -23,9 +25,8 @@ public class HomingProjectile : MonoBehaviour {
     public float scaleToNumber=3.5f;
     public float explosionTime;
     private bool timeToLerp;
-    private float timeToScale;
+    
     private float scaleCovered;
-    private float AmountOfScaleCompleted;
     private float startTime;
     public bool AmILerping() { return timeToLerp; }
     public bool activateMovement(bool isActive)
@@ -39,14 +40,13 @@ public class HomingProjectile : MonoBehaviour {
     {
         currentScale = ObjectToScale.transform.localScale;
         scaleToVector = new Vector3(scaleToNumber, scaleToNumber, scaleToNumber);
-        timeToScale = Vector3.Distance(currentScale, scaleToVector);
+    
         enabled = false;
         explodeScript = GetComponent<DetectWaitThenExplode>();
         TriggerCollider = GetComponent<SphereCollider>();
         if(TriggerCollider)
         {
             TriggerCollider.enabled = true;
-            startRadius = TriggerCollider.radius;
         }
     }
     private void Start()
@@ -60,7 +60,7 @@ public class HomingProjectile : MonoBehaviour {
         if (timeToLerp)
         {
             scaleCovered = (Time.time - startTime) * lerpSpeed;
-            AmountOfScaleCompleted = scaleCovered / timeToScale;
+            
             ObjectToScale.transform.localScale = Vector3.Lerp(currentScale, scaleToVector, scaleCovered);
         }
         else if (ShouldMove)

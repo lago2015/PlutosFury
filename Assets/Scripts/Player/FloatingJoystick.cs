@@ -5,7 +5,7 @@ using System.Collections;
 
 public class FloatingJoystick : MonoBehaviour,IDragHandler,IPointerUpHandler,IPointerDownHandler
 {
-
+	//
     
     public bool joystickStaysInFixedPosition = false;
     private bool doOnce;
@@ -16,9 +16,9 @@ public class FloatingJoystick : MonoBehaviour,IDragHandler,IPointerUpHandler,IPo
     private Image joystickKnobImage; // the "knob" part of the joystick, it just moves to provide feedback, it does not receive input from the touch
     private Vector3 inputVector; // normalized direction vector that will be ouput from this joystick, it can be accessed from outside this class using the public function GetInputDirection() defined in this class, this vector can be used to control your game object ex. a player character or any desired game object
     private Vector3 unNormalizedInput; // unormalized direction vector (it has a magnitude) that is only used within this class to allow this joystick to drag along on the screen as the user drags
-    private Vector3[] fourCornersArray = new Vector3[4]; // used to get the bottom right corner of the image in order to ensure that the pivot of the joystick's background image is always at the bottom right corner of the image (the pivot must always be placed on the bottom right corner of the joystick's background image in order to the script to work)
+    //private Vector3[] fourCornersArray = new Vector3[4]; // used to get the bottom right corner of the image in order to ensure that the pivot of the joystick's background image is always at the bottom right corner of the image (the pivot must always be placed on the bottom right corner of the joystick's background image in order to the script to work)
     private Vector2 bgImageStartPosition; // used to temporarily store the starting position of the joystick's background image (where it was placed on the canvas in the editor before play was pressed) in order to set the image back to this same position after setting the pivot to the bottom right corner of the image
-    private PointerEventData beginTouch;
+    
     private ButtonIndicator dashScript;
 
     private GameObject player;
@@ -238,7 +238,7 @@ public class FloatingJoystick : MonoBehaviour,IDragHandler,IPointerUpHandler,IPo
         {
             joystickStaysInFixedPosition = true;
         
-            beginTouch = ped;
+            
         }
         
         OnDrag(ped); // sent the event data to the OnDrag event
@@ -290,7 +290,6 @@ public class FloatingJoystick : MonoBehaviour,IDragHandler,IPointerUpHandler,IPo
         rotate.x = inputVector.x;
         rotate.y = inputVector.y;
         float rotationInDegrees = Mathf.Atan2(rotate.x, -rotate.y) * Mathf.Rad2Deg;
-        Quaternion rotation = new Quaternion(0, 0, 0, rotationInDegrees);
 
         return Quaternion.Euler(0, 0, rotationInDegrees);
     }

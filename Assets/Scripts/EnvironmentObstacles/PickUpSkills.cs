@@ -10,7 +10,7 @@ public class PickUpSkills : MonoBehaviour {
     private PlayerCollisionAndHealth playerCollisionScript;
     private PlayerAppearance appearanceScript;
     private MoonballManager moonballManScript;
-    private HUDManager hudScript;
+    
     private bool pickupObtained;
     private AudioController audioScript;
     
@@ -24,7 +24,7 @@ public class PickUpSkills : MonoBehaviour {
         }
         GameObject playerRef = GameObject.FindGameObjectWithTag("Player");
 
-        hudScript = GameObject.FindGameObjectWithTag("HUDManager").GetComponent<HUDManager>();
+    
         switch (curSkill)
         {
             

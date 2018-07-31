@@ -17,8 +17,7 @@ public class AsteroidSpawner : MonoBehaviour
     public float maxX;
     public float minY;
     public float maxY;
-    AsteroidCollector collecterScript;
-    GameObject collectorObject;
+    
     public float newMinX(float newMin) { return minX = newMin; }
     public float newMaxX(float newMax) { return maxX = newMax; }
     private Vector3 curObjectPosition;
@@ -40,11 +39,7 @@ public class AsteroidSpawner : MonoBehaviour
             maxX = levelBounds[3].transform.position.x;
         }
 
-        collectorObject = GameObject.FindGameObjectWithTag("GravityWell");
-        if (collectorObject)
-        {
-            collecterScript = collectorObject.GetComponent<AsteroidCollector>();
-        }
+        
         // Populate the list with orbs
         asteroidPool = new List<GameObject>();
         for (int i = 0; i < OrbPopulation; ++i)

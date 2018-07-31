@@ -4,11 +4,6 @@ using System.Collections;
 public class LifeSpan : MonoBehaviour {
 
     public float LifeDuration;
-    float CurrentHealth=0;
-    float IncrementTime=1;
-    bool DamagePlayer;
-    public GameObject Explosion;
-    public GameObject parent;
     public string poolName;
 
     void Start()
@@ -30,25 +25,14 @@ public class LifeSpan : MonoBehaviour {
     IEnumerator CountdownToLife()
     {
         yield return new WaitForSeconds(LifeDuration);
-        if (Explosion)
+        if (poolName.Length > 0)
         {
-            Instantiate(Explosion, transform.position, transform.rotation);
-        }
-        if (parent!=null)
-        {
-            Destroy(parent);
+            GameObject.FindObjectOfType<ObjectPoolManager>().PutBackObject(poolName, gameObject);
+            gameObject.SetActive(false);
         }
         else
         {
-            if (poolName.Length > 0)
-            {
-                GameObject.FindObjectOfType<ObjectPoolManager>().PutBackObject(poolName, gameObject);
-                gameObject.SetActive(false);
-            }
-            else
-            {
-                Destroy(gameObject);
-            }
+            Destroy(gameObject);
         }
     }
     

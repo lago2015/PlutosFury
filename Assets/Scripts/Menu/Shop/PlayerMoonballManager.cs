@@ -15,7 +15,7 @@ public class PlayerMoonballManager : MonoBehaviour {
     public Button BuyMoonballContainerButton;
     private UpdateOrbAmount orbTextScript;
     private NotEnoughOrbsAnimation notEnoughOrbsText;
-    private bool isPlaying;
+    
 
     private void Awake()
     {
@@ -108,13 +108,7 @@ public class PlayerMoonballManager : MonoBehaviour {
         }
     }
 
-    IEnumerator CountdownForAnimation()
-    {
-        yield return new WaitForSeconds(10);
-        isPlaying = false;
-        //notEnoughOrbsText.SetBool("TextActive", false);
-
-    }
+    
 
     public void BuyAMoonball()
     {

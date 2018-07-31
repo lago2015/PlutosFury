@@ -8,21 +8,20 @@ public class SkinManager : MonoBehaviour {
     //depending on skin index gained from leveling up
 
     public Button[] characterButtons;
-    private int skin0Bought;
     private int skin1Bought;
     private int skin2Bought;
     private int skin3Bought;
-    private int moonSkin0;
+
     private int moonSkin1;
     private int moonSkin2;
     private int moonSkin3;
     public void CheckSkins()
     {
-        skin0Bought = PlayerPrefs.GetInt("skin0");
+        
         skin1Bought = PlayerPrefs.GetInt("skin1");
         skin2Bought = PlayerPrefs.GetInt("skin2");
         skin3Bought = PlayerPrefs.GetInt("skin3");
-        moonSkin0 = PlayerPrefs.GetInt("skin4");
+        
         moonSkin1 = PlayerPrefs.GetInt("skin5");
         moonSkin2 = PlayerPrefs.GetInt("skin6");
         moonSkin3 = PlayerPrefs.GetInt("skin7");
@@ -86,11 +85,11 @@ public class SkinManager : MonoBehaviour {
 
     private void Awake()
     {
-        skin0Bought = PlayerPrefs.GetInt("skin0");
+        
         skin1Bought = PlayerPrefs.GetInt("skin1");
         skin2Bought = PlayerPrefs.GetInt("skin2");
         skin3Bought = PlayerPrefs.GetInt("skin3");
-        moonSkin0 = PlayerPrefs.GetInt("skin4");
+        
         moonSkin1 = PlayerPrefs.GetInt("skin5");
         moonSkin2 = PlayerPrefs.GetInt("skin6");
         moonSkin3 = PlayerPrefs.GetInt("skin7");

@@ -7,7 +7,7 @@ public class CanvasFade : MonoBehaviour {
     public Image fadeImage;             //image of fade
     public float fadeSpeed = 0.8f;		// the fading speed
     private CanvasGroup myGroup;
-    private int drawDepth = -1000;		// the texture's order in the draw hierarchy: a low number means it renders on top
+    
     private float alpha = 1.0f;			// the texture's alpha value between 0 and 1
     public int fadeDir = -1;
 
@@ -23,6 +23,7 @@ public class CanvasFade : MonoBehaviour {
         myGroup = GetComponent<CanvasGroup>();
         
         myGroup.alpha = 1;
+        StartfadeIn(true);
 
     }
 
@@ -45,13 +46,6 @@ public class CanvasFade : MonoBehaviour {
         }
     }
 
-    // OnLevelWasLoaded is called when a level is loaded. It takes loaded level index (int) as a parameter so you can limit the fade in to certain scenes.
-    void OnLevelWasLoaded()
-    {
-        // alpha = 1;		// use this if the alpha is not set to 1 by default
-        StartfadeIn(true);
-
-    }
     IEnumerator EnableFadeOut()
     {
 

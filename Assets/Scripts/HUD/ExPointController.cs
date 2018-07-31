@@ -7,14 +7,14 @@ public class ExPointController : MonoBehaviour {
     //reference animatied gameobject
     public GameObject exPointObject;
     private GameObject exPointChild;
-    private ExPoint animScript;
+    
     private void Awake()
     {
         if (exPointObject)
         {
             exPointObject = Instantiate(exPointObject, transform.position, Quaternion.identity);
             exPointChild = exPointObject.transform.GetChild(0).gameObject;
-            animScript = exPointObject.transform.GetChild(0).GetComponent<ExPoint>();
+    
             exPointObject.SetActive(false);
         }
     }

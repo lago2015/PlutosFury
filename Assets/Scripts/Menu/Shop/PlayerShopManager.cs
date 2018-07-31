@@ -15,7 +15,6 @@ public class PlayerShopManager : MonoBehaviour
     public Button BuyHeartButton;
     public Button BuyHeartContainerButton;
     private UpdateOrbAmount orbTextScript;
-    private NotEnoughOrbsAnimation notEnoughOrbsText;
     private bool isPlaying;
     private GameObject animatorObject;
     private void Awake()
@@ -69,7 +68,6 @@ public class PlayerShopManager : MonoBehaviour
         {
             BuyHeartContainerButton.interactable = false;
         }
-        notEnoughOrbsText = GameObject.FindGameObjectWithTag("Respawn").GetComponent<NotEnoughOrbsAnimation>();
     }
     //Reset all player preferences for testing***************
     public void ResetValues()
@@ -132,7 +130,6 @@ public class PlayerShopManager : MonoBehaviour
         //otherwise do not available sound and text pop up saying not enough orbs
         else
         {
-            //notEnoughOrbsText.PlayAnimation();
 
         }
 
@@ -171,7 +168,6 @@ public class PlayerShopManager : MonoBehaviour
         //otherwise do not available sound and text pop up saying not enough orbs
         else
         {
-            //notEnoughOrbsText.PlayAnimation();
 
         }
 

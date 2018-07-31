@@ -29,9 +29,9 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
     private Movement moveScript;
     private AudioController audioScript;
     private PlayerManager ScoreManager;
-    private PlayerLives livesScript;
+    
     private HUDManager hudScript;
-    private LerpToStart lerpScript;     //for boss level
+    
     private PlayerAppearance appearanceScript;
     private ExPointController bonusController;
 
@@ -74,7 +74,7 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
         moonBallHitEffect.SetActive(false);
         hudScript = GameObject.FindGameObjectWithTag("HUDManager").GetComponent<HUDManager>();
         //Script reference
-        lerpScript = GetComponent<LerpToStart>();   //for boss level
+        
         appearanceScript = GetComponent<PlayerAppearance>();
         bonusController = GetComponent<ExPointController>();
 
@@ -110,7 +110,7 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
     void Start ()
     {
         moveScript = GetComponent<Movement>();
-        livesScript = GetComponent<PlayerLives>();
+        
         ScoreManager = GameObject.FindGameObjectWithTag("ScoreManager").GetComponent<PlayerManager>();
         audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
         if (ScoreManager)
@@ -399,13 +399,10 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
         else if (curTag == "Neptune")
         {
             myBody.AddForce(c.contacts[0].normal * obstacleBump * 30, ForceMode.VelocityChange);
+            ShouldDash = moveScript.DashStatus();
             if (!ShouldDash)
             {
                 DamagePluto();
-            }
-            if (lerpScript)
-            {
-                lerpScript.EnableLerp();
             }
         }
     } 

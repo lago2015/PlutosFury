@@ -13,7 +13,6 @@ public class CollisionDetection : MonoBehaviour {
     public float bumperSpeed = 5;
     public int Health=3;
     public bool debugNoHealth;
-    GameManager managerScript;
 
     private Rigidbody myBody;
     private AudioController audioScript;
@@ -28,7 +27,6 @@ public class CollisionDetection : MonoBehaviour {
             defaultForce = chaseScript.force;
         }
         myBody = GetComponent<Rigidbody>();
-        managerScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<GameManager>();
     }
     private void Start()
     {

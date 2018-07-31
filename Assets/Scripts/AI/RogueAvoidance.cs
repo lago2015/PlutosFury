@@ -16,7 +16,7 @@ public class RogueAvoidance : MonoBehaviour {
     public bool isAvoiding;
     private Vector3 direction;
     private Vector3 ahead;
-    private Vector3 ahead2;
+    
     private Vector3 avoidanceForce;
     private RaycastHit hit;
     private FleeOrPursue dashScript;
@@ -70,7 +70,7 @@ public class RogueAvoidance : MonoBehaviour {
     void CollisionAvoidance(RaycastHit raycastHit)
     {
         ahead = transform.position + direction * range;
-        ahead2 = transform.position + direction * range * 0.5f;
+        
         Vector3 objectInSight = raycastHit.transform.position;
         avoidanceForce = ahead - objectInSight;
         avoidanceForce = avoidanceForce.normalized * MaxAvoidForce;

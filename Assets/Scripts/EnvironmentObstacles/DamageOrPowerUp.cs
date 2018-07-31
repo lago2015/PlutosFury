@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
+using UnityEngine;
 
 public class DamageOrPowerUp : MonoBehaviour {
 
@@ -7,25 +7,19 @@ public class DamageOrPowerUp : MonoBehaviour {
     public enum EffectState { Damage,Drain,PowerUp}
     public EffectState CurrentEffect;
 
-    //Drain
-    float SuperDrain;
-    float NormalDrain;
-    float NormalInterval;
+
     
     public bool colliderTriggered = true;
     public float DamageCooldown;
-    public GameObject SecondaryDamageObject;
-    private DamageOrPowerUp secondDamageScript;
+    
     //Rate of effect to apply
     //public float ApplyEffectRate;
     public float IncrementTimeRate;
     public bool Damaged;
-    bool SuperPluto;
+    
     float elapseTime;
-    bool PlayerNear = false;
     Movement PlayerMoveScript;
     PlayerCollisionAndHealth PlayerCollisionScript;
-    FleeOrPursue dashScript;
     private SphereCollider damageCollider;
     private BoxCollider otherDamageCollider;
 
@@ -48,10 +42,7 @@ public class DamageOrPowerUp : MonoBehaviour {
     {
         PlayerMoveScript = GameObject.FindGameObjectWithTag("Player").GetComponent<Movement>();
         PlayerCollisionScript = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerCollisionAndHealth>();
-        if(SecondaryDamageObject)
-        {
-            secondDamageScript = SecondaryDamageObject.GetComponent<DamageOrPowerUp>();
-        }
+        
         damageCollider = GetComponent<SphereCollider>();
         if(damageCollider==null)
         {
@@ -67,7 +58,11 @@ public class DamageOrPowerUp : MonoBehaviour {
             case EffectState.Damage:
                 if (!Damaged)
                 {
-                    PlayerCollisionScript.DamagePluto();
+                    if(PlayerCollisionScript)
+                    {
+                        PlayerCollisionScript.DamagePluto();
+                    }
+                    
                     Damaged = true;
                     if (damageCollider)
                     {
@@ -79,11 +74,7 @@ public class DamageOrPowerUp : MonoBehaviour {
                         otherDamageCollider.enabled = false;
                     }
                 }
-
-                //if (!gameObject.name.Contains("Explosion"))
-                //{
-                //    Destroy(gameObject);
-                //}
+                
                 break;
             
     
@@ -99,12 +90,12 @@ public class DamageOrPowerUp : MonoBehaviour {
             {
                 if (!Damaged)
                 {
-                    if (dashScript)
+                    bool plutoDashing = PlayerMoveScript.DashStatus();
+
+                    if (!plutoDashing)
                     {
                         bool playerDamaged = PlayerCollisionScript.DamageStatus();
-                        bool plutoDashing = PlayerMoveScript.DashStatus();
-
-                        if (!playerDamaged && !plutoDashing)
+                        if (!playerDamaged)
                         {
                             PlayerCollisionScript.DamagePluto();
                             Damaged = true;
@@ -112,40 +103,11 @@ public class DamageOrPowerUp : MonoBehaviour {
                             {
                                 damageCollider.enabled = false;
                             }
-
                             if (otherDamageCollider)
                             {
                                 otherDamageCollider.enabled = false;
                             }
-                            if (secondDamageScript)
-                            {
-                                secondDamageScript.didDamage();
-                            }
-
                             StartCoroutine(DamageReset());
-                        }
-                    }
-                    else
-                    {
-                        bool plutoDashing = PlayerMoveScript.DashStatus();
-
-                        if (!plutoDashing)
-                        {
-                            bool playerDamaged = PlayerCollisionScript.DamageStatus();
-                            if (!playerDamaged)
-                            {
-                                PlayerCollisionScript.DamagePluto();
-                                Damaged = true;
-                                if (damageCollider)
-                                {
-                                    damageCollider.enabled = false;
-                                }
-                                if (otherDamageCollider)
-                                {
-                                    otherDamageCollider.enabled = false;
-                                }
-                                StartCoroutine(DamageReset());
-                            }
                         }
                     }
                 }
@@ -163,7 +125,11 @@ public class DamageOrPowerUp : MonoBehaviour {
             {
                 if (!col.isTrigger)
                 {
-                    PlayerMoveScript.KnockbackPlayer(col.ClosestPoint(col.gameObject.transform.position));
+                    if(PlayerMoveScript)
+                    {
+                        PlayerMoveScript.KnockbackPlayer(col.ClosestPoint(col.gameObject.transform.position));
+                    }
+                    
 
                     ApplyEffect();
                 }

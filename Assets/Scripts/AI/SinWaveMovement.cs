@@ -9,15 +9,15 @@ public class SinWaveMovement : MonoBehaviour {
     public float amplitude = 5.0f;
     public float frequency = 5.0f;
 
-    int numberOfTicks;
-    float x;
-    float y;
+    private int numberOfTicks;
+    private float x;
+    private float y;
 
     public bool TriggerStart = true;
-    float coolDownTimer;
-    float attackCoolDown = 1.0f;
+    private float coolDownTimer;
+    
 
-    bool canShoot = false;
+    private bool canShoot = false;
 
     void Start()
     {

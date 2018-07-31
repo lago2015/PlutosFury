@@ -5,16 +5,23 @@ using UnityEngine;
 public class BossMoonballCollision : MonoBehaviour {
 
     private BossChargeAnimations animScript;
-
+    public GameObject explosion;
+    private Movement moveScript;
 	private void OnCollisionEnter(Collision col)
     {
-        if(col.gameObject.tag=="MoonBall")
+        if(col.gameObject.tag=="Player")
         {
-            animScript = GetComponent<BossChargeAnimations>();
-            if(animScript)
+            moveScript = col.gameObject.GetComponent<Movement>();
+            if(moveScript.DashStatus())
             {
-                animScript.PlayBossDeadAnimation();
+                if (explosion)
+                {
+                    Instantiate(explosion, transform.position, Quaternion.identity);
+                    GameObject.FindGameObjectWithTag("Spawner").GetComponent<GameManager>().GameEnded(false);
+                    Destroy(gameObject.transform.parent.gameObject);
+                }
             }
+            
         }
     }
 }

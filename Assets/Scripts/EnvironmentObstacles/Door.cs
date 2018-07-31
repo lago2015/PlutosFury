@@ -9,15 +9,14 @@ public class Door : MonoBehaviour {
     public int numOfLevel;
     private int curLevel;
     public int curWorld;
-    public float fadeTime = 2;
-    private int keyObtained;
-    private int numKeyRequired = 1;
+    
+    
     private bool doorActive;
     void Awake()
-    {
-        
-        gameScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<GameManager>();
-        
+    {    
+        //reference game manager to call game ended function
+        gameScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<GameManager>();   
+        //getting cur level player has unlocked
         curLevel = PlayerPrefs.GetInt(curWorld + "Unlocked");
         
     }

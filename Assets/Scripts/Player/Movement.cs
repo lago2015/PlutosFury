@@ -30,8 +30,7 @@ public class Movement : MonoBehaviour
     //dash trail rotation
     [SerializeField]
     private Quaternion trailRot;
-    [SerializeField]
-    private Quaternion lastTrailRot;
+    
     [SerializeField]
     //trail checks
     private bool moveOn;
@@ -60,21 +59,19 @@ public class Movement : MonoBehaviour
     //Components
 
     public Rigidbody myBody;
-    private GameObject joystick;
-    private GameObject asteroidSpawn;
+    
 
     //Script References
     private ButtonIndicator dashButt;
     private AudioController audioScript;
-    private AsteroidSpawner spawnScript;
-    private GameManager gameManager;
+    
+    
     private PlayerManager ScoreManager;
-    private CameraShake CamShake;
+    //private CameraShake CamShake;
     private FloatingJoystick joystickscript;
-    private PlayerCollisionAndHealth collisionScript;
+    
     private PlayerAppearance appearanceScript;
-    private ButtonIndicator buttonScript;
-    private HUDManager hudScript;
+    
     public TriggerCollisionPluto triggerScript;
 
     //Appearance Components
@@ -131,37 +128,10 @@ public class Movement : MonoBehaviour
     // Use this for initialization
     void Awake()
     {
-        
-        GameObject hudObject = GameObject.FindGameObjectWithTag("HUDManager");
-        if(hudObject)
-        {
-            hudScript = hudObject.GetComponent<HUDManager>();
-
-        }
-        GameObject buttonObject = GameObject.FindGameObjectWithTag("DashButt");
-        if(buttonObject)
-        {
-            buttonScript = buttonObject.GetComponent<ButtonIndicator>();
-        }
-        
-        
-        trailState = DashState.basicMove;
-
-        collisionScript = GetComponent<PlayerCollisionAndHealth>();
+        trailState = DashState.basicMove;   
         appearanceScript = GetComponent<PlayerAppearance>();
         
         
-        
-        //Dash Button
-        dashButt = GameObject.FindGameObjectWithTag("DashButt").GetComponent<ButtonIndicator>();
-        if (!dashButt)
-        {
-            Debug.Log("No Dash Button");
-        }
-        
-        //dash script
-        //Audio Controller
-
         //For physic things
         myBody = GetComponent<Rigidbody>();
         if (myBody)
@@ -170,31 +140,12 @@ public class Movement : MonoBehaviour
         }
         //Ensure speed is saved for default settings
         DefaultSpeed = MoveSpeed;
-        //For camera Shakes
-        GameObject camObject = GameObject.FindGameObjectWithTag("MainCamera");
-        if(camObject)
-        {
-            CamShake = camObject.GetComponent<CameraShake>();
-        }
-
-
-        //Look if there is a joystick
-        if (!joystick)
-        {
-            joystickscript = GameObject.FindGameObjectWithTag("GameController").GetComponent<FloatingJoystick>();
-        }
-
-        //For collecting asteroids and returning them to the pool
-        if (!asteroidSpawn)
-        {
-            asteroidSpawn = GameObject.FindGameObjectWithTag("Spawner");
-            if (asteroidSpawn)
-            {
-                spawnScript = asteroidSpawn.GetComponent<AsteroidSpawner>();
-                gameManager = asteroidSpawn.GetComponent<GameManager>();
-
-            }
-        }
+        ////For camera Shakes
+        //GameObject camObject = GameObject.FindGameObjectWithTag("MainCamera");
+        //if(camObject)
+        //{
+        //    CamShake = camObject.GetComponent<CameraShake>();
+        //}
     }
 
     
@@ -307,7 +258,7 @@ public class Movement : MonoBehaviour
 
                 //Get current rotation
                 trailRot = joystickscript.rotation();
-                lastTrailRot = trailRot;
+                
                 if (curTrail)
                 {
                     //apply rotation
@@ -508,12 +459,7 @@ public class Movement : MonoBehaviour
     }
 
     
-    //Called from trigger collision script for pluto(attached to asteroid collector)
-    public void ReturnAsteroid(GameObject curAsteroid)
-    {
-        spawnScript.ReturnPooledAsteroid(curAsteroid);
-        spawnScript.SpawnAsteroid();
-    }
+    
     //Called from gameobjects with triggers to apply knockback as player takes damage
     public void KnockbackPlayer(Vector3 Direction)
     {

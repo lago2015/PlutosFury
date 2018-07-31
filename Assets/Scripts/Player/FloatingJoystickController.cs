@@ -9,7 +9,7 @@ public class FloatingJoystickController : MonoBehaviour {
     private Image singleJoystickHandleImage; // handle (knob) image of the single joystick
     private FloatingJoystick singleJoystick; // script component attached to the single joystick's background image
     private int singleSideFingerID = 0; // unique finger id for touches on the left-side half of the screen
-    private int secondSideFingerID = 1;
+    //private int secondSideFingerID = 1;
     private Image secondTouchImage; //image to show second finger is recongized
     void Start()
     {
@@ -35,7 +35,7 @@ public class FloatingJoystickController : MonoBehaviour {
             {
                 if (Input.touchCount == 2)
                 {
-                    secondSideFingerID = myTouches[i].fingerId; // stores the unique id for this touch that happened on the left-side half of the screen
+//                    secondSideFingerID = myTouches[i].fingerId; // stores the unique id for this touch that happened on the left-side half of the screen
 
                     var currentPosition = secondTouchImage.rectTransform.position; // gets the current position of the single joystick
                     currentPosition.x = myTouches[i].position.x; // calculates the x position of the single joystick to where the screen was touched

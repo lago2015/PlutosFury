@@ -10,7 +10,6 @@ public class LookAtObject : MonoBehaviour {
     private Vector3 startPosition;
     private ShootProjectiles shootScript;
     public float maxDistanceToAttack;
-    private float rotY;
     private float angle;
     private Quaternion q;
     private float distanceToPlayer;
@@ -58,7 +57,7 @@ public class LookAtObject : MonoBehaviour {
     void RotateToObject()
     {
         //get y rotation
-        rotY = transform.rotation.y;
+        
         
         //calculate distance for rotation
         vectorToTarget = Player.transform.position - transform.position;

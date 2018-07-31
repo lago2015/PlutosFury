@@ -110,7 +110,7 @@ public class BossTurretTwo : MonoBehaviour
     
             if (!isReloadingEnergyBall)
             {
-                GameObject Mine = Instantiate(energyBallPrefab, energyBallTransform.position, energyBallTransform.rotation) as GameObject;
+                Instantiate(energyBallPrefab, energyBallTransform.position, energyBallTransform.rotation);
             }
            
             isReloadingEnergyBall = true;

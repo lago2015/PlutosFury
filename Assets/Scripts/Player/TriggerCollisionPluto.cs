@@ -6,7 +6,7 @@ public class TriggerCollisionPluto : MonoBehaviour {
 
     [HideInInspector]
     public GameObject parentOfPlayer;
-    private Movement playerMoveScript;
+    
     private PlayerCollisionAndHealth playerCollisionScript;
     private bool isDead;
     private bool ShouldDash;
@@ -20,7 +20,7 @@ public class TriggerCollisionPluto : MonoBehaviour {
     {
         audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
         ScoreManager = GameObject.FindGameObjectWithTag("ScoreManager").GetComponent<PlayerManager>();
-        playerMoveScript = GameObject.FindGameObjectWithTag("Player").GetComponent<Movement>();
+        
         playerCollisionScript = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerCollisionAndHealth>();
     }
 
@@ -43,7 +43,7 @@ public class TriggerCollisionPluto : MonoBehaviour {
             col.gameObject.GetComponent<BurstBehavior>().isOrbConsumed();
 
             //return orb to pool
-            playerMoveScript.ReturnAsteroid(col.gameObject);
+            GameObject.FindGameObjectWithTag("Spawner").GetComponent<AsteroidSpawner>().ReturnPooledAsteroid(gameObject);
             if (ScoreManager)
             {
                 ScoreManager.OrbObtained();

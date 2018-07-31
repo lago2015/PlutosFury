@@ -45,17 +45,6 @@ public class ObjectPoolManager : MonoBehaviour
 
             PoolList.Add(pools[i].name, pool);
         }
-
-        GameObject poolObj = Instantiate(poolPrefab);
-        poolObj.transform.position = gameObject.transform.position;
-        poolObj.transform.SetParent(gameObject.transform);
-
-        GameObject moonball = GameObject.FindObjectOfType<InGameCharacterManager>().CurrentMoonball(0);
-
-        ObjectPool moonPool = poolObj.GetComponent<ObjectPool>();
-        moonPool.InitializePool(moonball, 1);
-
-        PoolList.Add("MoonBall", moonPool);
     }
 
     public GameObject FindObject(string poolName)

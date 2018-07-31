@@ -7,7 +7,6 @@ public class HUDManager : MonoBehaviour {
 
 
     //Script References for hud
-    private CountDownStage timerScript;
     private PlayerManager scoreScript;
     private MoonballManager playerBallsScript;
     //Text to apply to hud
@@ -17,21 +16,18 @@ public class HUDManager : MonoBehaviour {
     public Text currentLevel;
     public Text playerLives;
     //local variables for hud 
-    private int curMaxHealth;
+    
     private int currentScore;
     private int currentMoonballAmount;
     // Use this for initialization
     void Awake()
     {
-        //Get timer script to display
-        timerScript = GetComponent<CountDownStage>();
         //get score manager to display current score
         GameObject scoreObject = GameObject.FindGameObjectWithTag("ScoreManager");
         if(scoreObject)
         {
             scoreScript = scoreObject.GetComponent<PlayerManager>();
         }
-        curMaxHealth = PlayerPrefs.GetInt("CurAddtionalHearts");
         
     }
 
@@ -133,11 +129,6 @@ public class HUDManager : MonoBehaviour {
 
 
     }
-
-
-    
-
-
     public void UpdateScore(int newScore)
     {
         if (scoreText)

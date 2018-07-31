@@ -51,9 +51,7 @@ public class AudioController : MonoBehaviour {
     [SerializeField]
     [Header("RogueDeath")]
     public AudioSource RogueDeathSrc;
-    [SerializeField]
-    [Header("ShatterCharge")]
-    public AudioSource shatterChargeSrc;
+
     [SerializeField]
     [Header("ShatterExplosion")]
     public AudioSource shatterExplosionSrc;
@@ -528,19 +526,7 @@ public class AudioController : MonoBehaviour {
         }
     }
 
-    public void ShatterCharge(Vector3 pos)
-    {
-        if (shatterChargeSrc != null)
-        {
-            
-            shatterChargeSrc.pitch = Random.Range(0.8f, 1f);
-            shatterChargeSrc.volume = Random.Range(0.8f, 1f);
-            shatterChargeSrc.minDistance = 20f;
-            shatterChargeSrc.loop = false;
-            shatterChargeSrc.Play();
-
-        }
-    }
+ 
     public void ShatterExplosion(Vector3 pos)
     {
         if (shatterExplosionSrc != null)

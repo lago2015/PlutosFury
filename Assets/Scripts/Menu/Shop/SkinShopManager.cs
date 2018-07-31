@@ -14,11 +14,9 @@ public class SkinShopManager : MonoBehaviour
      Save any skin bought
      */
 
-    private int skin0Bought;
     private int skin1Bought;
     private int skin2Bought;
     private int skin3Bought;
-    private int moonSkin0;
     private int moonSkin1;
     private int moonSkin2;
     private int moonSkin3;
@@ -26,17 +24,14 @@ public class SkinShopManager : MonoBehaviour
     public int PriceOfSkin = 1000;
     public Button[] BuySkinsButtons;
     private UpdateOrbAmount orbTextScript;
-    private int curSkinNumber;
-    private NotEnoughOrbsAnimation notEnoughOrbsText;
-    private bool isPlaying;
-    private float animationClip;
+    
+    
     private void Awake()
     {
-        skin0Bought = PlayerPrefs.GetInt("skin0");
         skin1Bought = PlayerPrefs.GetInt("skin1");
         skin2Bought = PlayerPrefs.GetInt("skin2");
         skin3Bought = PlayerPrefs.GetInt("skin3");
-        moonSkin0 = PlayerPrefs.GetInt("skin4");
+
         moonSkin1 = PlayerPrefs.GetInt("skin5");
         moonSkin2 = PlayerPrefs.GetInt("skin6");
         moonSkin3 = PlayerPrefs.GetInt("skin7");
@@ -118,8 +113,7 @@ public class SkinShopManager : MonoBehaviour
 
             BuySkinsButtons[7].interactable = true;
         }
-        notEnoughOrbsText = GameObject.FindGameObjectWithTag("Respawn").GetComponent<NotEnoughOrbsAnimation>();
-        //notEnoughOrbsText.SetBool("TextActive", false);
+        
         
     }
 

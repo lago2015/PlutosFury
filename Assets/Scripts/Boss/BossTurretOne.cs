@@ -11,12 +11,7 @@ public class BossTurretOne : MonoBehaviour
 
     public bool isGoingUp = true;
 
-    Quaternion currentRot;
 
-	// Use this for initialization
-	void Start () {
-        currentRot = transform.rotation;
-	}
 	
 	// Update is called once per frame
 	void Update ()

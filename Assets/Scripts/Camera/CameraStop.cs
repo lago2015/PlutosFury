@@ -30,7 +30,6 @@ public class CameraStop : MonoBehaviour {
     //private int maxNumSections;
 	private Vector3 cachedCameraPosition;
     private Vector3 wallTransform;
-    private Vector3 BossPosition = new Vector3(583, 0, 0);
     private Vector3 CameraOffset;
     public Vector3 delta;
 
