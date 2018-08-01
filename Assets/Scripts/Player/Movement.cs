@@ -148,7 +148,11 @@ public class Movement : MonoBehaviour
         //}
     }
 
-    
+    private void Start()
+    {
+        joystickscript = GameObject.FindGameObjectWithTag("GameController").GetComponent<FloatingJoystick>();
+    }
+
     void LateUpdate()
     {
         //capping velocity
@@ -182,18 +186,9 @@ public class Movement : MonoBehaviour
         {
             //Joystick input
             //move = Vector3.zero;
-            if(controllerConnected)
-            {
 
-                move.x = Input.GetAxis("Horizontal");
-                move.y = Input.GetAxis("Vertical");
-            }
-            else
-            {
-
-                move.x = joystickscript.horizontal();
-                move.y = joystickscript.vertial();
-            }
+            move.x = joystickscript.horizontal();
+            move.y = joystickscript.vertial();
             //normalize input
             if (move.magnitude > 1)
             {

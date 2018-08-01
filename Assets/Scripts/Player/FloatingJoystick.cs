@@ -20,7 +20,7 @@ public class FloatingJoystick : MonoBehaviour,IDragHandler,IPointerUpHandler,IPo
     private Vector2 bgImageStartPosition; // used to temporarily store the starting position of the joystick's background image (where it was placed on the canvas in the editor before play was pressed) in order to set the image back to this same position after setting the pivot to the bottom right corner of the image
     
     private ButtonIndicator dashScript;
-
+    private bool fingerDown;
     private GameObject player;
     public GameObject MoonballObject;
     public float ballLaunchPower = 30;
@@ -39,27 +39,22 @@ public class FloatingJoystick : MonoBehaviour,IDragHandler,IPointerUpHandler,IPo
     private MoonballManager moonballManagerScript;
 
     public GameObject currentMoonball(GameObject curBall) { return MoonballObject = curBall; }
-
+    private float joystickSize = 0.18f;
     private void Start()
     {
-        if (GetComponent<Image>() == null)
-        {
-            Debug.LogError("There is no joystick image attached to this script.");
-        }
         player = GameObject.FindGameObjectWithTag("Player");
         if(player)
         {
             moonballManagerScript = player.GetComponent<MoonballManager>();
-        }
-        if (transform.GetChild(0).GetComponent<Image>() == null)
-        {
-            Debug.LogError("There is no joystick handle image attached to this script.");
         }
         dashScript = GameObject.FindGameObjectWithTag("DashButt").GetComponent<ButtonIndicator>();
         if (GetComponent<Image>() != null && transform.GetChild(0).GetComponent<Image>() != null)
         {
             bgImage = GetComponent<Image>(); // gets the background image of this joystick
             joystickKnobImage = transform.GetChild(0).GetComponent<Image>(); // gets the joystick "knob" imae (the handle of the joystick), the joystick knob game object must be a child of this game object and have an image component 
+            joystickSize *= Screen.width;
+            bgImage.rectTransform.sizeDelta = new Vector2(joystickSize, joystickSize);
+            
         }
     }
 
@@ -135,7 +130,7 @@ public class FloatingJoystick : MonoBehaviour,IDragHandler,IPointerUpHandler,IPo
                     //resetting values 
                     directionChosen = false;
                     distance = 0;
-
+                    fingerDown = true;
                     break;
 
                 case TouchPhase.Moved:
@@ -162,6 +157,7 @@ public class FloatingJoystick : MonoBehaviour,IDragHandler,IPointerUpHandler,IPo
                         }
                         directionChosen = false;
                     }
+                    fingerDown = false;
                     //Debug.Log("Distance: " + distance);
                     break;
             }
@@ -173,7 +169,7 @@ public class FloatingJoystick : MonoBehaviour,IDragHandler,IPointerUpHandler,IPo
             {
                 scriptDoOnce = dashScript.doOnce;
                 //if charge hasnt started than start now
-                if (!scriptDoOnce)
+                if (!scriptDoOnce&&!fingerDown)
                 {
                     //activate dash mechanic 
                     dashScript.changeChargeStatus(true);

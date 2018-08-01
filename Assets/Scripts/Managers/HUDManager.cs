@@ -13,7 +13,7 @@ public class HUDManager : MonoBehaviour {
     public Text scoreText;
     public Image[] healthSprites;
     //public Text timerText;
-    public Text currentLevel;
+    
     public Text playerLives;
     //local variables for hud 
     
@@ -37,12 +37,7 @@ public class HUDManager : MonoBehaviour {
         {
             UpdateHealth(scoreScript.playerHealth);
         }
-        if(currentLevel)
-        {
-            Scene curScene = SceneManager.GetActiveScene();
-            int curIndex = curScene.buildIndex-1;
-            currentLevel.text = (" "+curIndex);
-        }
+        
         if(playerLives&&scoreScript)
         {
             currentScore = scoreScript.ReturnScore();
