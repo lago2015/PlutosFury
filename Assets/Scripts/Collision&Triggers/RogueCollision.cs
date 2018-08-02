@@ -8,12 +8,13 @@ public class RogueCollision : MonoBehaviour {
     public int EnemyHealth = 1;
     public float wallBump = 20;
     public GameObject pursueModel;
-
+    private bool isCharger;
     private FleeOrPursue rogueMoveScript;
     private Collider myCollider;
     private Movement playerMoveScript;
     private AsteroidSpawner orbScript;
-    
+    private bool RogueDashing;
+    private bool isDashing;
     private PlayerCollisionAndHealth playerCollisionScript;
     private Rigidbody myBody;
     private AudioController audioScript;
@@ -27,7 +28,10 @@ public class RogueCollision : MonoBehaviour {
         {
             rogueMoveScript = pursueModel.GetComponent<FleeOrPursue>();
         }
-       
+        if(transform.parent.name.Contains("Charger"))
+        {
+            isCharger = true;
+        }
     }
 
     private void Start()
@@ -64,38 +68,61 @@ public class RogueCollision : MonoBehaviour {
         }
     }
 
-    void OnCollisionEnter(Collision col)
+    void Damage(Collision col)
     {
-        string curTag = col.gameObject.tag;
-        if(curTag=="Player")
+        if(isCharger)
         {
-            bool RogueDashing = rogueMoveScript.isDashing();
+            isDashing = playerMoveScript.DashStatus();
+
+            if (!isDashing && playerMoveScript)
+            {
+                playerCollisionScript.DamagePluto();
+            }
+            else
+            {
+                RogueDamage();
+
+            }
+        }
+        else
+        {
+            RogueDashing = rogueMoveScript.isDashing();
             if (!RogueDashing)
             {
                 bool isDashing = playerMoveScript.DashStatus();
-                if(!isDashing&& playerMoveScript)
+                if (!isDashing && playerMoveScript)
                 {
                     playerCollisionScript.DamagePluto();
                 }
                 else
                 {
-                    
-                    
+                    RogueDamage();
+
                 }
                 if (myBody)
                 {
                     myBody.AddForce(col.contacts[0].normal * wallBump, ForceMode.VelocityChange);
                 }
-                
+
             }
             else
             {
-                if(playerMoveScript)
+                if (playerCollisionScript)
                 {
                     playerCollisionScript.DamagePluto();
                     rogueMoveScript.HitPlayerCooldown();
+
                 }
             }
+        }
+    }
+
+    void OnCollisionEnter(Collision col)
+    {
+        string curTag = col.gameObject.tag;
+        if(curTag=="Player")
+        {
+            Damage(col);
         }
         
         else if(curTag== "MoonBall")
@@ -105,7 +132,7 @@ public class RogueCollision : MonoBehaviour {
             Vector3 forwardDirection = rogueMoveScript.transform.forward.normalized;
             bool rogueDashing = rogueMoveScript.isDashing();
 
-            if(!rogueDashing)
+            if (!rogueDashing && !isCharger)
             {
                 ComboTextManager comboObject = GameObject.FindObjectOfType<ComboTextManager>();
                 if (comboObject)
@@ -116,6 +143,10 @@ public class RogueCollision : MonoBehaviour {
                     }
                 }
 
+                RogueDamage();
+            }
+            else if(isCharger)
+            {
                 RogueDamage();
             }
 
@@ -138,7 +169,7 @@ public class RogueCollision : MonoBehaviour {
 
             else
             {
-                col.gameObject.GetComponent<BigAsteroid>().AsteroidHit(2,false);
+                col.gameObject.GetComponent<BigAsteroid>().AsteroidHit(2,false,false);
 
             }
         }

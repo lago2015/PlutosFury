@@ -13,13 +13,13 @@ public class BigAsteroid : MonoBehaviour {
     private bool isDestroyed;
     
     private AudioController audioScript;
-    
+    private PlayerManager playerManager;
     private AsteroidSpawner spawnPointScript;
     public bool RockStatus() { return isDestroyed; }
     
     void Start()
     {
-    
+        playerManager = GameObject.FindObjectOfType<PlayerManager>();
         GameObject audioObject = GameObject.FindGameObjectWithTag("AudioController");
         if (audioObject)
         {
@@ -39,7 +39,7 @@ public class BigAsteroid : MonoBehaviour {
     }
 
 
-    public void AsteroidHit(int DamageAmount,bool isPlayer)
+    public void AsteroidHit(int DamageAmount,bool isPlayer,bool isMoonball)
     {
         if(DamageAmount==0)
         {
@@ -53,6 +53,17 @@ public class BigAsteroid : MonoBehaviour {
                 audioScript.AsteroidExplosion(transform.position);
             }
             if(isPlayer)
+            {
+                //add orbs to total to player
+                if(playerManager)
+                {
+                    for(int i=0;i<=orbDrop;i++)
+                    {
+                        playerManager.OrbObtained();
+                    }
+                }
+            }
+            if(isMoonball)
             {
                 SpawnAsteroids();
             }

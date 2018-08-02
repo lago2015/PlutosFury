@@ -167,7 +167,7 @@ public class ModifiedRogueCollision : MonoBehaviour {
 
                 else
                 {
-                    col.gameObject.GetComponent<BigAsteroid>().AsteroidHit(2,false);
+                    col.gameObject.GetComponent<BigAsteroid>().AsteroidHit(2,false,false);
 
                 }
             }

@@ -50,7 +50,7 @@ public class Rocket : MonoBehaviour {
         {
             //start explosion
             
-            col.gameObject.GetComponent<BigAsteroid>().AsteroidHit(5, false);
+            col.gameObject.GetComponent<BigAsteroid>().AsteroidHit(5, false,false);
             BlowUp(true);
 
         }

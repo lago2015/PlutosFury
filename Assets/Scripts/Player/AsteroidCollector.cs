@@ -12,7 +12,7 @@ public class AsteroidCollector : MonoBehaviour {
     public Vector3 directionToPluto;
     public double distanceToPluto;
     public float GravityStrength = 1f;
-    public float maxDistanceForGravity = 6;
+    public float maxDistanceForGravity = 15;
     public float minForce = 25f;
     public float maxForce = 50f;
     private Rigidbody CurBody;
@@ -29,7 +29,6 @@ public class AsteroidCollector : MonoBehaviour {
 
     private void Start()
     {
-        spawnScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<AsteroidSpawner>();
         if (followPlayer)
         {
             ObjectToFollow = GameObject.FindGameObjectWithTag("Player");
@@ -62,17 +61,8 @@ public class AsteroidCollector : MonoBehaviour {
             CurBody = curAsteroid.GetComponent<Rigidbody>();
             directionToPluto = (curAsteroid.transform.position - transform.position).normalized;
             distanceToPluto = Vector3.Distance(transform.position, curAsteroid.transform.position);
-            if(distanceToPluto<maxDistanceForGravity)
+            if(distanceToPluto>maxDistanceForGravity)
             {
-                if(spawnScript)
-                {
-                    GameObject.FindObjectOfType<ObjectPoolManager>().PutBackObject("Orb", curAsteroid);
-                }
-                
-            }
-            else
-            {
-
                 strength = plutoG * GravityStrength / distanceToPluto * distanceToPluto;
                 forceOnMe = directionToPluto * (float)strength;
                 if (!float.IsNaN(forceOnMe.x) ||
@@ -83,6 +73,7 @@ public class AsteroidCollector : MonoBehaviour {
                     curAsteroid.transform.position = new Vector3(curAsteroid.transform.position.x, curAsteroid.transform.position.y, 0);
                 }
                 forceOnMe = Vector3.zero;
+
             }
         }
     }

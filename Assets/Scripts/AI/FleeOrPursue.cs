@@ -24,7 +24,7 @@ public class FleeOrPursue : MonoBehaviour {
     private bool firstEncounter = false;
     private float DefaultSpeed;
     private float normalDrag;
-    
+    private float curDistance;
     public float maxDistAvoidance = 20f;
     public float maxAvoidForce = 100f;
     //components
@@ -35,7 +35,8 @@ public class FleeOrPursue : MonoBehaviour {
     public GameObject chargingParticle;
     public GameObject burstParticle;
     private Rigidbody myBody;
-    
+    private Quaternion rotation;
+    private bool lookingForPosition=true;
     public bool isTriggered;
     public bool ShouldPursue;// chase player or not
     private bool isCharging;
@@ -53,7 +54,7 @@ public class FleeOrPursue : MonoBehaviour {
     void Awake()
     {
         DefaultSpeed = MoveSpeed;
-        
+
         myBody = myParent.transform.GetChild(0).GetComponent<Rigidbody>();
         //Getting the drag to revert back to for slow down of dash
         if (myBody)
@@ -65,7 +66,7 @@ public class FleeOrPursue : MonoBehaviour {
             myBody = myParent.GetComponent<Rigidbody>();
         }
         //turning off all particles at start
-        if(chargingParticle)
+        if (chargingParticle)
         {
             chargingParticle.SetActive(false);
         }
@@ -74,7 +75,7 @@ public class FleeOrPursue : MonoBehaviour {
         {
             trailModel.SetActive(false);
         }
-        if(burstParticle)
+        if (burstParticle)
         {
             burstParticle.SetActive(false);
         }
@@ -126,26 +127,45 @@ public class FleeOrPursue : MonoBehaviour {
 
             if (!isCharging || ShouldDash)
             {
-                if(!PlayerTransform)
+                if (!PlayerTransform)
                 {
                     PlayerTransform = GameObject.FindGameObjectWithTag("Player").transform;
                 }
                 else
                 {
-                    //calculate distance between player and rogue
-                    float curDistance = Vector3.Distance(transform.position, PlayerTransform.transform.position);
+                    if(lookingForPosition)
+                    {
+                        //calculate distance between player and rogue
+                        curDistance = Vector3.Distance(transform.position, PlayerTransform.transform.position);
+                        StartCoroutine(LookForPlayerLocation());
+                    }
+                    
                     //check if player is close enough, if not then pursue
                     if (curDistance > DistanceFromPlayerToExplode)
                     {
+                        //Where rotation is applied while pursing
+                        if (RotationSpeed > 0)
+                        {
+                            rotation = Quaternion.LookRotation(PlayerTransform.transform.position - transform.position);
+
+                            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * RotationSpeed);
+                        }
                         //move rogue forward if hes not charging
                         transform.parent.position += transform.forward * MoveSpeed * Time.deltaTime;
                         transform.parent.position = new Vector3(transform.position.x, transform.position.y, 0);
                     }
                 }
-                
+
             }
 
         }
+    }
+
+    IEnumerator LookForPlayerLocation()
+    {
+        lookingForPosition = false;
+        yield return new WaitForSeconds(1.5f);
+        lookingForPosition = true;
     }
 
     public void HitPlayerCooldown()
@@ -188,13 +208,7 @@ public class FleeOrPursue : MonoBehaviour {
             {
                 if (PlayerTransform)
                 {
-                    //Where rotation is applied while pursing
-                    if (RotationSpeed > 0)
-                    {
-                        Quaternion rotation = Quaternion.LookRotation(PlayerTransform.transform.position - transform.position);
-
-                        transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * RotationSpeed);
-                    }
+                    
                     //check if recently dashed and can dash again
                     if (!isExhausted)
                     {

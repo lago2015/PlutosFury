@@ -89,7 +89,7 @@ public class DetectWaitThenExplode : MonoBehaviour
                 damageScript.didDamage();
             }
             //apply damage to asteroid
-            col.gameObject.GetComponent<BigAsteroid>().AsteroidHit(5, false);
+            col.gameObject.GetComponent<BigAsteroid>().AsteroidHit(5, false,false);
         }
         else if (CurTag == "EnvironmentObstacle"||CurTag=="Obstacle"||CurTag=="Planet")
         {
