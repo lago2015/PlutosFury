@@ -3,7 +3,7 @@ using System.Collections;
 
 public class MoonBall : MonoBehaviour
 {
-    public GameObject Explosion;
+
     public float hitSpeed;
     private SphereCollider colliderComp;
     [SerializeField]
@@ -85,7 +85,6 @@ public class MoonBall : MonoBehaviour
     // NEW FUNCTION FOR BALL MOVEMENT LOGIC
     public void MoveBall(Vector3 movementVec, float speed)
     {
-        Debug.Log("HIT");
         rb.velocity = movementVec * speed;
         rb.AddTorque(movementVec * speed);
     }
@@ -161,14 +160,13 @@ public class MoonBall : MonoBehaviour
     }
     public void OnExplosion()
     {
-        if (Explosion)
-        {
-            Instantiate(Explosion, transform.position, Quaternion.identity);
+        Debug.Log("Hit");
+       
+        GameObject explosion = GameObject.FindObjectOfType<ObjectPoolManager>().FindObject("ContainerExplosion");
+        explosion.transform.position = transform.position;
+        explosion.SetActive(true);
 
-            GameObject.FindObjectOfType<ObjectPoolManager>().PutBackObject("MoonBall", gameObject);
-
-           // Destroy(gameObject);
-        }
+        GameObject.FindObjectOfType<ObjectPoolManager>().PutBackObject("MoonBall", gameObject);
     }
 
     private void Bounce(Collision c)
