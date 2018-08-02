@@ -43,14 +43,17 @@ public class TriggerCollisionPluto : MonoBehaviour {
             col.gameObject.GetComponent<BurstBehavior>().isOrbConsumed();
 
             //return orb to pool
-            GameObject.FindGameObjectWithTag("Spawner").GetComponent<AsteroidSpawner>().ReturnPooledAsteroid(gameObject);
+            GameObject.FindObjectOfType<ObjectPoolManager>().PutBackObject("Orb", col.gameObject);
             if (ScoreManager)
             {
                 ScoreManager.OrbObtained();
             }
             
         }
+
+        
     }
+
     private void OnTriggerStay(Collider other)
     {
         string curTag = other.tag;

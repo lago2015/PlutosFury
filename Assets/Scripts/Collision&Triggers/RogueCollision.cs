@@ -79,7 +79,8 @@ public class RogueCollision : MonoBehaviour {
                 }
                 else
                 {
-                    RogueDamage();
+                    
+                    
                 }
                 if (myBody)
                 {
@@ -103,6 +104,21 @@ public class RogueCollision : MonoBehaviour {
 
             Vector3 forwardDirection = rogueMoveScript.transform.forward.normalized;
             bool rogueDashing = rogueMoveScript.isDashing();
+
+            if(!rogueDashing)
+            {
+                ComboTextManager comboObject = GameObject.FindObjectOfType<ComboTextManager>();
+                if (comboObject)
+                {
+                    {
+                        comboObject.CreateComboText(0);
+                        GameObject.FindObjectOfType<PlayerManager>().niceCombo++;
+                    }
+                }
+
+                RogueDamage();
+            }
+
             moonBall.rogueHit(forwardDirection, rogueDashing);
          
             moonBall.OnExplosion();

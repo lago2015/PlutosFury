@@ -80,7 +80,7 @@ public class GravityPull : MonoBehaviour {
                         {
                             if (AsteroidScript)
                             {
-                                //AsteroidScript.SpawnAsteroidHere(transform.position);
+                                GameObject.FindObjectOfType<ObjectPoolManager>().PutBackObject("Orb", col.gameObject);
                             }
                         }
                         Destroy(gameObject);
@@ -96,8 +96,7 @@ public class GravityPull : MonoBehaviour {
                 asteroidNumber++;
                 if (AsteroidScript)
                 {
-                    AsteroidScript.ReturnPooledAsteroid(col.gameObject);
-
+                    GameObject.FindObjectOfType<ObjectPoolManager>().PutBackObject("Orb", col.gameObject);
                 }
             }
         }

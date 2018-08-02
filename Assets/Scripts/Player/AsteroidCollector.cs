@@ -66,7 +66,7 @@ public class AsteroidCollector : MonoBehaviour {
             {
                 if(spawnScript)
                 {
-                    spawnScript.ReturnPooledAsteroid(curAsteroid);
+                    GameObject.FindObjectOfType<ObjectPoolManager>().PutBackObject("Orb", curAsteroid);
                 }
                 
             }

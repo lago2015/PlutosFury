@@ -67,7 +67,9 @@ public class DetectWaitThenExplode : MonoBehaviour
 
                         WaitTimeToExplode = 0;
                         playerScript.KnockbackPlayer(col.contacts[0].normal);
+                        playerScript.KillCombo();
                         TriggerExplosionInstantly();
+                        
                     }
                 }
                 else
@@ -96,7 +98,17 @@ public class DetectWaitThenExplode : MonoBehaviour
         }
         else if(CurTag=="MoonBall")
         {
+            ComboTextManager comboObject = GameObject.FindObjectOfType<ComboTextManager>();
+            if (comboObject)
+            {
+                {
+                    comboObject.CreateComboText(0);
+                    GameObject.FindObjectOfType<PlayerManager>().niceCombo++;
+                }
+            }
+
             TriggerExplosionInstantly();
+
         }
         else if(CurTag=="BreakableWall")
         {

@@ -95,12 +95,13 @@ public class BurstBehavior : MonoBehaviour {
         yield return new WaitForSeconds(curLifeTime);
         spriteComp.color = nearInvisibleColor;
         nearInvisibleColor.a = 0.7f;
-        spawnerScript.ReturnPooledAsteroid(gameObject);
+        //spawnerScript.ReturnPooledAsteroid(gameObject);
+        GameObject.FindObjectOfType<ObjectPoolManager>().PutBackObject("Orb", gameObject);
     }
 
     public void ReturnToPool()
     {
-        spawnerScript.ReturnPooledAsteroid(gameObject);
+        GameObject.FindObjectOfType<ObjectPoolManager>().PutBackObject("Orb", gameObject);
     }
 
     void ChangeTag()

@@ -48,8 +48,20 @@ public class AIHealth : MonoBehaviour {
                 ComboTextManager comboObject = GameObject.FindObjectOfType<ComboTextManager>();
                 if(comboObject)
                 {
-                    comboObject.CreateComboText(1);
+                    if (currentEnemy == EnemyOptions.Spike || currentEnemy == EnemyOptions.Shatter)
+                    {
+                        comboObject.CreateComboText(2);
+                        GameObject.FindObjectOfType<PlayerManager>().awesomeCombo++;
+                    }
+                    else
+                    {
+                        comboObject.CreateComboText(0);
+                        GameObject.FindObjectOfType<PlayerManager>().niceCombo++;
+                    }
                 }
+
+
+
             }
             if (orbScript)
             {
@@ -110,10 +122,14 @@ public class AIHealth : MonoBehaviour {
 
         if (CurTag == "Player")
         {
-            bool isDashing = col.gameObject.GetComponent<Movement>().DashStatus();
+            Movement player = col.gameObject.GetComponent<Movement>();
+
+            bool isDashing = player.DashStatus();
             if (isDashing)
             {
                 IncrementDamage(CurTag);
+
+                player.KillCombo();
 
                 if (myBody)
                 {

@@ -9,8 +9,6 @@ public class Movement : MonoBehaviour
     [SerializeField]
     public bool startAtBeginning;
     [SerializeField]
-    private int orbCount = 0;
-    [SerializeField]
     public bool controllerConnected = false;
     [SerializeField]
     //buffs and debuffs
@@ -57,6 +55,10 @@ public class Movement : MonoBehaviour
     public float slowDownDrag;
     private float normalDrag;
     //Components
+
+    //Combo counts
+    private int orbCount = 0;
+    private int killCount = 0;
 
     public Rigidbody myBody;
     
@@ -423,6 +425,7 @@ public class Movement : MonoBehaviour
         gameObject.layer = 8;
 
         orbCount = 0;
+        killCount = 0;
     }
 
     //Cool down for exhaustion from dash
@@ -504,16 +507,30 @@ public class Movement : MonoBehaviour
         myBody.drag = normalDrag;
     }
 
+    public void KillCombo()
+    {
+        if (++killCount >= 2)
+        {
+            ComboTextManager ComboObject = GameObject.FindObjectOfType<ComboTextManager>();
+            if (ComboObject)
+            {
+                ComboObject.CreateComboText(1);
+                GameObject.FindObjectOfType<PlayerManager>().coolCombo++;
+                killCount = 0;
+            }
+
+        }
+    }
+
     public void OrbCombo()
     {
-        //Debug.Log("Hes");
-
         if(++orbCount >= 10)
         {
             ComboTextManager ComboObject = GameObject.FindObjectOfType<ComboTextManager>();
             if(ComboObject)
             {
-                ComboObject.CreateComboText(0);
+                ComboObject.CreateComboText(1);
+                GameObject.FindObjectOfType<PlayerManager>().coolCombo++;
                 orbCount = 0;
             }
             
