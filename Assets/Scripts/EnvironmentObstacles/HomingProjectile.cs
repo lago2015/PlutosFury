@@ -60,8 +60,12 @@ public class HomingProjectile : MonoBehaviour {
         if (timeToLerp)
         {
             scaleCovered = (Time.time - startTime) * lerpSpeed;
-            
             ObjectToScale.transform.localScale = Vector3.Lerp(currentScale, scaleToVector, scaleCovered);
+            if(ObjectToScale.transform.localScale==scaleToVector)
+            {
+                timeToLerp = false;
+                enabled = false;
+            }
         }
         else if (ShouldMove)
         {

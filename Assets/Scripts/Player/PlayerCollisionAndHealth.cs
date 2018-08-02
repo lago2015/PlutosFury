@@ -41,6 +41,7 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
     public float obstacleBump = 20f;
     public float explosionBump = 50f;
     public float soccerKnockback = 50f;
+    private Vector3 direction;
     //bools
     private bool ShouldDash;
 
@@ -285,7 +286,9 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
         if (curTag == "BigAsteroid")
         {
             myBody.velocity = Vector3.zero;
-            myBody.AddForce(c.contacts[0].normal * OrbBump, ForceMode.VelocityChange);
+            direction = c.transform.position - transform.position;
+            direction = direction.normalized;
+            myBody.AddForce(-direction * OrbBump);
             if (audioScript)
             {
                 audioScript.AsteroidBounce(transform.position);
@@ -300,8 +303,9 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
             if (isDashing())
             {
                 myBody.velocity = Vector3.zero;
-                myBody.AddForce(c.contacts[0].normal * wallBump, ForceMode.VelocityChange);
-
+                direction = c.transform.position - transform.position;
+                direction = direction.normalized;
+                myBody.AddForce(-direction * wallBump);
             }
         }
         else if (curTag == "BreakableWall")
@@ -317,7 +321,9 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
 
             }
             myBody.velocity = Vector3.zero;
-            myBody.AddForce(c.contacts[0].normal * OrbBump, ForceMode.VelocityChange);
+            direction = c.transform.position - transform.position;
+            direction = direction.normalized;
+            myBody.AddForce(-direction * OrbBump);
 
         }
         else if (curTag == "MoonBall")
@@ -338,7 +344,9 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
             }
 
             myBody.velocity = Vector3.zero;
-            myBody.AddForce(c.contacts[0].normal * OrbBump, ForceMode.VelocityChange);
+            direction = c.transform.position - transform.position;
+            direction = direction.normalized;
+            myBody.AddForce(-direction * OrbBump);
             if (ShouldDash)
             {
                 if (!moonBallHitEffect.activeSelf)
@@ -359,8 +367,9 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
         else if (curTag == "EnvironmentObstacle" || curTag == "ShatterPiece")
         {
             myBody.velocity = Vector3.zero;
-            myBody.AddForce(c.contacts[0].normal * obstacleBump, ForceMode.VelocityChange);
-
+            direction = c.transform.position - transform.position;
+            direction = direction.normalized;
+            myBody.AddForce(-direction * obstacleBump);
             if (!isDamaged)
             {
                 WallHealth healthScript = c.gameObject.GetComponent<WallHealth>();
@@ -390,15 +399,17 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
         else if (curTag == "Obstacle" || curTag=="Planet")
         {
 
-            if (c.transform.name != "Seeker")
-            {
-                myBody.AddForce(c.contacts[0].normal * obstacleBump, ForceMode.VelocityChange);
-            }
+            direction = c.transform.position - transform.position;
+            direction = direction.normalized;
+            myBody.AddForce(-direction * obstacleBump);
+            //myBody.AddForce(c.contacts[0].normal * obstacleBump, ForceMode.VelocityChange);
 
         }
         else if (curTag == "Neptune")
         {
-            myBody.AddForce(c.contacts[0].normal * obstacleBump * 30, ForceMode.VelocityChange);
+            direction = c.transform.position - transform.position;
+            direction = direction.normalized;
+            myBody.AddForce(-direction * obstacleBump*30);
             ShouldDash = moveScript.DashStatus();
             if (!ShouldDash)
             {

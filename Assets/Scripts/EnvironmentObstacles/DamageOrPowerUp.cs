@@ -125,12 +125,6 @@ public class DamageOrPowerUp : MonoBehaviour {
             {
                 if (!col.isTrigger)
                 {
-                    if(PlayerMoveScript)
-                    {
-                        PlayerMoveScript.KnockbackPlayer(col.ClosestPoint(col.gameObject.transform.position));
-                    }
-                    
-
                     ApplyEffect();
                 }
             }
