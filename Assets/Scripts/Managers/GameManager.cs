@@ -123,7 +123,7 @@ public class GameManager : MonoBehaviour
                 StartCoroutine(GameOver());
 
                 //reset health otherwise
-                ScoreManager.HealthChange(0);
+                ScoreManager.DefaultHealth();
             }
         }
 

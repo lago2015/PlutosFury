@@ -21,7 +21,14 @@ public class PlayerManager : MonoBehaviour {
     public int coolCombo;
     public int awesomeCombo;
     
-    public int CurrentHealth() { return playerHealth; }
+    public int CurrentHealth()
+    {
+        if(playerHealth<1)
+        {
+            playerHealth = 1;
+        }
+        return playerHealth;
+    }
     public int ScoreInLevel() { return OrbsObtainedInLevel; }
 
 	// Use this for initialization
@@ -53,7 +60,7 @@ public class PlayerManager : MonoBehaviour {
 
     public void SaveHealth()
     {
-        if (playerHealth > 0)
+        if (playerHealth > 1)
         {
             PlayerPrefs.SetInt("healthPref", playerHealth);
         }
@@ -65,30 +72,15 @@ public class PlayerManager : MonoBehaviour {
         playerHealth = newHealth;
         if(playerHealth==-1)
         {
-            DefaultHealth();
+            playerHealth = 0;
         }
 
     }
-
-    //run this function during game over
-    /*public void SaveScore(bool isGameOver)
-    {
-        if(isGameOver)
-        {
-            OrbsObtainedTotal += OrbGameoverReward;
-            PlayerPrefs.SetInt("scorePref", OrbsObtainedTotal);
-        }
-        else
-        {
-            OrbsObtainedTotal += OrbsObtainedInLevel;
-            PlayerPrefs.SetInt("scorePref", OrbsObtainedTotal);
-        }
-    }
-    */
+    
     //For game over and about to get into game over to ensure health is 0
     public void DefaultHealth()
     {
-        PlayerPrefs.SetInt("healthPref", 0);
+        PlayerPrefs.SetInt("healthPref", 1);
     }
 
     
