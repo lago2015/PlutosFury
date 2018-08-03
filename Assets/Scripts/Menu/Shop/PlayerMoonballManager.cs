@@ -19,6 +19,11 @@ public class PlayerMoonballManager : MonoBehaviour {
 
     private void Awake()
     {
+        CheckBallShop();
+    }
+
+    public void CheckBallShop()
+    {
         //get current heart container saved
         curMoonballContainer = PlayerPrefs.GetInt("CurAddtionalBalls");
         //Get current hearts saved
@@ -70,16 +75,15 @@ public class PlayerMoonballManager : MonoBehaviour {
         //notEnoughOrbsText = GameObject.FindGameObjectWithTag("Respawn").GetComponent<NotEnoughOrbsAnimation>();
     }
 
-
     //function to buy a heart container
     public void BuyAMoonballContainer()
     {
         //get orb reference then see if player has enough to buy
         curOrbs = PlayerPrefs.GetInt("scorePref");
-        if (curOrbs >= heartContainerPrices[curMoonballContainer])
+        if (curOrbs >= heartContainerPrices[curMoonballContainer-1])
         {
             //update orb amount then save
-            curOrbs -= heartContainerPrices[curMoonballContainer];
+            curOrbs -= heartContainerPrices[curMoonballContainer-1];
             PlayerPrefs.SetInt("scorePref", curOrbs);
             //up heart container
             curMoonballContainer++;

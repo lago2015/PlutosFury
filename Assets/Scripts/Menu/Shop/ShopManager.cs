@@ -24,6 +24,13 @@ public class ShopManager : MonoBehaviour {
         }
     }
 
+    public void CheckItems()
+    {
+        playerShopManager.CheckPlayerShop();
+        moonballManager.CheckBallShop();
+        moonballUpgradeManager.CheckUpgrades();
+    }
+
     public void BuyItem()
     {
        switch (curItem)

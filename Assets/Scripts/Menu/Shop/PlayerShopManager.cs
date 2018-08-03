@@ -19,20 +19,25 @@ public class PlayerShopManager : MonoBehaviour
     private GameObject animatorObject;
     private void Awake()
     {
+        CheckPlayerShop();
+    }
+
+    public void CheckPlayerShop()
+    {
         //get current heart container saved
         curHeartContainer = PlayerPrefs.GetInt("CurAddtionalHearts");
         //Get current hearts saved
         curHeartIndex = PlayerPrefs.GetInt("healthPref");
         orbTextScript = GameObject.FindGameObjectWithTag("Finish").GetComponent<UpdateOrbAmount>();
         //ensure health isnt greater than container
-        if(curHeartIndex>curHeartContainer)
+        if (curHeartIndex > curHeartContainer)
         {
             curHeartIndex = curHeartContainer;
             PlayerPrefs.GetInt("healthPref", curHeartIndex);
         }
 
         //enable amount of available heart containers the player has in saved file
-        for (int i = 0; i <= HeartImageContainer.Length-1; i++)
+        for (int i = 0; i <= HeartImageContainer.Length - 1; i++)
         {
             if (i <= curHeartContainer)
             {
@@ -44,7 +49,7 @@ public class PlayerShopManager : MonoBehaviour
             }
         }
         //same idea as previous loop just for current number of hearts player has
-        for(int i = 0; i <= CurrentHeartSavedContainer.Length-1; i++)
+        for (int i = 0; i <= CurrentHeartSavedContainer.Length - 1; i++)
         {
             if (i <= curHeartIndex)
             {
@@ -69,7 +74,8 @@ public class PlayerShopManager : MonoBehaviour
             BuyHeartContainerButton.interactable = false;
         }
     }
-    //Reset all player preferences for testing***************
+
+    //Reset all player preferences for new game
     public void ResetValues()
     {
         PlayerPrefs.SetInt("CurAddtionalHearts", 1);
@@ -88,6 +94,8 @@ public class PlayerShopManager : MonoBehaviour
         PlayerPrefs.SetInt("MoonballUpgrade1", 0);
         PlayerPrefs.SetInt(0 + "Unlocked", 2);
         PlayerPrefs.SetInt(1 + "Unlocked", 7);
+        PlayerPrefs.SetInt("scorePref", 100);
+        orbTextScript.ChangeOrbAmount();
     }
 
     public void AddOrbs()

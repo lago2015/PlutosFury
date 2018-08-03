@@ -28,6 +28,11 @@ public class SkinShopManager : MonoBehaviour
     
     private void Awake()
     {
+        CheckSkins();
+    }
+
+    public void CheckSkins()
+    {
         skin1Bought = PlayerPrefs.GetInt("skin1");
         skin2Bought = PlayerPrefs.GetInt("skin2");
         skin3Bought = PlayerPrefs.GetInt("skin3");
@@ -113,11 +118,10 @@ public class SkinShopManager : MonoBehaviour
 
             BuySkinsButtons[7].interactable = true;
         }
-        
-        
+
+
     }
 
-    
     public void BuySkin(int curSkin)
     {
         curOrbs = PlayerPrefs.GetInt("scorePref");
