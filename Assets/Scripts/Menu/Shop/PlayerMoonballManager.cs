@@ -14,14 +14,24 @@ public class PlayerMoonballManager : MonoBehaviour {
     public Button BuyMoonballButton;
     public Button BuyMoonballContainerButton;
     private UpdateOrbAmount orbTextScript;
-    private NotEnoughOrbsAnimation notEnoughOrbsText;
-    
-
+    [HideInInspector]
+    public bool canBuyBall;
+    [HideInInspector]
+    public bool canBuyBallContainer;
     private void Awake()
     {
         CheckBallShop();
     }
-
+    public int curBallPrice()
+    {
+        return perMoonballPrice;
+    }
+    public int curBallContainerPrice()
+    {
+        //get current heart container saved
+        curMoonballContainer = PlayerPrefs.GetInt("CurAddtionalBalls");
+        return heartContainerPrices[curMoonballContainer - 1];
+    }
     public void CheckBallShop()
     {
         //get current heart container saved
@@ -61,18 +71,21 @@ public class PlayerMoonballManager : MonoBehaviour {
         }
         if (curMoonballIndex >= curMoonballContainer)
         {
-            BuyMoonballButton.interactable = false;
+            canBuyBall = false;
         }
         else
         {
-            BuyMoonballButton.interactable = true;
+            canBuyBall = true;
         }
         //if capped for heart containers then disable button
         if (curMoonballContainer == 4)
         {
-            BuyMoonballContainerButton.interactable = false;
+            canBuyBallContainer = false;
         }
-        //notEnoughOrbsText = GameObject.FindGameObjectWithTag("Respawn").GetComponent<NotEnoughOrbsAnimation>();
+        else
+        {
+            canBuyBallContainer = true;
+        }
     }
 
     //function to buy a heart container
@@ -96,19 +109,13 @@ public class PlayerMoonballManager : MonoBehaviour {
             //check if buying a heart button is disabled due to max hearts being bought and re enable the button
             if (BuyMoonballButton.IsInteractable() == false)
             {
-                BuyMoonballButton.interactable = true;
+                canBuyBall = true;
             }
             //if capped for heart containers then disable button
             if (curMoonballContainer ==4)
             {
-                BuyMoonballContainerButton.interactable = false;
+                canBuyBallContainer = false;
             }
-        }
-        //otherwise do not available sound and text pop up saying not enough orbs
-        else
-        {
-            //notEnoughOrbsText.PlayAnimation();
-
         }
     }
 
@@ -130,21 +137,10 @@ public class PlayerMoonballManager : MonoBehaviour {
                 PlayerPrefs.SetInt("moonBallAmount", curMoonballIndex);
 
             }
-            else
-            {
-                //notEnoughOrbsText.PlayAnimation();
-
-            }
             if (curMoonballIndex == curMoonballContainer)
             {
-                BuyMoonballButton.interactable = false;
+                canBuyBall = false;
             }
-        }
-        //otherwise do not available sound and text pop up saying not enough orbs
-        else
-        {
-            //notEnoughOrbsText.PlayAnimation();
-
         }
 
 

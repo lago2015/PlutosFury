@@ -24,7 +24,7 @@ public class MoonBall : MonoBehaviour
     public GameObject gravityWell;
     private GameObject newGravWell;
     public bool GravWellEnabled;
-    public bool CheckUpgrades = false;
+    
     private int upgrade1Index;
     private int upgrade2Index;
     private Rigidbody rb;
@@ -32,26 +32,24 @@ public class MoonBall : MonoBehaviour
 
     private void Awake()
     {
-        if (CheckUpgrades)
+        hitCount = PlayerPrefs.GetInt("moonballHits");
+        upgrade1Index = PlayerPrefs.GetInt("MoonballUpgrade0");
+        upgrade2Index = PlayerPrefs.GetInt("MoonballUpgrade1");
+        if (upgrade1Index == 1)
         {
-            upgrade1Index = PlayerPrefs.GetInt("MoonballUpgrade0");
-            upgrade2Index = PlayerPrefs.GetInt("MoonballUpgrade1");
-            if (upgrade1Index == 1)
-            {
-                isShockWave = true;
-            }
-            else
-            {
-                isShockWave = false;
-            }
-            if (upgrade2Index == 1)
-            {
-                GravWellEnabled = true;
-            }
-            else
-            {
-                GravWellEnabled = false;
-            }
+            isShockWave = true;
+        }
+        else
+        {
+            isShockWave = false;
+        }
+        if (upgrade2Index == 1)
+        {
+            GravWellEnabled = true;
+        }
+        else
+        {
+            GravWellEnabled = false;
         }
     }
 
@@ -123,7 +121,7 @@ public class MoonBall : MonoBehaviour
             }
             else
             {
-                if (--hitCount >= 0)
+                if (--hitCount >= -1)
                 {
                     Bounce(col);
                 }

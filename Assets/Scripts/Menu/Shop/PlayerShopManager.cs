@@ -15,11 +15,23 @@ public class PlayerShopManager : MonoBehaviour
     public Button BuyHeartButton;
     public Button BuyHeartContainerButton;
     private UpdateOrbAmount orbTextScript;
-    private bool isPlaying;
-    private GameObject animatorObject;
+    [HideInInspector]
+    public bool canBuyHeart;
+    [HideInInspector]
+    public bool canBuyContainer;
     private void Awake()
     {
         CheckPlayerShop();
+    }
+    public int CurHeartPrice()
+    {
+        return perHeartPrice;
+    }
+    public int CurHeartContainerPrice()
+    {
+        //get current heart container saved
+        curHeartContainer = PlayerPrefs.GetInt("CurAddtionalHearts");
+        return heartContainerPrices[curHeartContainer - 1];
     }
 
     public void CheckPlayerShop()
@@ -62,16 +74,20 @@ public class PlayerShopManager : MonoBehaviour
         }
         if (curHeartIndex == curHeartContainer)
         {
-            BuyHeartButton.interactable = false;
+            canBuyHeart = false;
         }
         else
         {
-            BuyHeartButton.interactable = true;
+            canBuyHeart = true;
         }
         //if capped for heart containers then disable button
         if (curHeartContainer == 4)
         {
-            BuyHeartContainerButton.interactable = false;
+            canBuyContainer = false;
+        }
+        else
+        {
+            canBuyContainer = true;
         }
     }
 
@@ -82,16 +98,15 @@ public class PlayerShopManager : MonoBehaviour
         PlayerPrefs.SetInt("healthPref", 1);
         PlayerPrefs.SetInt("CurAddtionalBalls", 1);
         PlayerPrefs.SetInt("moonBallAmount", 0);
-        PlayerPrefs.SetInt("skin0", 0);
         PlayerPrefs.SetInt("skin1", 0);
         PlayerPrefs.SetInt("skin2", 0);
         PlayerPrefs.SetInt("skin3", 0);
         PlayerPrefs.SetInt("skin4", 0);
         PlayerPrefs.SetInt("skin5", 0);
         PlayerPrefs.SetInt("skin6", 0);
-        PlayerPrefs.SetInt("skin7", 0);
         PlayerPrefs.SetInt("MoonballUpgrade0", 0);
         PlayerPrefs.SetInt("MoonballUpgrade1", 0);
+        PlayerPrefs.SetInt("moonballHits", 0);
         PlayerPrefs.SetInt(0 + "Unlocked", 2);
         PlayerPrefs.SetInt(1 + "Unlocked", 7);
         PlayerPrefs.SetInt("scorePref", 100);
@@ -125,20 +140,15 @@ public class PlayerShopManager : MonoBehaviour
             //save amount of additional hearts player has bought
             PlayerPrefs.SetInt("CurAddtionalHearts", curHeartContainer);
             //check if buying a heart button is disabled due to max hearts being bought and re enable the button
-            if (BuyHeartButton.IsInteractable() == false)
+            if (canBuyHeart== false)
             {
-                BuyHeartButton.interactable = true;
+                canBuyHeart = true;
             }
             //if capped for heart containers then disable button
             if (curHeartContainer == 4)
             {
-                BuyHeartContainerButton.interactable = false;
+                canBuyContainer = false;
             }
-        }
-        //otherwise do not available sound and text pop up saying not enough orbs
-        else
-        {
-
         }
 
 
@@ -162,23 +172,11 @@ public class PlayerShopManager : MonoBehaviour
                 PlayerPrefs.SetInt("healthPref", curHeartIndex);
 
             }
-            else
-            {
-                //notEnoughOrbsText.PlayAnimation();
-
-            }
-
             if (curHeartIndex == curHeartContainer)
             {
-                BuyHeartButton.interactable = false;
+                canBuyHeart = false;
             }
         }
-        //otherwise do not available sound and text pop up saying not enough orbs
-        else
-        {
-
-        }
-
 
 
     }

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class MoonballManager : MonoBehaviour {
 
+
     private int moonballNum;
     private int moonballMaxContainer;
     private HUDManager HUDScript;
@@ -20,6 +21,7 @@ public class MoonballManager : MonoBehaviour {
         moonballMaxContainer = 2;
         moonballMaxContainer += PlayerPrefs.GetInt("CurAddtionalBalls");
         moonballNum = PlayerPrefs.GetInt("moonBallAmount");
+
         bonusController = GetComponent<ExPointController>();
 
     }

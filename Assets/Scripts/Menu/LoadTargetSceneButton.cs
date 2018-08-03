@@ -68,14 +68,15 @@ public class LoadTargetSceneButton : MonoBehaviour {
 			Debug.Log ("Scene not loaded properly");
 			return;
 		}
-       
-        
+
+        PlayerPrefs.SetInt("levelSelect", 1);
         LoadingScreenManager.LoadScene (num);
         Time.timeScale = 1;
     }
 
     public void LoadToMainMenu()
     {
+
         SceneManager.LoadScene(0);
     }
 }

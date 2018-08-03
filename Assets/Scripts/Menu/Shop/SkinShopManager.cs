@@ -21,8 +21,7 @@ public class SkinShopManager : MonoBehaviour
     private int moonSkin2;
     private int moonSkin3;
     private int curOrbs;
-    public int PriceOfSkin = 1000;
-    public Button[] BuySkinsButtons;
+    public int[] PriceOfSkin;
     private UpdateOrbAmount orbTextScript;
     
     
@@ -31,117 +30,98 @@ public class SkinShopManager : MonoBehaviour
         CheckSkins();
     }
 
+    public bool checkSkinBought(int curSkin)
+    {
+        switch(curSkin)
+        {
+            case 0:
+                skin1Bought = PlayerPrefs.GetInt("skin1");
+
+                if (skin1Bought==1)
+                {
+                    return true;
+                }
+                else
+                    return false;
+            case 1:
+                skin2Bought = PlayerPrefs.GetInt("skin2");
+
+                if (skin2Bought == 1)
+                {
+                    return true;
+                }
+                else
+                    return false;
+            case 2:
+                skin3Bought = PlayerPrefs.GetInt("skin3");
+
+                if (skin3Bought == 1)
+                {
+                    return true;
+                }
+                else
+                    return false;
+            case 3:
+                moonSkin1 = PlayerPrefs.GetInt("skin4");
+
+                if (moonSkin1 == 1)
+                {
+                    return true;
+                }
+                else
+                    return false;
+            case 4:
+                moonSkin2 = PlayerPrefs.GetInt("skin5");
+
+                if (moonSkin2 == 1)
+                {
+                    return true;
+                }
+                else
+                    return false;
+            case 5:
+                moonSkin3 = PlayerPrefs.GetInt("skin6");
+
+                if (moonSkin3 == 1)
+                {
+                    return true;
+                }
+                else
+                    return false;
+        }
+        return false;
+    }
+
     public void CheckSkins()
     {
         skin1Bought = PlayerPrefs.GetInt("skin1");
         skin2Bought = PlayerPrefs.GetInt("skin2");
         skin3Bought = PlayerPrefs.GetInt("skin3");
 
-        moonSkin1 = PlayerPrefs.GetInt("skin5");
-        moonSkin2 = PlayerPrefs.GetInt("skin6");
-        moonSkin3 = PlayerPrefs.GetInt("skin7");
+        moonSkin1 = PlayerPrefs.GetInt("skin4");
+        moonSkin2 = PlayerPrefs.GetInt("skin5");
+        moonSkin3 = PlayerPrefs.GetInt("skin6");
         orbTextScript = GameObject.FindGameObjectWithTag("Finish").GetComponent<UpdateOrbAmount>();
 
 
-        BuySkinsButtons[0].interactable = false;
-
-        //if player has bought the skin then disable button
-        if (skin1Bought == 1)
-        {
-
-            BuySkinsButtons[1].interactable = false;
-        }
-        //otherwise make it available to purchase
-        else
-        {
-            BuySkinsButtons[1].interactable = true;
-        }
-
-        if (skin2Bought == 1)
-        {
-
-            BuySkinsButtons[2].interactable = false;
-        }
-        else
-        {
-
-
-            BuySkinsButtons[2].interactable = true;
-        }
-
-        if (skin3Bought == 1)
-        {
-
-            BuySkinsButtons[3].interactable = false;
-        }
-        else
-        {
-
-
-            BuySkinsButtons[3].interactable = true;
-        }
-        //****************Moonball skins**********************
-
-        BuySkinsButtons[4].interactable = false;
-
-
-        if (moonSkin1 == 1)
-        {
-
-            BuySkinsButtons[5].interactable = false;
-        }
-        else
-        {
-
-
-            BuySkinsButtons[5].interactable = true;
-        }
-        if (moonSkin2 == 1)
-        {
-
-            BuySkinsButtons[6].interactable = false;
-        }
-        else
-        {
-
-
-            BuySkinsButtons[6].interactable = true;
-        }
-        if (moonSkin3 == 1)
-        {
-
-            BuySkinsButtons[7].interactable = false;
-        }
-        else
-        {
-
-
-            BuySkinsButtons[7].interactable = true;
-        }
-
+        
 
     }
-
+    public int CurPrice(int curSkin)
+    {
+        return PriceOfSkin[curSkin];
+    }
     public void BuySkin(int curSkin)
     {
         curOrbs = PlayerPrefs.GetInt("scorePref");
         
-        if(curOrbs>=PriceOfSkin && curSkin != -1)
+        if(curOrbs>=PriceOfSkin[curSkin] && curSkin != -1)
         {
             PlayerPrefs.SetInt("skin" + curSkin, 1);
 
-            BuySkinsButtons[curSkin].interactable = false;
-            curOrbs -= PriceOfSkin;
+            curOrbs -= PriceOfSkin[curSkin];
             PlayerPrefs.SetInt("scorePref", curOrbs);
             orbTextScript.ChangeOrbAmount();
-        }
-        //otherwise do not available sound and text pop up saying not enough orbs
-        else
-        {
-
-            //notEnoughOrbsText.PlayAnimation();
-
-
         }
     }
     

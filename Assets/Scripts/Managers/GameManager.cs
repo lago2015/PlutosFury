@@ -40,6 +40,11 @@ public class GameManager : MonoBehaviour
     private GameObject CanvasManager;
     private CanvasToggle canvasScript;
 
+
+    private void OnApplicationQuit()
+    {
+        PlayerPrefs.SetInt("levelSelect", 0);
+    }
     void Awake()
     {
         //30 fps set rate
