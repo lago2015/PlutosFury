@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour
     MoonballManager moonBallManScript;
     PlayerCollisionAndHealth playerCollisionScript;
     GameObject audioObject;
-    AudioController audioScript;
+    BackgroundMusicManager audioScript;
     
     private GameObject scoreObject;
     PlayerManager ScoreManager;
@@ -64,7 +64,7 @@ public class GameManager : MonoBehaviour
         if (audioManager)
         {
             audioObject = Instantiate(audioManager, Vector3.zero, Quaternion.identity);
-            audioScript = audioObject.GetComponent<AudioController>();
+            audioScript = GameObject.FindGameObjectWithTag("Respawn").GetComponent<BackgroundMusicManager>();
         }
         InGameCharacterManager charManager = transform.GetChild(0).GetComponent<InGameCharacterManager>();
         //Spawn all player components
@@ -187,14 +187,9 @@ public class GameManager : MonoBehaviour
 
     void DelayVoiceThenPlayMusic()
     {
-        //yield return new WaitForSeconds(delayVoice);
+        
         audioScript.GameOverVoiceCue();
-        if (SceneManager.GetActiveScene().buildIndex < 7)
-        {
-            //delayMusic = audioScript.gameOverVoiceSource.clip.length;
-            //yield return new WaitForSeconds(delayMusic);
-            audioScript.GameOver(transform.position);
-        }
+        
     }
 
     //same kind of functionality as game over except for a win condition

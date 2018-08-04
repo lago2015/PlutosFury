@@ -5,22 +5,7 @@ public class AudioController : MonoBehaviour {
     // Singleton instance 
     [SerializeField]
     public static AudioController instance;
-    [SerializeField]
-    [Header("Background-WinMusic")]
-    public AudioSource BgMusicWinSource;
-    [SerializeField] 
-    [Header("Intro-Ready")]
-    public AudioSource ReadyAudioSource;
-
-    [SerializeField]
-    [Header("Intro-Go")]
-    public AudioSource GoAudioSource;
-    [SerializeField]
-    [Header("Complete Level Voice Cue")]
-    public AudioSource CompleteSource;
-    [SerializeField]
-    [Header("Game Over Voice Cue")]
-    public AudioSource gameOverVoiceSource;
+    
     [SerializeField]
     [Header("Pluto Hit")]
     public AudioSource plutoHitSource;
@@ -78,202 +63,8 @@ public class AudioController : MonoBehaviour {
     [Header("AsteroidBounce")]
     public AudioSource asteroidBounce;
     public float asteroidBounceDelay = 0.5f;
-    [SerializeField]
-    //********UI**************
-    [Header("GameOver")]
-    public AudioSource GameOverSource;
-    public float GameOverDelay = 0.5f;
-
-    [SerializeField]
-    //current object to transfer to be a child 
-    private GameObject curObject;
     
-    //crazy idea to create audio prefabs on awake
-    //private void Awake()
-    //{
-    //    if(BgMusicSource)
-    //    {
-    //        curObject = Instantiate(BgMusicSource.gameObject);
-    //        BgMusicSource = curObject.GetComponent<AudioSource>();
-    //        curObject.transform.parent = transform;
-    //        curObject = null;
-    //    }
-    //    if(BgMusicWinSource)
-    //    {
-    //        curObject = Instantiate(BgMusicWinSource.gameObject);
-    //        BgMusicWinSource = curObject.GetComponent<AudioSource>();
-    //        curObject.transform.parent = transform;
-    //        curObject = null;
-    //    }
-        
-    //    if (ReadyAudioSource)
-    //    {
-    //        curObject = Instantiate(ReadyAudioSource.gameObject);
-    //        ReadyAudioSource = curObject.GetComponent<AudioSource>();
-
-    //        curObject.transform.parent = transform;
-    //        curObject = null;
-    //    }
-    //    if (GoAudioSource)
-    //    {
-    //        curObject = Instantiate(GoAudioSource.gameObject);
-    //        GoAudioSource = curObject.GetComponent<AudioSource>();
-
-    //        curObject.transform.parent = transform;
-    //        curObject = null;
-    //    }
-    //    if (CompleteSource)
-    //    {
-    //        curObject = Instantiate(CompleteSource.gameObject);
-    //        CompleteSource = curObject.GetComponent<AudioSource>();
-
-    //        curObject.transform.parent = transform;
-    //        curObject = null;
-    //    }
-    //    if (gameOverVoiceSource)
-    //    {
-    //        curObject = Instantiate(gameOverVoiceSource.gameObject);
-    //        gameOverVoiceSource = curObject.GetComponent<AudioSource>();
-
-    //        curObject.transform.parent = transform;
-    //        curObject = null;
-    //    }
-    //    if (plutoHitSource)
-    //    {
-    //        curObject = Instantiate(plutoHitSource.gameObject);
-    //        plutoHitSource = curObject.GetComponent<AudioSource>();
-
-    //        curObject.transform.parent = transform;
-    //        curObject = null;
-    //    }
-    //    if (asteroidAbsorbedSrc)
-    //    {
-    //        curObject = Instantiate(asteroidAbsorbedSrc.gameObject);
-    //        asteroidAbsorbedSrc = curObject.GetComponent<AudioSource>();
-
-    //        curObject.transform.parent = transform;
-    //        curObject = null;
-    //    }
-    //    if (plutoDeathSource)
-    //    {
-    //        curObject = Instantiate(plutoDeathSource.gameObject);
-    //        plutoDeathSource = curObject.GetComponent<AudioSource>();
-
-    //        curObject.transform.parent = transform;
-    //        curObject = null;
-    //    }
-    //    if (plutoDash1)
-    //    {
-    //        curObject = Instantiate(plutoDash1.gameObject);
-    //        plutoDash1 = curObject.GetComponent<AudioSource>();
-
-    //        curObject.transform.parent = transform;
-    //        curObject = null;
-    //    }
-    //    if (plutoHealthUp)
-    //    {
-    //        curObject = Instantiate(plutoHealthUp.gameObject);
-    //        plutoHealthUp = curObject.GetComponent<AudioSource>();
-
-    //        curObject.transform.parent = transform;
-    //        curObject = null;
-    //    }
-    //    if (RogueDashSource)
-    //    {
-    //        curObject = Instantiate(RogueDashSource.gameObject);
-    //        RogueDashSource = curObject.GetComponent<AudioSource>();
-
-    //        curObject.transform.parent = transform;
-    //        curObject = null;
-    //    }
-    //    if (RogueDeathSrc)
-    //    {
-    //        curObject = Instantiate(RogueDeathSrc.gameObject);
-    //        RogueDeathSrc = curObject.GetComponent<AudioSource>();
-
-    //        curObject.transform.parent = transform;
-    //        curObject = null;
-    //    }
-    //    if (RogueSpottedSrc)
-    //    {
-    //        curObject = Instantiate(RogueSpottedSrc.gameObject);
-    //        RogueSpottedSrc = curObject.GetComponent<AudioSource>();
-    //        curObject.transform.parent = transform;
-    //        curObject = null;
-    //    }
-    //    if (shatterChargeSrc)
-    //    {
-    //        curObject = Instantiate(shatterChargeSrc.gameObject);
-    //        shatterChargeSrc = curObject.GetComponent<AudioSource>();
-
-    //        curObject.transform.parent = transform;
-    //        curObject = null;
-    //    }
-    //    if (shatterExplosionSrc)
-    //    {
-    //        curObject = Instantiate(shatterExplosionSrc.gameObject);
-    //        shatterExplosionSrc = curObject.GetComponent<AudioSource>();
-
-    //        curObject.transform.parent = transform;
-    //        curObject = null;
-    //    }
-    //    if (wallBounceSource)
-    //    {
-    //        curObject = Instantiate(wallBounceSource.gameObject);
-    //        wallBounceSource = curObject.GetComponent<AudioSource>();
-
-    //        curObject.transform.parent = transform;
-    //        curObject = null;
-    //    }
-    //    if (DestrcSmllSource)
-    //    {
-    //        curObject = Instantiate(shatterExplosionSrc.gameObject);
-    //        DestrcSmllSource = curObject.GetComponent<AudioSource>();
-
-    //        curObject.transform.parent = transform;
-    //        curObject = null;
-    //    }
-    //    if (WormholeEnterSource)
-    //    {
-    //        curObject = Instantiate(shatterExplosionSrc.gameObject);
-    //        WormholeEnterSource = curObject.GetComponent<AudioSource>();
-
-    //        curObject.transform.parent = transform;
-    //        curObject = null;
-    //    }
-    //    if (SpikeHitPlutoSource)
-    //    {
-    //        curObject = Instantiate(SpikeHitPlutoSource.gameObject);
-    //        SpikeHitPlutoSource = curObject.GetComponent<AudioSource>();
-
-    //        curObject.transform.parent = transform;
-    //        curObject = null;
-    //    }
-    //    if (asteroidExplosion)
-    //    {
-    //        curObject = Instantiate(asteroidExplosion.gameObject);
-    //        asteroidExplosion = curObject.GetComponent<AudioSource>();
-
-    //        curObject.transform.parent = transform;
-    //        curObject = null;
-    //    }
-    //    if (asteroidBounce)
-    //    {
-    //        curObject = Instantiate(asteroidBounce.gameObject);
-    //        asteroidBounce = curObject.GetComponent<AudioSource>();
-
-    //        curObject.transform.parent = transform;
-    //        curObject = null;
-    //    }
-    //    if (GameOverSource)
-    //    {
-    //        curObject = Instantiate(GameOverSource.gameObject);
-    //        GameOverSource = curObject.GetComponent<AudioSource>();
-
-    //        curObject.transform.parent = transform;
-    //        curObject = null;
-    //    }
-    //}
+    
 
     // Use this for initialization
     void Start () {
@@ -281,64 +72,6 @@ public class AudioController : MonoBehaviour {
 	}
 	
 	
-    public void BackgroundWinMusic()
-    {
-        if (BgMusicWinSource != null)
-        {
-            //BgMusicSource.Stop();
-            BgMusicWinSource.priority = 200;
-            BgMusicWinSource.volume = 0.25f;
-            BgMusicWinSource.minDistance = 1000f;
-            BgMusicWinSource.loop = true;
-            BgMusicWinSource.Play();
-        }
-    }
-
-    
-    public void StartReadyIntro()
-    {
-        if (ReadyAudioSource != null)
-        {
-            ReadyAudioSource.priority = 200;
-            ReadyAudioSource.volume = 1f;
-            ReadyAudioSource.minDistance = 1000f;
-            ReadyAudioSource.loop = false;
-            ReadyAudioSource.Play();
-        }
-    }
-    public void StartGoIntro()
-    {
-        if (GoAudioSource != null)
-        {
-            GoAudioSource.priority = 200;
-            GoAudioSource.volume = 1f;
-            GoAudioSource.minDistance = 1000f;
-            GoAudioSource.loop = false;
-            GoAudioSource.Play();
-        }
-    }
-    public void CompleteLevel()
-    {
-        if (CompleteSource != null)
-        {
-            CompleteSource.priority = 200;
-            CompleteSource.volume = 1f;
-            CompleteSource.minDistance = 1000f;
-            CompleteSource.loop = false;
-            CompleteSource.Play();
-        }
-    }
-    public void GameOverVoiceCue()
-    {
-        if (gameOverVoiceSource != null)
-        {
-            gameOverVoiceSource.priority = 200;
-            gameOverVoiceSource.volume = 1f;
-            gameOverVoiceSource.minDistance = 1000f;
-            gameOverVoiceSource.loop = false;
-            gameOverVoiceSource.Play();
-        }
-    }
 
     public void PlutoHit(Vector3 pos)
     {
@@ -564,17 +297,7 @@ public class AudioController : MonoBehaviour {
         }
     }
 
-    public void GameOver(Vector3 pos)
-    {
-        if (GameOverSource != null)
-        {
-            GameOverSource.transform.position = pos;
-            GameOverSource.minDistance = 20f;
-            GameOverSource.loop = true;
-            
-            GameOverSource.Play();
-        }
-    }
+    
 
 
 

@@ -16,7 +16,7 @@ public class CanvasToggle : MonoBehaviour {
     public GameObject WinScreenCanvas;
     private WinScreen winScript;
     
-    private AudioController audioScript;
+    private BackgroundMusicManager audioScript;
     public float StartReady=1f;
     public float GoAudioLength=1f;
     public float ReadySpriteFadeIn = 1;
@@ -51,10 +51,10 @@ public class CanvasToggle : MonoBehaviour {
 
     private void Start()
     {
-        GameObject audioObject = GameObject.FindGameObjectWithTag("AudioController");
+        GameObject audioObject = GameObject.FindGameObjectWithTag("Respawn");
         if (audioObject)
         {
-            audioScript = audioObject.GetComponent<AudioController>();
+            audioScript = audioObject.GetComponent<BackgroundMusicManager>();
         }
         playerScript = GameObject.FindGameObjectWithTag("Player").GetComponent<Movement>();
 
@@ -118,6 +118,10 @@ public class CanvasToggle : MonoBehaviour {
         {
             playerScript.ResumePluto();
         }
+        if(audioScript)
+        {
+            audioScript.BackgroundMusic();
+        }
         StartCoroutine(SetSpritesInactive());
     }
 
@@ -132,8 +136,6 @@ public class CanvasToggle : MonoBehaviour {
     //which button to set active(one for going to menu and one to next level
     public void GameEnded(bool isGameOver)
     {
-
-       // hudCanvas.SetActive(false);
 
         if(isGameOver)
         {
