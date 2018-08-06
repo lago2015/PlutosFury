@@ -79,7 +79,7 @@ public class AudioController : MonoBehaviour {
         {
             plutoHitSource.pitch = Random.Range(0.8f, 1f);
             plutoHitSource.volume = Random.Range(0.8f, 1f);
-            plutoHitSource.minDistance = 20f;
+            
             plutoHitSource.loop = false;
             plutoHitSource.Play();
 
@@ -93,7 +93,6 @@ public class AudioController : MonoBehaviour {
         {
             
             asteroidAbsorbedSrc.volume = 0.5f;
-            asteroidAbsorbedSrc.minDistance = 20f;
             asteroidAbsorbedSrc.loop = false;
             asteroidAbsorbedSrc.Play();
 
@@ -106,7 +105,7 @@ public class AudioController : MonoBehaviour {
         if (plutoDash1 != null)
         {
             plutoDash1.transform.position = pos;
-            plutoDash1.minDistance = 20f;
+
             plutoDash1.loop = false;
             plutoDash1.Play();
 
@@ -122,7 +121,6 @@ public class AudioController : MonoBehaviour {
         {
 
             plutoDeathSource.transform.position = pos;
-            plutoDeathSource.minDistance = 20f;
             plutoDeathSource.loop = false;
             plutoDeathSource.Play();
         }
@@ -134,7 +132,6 @@ public class AudioController : MonoBehaviour {
         if (plutoHealthUp != null)
         {
             plutoHealthUp.transform.position = pos;
-            plutoHealthUp.minDistance = 20f;
             plutoHealthUp.loop = false;
             plutoHealthUp.Play();
         }
@@ -145,7 +142,6 @@ public class AudioController : MonoBehaviour {
         if (WormholeEnterSource != null)
         {
             WormholeEnterSource.transform.position = MyPos;
-            WormholeEnterSource.minDistance = 20f;
             WormholeEnterSource.loop = false;
             WormholeEnterSource.Play();
   
@@ -159,7 +155,7 @@ public class AudioController : MonoBehaviour {
         if (RogueDashSource != null)
         {
             RogueDashSource.transform.position = pos;
-            RogueDashSource.minDistance = 20f;
+            
             RogueDashSource.loop = false;
             RogueDashSource.Play();
 
@@ -172,7 +168,7 @@ public class AudioController : MonoBehaviour {
         if (RogueSpottedSrc != null)
         {
             RogueSpottedSrc.transform.position = pos;
-            RogueSpottedSrc.minDistance = 20f;
+            
             RogueSpottedSrc.loop = false;
             RogueSpottedSrc.Play();
 
@@ -186,7 +182,7 @@ public class AudioController : MonoBehaviour {
         if (RogueDeathSrc != null)
         {
             RogueDeathSrc.transform.position = pos;
-            RogueDeathSrc.minDistance = 20f;
+            
             RogueDeathSrc.loop = false;
             RogueDeathSrc.Play();
 
@@ -199,7 +195,7 @@ public class AudioController : MonoBehaviour {
     {
         if (wallBounceSource != null)
         {
-            wallBounceSource.minDistance = 20f;
+            
             wallBounceSource.loop = false;
             wallBounceSource.Play();
         }
@@ -214,7 +210,7 @@ public class AudioController : MonoBehaviour {
         {
             asteroidExplosion.pitch = Random.Range(0.8f, 1f);
             asteroidExplosion.volume = Random.Range(0.8f, 1f);
-            asteroidExplosion.minDistance = 20f;
+            
             asteroidExplosion.loop = false;
             asteroidExplosion.Play();
 
@@ -233,7 +229,7 @@ public class AudioController : MonoBehaviour {
 
             asteroidBounce.pitch = Random.Range(0.8f, 1f);
 
-            asteroidBounce.minDistance = 20f;
+            
             asteroidBounce.loop = false;
             asteroidBounce.Play();
 
@@ -251,7 +247,7 @@ public class AudioController : MonoBehaviour {
             }
             SpikeHitPlutoSource.pitch = Random.Range(0.8f, 1f);
             SpikeHitPlutoSource.volume = Random.Range(0.8f, 1f);
-            SpikeHitPlutoSource.minDistance = 20f;
+            
             SpikeHitPlutoSource.loop = false;
             SpikeHitPlutoSource.Play();
 
@@ -267,7 +263,7 @@ public class AudioController : MonoBehaviour {
 
             shatterExplosionSrc.pitch = Random.Range(0.8f, 1f);
             shatterExplosionSrc.volume = Random.Range(0.8f, 1f);
-            shatterExplosionSrc.minDistance = 20f;
+            
             shatterExplosionSrc.loop = false;
             shatterExplosionSrc.Play();
 
@@ -279,7 +275,7 @@ public class AudioController : MonoBehaviour {
         if (DestrcSmllSource != null)
         {
             DestrcSmllSource.transform.position = pos;
-            DestrcSmllSource.minDistance = 20f;
+            
             DestrcSmllSource.loop = false;
             DestrcSmllSource.Play();
         }
@@ -291,7 +287,7 @@ public class AudioController : MonoBehaviour {
         {
             DestrcSmllSource.transform.position = pos;
             DestrcSmllSource.volume = 0.1f;
-            DestrcSmllSource.minDistance = 10f;
+            
             DestrcSmllSource.loop = false;
             DestrcSmllSource.Play();
         }

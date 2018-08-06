@@ -39,13 +39,13 @@ public class OptionsMenu : MonoBehaviour {
         {
             if (PlayerPrefs.GetInt("godMode") == 1)
             {
-                vHit.isOn = true;
+                iControls.isOn = true;
             }
             else
             {
-                if (vHit)
+                if (iControls)
                 {
-                    vHit.isOn = false;
+                    iControls.isOn = false;
                 }
             }
         }

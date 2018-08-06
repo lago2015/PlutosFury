@@ -8,10 +8,10 @@ public class DetectThenExplode : MonoBehaviour {
     private DamageOrPowerUp damageScript;
     private Rigidbody mybody;
     private AsteroidSpawner orbScript;
-
+    private GameObject explosion;
     private ProjectileMovement rocketScript;
     private bool doOnce;
-
+    private AudioController audioScript;
     public bool isLandmine;
     public int orbDrop = 4;
 
@@ -25,7 +25,10 @@ public class DetectThenExplode : MonoBehaviour {
 
         }
     }
- 
+    private void Start()
+    {
+        audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
+    }
     void OnCollisionEnter(Collision col)
     {
         string CurTag = col.gameObject.tag;
@@ -35,26 +38,17 @@ public class DetectThenExplode : MonoBehaviour {
         {
             if (!doOnce)
             {
-                if (damageScript)
-                {
-                    damageScript.didDamage();
-                }
-
+                
                 col.gameObject.GetComponent<PlayerCollisionAndHealth>().DamagePluto();
-                //col.gameObject.GetComponent<Movement>().KnockbackPlayer(col.contacts[0].point);
                 //Start Explosion
-                TriggeredExplosion();
+                TriggeredExplosion(true);
             }
         }
         else if (CurTag == "BigAsteroid")
         {
             //start explosion
-            TriggeredExplosion();
-            //notify damage script that damage is dealt to asteroid
-            if (damageScript)
-            {
-                damageScript.didDamage();
-            }
+            TriggeredExplosion(false);
+            
             //apply damage to asteroid
             col.gameObject.GetComponent<BigAsteroid>().AsteroidHit(5, false,false);
         }
@@ -65,16 +59,16 @@ public class DetectThenExplode : MonoBehaviour {
                 col.gameObject.GetComponent<WallHealth>().IncrementDamage();
             }
             //start explosion
-            TriggeredExplosion();
+            TriggeredExplosion(false);
         }
         else if(CurTag=="Neptune")
         {
-           TriggeredExplosion();  
+           TriggeredExplosion(false);  
         }
         else if (CurTag == "BreakableWall")
         {
             //start explosion
-            TriggeredExplosion();
+            TriggeredExplosion(false);
         }
         else if(CurTag == "MoonBall")
         {
@@ -87,16 +81,16 @@ public class DetectThenExplode : MonoBehaviour {
 
             }
 
-            TriggeredExplosion();
+            TriggeredExplosion(false);
         }
         else if(CurTag=="Wall")
         {
-            TriggeredExplosion();
+            TriggeredExplosion(false);
     
         }
     }
 
-    public void TriggeredExplosion()
+    public void TriggeredExplosion(bool didDamage)
     {
         if (TriggerCollider)
         {
@@ -106,15 +100,50 @@ public class DetectThenExplode : MonoBehaviour {
         //ensure audio gets played once
         if (!doOnce)
         {
-            //get audio controller and play audio
-            GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>().DestructionSmall(transform.position);
+            if(audioScript)
+            {
+
+                //get audio controller and play audio
+                audioScript.DestructionSmall(transform.position);
+            }
+            else
+            {
+                audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
+                if(audioScript)
+                {
+
+                    //get audio controller and play audio
+                    audioScript.DestructionSmall(transform.position);
+                }
+            }
             doOnce = true;
         }
+        if(isLandmine)
+        {
+            
+            // Using Object Pool Manager to grab explosion to play and destroy enemy
+            explosion = GameObject.FindObjectOfType<ObjectPoolManager>().FindObject("DamageExplosion");
+            if(didDamage)
+            {
+                damageScript = explosion.GetComponent<DamageOrPowerUp>();
+                if (damageScript)
+                {
+                    damageScript.didDamage();
+                }
+            }
+            
+            explosion.transform.position = transform.position;
+            explosion.SetActive(true);
 
-        // Using Object Pool Manager to grab explosion to play and destroy enemy
-        GameObject explosion = GameObject.FindObjectOfType<ObjectPoolManager>().FindObject("BigExplosion");
-        explosion.transform.position = transform.position;
-        explosion.SetActive(true);
+        }
+        else
+        {
+            // Using Object Pool Manager to grab explosion to play and destroy enemy
+            explosion = GameObject.FindObjectOfType<ObjectPoolManager>().FindObject("BigExplosion");
+            explosion.transform.position = transform.position;
+            explosion.SetActive(true);
+
+        }
 
         Destroy(gameObject); 
     }

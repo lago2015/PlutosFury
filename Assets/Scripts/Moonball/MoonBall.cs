@@ -192,7 +192,7 @@ public class MoonBall : MonoBehaviour
             DetectThenExplode explodeScript = col.GetComponent<DetectThenExplode>();
             if (explodeScript)
             {
-                explodeScript.TriggeredExplosion();
+                explodeScript.TriggeredExplosion(false);
                 break;
             }
             DetectWaitThenExplode explodeThenWaitScript = col.GetComponent<DetectWaitThenExplode>();

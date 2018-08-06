@@ -7,8 +7,12 @@ public class SpriteToggle : MonoBehaviour {
     public Image offImage;
     public Image onImage;
 
+    private void Awake()
+    {
+        ToggleSprite();
+    }
 
-	public void ToggleSprite()
+    public void ToggleSprite()
     {
         Toggle toggleComp = GetComponent<Toggle>();
         bool isSpriteOn = toggleComp.isOn;
