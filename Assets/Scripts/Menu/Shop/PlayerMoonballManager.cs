@@ -28,9 +28,17 @@ public class PlayerMoonballManager : MonoBehaviour {
     }
     public int curBallContainerPrice()
     {
-        //get current heart container saved
-        curMoonballContainer = PlayerPrefs.GetInt("CurAddtionalBalls");
-        return heartContainerPrices[curMoonballContainer - 1];
+        if(canBuyBallContainer)
+        {
+            //get current heart container saved
+            curMoonballContainer = PlayerPrefs.GetInt("CurAddtionalBalls");
+            return heartContainerPrices[curMoonballContainer - 1];
+        }
+        else
+        {
+            return 0;
+        }
+        
     }
     public void CheckBallShop()
     {

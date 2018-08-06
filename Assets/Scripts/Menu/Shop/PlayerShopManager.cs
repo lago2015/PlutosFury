@@ -29,9 +29,15 @@ public class PlayerShopManager : MonoBehaviour
     }
     public int CurHeartContainerPrice()
     {
-        //get current heart container saved
-        curHeartContainer = PlayerPrefs.GetInt("CurAddtionalHearts");
-        return heartContainerPrices[curHeartContainer - 1];
+        if (canBuyContainer)
+        {
+            //get current heart container saved
+            curHeartContainer = PlayerPrefs.GetInt("CurAddtionalHearts");
+            return heartContainerPrices[curHeartContainer - 1];
+        }
+        else
+            return 0;
+        
     }
 
     public void CheckPlayerShop()
@@ -150,11 +156,7 @@ public class PlayerShopManager : MonoBehaviour
                 canBuyContainer = false;
             }
         }
-
-
     }
-
-
 
     public void BuyAHeart()
     {

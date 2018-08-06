@@ -15,8 +15,7 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
     //colors for sprite renderer for damage indication
     private Color r_Color;
     private Color w_Color;
-    //Check for shield
-    private bool Shielded;
+    
     [HideInInspector]
     public bool isDamaged;
     private float invincbleTimer = 0.5f;
@@ -29,7 +28,8 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
     private Movement moveScript;
     private AudioController audioScript;
     private PlayerManager ScoreManager;
-    
+    private MoonBall ball;
+    private WallHealth healthScript;
     private HUDManager hudScript;
     
     private PlayerAppearance appearanceScript;
@@ -131,7 +131,7 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
 
     private void Update()
     {
-        
+
         RaycastHit hit;
         if (Physics.Raycast(transform.position, transform.up, out hit, 2f) || Physics.Raycast(transform.position, -transform.up, out hit, 2f) ||
             Physics.Raycast(transform.position, -transform.right, out hit, 2f))
@@ -171,7 +171,7 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
     }
     public void HealthPickup(Vector3 curLocation)
     {
-        if (curHealth > curMaxHealth)
+        if (curHealth < curMaxHealth)
         {
             curHealth++;
 
@@ -313,10 +313,11 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
             if (isDashing())
             {
 
-                WallHealth healthScript = c.gameObject.GetComponent<WallHealth>();
+                healthScript = c.gameObject.GetComponent<WallHealth>();
                 if (healthScript)
                 {
                     healthScript.IncrementDamage();
+                    healthScript = null;
                 }
 
             }
@@ -328,21 +329,21 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
         }
         else if (curTag == "MoonBall")
         {
-            MoonBall ball = c.gameObject.GetComponent<MoonBall>();
+            ball = c.gameObject.GetComponent<MoonBall>();
 
             // Launches Moonball accodring to contact point
             if (isDashing())
             {
-                Vector3 dir = c.contacts[0].point - transform.position;
-                dir = dir.normalized;
-                ball.MoveBall(dir, ball.hitSpeed);
+                direction = c.contacts[0].point - transform.position;
+                direction = direction.normalized;
+                ball.MoveBall(direction, ball.hitSpeed);
                 moveScript.CancelDash();
             }
             else
             {
                 ball.MoveBall(Vector3.zero, 0.0f);
             }
-
+            ball = null;
             myBody.velocity = Vector3.zero;
             direction = c.transform.position - transform.position;
             direction = direction.normalized;
@@ -372,14 +373,14 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
             myBody.AddForce(-direction * obstacleBump);
             if (!isDamaged)
             {
-                WallHealth healthScript = c.gameObject.GetComponent<WallHealth>();
+                healthScript = c.gameObject.GetComponent<WallHealth>();
                 if (healthScript)
                 {
                     if (isDashing())
                     {
                         healthScript.IncrementDamage();
                         DamagePluto();
-
+                        healthScript = null;
                     }
                 }
                 else
@@ -402,7 +403,6 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
             direction = c.transform.position - transform.position;
             direction = direction.normalized;
             myBody.AddForce(-direction * obstacleBump);
-            //myBody.AddForce(c.contacts[0].normal * obstacleBump, ForceMode.VelocityChange);
 
         }
         else if (curTag == "Neptune")
@@ -416,5 +416,6 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
                 DamagePluto();
             }
         }
+        direction = Vector3.zero;
     } 
 }

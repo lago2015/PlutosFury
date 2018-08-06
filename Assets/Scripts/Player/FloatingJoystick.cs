@@ -71,6 +71,19 @@ public class FloatingJoystick : MonoBehaviour,IDragHandler,IPointerUpHandler,IPo
         {
             dashScript.changeChargeStatus(false);
         }
+        if (Input.touchCount == 2)
+        {
+            if (!directionChosen && distance <= minDistance&&!fingerDown)
+            {
+                scriptDoOnce = dashScript.doOnce;
+                //if charge hasnt started than start now
+                if (!scriptDoOnce)
+                {
+                    //activate dash mechanic 
+                    dashScript.changeChargeStatus(true);
+                }
+            }
+        }
     }
 
     // this event happens when there is a drag on screen
@@ -191,7 +204,7 @@ public class FloatingJoystick : MonoBehaviour,IDragHandler,IPointerUpHandler,IPo
                 GameObject newMoonBall = GameObject.FindObjectOfType<ObjectPoolManager>().FindObject("MoonBall");
                 newMoonBall.transform.position = curPosition;
                 newMoonBall.SetActive(true);
-               // GameObject newMoonBall = Instantiate(MoonballObject, curPosition, Quaternion.identity);
+               
                 if (!previousMoonball)
                 {
                     previousMoonball = newMoonBall;
