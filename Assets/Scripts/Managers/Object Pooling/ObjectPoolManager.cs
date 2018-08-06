@@ -53,7 +53,7 @@ public class ObjectPoolManager : MonoBehaviour
         GameObject moonball = GameObject.FindObjectOfType<InGameCharacterManager>().CurrentMoonball(0);
 
         ObjectPool moonPool = poolObj.GetComponent<ObjectPool>();
-        moonPool.InitializePool(moonball, 1);
+        moonPool.InitializePool(moonball, 3);
 
         PoolList.Add("MoonBall", moonPool);
     }

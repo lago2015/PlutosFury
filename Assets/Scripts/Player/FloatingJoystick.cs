@@ -39,6 +39,7 @@ public class FloatingJoystick : MonoBehaviour,IDragHandler,IPointerUpHandler,IPo
     private MoonballManager moonballManagerScript;
 
     public GameObject currentMoonball(GameObject curBall) { return MoonballObject = curBall; }
+    public void SwitchPrevMoonball() { previousMoonball = null; }
     private float joystickSize = 0.18f;
     private void Start()
     {
