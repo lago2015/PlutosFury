@@ -40,7 +40,6 @@ public class DetectWaitThenExplode : MonoBehaviour
         GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
         if (playerObject)
         {
-            Debug.Log("foundPlayer");
             playerScript = playerObject.GetComponent<Movement>();
         }
     }

@@ -41,7 +41,7 @@ public class DetectThenExplode : MonoBehaviour {
                 }
 
                 col.gameObject.GetComponent<PlayerCollisionAndHealth>().DamagePluto();
-                col.gameObject.GetComponent<Movement>().KnockbackPlayer(col.contacts[0].point);
+                //col.gameObject.GetComponent<Movement>().KnockbackPlayer(col.contacts[0].point);
                 //Start Explosion
                 TriggeredExplosion();
             }

@@ -20,7 +20,7 @@ public class MoonBall : MonoBehaviour
     [SerializeField]
     private int hitCount = 3;
 
-
+    private bool resetCollider;
     public GameObject gravityWell;
     private GameObject newGravWell;
     public bool GravWellEnabled;
@@ -28,7 +28,7 @@ public class MoonBall : MonoBehaviour
     private int upgrade1Index;
     private int upgrade2Index;
     private Rigidbody rb;
-
+    private Coroutine myCoroutine;
 
     private void Awake()
     {
@@ -68,9 +68,15 @@ public class MoonBall : MonoBehaviour
 
     public void DisableCollider()
     {
+        if(resetCollider)
+        {
+            StopCoroutine(myCoroutine);
+        }
+        resetCollider = true;
+        gameObject.SetActive(true);
         colliderComp = GetComponent<SphereCollider>();
         colliderComp.enabled = false;
-        StartCoroutine(DisableColliderCounter());
+        myCoroutine=StartCoroutine(DisableColliderCounter());
     }
 
     IEnumerator DisableColliderCounter()
@@ -141,13 +147,11 @@ public class MoonBall : MonoBehaviour
         {
             // Apply force and rotation to knock back from rogue with dashing
             rb.AddForce(direction * hitSpeed, ForceMode.VelocityChange);
-            //rb.AddTorque(direction * hitSpeed);
         }
         else
         {
             // Apply force and rotation to knock back from rogue
             rb.AddForce(direction * knockbackSpeed, ForceMode.VelocityChange);
-            //rb.AddTorque(direction * hitSpeed);
         }
         if (isShockWave)
         {
@@ -158,8 +162,8 @@ public class MoonBall : MonoBehaviour
     }
     public void OnExplosion()
     {
-        Debug.Log("Hit");
-       
+        
+        
         GameObject explosion = GameObject.FindObjectOfType<ObjectPoolManager>().FindObject("ContainerExplosion");
         explosion.transform.position = transform.position;
         explosion.SetActive(true);
