@@ -44,6 +44,11 @@ public class ShopManager : MonoBehaviour {
 
     private void Start()
     {
+        CheckFirstItem();
+    }
+
+    public void CheckFirstItem()
+    {
         enableButton = playerShopManager.canBuyHeart;
         buyButton.interactable = enableButton;
     }

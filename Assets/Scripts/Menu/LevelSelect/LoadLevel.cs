@@ -19,28 +19,30 @@ public class LoadLevel : MonoBehaviour {
 	// Use this for initialization
 	void Start ()
     {
-        
         curButton = GetComponent<Button>();
         loadScreenScript = GameObject.Find("MyMenuSystem").GetComponent<LoadTargetSceneButton>();
+        CheckButton();
+    }
+
+    public void CheckButton()
+    {
         if (loadLevel == 2 || loadLevel == 7)
         {
             isUnlocked = true;
             curButton.interactable = true;
         }
-        else if (PlayerPrefs.GetInt(curWorld + "Unlocked")>=loadLevel )
+        else if (PlayerPrefs.GetInt(curWorld + "Unlocked") >= loadLevel)
         {
             isUnlocked = true;
             curButton.interactable = true;
-            
+
         }
-        else 
+        else
         {
             isUnlocked = false;
             curButton.interactable = false;
         }
-
     }
-
 
     public void LoadCurLevel ()
     {

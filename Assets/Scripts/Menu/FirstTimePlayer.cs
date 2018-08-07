@@ -17,4 +17,9 @@ public class FirstTimePlayer : MonoBehaviour {
             PlayerPrefs.SetInt("firstTime", preNum);
         }
     }
+
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
 }

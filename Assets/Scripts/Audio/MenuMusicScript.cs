@@ -18,10 +18,12 @@ public class MenuMusicScript : MonoBehaviour {
         if(isHubActive)
         {
             VoiceIntro.playOnAwake = false;
+            VoiceIntro.Stop();
         }
         else
         {
             VoiceIntro.playOnAwake = true;
+            VoiceIntro.Play();
         }
         return isHubOn = isHubActive;
     }
@@ -61,7 +63,14 @@ public class MenuMusicScript : MonoBehaviour {
     {
 
         hubMusicSource.Stop();
+        TurnMusicOn(false);
         BackgroundMusic();
+        BgMusicSource.volume = 0.11f;
+        if (VoiceIntro != null)
+        {
+            bgMusicStartDelay = VoiceIntro.clip.length - 1f;
+        }
+        myCoroutine = StartCoroutine(DelayMusic());
     }
     IEnumerator DelayHub()
     {
