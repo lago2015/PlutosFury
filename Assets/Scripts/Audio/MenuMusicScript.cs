@@ -29,7 +29,6 @@ public class MenuMusicScript : MonoBehaviour {
     // Use this for initialization
     void Start ()
     {
-
         //if hub is on then delay any sound for a second then play music
         if(isHubOn)
         {

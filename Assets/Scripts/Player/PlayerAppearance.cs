@@ -37,7 +37,18 @@ public class PlayerAppearance : MonoBehaviour {
         animComp.enabled = false;
         BusterChange(BusterStates.Death);
         gameManager.GameEnded(true);
-        audioScript.PlutoDeath(transform.position);
+        if(audioScript)
+        {
+            audioScript.PlutoDeath(transform.position);
+        }
+        else
+        {
+            audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
+            if (audioScript)
+            {
+                audioScript.PlutoDeath(transform.position);
+            }
+        }
     }
 
     //function for changing buster states depending on overload

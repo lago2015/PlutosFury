@@ -22,8 +22,8 @@ public class CanvasToggle : MonoBehaviour {
     public float ReadySpriteFadeIn = 1;
     public float goSpriteFadeIn = 1;
     public float goSpriteFadeOut = 1;
-    
-    
+
+    private FloatingJoystickController controllerScript;
     private Movement playerScript;
     
     
@@ -61,6 +61,12 @@ public class CanvasToggle : MonoBehaviour {
         if (playerScript)
         {
             playerScript.DisableMovement(false);
+        }
+
+        controllerScript = GameObject.FindObjectOfType<FloatingJoystickController>();
+        if(controllerScript)
+        {
+            controllerScript.enabled = false;
         }
 
         if (tipOnStart)
@@ -128,18 +134,27 @@ public class CanvasToggle : MonoBehaviour {
     IEnumerator SetSpritesInactive()
     {
         yield return new WaitForSeconds(0.7f);
+        
         GoSprite.gameObject.SetActive(false);
         ReadySprite.gameObject.SetActive(false);
+        if (controllerScript)
+        {
+            controllerScript.enabled = true;
+        }
     }
 
     //toggle canvas and pass through if the player is dead or not to know 
     //which button to set active(one for going to menu and one to next level
     public void GameEnded(bool isGameOver)
     {
-
-        if(isGameOver)
+        //turn off controller
+        if (controllerScript)
         {
- 
+            controllerScript.enabled = false;
+        }
+
+        if (isGameOver)
+        {
             GameOverCanvas.SetActive(true);
             if (winScript)
             {
