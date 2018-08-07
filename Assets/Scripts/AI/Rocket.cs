@@ -9,6 +9,12 @@ public class Rocket : MonoBehaviour {
     public float travelTimeRocket = 3;
 
     private DamageOrPowerUp damageScript;
+    private AudioController audioScript;
+
+    void Start()
+    {
+        audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
+    }
 
     void OnEnable()
     {
@@ -20,7 +26,7 @@ public class Rocket : MonoBehaviour {
         if (ShouldMove)
         {
             transform.position += moveSpeed * transform.forward * Time.deltaTime;
-            //transform.position = new Vector3(transform.position.x, transform.position.y, 0);
+            transform.position = new Vector3(transform.position.x, transform.position.y, 0);
         }
     }
 
@@ -41,7 +47,6 @@ public class Rocket : MonoBehaviour {
         {
 
             col.gameObject.GetComponent<PlayerCollisionAndHealth>().DamagePluto();
-            //col.gameObject.GetComponent<Movement>().KnockbackPlayer(col.contacts[0].point);
             //Start Explosion
             BlowUp(true);
 
@@ -79,17 +84,21 @@ public class Rocket : MonoBehaviour {
         }
     }
 
-    private void BlowUp(bool damage)
+    public void BlowUp(bool damage)
     {
         ObjectPoolManager pool = GameObject.FindObjectOfType<ObjectPoolManager>();
 
         GameObject explosion = pool.FindObject("SmallExplosion");
         explosion.transform.position = transform.position;
         explosion.SetActive(true);
-
+        
         if (damage&&explosion)
         {
             explosion.GetComponentInChildren<DamageOrPowerUp>().didDamage();
+        }
+        if(audioScript)
+        {
+            audioScript.DestructionSmallEnvirObstacle(transform.position);
         }
 
         pool.PutBackObject("Rocket", gameObject);

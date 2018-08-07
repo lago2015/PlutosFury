@@ -18,6 +18,7 @@ public class RogueCollision : MonoBehaviour {
     private PlayerCollisionAndHealth playerCollisionScript;
     private Rigidbody myBody;
     private AudioController audioScript;
+    private string curName;
     // Use this for initialization
     void Awake ()
     {
@@ -157,28 +158,33 @@ public class RogueCollision : MonoBehaviour {
 
         else if(curTag=="BigAsteroid")
         {
-            bool RogueDashing = rogueMoveScript.isDashing();
-            if (!RogueDashing)
-            {
-                if (myBody)
-                {
-                    myBody.AddForce(col.contacts[0].normal * wallBump, ForceMode.VelocityChange);
-                }
-
-            }
-
-            else
-            {
-                col.gameObject.GetComponent<BigAsteroid>().AsteroidHit(2,false,false);
-
-            }
+            col.gameObject.GetComponent<BigAsteroid>().AsteroidHit(2, false, false);
         }
         else if(curTag=="EnvironmentObstacle")
         {
-            if(col.gameObject.name.Contains("DamageWall"))
+            bool rogueDashing = rogueMoveScript.isDashing();
+            curName = col.gameObject.name;
+            if(curName.Contains("DamageWall"))
             {
                 RogueDamage();
                 col.gameObject.GetComponent<WallHealth>().IncrementDamage();
+            }
+            else if(curName.Contains("Landmine"))
+            {
+                if(!rogueDashing)
+                {
+                    RogueDamage();
+                }
+                
+                col.gameObject.GetComponent<DetectThenExplode>();
+            }
+            else if(curName.Contains("Rocket"))
+            {
+                if (!rogueDashing)
+                {
+                    RogueDamage();
+                }
+                col.gameObject.GetComponent<Rocket>().BlowUp(false);
             }
         }
         else if(curTag=="Wall")

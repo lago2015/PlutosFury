@@ -6,7 +6,7 @@ public class MoonballManager : MonoBehaviour {
 
 
     private int moonballNum;
-    private int moonballMaxContainer;
+    private int moonballMaxContainer=1;
     private HUDManager HUDScript;
     private ExPointController bonusController;
 
@@ -18,7 +18,7 @@ public class MoonballManager : MonoBehaviour {
             HUDScript = hudObject.GetComponent<HUDManager>();
             hudObject = null;
         }
-        moonballMaxContainer = 2;
+        
         moonballMaxContainer += PlayerPrefs.GetInt("CurAddtionalBalls");
         moonballNum = PlayerPrefs.GetInt("moonBallAmount");
 
@@ -44,7 +44,7 @@ public class MoonballManager : MonoBehaviour {
 
     public void IncrementBalls()
     {
-        if(moonballNum<=moonballMaxContainer)
+        if(moonballNum<moonballMaxContainer)
         {
             moonballNum++;
             if (HUDScript)

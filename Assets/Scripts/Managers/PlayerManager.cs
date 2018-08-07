@@ -54,7 +54,7 @@ public class PlayerManager : MonoBehaviour {
         playerHeartContainer = PlayerPrefs.GetInt("CurAddtionalHearts");
         if (playerHealthScript)
         {
-            playerHealthScript.ApplyNewMaxHearts(playerHeartContainer + 2);
+            playerHealthScript.ApplyNewMaxHearts(playerHeartContainer);
         }
     }
 

@@ -25,7 +25,7 @@ public class CollisionDamage : MonoBehaviour {
                     pursueScript.HitPlayerCooldown();
                 }
                 CollisionScript.DamagePluto();
-                col.gameObject.GetComponent<Movement>().KnockbackPlayer(col.ClosestPoint(col.gameObject.transform.position));
+                col.gameObject.GetComponent<Movement>().KnockbackPlayer(transform.position);
                 if (audioScript)
                 {
                     audioScript.SpikeHitPluto(transform.position);

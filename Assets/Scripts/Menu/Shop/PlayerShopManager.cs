@@ -7,7 +7,7 @@ public class PlayerShopManager : MonoBehaviour
 {
     public int curHeartIndex;
     private int curOrbs;
-    public int curHeartContainer;
+    private int curHeartContainer;
     public int perHeartPrice=1000;
     public int[] heartContainerPrices;
     public GameObject[] HeartImageContainer;
@@ -32,8 +32,9 @@ public class PlayerShopManager : MonoBehaviour
         if (canBuyContainer)
         {
             //get current heart container saved
-            curHeartContainer = PlayerPrefs.GetInt("CurAddtionalHearts");
-            return heartContainerPrices[curHeartContainer - 1];
+            curHeartContainer = PlayerPrefs.GetInt("CurAddtionalHearts")+1;
+
+            return heartContainerPrices[curHeartContainer-1];
         }
         else
             return 0;
@@ -43,7 +44,9 @@ public class PlayerShopManager : MonoBehaviour
     public void CheckPlayerShop()
     {
         //get current heart container saved
-        curHeartContainer = PlayerPrefs.GetInt("CurAddtionalHearts");
+        curHeartContainer = PlayerPrefs.GetInt("CurAddtionalHearts")+1;
+
+
         //Get current hearts saved
         curHeartIndex = PlayerPrefs.GetInt("healthPref");
         orbTextScript = GameObject.FindGameObjectWithTag("Finish").GetComponent<UpdateOrbAmount>();
@@ -87,7 +90,7 @@ public class PlayerShopManager : MonoBehaviour
             canBuyHeart = true;
         }
         //if capped for heart containers then disable button
-        if (curHeartContainer == 4)
+        if (curHeartContainer == 5)
         {
             canBuyContainer = false;
         }
@@ -100,9 +103,9 @@ public class PlayerShopManager : MonoBehaviour
     //Reset all player preferences for new game
     public void ResetValues()
     {
-        PlayerPrefs.SetInt("CurAddtionalHearts", 1);
+        PlayerPrefs.SetInt("CurAddtionalHearts", 0);
         PlayerPrefs.SetInt("healthPref", 1);
-        PlayerPrefs.SetInt("CurAddtionalBalls", 1);
+        PlayerPrefs.SetInt("CurAddtionalBalls", 0);
         PlayerPrefs.SetInt("moonBallAmount", 0);
         PlayerPrefs.SetInt("skin1", 0);
         PlayerPrefs.SetInt("skin2", 0);
@@ -144,7 +147,7 @@ public class PlayerShopManager : MonoBehaviour
             //update image for screen to show heart has been bought
             HeartImageContainer[curHeartContainer].SetActive(true);
             //save amount of additional hearts player has bought
-            PlayerPrefs.SetInt("CurAddtionalHearts", curHeartContainer);
+            PlayerPrefs.SetInt("CurAddtionalHearts", curHeartContainer-1);
             //check if buying a heart button is disabled due to max hearts being bought and re enable the button
             if (canBuyHeart== false)
             {

@@ -5,7 +5,6 @@ public class Door : MonoBehaviour {
     
 
     private GameManager gameScript;
-    private CanvasFade fadeScript;
     public int numOfLevel;
     private int curLevel;
     public int curWorld;

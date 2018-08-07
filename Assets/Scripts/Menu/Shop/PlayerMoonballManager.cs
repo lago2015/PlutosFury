@@ -31,7 +31,7 @@ public class PlayerMoonballManager : MonoBehaviour {
         if(canBuyBallContainer)
         {
             //get current heart container saved
-            curMoonballContainer = PlayerPrefs.GetInt("CurAddtionalBalls");
+            curMoonballContainer = PlayerPrefs.GetInt("CurAddtionalBalls")+1;
             return heartContainerPrices[curMoonballContainer - 1];
         }
         else
@@ -43,7 +43,7 @@ public class PlayerMoonballManager : MonoBehaviour {
     public void CheckBallShop()
     {
         //get current heart container saved
-        curMoonballContainer = PlayerPrefs.GetInt("CurAddtionalBalls");
+        curMoonballContainer = PlayerPrefs.GetInt("CurAddtionalBalls")+1;
         //Get current hearts saved
         curMoonballIndex = PlayerPrefs.GetInt("moonBallAmount");
         orbTextScript = GameObject.FindGameObjectWithTag("Finish").GetComponent<UpdateOrbAmount>();
@@ -113,7 +113,7 @@ public class PlayerMoonballManager : MonoBehaviour {
             //update image for screen to show heart has been bought
             MoonballImageContainer[curMoonballContainer].SetActive(true);
             //save amount of additional hearts player has bought
-            PlayerPrefs.SetInt("CurAddtionalBalls", curMoonballContainer);
+            PlayerPrefs.SetInt("CurAddtionalBalls", curMoonballContainer-1);
             //check if buying a heart button is disabled due to max hearts being bought and re enable the button
             if (BuyMoonballButton.IsInteractable() == false)
             {

@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerCollisionAndHealth : MonoBehaviour {
     //health properties
     public int curHealth;
-    public int curMaxHealth;
+    private int curMaxHealth=1;
     private int curAddtionalHearts=0;
     public bool godMode;
     [HideInInspector]

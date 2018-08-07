@@ -28,7 +28,8 @@ public class Movement : MonoBehaviour
     //dash trail rotation
     [SerializeField]
     private Quaternion trailRot;
-    
+    [SerializeField]
+    private Vector3 dir;
     [SerializeField]
     //trail checks
     private bool moveOn;
@@ -87,8 +88,7 @@ public class Movement : MonoBehaviour
     //Basic Movement values
     [HideInInspector]
     public Vector3 move;
-    public float wallBump = 20.0f;
-    public float soccerKnockback = 50f;
+    private float wallBump = 70f;
     private float velocityCap = 80;
     private float velocityMin = -80;
     private bool isWaiting;
@@ -459,13 +459,12 @@ public class Movement : MonoBehaviour
     
     
     //Called from gameobjects with triggers to apply knockback as player takes damage
-    public void KnockbackPlayer(Vector3 Direction)
+    public void KnockbackPlayer(Vector3 EnemyPoint)
     {
-        Direction.x = Direction.x + myBody.velocity.x;
-        Direction.y = Direction.y + myBody.velocity.y;
-        Direction.z = Direction.z + myBody.velocity.z;
-        // Apply force and rotation to knock back from rocket explosion
-        myBody.AddForce(Direction.normalized * soccerKnockback, ForceMode.VelocityChange);
+        myBody.velocity = Vector3.zero;
+        dir = EnemyPoint - transform.position;
+        dir = dir.normalized;
+        myBody.AddForce(-dir * wallBump,ForceMode.VelocityChange);
         
     }
 
