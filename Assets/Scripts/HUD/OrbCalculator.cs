@@ -93,7 +93,7 @@ public class OrbCalculator : MonoBehaviour
         bonusTotal = (int)Mathf.Round(levelOrb * totalBonus);
         playerNewTotal += playerOldTotal + bonusTotal;
 
-        //PlayerPrefs.SetInt("scorePref", playerTotal);
+        PlayerPrefs.SetInt("scorePref", playerNewTotal);
 
         // set text numbers
 
@@ -155,7 +155,7 @@ public class OrbCalculator : MonoBehaviour
 
         duration = 0.5f;
 
-        //PlayerPrefs.SetInt("scorePref", playerTotal);
+        PlayerPrefs.SetInt("scorePref", playerNewTotal);
 
         // function to skip all animations and lerps
     }
