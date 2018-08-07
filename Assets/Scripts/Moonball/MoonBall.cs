@@ -169,6 +169,7 @@ public class MoonBall : MonoBehaviour
         explosion.SetActive(true);
 
         GameObject.FindObjectOfType<ObjectPoolManager>().PutBackObject("MoonBall", gameObject);
+        GameObject.FindObjectOfType<FloatingJoystick>().SwitchPrevMoonball();
     }
 
     private void Bounce(Collision c)
