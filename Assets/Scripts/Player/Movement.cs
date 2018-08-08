@@ -150,9 +150,13 @@ public class Movement : MonoBehaviour
         //}
     }
 
-    private void Start()
+    public void GetController(GameObject joystick)
     {
-        joystickscript = GameObject.FindGameObjectWithTag("GameController").GetComponent<FloatingJoystick>();
+        if(joystick)
+        {
+            joystickscript = joystick.GetComponent<FloatingJoystick>();
+        }
+        
     }
 
     void LateUpdate()

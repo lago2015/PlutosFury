@@ -20,15 +20,20 @@ public class InGameCharacterManager : MonoBehaviour {
         
     }
 
-    private void Start()
+    
+
+    public void WaitForIntro(GameObject joystick)
     {
-        joystickScript = GameObject.FindGameObjectWithTag("GameController").GetComponent<FloatingJoystick>();
 
-        joystickScript.currentMoonball(InGameMoonballs[curBallIndex]);
+        if(joystick)
+        {
+            joystickScript = joystick.GetComponent<FloatingJoystick>();
 
+            joystickScript.currentMoonball(InGameMoonballs[curBallIndex]);
+
+        }
     }
 
-    
     //This function is to know what skin is currently saved for the player
     public GameObject CurrentCharacter(int numberOfSpawns)
     {

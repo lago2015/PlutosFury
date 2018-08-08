@@ -25,7 +25,7 @@ public class CanvasToggle : MonoBehaviour {
 
     private FloatingJoystickController controllerScript;
     private Movement playerScript;
-    
+    private HUDManager hudManager;
     
 
     public bool tipOnStart;
@@ -36,7 +36,7 @@ public class CanvasToggle : MonoBehaviour {
         LevelNumberSprite.canvasRenderer.SetAlpha(0.0f);
         ReadySprite.canvasRenderer.SetAlpha(0.0f);
         GoSprite.canvasRenderer.SetAlpha(0.0f);
-        
+        hudManager = GameObject.FindGameObjectWithTag("HUDManager").GetComponent<HUDManager>();
         
         //get canvas script to enable fading
         if(WinScreenCanvas)
@@ -113,6 +113,7 @@ public class CanvasToggle : MonoBehaviour {
         {
             audioScript.StartGoIntro();
         }
+
         
         StartCoroutine(GoSpriteFadeOut());
     }
@@ -134,7 +135,10 @@ public class CanvasToggle : MonoBehaviour {
     IEnumerator SetSpritesInactive()
     {
         yield return new WaitForSeconds(0.7f);
-        
+        if (hudManager)
+        {
+            hudManager.EnableController();
+        }
         GoSprite.gameObject.SetActive(false);
         ReadySprite.gameObject.SetActive(false);
         if (controllerScript)

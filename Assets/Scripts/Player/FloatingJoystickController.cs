@@ -17,11 +17,18 @@ public class FloatingJoystickController : MonoBehaviour {
         singleJoystickBackgroundImage.enabled = singleJoyStickAlwaysVisible;
         singleJoystickHandleImage = singleJoystickBackgroundImage.transform.GetChild(0).GetComponent<Image>();
         singleJoystickHandleImage.enabled = singleJoyStickAlwaysVisible;
-        secondTouchImage = GameObject.FindGameObjectWithTag("DashButt").GetComponent<Image>();
-        secondTouchImage.enabled = false;
         
     }
 
+    public void GetSecondTouchImage(GameObject touchImage)
+    {
+        if(touchImage)
+        {
+            secondTouchImage = GameObject.FindGameObjectWithTag("DashButt").GetComponent<Image>();
+            secondTouchImage.enabled = false;
+        }
+
+    }
 
     void FixedUpdate()
     {

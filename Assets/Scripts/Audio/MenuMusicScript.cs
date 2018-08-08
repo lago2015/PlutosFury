@@ -54,6 +54,7 @@ public class MenuMusicScript : MonoBehaviour {
     //this will be called from onClick in menu
     public void StartHubMusic()
     {
+        StopCoroutine(myCoroutine);
         BgMusicSource.Stop();
         VoiceIntro.Stop();
         myCoroutine = StartCoroutine(DelayHub());
@@ -61,7 +62,7 @@ public class MenuMusicScript : MonoBehaviour {
     //when coming back from the hub use this function to start title screen music
     public void StartBackgroundMusic()
     {
-
+        StopCoroutine(myCoroutine);
         hubMusicSource.Stop();
         TurnMusicOn(false);
         BackgroundMusic();

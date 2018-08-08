@@ -13,10 +13,14 @@ public class HUDManager : MonoBehaviour {
     public Text scoreText;
     public Image[] healthSprites;
     //public Text timerText;
-    
+    private FloatingJoystickController joystickController;
     public Text playerLives;
+    private FloatingJoystick joystickScript;
+    public GameObject joystick;
+    public GameObject dashButton;
+    private InGameCharacterManager charManager;
+    private Movement moveScript;
     //local variables for hud 
-    
     private int currentScore;
     private int currentMoonballAmount;
     // Use this for initialization
@@ -28,12 +32,47 @@ public class HUDManager : MonoBehaviour {
         {
             scoreScript = scoreObject.GetComponent<PlayerManager>();
         }
-        
+
+        if(joystick)
+        {
+            charManager = GameObject.FindGameObjectWithTag("Spawner").transform.GetChild(0).GetComponent<InGameCharacterManager>();
+            
+            if(charManager)
+            {
+                charManager.WaitForIntro(joystick);
+                charManager = null;
+            }
+            joystickScript = joystick.GetComponent<FloatingJoystick>();
+            if(joystickScript)
+            {
+                joystickScript.GetButton(dashButton);
+            }
+        }
     }
 
     private void Start()
     {
-        if(scoreScript)
+        if(joystick)
+        {
+            moveScript = GameObject.FindGameObjectWithTag("Player").GetComponent<Movement>();
+            if(moveScript)
+            {
+                moveScript.GetController(joystick);
+                moveScript = null;
+            }
+            joystick.SetActive(false);
+        }
+
+        if (dashButton)
+        {
+            joystickController = GameObject.FindGameObjectWithTag("EditorOnly").GetComponent<FloatingJoystickController>();
+            if(joystickController)
+            {
+                joystickController.GetSecondTouchImage(dashButton);
+            }
+            dashButton.SetActive(false);
+        }
+        if (scoreScript)
         {
             UpdateHealth(scoreScript.playerHealth);
         }
@@ -48,7 +87,18 @@ public class HUDManager : MonoBehaviour {
         UpdateBalls(currentMoonballAmount);
 
     }
-
+    //Gets called from Canvas Toggle after go sprite is played
+    public void EnableController()
+    {
+        if (joystick)
+        {
+            joystick.SetActive(true);
+        }
+        if (dashButton)
+        {
+            dashButton.SetActive(true);
+        }
+    }
 
     //Called from players collision and health script. ensures the health is 
     //under the max health then calls Update Health to tell the HUD the new health

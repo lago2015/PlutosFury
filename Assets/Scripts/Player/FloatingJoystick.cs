@@ -11,7 +11,7 @@ public class FloatingJoystick : MonoBehaviour,IDragHandler,IPointerUpHandler,IPo
     private bool doOnce;
     private bool scriptDoOnce;
     [Tooltip("Sets the maximum distance the handle (knob) stays away from the center of this joystick. If the joystick handle doesn't look or feel right you can change this value. Must be a whole number. Default value is 4.")]
-    public int joystickHandleDistance = 4;
+    public int joystickHandleDistance = 2;
     private Image bgImage; // background of the joystick, this is the part of the joystick that recieves input
     private Image joystickKnobImage; // the "knob" part of the joystick, it just moves to provide feedback, it does not receive input from the touch
     private Vector3 inputVector; // normalized direction vector that will be ouput from this joystick, it can be accessed from outside this class using the public function GetInputDirection() defined in this class, this vector can be used to control your game object ex. a player character or any desired game object
@@ -41,6 +41,16 @@ public class FloatingJoystick : MonoBehaviour,IDragHandler,IPointerUpHandler,IPo
     public GameObject currentMoonball(GameObject curBall) { return MoonballObject = curBall; }
     public void SwitchPrevMoonball() { previousMoonball = null; }
     private float joystickSize = 0.18f;
+
+    public void GetButton(GameObject button)
+    {
+        if(button)
+        {
+            dashScript = button.GetComponent<ButtonIndicator>();
+        }
+        
+    }
+
     private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
@@ -48,7 +58,7 @@ public class FloatingJoystick : MonoBehaviour,IDragHandler,IPointerUpHandler,IPo
         {
             moonballManagerScript = player.GetComponent<MoonballManager>();
         }
-        dashScript = GameObject.FindGameObjectWithTag("DashButt").GetComponent<ButtonIndicator>();
+        
         if (GetComponent<Image>() != null && transform.GetChild(0).GetComponent<Image>() != null)
         {
             bgImage = GetComponent<Image>(); // gets the background image of this joystick

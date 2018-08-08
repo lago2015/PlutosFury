@@ -14,7 +14,7 @@ public class OrbCalculator : MonoBehaviour
     public Text bonusTotalText;
     public Text playerTotalText;
     public GameObject continueBtn;
-
+    public GameObject retryBtn;
     private int levelOrb;
     private int niceNum;
     private int coolNum;
@@ -70,6 +70,7 @@ public class OrbCalculator : MonoBehaviour
             {
                 isTallying = false;
                 continueBtn.SetActive(true);
+                retryBtn.SetActive(true);
             }
         }
     }
