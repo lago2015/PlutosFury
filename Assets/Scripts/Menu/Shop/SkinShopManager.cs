@@ -35,59 +35,59 @@ public class SkinShopManager : MonoBehaviour
         switch(curSkin)
         {
             case 0:
-                skin1Bought = PlayerPrefs.GetInt("skin1");
+                skin1Bought = PlayerPrefs.GetInt("skin0");
 
                 if (skin1Bought==1)
                 {
-                    return true;
+                    return false;
                 }
                 else
-                    return false;
+                    return true;
             case 1:
-                skin2Bought = PlayerPrefs.GetInt("skin2");
+                skin2Bought = PlayerPrefs.GetInt("skin1");
 
                 if (skin2Bought == 1)
                 {
-                    return true;
+                    return false;
                 }
                 else
-                    return false;
+                    return true;
             case 2:
-                skin3Bought = PlayerPrefs.GetInt("skin3");
+                skin3Bought = PlayerPrefs.GetInt("skin2");
 
                 if (skin3Bought == 1)
                 {
-                    return true;
+                    return false;
                 }
                 else
-                    return false;
+                    return true;
             case 3:
-                moonSkin1 = PlayerPrefs.GetInt("skin4");
+                moonSkin1 = PlayerPrefs.GetInt("skin3");
 
                 if (moonSkin1 == 1)
                 {
-                    return true;
+                    return false;
                 }
                 else
-                    return false;
+                    return true;
             case 4:
-                moonSkin2 = PlayerPrefs.GetInt("skin5");
+                moonSkin2 = PlayerPrefs.GetInt("skin4");
 
                 if (moonSkin2 == 1)
                 {
-                    return true;
+                    return false;
                 }
                 else
-                    return false;
+                    return true;
             case 5:
-                moonSkin3 = PlayerPrefs.GetInt("skin6");
+                moonSkin3 = PlayerPrefs.GetInt("skin5");
 
                 if (moonSkin3 == 1)
                 {
-                    return true;
+                    return false;
                 }
                 else
-                    return false;
+                    return true;
         }
         return false;
     }
@@ -100,12 +100,9 @@ public class SkinShopManager : MonoBehaviour
 
         moonSkin1 = PlayerPrefs.GetInt("skin4");
         moonSkin2 = PlayerPrefs.GetInt("skin5");
-        moonSkin3 = PlayerPrefs.GetInt("skin6");
+        moonSkin3 = PlayerPrefs.GetInt("skin0");
         orbTextScript = GameObject.FindGameObjectWithTag("Finish").GetComponent<UpdateOrbAmount>();
-
-
         
-
     }
     public int CurPrice(int curSkin)
     {

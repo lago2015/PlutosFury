@@ -24,12 +24,24 @@ public class AIHealth : MonoBehaviour {
     public int hunterOrbDrop = 3;
     public string explosionPoolName;
     private AsteroidSpawner orbScript;
+
+    //Player prefs
+    private bool vibrationHit;
+
     void Awake()
     {
         orbScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<AsteroidSpawner>();
 
         myBody = GetComponent<Rigidbody>();
-      
+        //vibration enabled/disabled
+        if (PlayerPrefs.GetInt("VibrationHit") == 1)
+        {
+            vibrationHit = true;
+        }
+        else
+        {
+            vibrationHit = false;
+        }
     }
     private void Start()
     {
@@ -99,7 +111,11 @@ public class AIHealth : MonoBehaviour {
                     audioScript.ShatterExplosion(transform.position);
                 }
             }
-
+            //feedback on damage
+            if (vibrationHit)
+            {
+                Handheld.Vibrate();
+            }
             // Using Object Pool Manager to grab explosion to play and destroy enemy
             GameObject explosion = GameObject.FindObjectOfType<ObjectPoolManager>().FindObject(explosionPoolName);
             explosion.transform.position = transform.position;

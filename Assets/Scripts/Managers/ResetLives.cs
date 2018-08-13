@@ -13,14 +13,9 @@ public class ResetLives : MonoBehaviour {
         Screen.autorotateToPortrait = false;
         Screen.autorotateToPortraitUpsideDown = false;
         Screen.orientation = ScreenOrientation.AutoRotation;
+        //PlayerPrefs.SetInt("levelSelect", 0);
     }
-
-    // Use this for initialization
-    void Start ()
-    {
-        PlayerPrefs.SetInt("totalScore", 0);
-        PlayerPrefs.SetInt("healthPref", 0);
-	}
+    
 	
 
 }

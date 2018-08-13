@@ -125,10 +125,6 @@ public class CanvasToggle : MonoBehaviour {
         {
             playerScript.ResumePluto();
         }
-        if(audioScript)
-        {
-            audioScript.BackgroundMusic();
-        }
         StartCoroutine(SetSpritesInactive());
     }
 

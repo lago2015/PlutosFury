@@ -20,6 +20,7 @@ public class FirstTimePlayer : MonoBehaviour {
 
     public void QuitGame()
     {
+        PlayerPrefs.SetInt("levelSelect", 0);
         Application.Quit();
     }
 }

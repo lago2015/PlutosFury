@@ -128,6 +128,7 @@ public class ShopManager : MonoBehaviour {
         } 
 
     }
+
     public void CheckPrice(int ItemNum)
     {
         curPrice = GetPrice();
@@ -160,7 +161,6 @@ public class ShopManager : MonoBehaviour {
             //player upgrade
             case 2:
                 curPrice = playerShopManager.CurHeartContainerPrice();
-                Debug.Log("Cur Price: " + curPrice);
                 break;
             //Moonball consumables
             case 3:

@@ -80,20 +80,22 @@ public class DetectWaitThenExplode : MonoBehaviour
         }
         else if (CurTag == "BigAsteroid")
         {
-            //start explosion
-            TriggeredExplosion();
-            //notify damage script that damage is dealt to asteroid
-            if (damageScript)
-            {
-                damageScript.didDamage();
-            }
+            
             //apply damage to asteroid
             col.gameObject.GetComponent<BigAsteroid>().AsteroidHit(5, false,false);
         }
         else if (CurTag == "EnvironmentObstacle"||CurTag=="Obstacle"||CurTag=="Planet")
         {
-            //start explosion
-            TriggeredExplosion();
+            if(col.gameObject.name.Contains("Landmine")||col.gameObject.name.Contains("DamageWall"))
+            {
+                col.gameObject.GetComponent<DetectThenExplode>().TriggeredExplosion(false);
+            }
+            else
+            {
+                //start explosion
+                TriggeredExplosion();
+            }
+            
         }
         else if(CurTag=="MoonBall")
         {

@@ -18,13 +18,13 @@ public class SkinManager : MonoBehaviour {
     public void CheckSkins()
     {
         
-        skin1Bought = PlayerPrefs.GetInt("skin1");
-        skin2Bought = PlayerPrefs.GetInt("skin2");
-        skin3Bought = PlayerPrefs.GetInt("skin3");
+        skin1Bought = PlayerPrefs.GetInt("skin0");
+        skin2Bought = PlayerPrefs.GetInt("skin1");
+        skin3Bought = PlayerPrefs.GetInt("skin2");
         
-        moonSkin1 = PlayerPrefs.GetInt("skin5");
-        moonSkin2 = PlayerPrefs.GetInt("skin6");
-        moonSkin3 = PlayerPrefs.GetInt("skin7");
+        moonSkin1 = PlayerPrefs.GetInt("skin3");
+        moonSkin2 = PlayerPrefs.GetInt("skin4");
+        moonSkin3 = PlayerPrefs.GetInt("skin5");
         //first character
         characterButtons[0].interactable = true;
         //first moonball

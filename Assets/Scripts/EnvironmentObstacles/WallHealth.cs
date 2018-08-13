@@ -5,7 +5,7 @@ using UnityEngine;
 public class WallHealth : MonoBehaviour
 {
 
-
+    private bool isPlayerDashing;
     public int EnemyHealth = 1;
     public GameObject Explosion;
     public GameObject Model;
@@ -26,13 +26,36 @@ public class WallHealth : MonoBehaviour
         if(pickUpContained)
         {
             pickUpCollider = pickUpContained.GetComponent<Collider>();
-            pickUpCollider.enabled = false;
-            
+            explosionPoolName = "ContainerExplosion";
+        }
+        else
+        {
+            gameObject.tag = "Obstacle";
+            explosionPoolName = "BigExplosion";
         }
     }
 
     void OnCollisionEnter(Collision collision)
     {
+
+        if(collision.gameObject.tag=="Player")
+        {
+            isPlayerDashing = collision.gameObject.GetComponent<Movement>().DashStatus();
+            if(isPlayerDashing)
+            {
+                IncrementDamage();
+                if (pickUpContained)
+                {
+                    ApplyPickup();
+                }
+                else
+                {
+                    collision.gameObject.GetComponent<PlayerCollisionAndHealth>().DamagePluto();
+                }
+            }
+            
+        }
+
         if(collision.gameObject.tag=="Obstacle"&& !collision.transform.name.Contains("DamageWall"))
         {
             if(collision.transform.name.Contains("Seeker") && pickUpContained!=null)
@@ -48,7 +71,20 @@ public class WallHealth : MonoBehaviour
         if(collision.gameObject.tag == "MoonBall")
         {
             IncrementDamage();
+            if (pickUpContained)
+            {
+                ApplyPickup();
+            }
         }
+    }
+
+    public void ApplyPickup()
+    {
+        if (pickUpContained)
+        {
+            pickUpContained.GetComponent<PickUpSkills>().PickUpObtained();
+        }
+
     }
 
     public void IncrementDamage()
@@ -66,14 +102,7 @@ public class WallHealth : MonoBehaviour
                 GameObject explosion = GameObject.FindObjectOfType<ObjectPoolManager>().FindObject(explosionPoolName);
                 explosion.transform.position = transform.position;
                 explosion.SetActive(true);
-                //Explosion.SetActive(true);
-               // Model.SetActive(false);
-                if(pickUpContained)
-                {
-                    pickUpContained.GetComponent<PickUpSkills>().PickUpObtained();
-                }
-                
-                //Explosion.transform.parent = null;
+
                 //Destroy gameobject at the end of explosions duration to play
                 Destroy(gameObject);   
             }

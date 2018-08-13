@@ -26,7 +26,6 @@ public class GameManager : MonoBehaviour
     public float fadeTime;
     public float GameOverDelay = 5f;
     public bool levelWallActive;
-    private int curTotalScore;
     Movement playerMoveScript;
     MoonballManager moonBallManScript;
     PlayerCollisionAndHealth playerCollisionScript;
@@ -39,6 +38,8 @@ public class GameManager : MonoBehaviour
     private GameObject levelWall;
     private GameObject CanvasManager;
     private CanvasToggle canvasScript;
+
+
 
 
     private void OnApplicationQuit()

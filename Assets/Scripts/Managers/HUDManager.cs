@@ -12,9 +12,9 @@ public class HUDManager : MonoBehaviour {
     //Text to apply to hud
     public Text scoreText;
     public Image[] healthSprites;
+    public Image[] moonballSprites;
     //public Text timerText;
     private FloatingJoystickController joystickController;
-    public Text playerLives;
     private FloatingJoystick joystickScript;
     public GameObject joystick;
     public GameObject dashButton;
@@ -77,7 +77,7 @@ public class HUDManager : MonoBehaviour {
             UpdateHealth(scoreScript.playerHealth);
         }
         
-        if(playerLives&&scoreScript)
+        if(scoreScript)
         {
             currentScore = scoreScript.ReturnScore();
             UpdateScore(currentScore);
@@ -184,9 +184,72 @@ public class HUDManager : MonoBehaviour {
 
     public void UpdateBalls(int newBalls)
     {
-        if (scoreScript)
+        if (newBalls == 0)
         {
-            playerLives.text = ("x " + newBalls);
+            for (int i = 0; i <= moonballSprites.Length - 1; ++i)
+            {
+                moonballSprites[i].enabled = false;
+                if (i == 0)
+                {
+                    moonballSprites[i].enabled = true;
+                }
+            }
+        }
+
+        else if (newBalls == 1)
+        {
+            for (int i = 0; i <= moonballSprites.Length - 1; ++i)
+            {
+                moonballSprites[i].enabled = false;
+                if (i == 1)
+                {
+                    moonballSprites[0].enabled = true;
+                    moonballSprites[1].enabled = true;
+                }
+            }
+        }
+        else if (newBalls == 2)
+        {
+            for (int i = 0; i <= moonballSprites.Length - 1; ++i)
+            {
+                moonballSprites[i].enabled = false;
+                if (i == 2)
+                {
+                    moonballSprites[0].enabled = true;
+                    moonballSprites[1].enabled = true;
+                    moonballSprites[2].enabled = true;
+                }
+            }
+        }
+        else if (newBalls == 3)
+        {
+            for (int i = 0; i <= moonballSprites.Length - 1; ++i)
+            {
+                moonballSprites[i].enabled = false;
+                if (i == 3)
+                {
+                    moonballSprites[0].enabled = true;
+                    moonballSprites[1].enabled = true;
+                    moonballSprites[2].enabled = true;
+                    moonballSprites[3].enabled = true;
+                }
+            }
+        }
+        else if (newBalls == 4)
+        {
+            for (int i = 0; i <= moonballSprites.Length - 1; ++i)
+            {
+                moonballSprites[i].enabled = true;
+
+            }
+        }
+        else if (newBalls == -1)
+        {
+            for (int i = 0; i <= moonballSprites.Length - 1; ++i)
+            {
+                moonballSprites[i].enabled = false;
+
+            }
         }
     }
 }

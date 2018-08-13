@@ -146,6 +146,10 @@ public class RogueCollision : MonoBehaviour {
 
                 RogueDamage();
             }
+            else if(rogueDashing&&!isCharger)
+            {
+                rogueMoveScript.HitPlayerCooldown();
+            }
             else if(isCharger)
             {
                 RogueDamage();

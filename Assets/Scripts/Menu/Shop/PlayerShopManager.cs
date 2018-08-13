@@ -112,12 +112,14 @@ public class PlayerShopManager : MonoBehaviour
         PlayerPrefs.SetInt("skin3", 0);
         PlayerPrefs.SetInt("skin4", 0);
         PlayerPrefs.SetInt("skin5", 0);
-        PlayerPrefs.SetInt("skin6", 0);
+        PlayerPrefs.SetInt("skin0", 0);
         PlayerPrefs.SetInt("MoonballUpgrade0", 0);
         PlayerPrefs.SetInt("MoonballUpgrade1", 0);
         PlayerPrefs.SetInt("moonballHits", 0);
         PlayerPrefs.SetInt(0 + "Unlocked", 2);
         PlayerPrefs.SetInt(1 + "Unlocked", 7);
+        PlayerPrefs.SetInt("PlayerMoonballIndex", 0);
+        PlayerPrefs.SetInt("PlayerCharacterIndex", 0);
         PlayerPrefs.SetInt("scorePref", 100);
         orbTextScript.ChangeOrbAmount();
     }

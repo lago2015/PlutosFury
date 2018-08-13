@@ -115,7 +115,7 @@ public class PlayerMoonballManager : MonoBehaviour {
             //save amount of additional hearts player has bought
             PlayerPrefs.SetInt("CurAddtionalBalls", curMoonballContainer-1);
             //check if buying a heart button is disabled due to max hearts being bought and re enable the button
-            if (BuyMoonballButton.IsInteractable() == false)
+            if (canBuyBall == false)
             {
                 canBuyBall = true;
             }

@@ -33,13 +33,25 @@ public class CollisionDamage : MonoBehaviour {
             }
         }
 
-        if (col.gameObject.tag == "MoonBall")
+        else if (col.gameObject.tag == "MoonBall")
         {
             col.gameObject.GetComponent<MoonBall>().KnockBack(this.gameObject);
         }
-        if(col.gameObject.tag=="BigAsteroid")
+        else if(col.gameObject.tag=="BigAsteroid")
         {
             col.gameObject.GetComponent<BigAsteroid>().AsteroidHit(5,false,false);
+        }
+        else if(col.gameObject.name.Contains("DamageWall"))
+        {
+            col.gameObject.GetComponent<WallHealth>().IncrementDamage();
+        }
+        else if(col.gameObject.name.Contains("Landmine"))
+        {
+            col.gameObject.GetComponent<DetectThenExplode>().TriggeredExplosion(false);
+        }
+        else if(col.gameObject.name.Contains("Rocket"))
+        {
+            col.gameObject.GetComponent<Rocket>().BlowUp(false);
         }
     }
 

@@ -25,6 +25,22 @@ public class BackgroundMusicManager : MonoBehaviour
     public AudioSource gameOverVoiceSource;
 
 
+    private void Start()
+    {
+        if(BgMusicSource)
+        {
+            BgMusicSource.volume = 0.07f;
+            BackgroundMusic();
+            StartCoroutine(DelayVolume());
+        }
+    }
+
+    IEnumerator DelayVolume()
+    {
+        yield return new WaitForSeconds(2f);
+        BgMusicSource.volume = 0.25f;
+    }
+
     public void BackgroundMusic()
     {
         if (BgMusicSource != null)

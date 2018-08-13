@@ -316,8 +316,15 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
                 healthScript = c.gameObject.GetComponent<WallHealth>();
                 if (healthScript)
                 {
+
                     healthScript.IncrementDamage();
+                    healthScript.ApplyPickup();
                     healthScript = null;
+                }
+                //feedback on damage
+                if (vibrationHit)
+                {
+                    Handheld.Vibrate();
                 }
 
             }
@@ -373,20 +380,8 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
             myBody.AddForce(-direction * obstacleBump);
             if (!isDamaged)
             {
-                healthScript = c.gameObject.GetComponent<WallHealth>();
-                if (healthScript)
-                {
-                    if (isDashing())
-                    {
-                        healthScript.IncrementDamage();
-                        DamagePluto();
-                        healthScript = null;
-                    }
-                }
-                else
-                {
-                    DamagePluto();
-                }
+                DamagePluto();
+
                 if (c.gameObject.name == "Spikes")
                 {
                     if (audioScript)

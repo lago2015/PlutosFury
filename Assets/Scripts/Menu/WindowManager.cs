@@ -32,10 +32,22 @@ public class WindowManager : MonoBehaviour {
                 musicManager.TurnMusicOn(true);
             }
         }
+
+    }
+    private void Start()
+    {
+        StartCoroutine(resetPlayerPref());
+    }
+    IEnumerator resetPlayerPref()
+    {
+        yield return new WaitForSeconds(0.5f);
+        PlayerPrefs.SetInt("levelSelect", 0);
     }
     //ensure player goes back to title screen next time app is open
     private void OnApplicationQuit()
     {
         PlayerPrefs.SetInt("levelSelect", 0);
     }
+
+    
 }

@@ -120,23 +120,31 @@ public class MoonBall : MonoBehaviour
         }
         else if (col.gameObject.tag == "EnvironmentObstacle" || col.gameObject.tag == "BreakableWall" || col.gameObject.GetComponent<AIHealth>() || col.gameObject.tag == "Neptune")
         {
-            if (isShockWave)
+            if(col.gameObject.name.Contains("DamageWall")||col.gameObject.name.Contains("Rocket")||col.gameObject.name.Contains("Landmine"))
             {
-                ShockWave();
                 OnExplosion();
             }
             else
             {
-                if (--hitCount >= -1)
+                if (isShockWave)
                 {
-                    Bounce(col);
+                    ShockWave();
+                    OnExplosion();
                 }
                 else
                 {
-                    OnExplosion();
+                    if (--hitCount >= -1)
+                    {
+                        Bounce(col);
+                    }
+                    else
+                    {
+                        OnExplosion();
+                    }
+
                 }
-          
-            }              
+            }
+                          
         }
     }
 
