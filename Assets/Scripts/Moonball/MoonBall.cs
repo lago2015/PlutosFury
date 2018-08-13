@@ -118,7 +118,7 @@ public class MoonBall : MonoBehaviour
         {
             Bounce(col);
         }
-        else if (col.gameObject.tag == "EnvironmentObstacle" || col.gameObject.tag == "BreakableWall" || col.gameObject.GetComponent<AIHealth>() || col.gameObject.tag == "Neptune")
+        else if (col.gameObject.tag == "EnvironmentObstacle" || col.gameObject.tag == "BreakableWall" || col.gameObject.GetComponent<AIHealth>() || col.gameObject.tag == "Neptune"||col.gameObject.tag=="Obstacle")
         {
             if(col.gameObject.name.Contains("DamageWall")||col.gameObject.name.Contains("Rocket")||col.gameObject.name.Contains("Landmine"))
             {
@@ -213,7 +213,7 @@ public class MoonBall : MonoBehaviour
             AIHealth enemyScript = col.GetComponent<AIHealth>();
             if (enemyScript)
             {
-                enemyScript.IncrementDamage(this.gameObject.tag);
+                enemyScript.IncrementDamage(this.gameObject.tag,true);
                 break;
             }
             RogueCollision rogueScript = col.GetComponent<RogueCollision>();

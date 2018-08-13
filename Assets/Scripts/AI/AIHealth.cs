@@ -48,7 +48,7 @@ public class AIHealth : MonoBehaviour {
         audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
 
     }
-    public void IncrementDamage(string CurName)
+    public void IncrementDamage(string CurName,bool spawnOrbs)
     {
        
         EnemyHealth--;
@@ -71,11 +71,15 @@ public class AIHealth : MonoBehaviour {
                         GameObject.FindObjectOfType<PlayerManager>().niceCombo++;
                     }
                 }
-
+                //feedback on damage
+                if (vibrationHit)
+                {
+                    Handheld.Vibrate();
+                }
 
 
             }
-            if (orbScript)
+            if (orbScript&&spawnOrbs)
             {
                 switch (currentEnemy)
                 {
@@ -111,11 +115,7 @@ public class AIHealth : MonoBehaviour {
                     audioScript.ShatterExplosion(transform.position);
                 }
             }
-            //feedback on damage
-            if (vibrationHit)
-            {
-                Handheld.Vibrate();
-            }
+            
             // Using Object Pool Manager to grab explosion to play and destroy enemy
             GameObject explosion = GameObject.FindObjectOfType<ObjectPoolManager>().FindObject(explosionPoolName);
             explosion.transform.position = transform.position;
@@ -143,7 +143,7 @@ public class AIHealth : MonoBehaviour {
             bool isDashing = player.DashStatus();
             if (isDashing)
             {
-                IncrementDamage(CurTag);
+                IncrementDamage(CurTag,true);
 
                 player.KillCombo();
 
@@ -162,6 +162,13 @@ public class AIHealth : MonoBehaviour {
 
             }
         }
+        else if(CurTag=="EnvironmentObstacle")
+        {
+            if(col.gameObject.name.Contains("Rocket"))
+            {
+                IncrementDamage(CurTag,false);
+            }
+        }
         else if (CurTag == "RogueWall" || CurTag == "Wall" || CurTag == "MazeWall")
         {
 
@@ -171,7 +178,7 @@ public class AIHealth : MonoBehaviour {
         if (col.gameObject.tag == "MoonBall")
         {
             col.gameObject.GetComponent<MoonBall>().OnExplosion();
-            IncrementDamage(col.gameObject.tag);
+            IncrementDamage(col.gameObject.tag,true);
         }
     }
 
@@ -187,7 +194,7 @@ public class AIHealth : MonoBehaviour {
 
                 if (isPlayerDashing)
                 {
-                    IncrementDamage(col.tag);
+                    IncrementDamage(col.tag,true);
                 }
             }
         }
@@ -195,7 +202,7 @@ public class AIHealth : MonoBehaviour {
         if (col.gameObject.tag == "MoonBall")
         {
             col.GetComponent<MoonBall>().OnExplosion();
-            IncrementDamage(col.tag);   
+            IncrementDamage(col.tag,true);   
         } 
     }
 }

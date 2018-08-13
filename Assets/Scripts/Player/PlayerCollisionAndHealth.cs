@@ -300,13 +300,19 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
             {
                 audioScript.WallBounce();
             }
+            
+            myBody.velocity = Vector3.zero;
+            direction = c.contacts[0].point - transform.position;
+            direction = direction.normalized;
             if (isDashing())
             {
-                myBody.velocity = Vector3.zero;
-                direction = c.transform.position - transform.position;
-                direction = direction.normalized;
+                myBody.AddForce(-direction * wallBump*2);
+            }
+            else
+            {
                 myBody.AddForce(-direction * wallBump);
             }
+            
         }
         else if (curTag == "BreakableWall")
         {
@@ -375,9 +381,19 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
         else if (curTag == "EnvironmentObstacle" || curTag == "ShatterPiece")
         {
             myBody.velocity = Vector3.zero;
-            direction = c.transform.position - transform.position;
-            direction = direction.normalized;
-            myBody.AddForce(-direction * obstacleBump);
+            if(c.gameObject.name.Contains("DamageWall"))
+            {
+                direction = c.transform.position - transform.position;
+                direction = direction.normalized;
+                myBody.AddForce(-direction * OrbBump);
+            }
+            else
+            {
+                direction = c.transform.position - transform.position;
+                direction = direction.normalized;
+                myBody.AddForce(-direction * obstacleBump);
+            }
+            
             if (!isDamaged)
             {
                 DamagePluto();

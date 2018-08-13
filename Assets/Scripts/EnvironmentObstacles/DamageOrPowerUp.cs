@@ -17,7 +17,6 @@ public class DamageOrPowerUp : MonoBehaviour {
     public float IncrementTimeRate;
     public bool Damaged;
     
-    float elapseTime;
     Movement PlayerMoveScript;
     PlayerCollisionAndHealth PlayerCollisionScript;
     private SphereCollider damageCollider;
