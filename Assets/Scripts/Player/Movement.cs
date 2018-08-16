@@ -6,52 +6,48 @@ using UnityEngine.Events;
 
 public class Movement : MonoBehaviour
 {
-    [SerializeField]
-    public bool startAtBeginning;
-    [SerializeField]
-    public bool controllerConnected = false;
-    [SerializeField]
     //buffs and debuffs
-    bool CanFreezePluto;
-    [SerializeField]
+    private bool CanFreezePluto;
+    
     private bool isDisabled;
-    [SerializeField]
+    
     private bool isDead;
     //******Dash Variables
     //Dash States
-    [SerializeField]
+    
     public enum DashState { idle, basicMove, dashMove, chargeStart, chargeComplete, burst }
-    [SerializeField]
-    private DashState trailState;
-    [SerializeField]
+    [HideInInspector]
+    public DashState trailState;
+    
     private GameObject curTrail;
     //dash trail rotation
-    [SerializeField]
+    
     private Quaternion trailRot;
-    [SerializeField]
+    
     private Vector3 dir;
-    [SerializeField]
+    
     //trail checks
     private bool moveOn;
-    [SerializeField]
+    
     private bool dashOn;
     [SerializeField]
     /////Time outs
     public float DashTimeout = 2f;
-    [SerializeField]
+    
     ///Cooldowns
     private float DashCooldownTime = 0.5f;
-    [SerializeField]
-    /////checks
-    private bool playOnce;
+    
+    //checks
     private bool isExhausted = false;
 
+    [HideInInspector]
     public bool ShouldDash;
     private bool dashOnce;
     /////Speeds
     private float DefaultSpeed;
     public float MoveSpeed;
     public float DashSpeed;
+    public int rotationSpeed = 8;   //how quick the player rotate to target location
     //Rigidbody drag floats
     public float slowDownDrag;
     private float normalDrag;
@@ -63,36 +59,34 @@ public class Movement : MonoBehaviour
 
     public Rigidbody myBody;
     
+    private FloatingJoystickV2 joystick;
 
     //Script References
-    private ButtonIndicator dashButt;
     private AudioController audioScript;
-    
-    
     private PlayerManager ScoreManager;
-    //private CameraShake CamShake;
-    private FloatingJoystick joystickscript;
-    
     private PlayerAppearance appearanceScript;
-    
-    public TriggerCollisionPluto triggerScript;
+    private TriggerCollisionPluto triggerScript;
 
     //Appearance Components
     [Tooltip("0=default, 1=dash, 2=chargeStart, 3=chargeComplete, 4=burst")]
     public GameObject[] trailContainer;
-    public GameObject hitEffect;
+    private GameObject hitEffect;
 
     //collider radius
-    private float defaultRadius;
-
+    
+    private float tempAngle;
+    private float xMovementInput;
+    private float zMovementInput;
     //Basic Movement values
     [HideInInspector]
     public Vector3 move;
+    private Vector3 tempPosition;
+    private Vector3 lookingVector;
     private float wallBump = 70f;
     private float velocityCap = 80;
     private float velocityMin = -80;
     private bool isWaiting;
-    private Vector3 lastMove;
+    
     private Vector3 newVelocity;
 
     public void ReferenceAbsorbScript(GameObject scriptObject)
@@ -132,7 +126,7 @@ public class Movement : MonoBehaviour
     {
         trailState = DashState.basicMove;   
         appearanceScript = GetComponent<PlayerAppearance>();
-        
+        joystick = GameObject.FindGameObjectWithTag("GameController").GetComponent<FloatingJoystickV2>();
         
         //For physic things
         myBody = GetComponent<Rigidbody>();
@@ -149,15 +143,7 @@ public class Movement : MonoBehaviour
         //    CamShake = camObject.GetComponent<CameraShake>();
         //}
     }
-
-    public void GetController(GameObject joystick)
-    {
-        if(joystick)
-        {
-            joystickscript = joystick.GetComponent<FloatingJoystick>();
-        }
-        
-    }
+    
 
     void LateUpdate()
     {
@@ -188,32 +174,17 @@ public class Movement : MonoBehaviour
         {
             MoveSpeed = 0;
         }
-        if (joystickscript && !isDead)
+        if (joystick && !isDead)
         {
             //Joystick input
-            //move = Vector3.zero;
-
-            move.x = joystickscript.horizontal();
-            move.y = joystickscript.vertial();
-            //normalize input
-            if (move.magnitude > 1)
-            {
-                move.Normalize();
-            }
-           if(move.x>0.7f || move.x<-0.7f)
-            {
-                lastMove.x= move.x;
-
-            }
-            if (move.y > 0.7f||move.y<-0.7f)
-            {
-                lastMove.y = move.y;
-            }
-           
             
-            //move player
-            myBody.AddForce(move * MoveSpeed * Time.deltaTime, ForceMode.VelocityChange);
+            move = Vector3.zero;
+            move.x = joystick.Horizontal;
+            move.y = joystick.Vertical;
 
+
+            xMovementInput = move.x;
+            zMovementInput = move.y;
             //trail rotation and enabling trails
             if (trailContainer.Length > 0)
             {
@@ -222,59 +193,60 @@ public class Movement : MonoBehaviour
                     TrailChange(DashState.idle);
 
                 }
-                else
+                else if (!ShouldDash)
                 {
-
-                    //Player not moving but dash is fully charged
-                    if (move == Vector3.zero)
+                    if (!moveOn)
                     {
-                        TrailChange(DashState.idle);
+                        TrailChange(DashState.basicMove);
                     }
-                    //check if player is only moving
-                    else if (!ShouldDash)
-                    {
-                        if (!moveOn)
-                        {
-                            TrailChange(DashState.basicMove);
-                        }
-                    }
-                    //check if player is done charging
-                    else if (!playOnce && !ShouldDash)
-                    {
-                        playOnce = true;
-                        TrailChange(DashState.chargeComplete);
-                    }
-                    //check if player is dashing but isnt charged
-                    else if (ShouldDash)
-                    {
-                        if (!dashOn)
-                        {
-                            TrailChange(DashState.dashMove);
-                        }
-
-                    }
-                    
-
                 }
-
-                //Get current rotation
-                trailRot = joystickscript.rotation();
-                
-                if (curTrail)
+                //check if player is dashing but isnt charged
+                else if (ShouldDash)
                 {
-                    //apply rotation
-                    curTrail.transform.rotation = trailRot;
-                    if(ShouldDash)
+                    if (!dashOn)
                     {
-                        trailContainer[1].transform.rotation = trailRot;
+                        TrailChange(DashState.dashMove);
                     }
                 }
             }
-        }
-        
-        
+            //if there is only input from the joystick
+            if(move!=Vector3.zero)
+            {
+                //Move the player the same distance in each direction. Player must move in circular motion
+                tempAngle = Mathf.Atan2(zMovementInput, xMovementInput);
+                xMovementInput *= Mathf.Abs(Mathf.Cos(tempAngle));
+                zMovementInput *= Mathf.Abs(Mathf.Sin(tempAngle));
 
-        
+                move = new Vector3(xMovementInput, zMovementInput,0);
+                move = transform.TransformDirection(move);
+                move *= MoveSpeed;
+
+
+                // Make rotation object(The child object that contains animation) rotate to direction we are moving in.
+
+                tempPosition = transform.position;
+                tempPosition.x += xMovementInput;
+                tempPosition.y += zMovementInput;
+                lookingVector = tempPosition - transform.position;
+                if(lookingVector!=Vector3.zero)
+                {
+                    ////Get current rotation
+                    trailRot = joystick.rotation();
+                    if (curTrail)
+                    {
+                        //apply rotation
+                        curTrail.transform.rotation = trailRot;
+                        if (ShouldDash)
+                        {
+                            trailContainer[1].transform.rotation = trailRot;
+                        }
+                    }
+                }
+                //myBody.transform.Translate(move * Time.fixedDeltaTime);
+                myBody.AddForce(move * MoveSpeed * Time.fixedDeltaTime, ForceMode.VelocityChange);
+
+            }
+        }
     }
 //Function for changing trails depending on overload
     public void TrailChange(DashState nextState)
@@ -290,10 +262,7 @@ public class Movement : MonoBehaviour
             switch (trailState)
             {
                 case DashState.idle:
-                    if (!isWaiting)
-                    {
-                        ResumePluto();
-                    }
+                    
                     ShouldDash = false;
                     moveOn = false;
 
@@ -500,6 +469,7 @@ public class Movement : MonoBehaviour
     {
         isWaiting = false;
         MoveSpeed = DefaultSpeed;
+        Debug.Log("Hit");
         myBody.drag = normalDrag;
         isDisabled = false;
     }

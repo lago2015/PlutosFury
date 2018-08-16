@@ -15,7 +15,7 @@ public class HUDManager : MonoBehaviour {
     public Image[] moonballSprites;
     //public Text timerText;
     private FloatingJoystickController joystickController;
-    private FloatingJoystick joystickScript;
+    private FloatingJoystickV2 joystickScript;
     public GameObject joystick;
     public GameObject dashButton;
     private InGameCharacterManager charManager;
@@ -42,36 +42,25 @@ public class HUDManager : MonoBehaviour {
                 charManager.WaitForIntro(joystick);
                 charManager = null;
             }
-            joystickScript = joystick.GetComponent<FloatingJoystick>();
-            if(joystickScript)
-            {
-                joystickScript.GetButton(dashButton);
-            }
+            
         }
+        dashButton = GameObject.FindGameObjectWithTag("DashButt");
     }
 
     private void Start()
     {
-        if(joystick)
-        {
-            moveScript = GameObject.FindGameObjectWithTag("Player").GetComponent<Movement>();
-            if(moveScript)
-            {
-                moveScript.GetController(joystick);
-                moveScript = null;
-            }
-            joystick.SetActive(false);
-        }
+        //if(joystick)
+        //{
+        //    moveScript = GameObject.FindGameObjectWithTag("Player").GetComponent<Movement>();
+        //    if(moveScript)
+        //    {
+        //        moveScript.GetController(joystick);
+        //        moveScript = null;
+        //    }
+        //    joystick.SetActive(false);
+        //}
 
-        if (dashButton)
-        {
-            joystickController = GameObject.FindGameObjectWithTag("EditorOnly").GetComponent<FloatingJoystickController>();
-            if(joystickController)
-            {
-                joystickController.GetSecondTouchImage(dashButton);
-            }
-            dashButton.SetActive(false);
-        }
+        
         if (scoreScript)
         {
             UpdateHealth(scoreScript.playerHealth);
@@ -90,14 +79,14 @@ public class HUDManager : MonoBehaviour {
     //Gets called from Canvas Toggle after go sprite is played
     public void EnableController()
     {
-        if (joystick)
-        {
-            joystick.SetActive(true);
-        }
-        if (dashButton)
-        {
-            dashButton.SetActive(true);
-        }
+        //if (joystick)
+        //{
+        //    joystick.SetActive(true);
+        //}
+        //if (dashButton)
+        //{
+        //    dashButton.SetActive(true);
+        //}
     }
 
     //Called from players collision and health script. ensures the health is 

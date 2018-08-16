@@ -81,7 +81,7 @@ public class GameManager : MonoBehaviour
             //asteroid collector
             collectorObject=Instantiate(charManager.AsteroidCollectorPlayers, spawnPoint.transform.position, Quaternion.identity);
             //floating joystick controller
-            Instantiate(charManager.floatingJoystickController, Vector3.zero, Quaternion.identity);
+            //Instantiate(charManager.floatingJoystickController, Vector3.zero, Quaternion.identity);
             playerMoveScript.ReferenceAbsorbScript(collectorObject);
             playerMoveScript.ReferenceAudio(audioObject);
         }

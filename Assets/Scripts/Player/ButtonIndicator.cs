@@ -20,7 +20,11 @@ public class ButtonIndicator : MonoBehaviour
     public bool isDashing;
     public float delayTimer;
 
+    private void Awake()
+    {
+        GameObject.FindObjectOfType<FloatingJoystickV2>().GetButton(gameObject);
 
+    }
     void Start()
     {
         //getter for audio controller and player movement script
@@ -30,7 +34,6 @@ public class ButtonIndicator : MonoBehaviour
             //Getter for delays and timeouts set by user in movement script
             dashDelay = playerScript.DashTimeout;
         }
-        
     }
     
     void Update()
@@ -51,11 +54,8 @@ public class ButtonIndicator : MonoBehaviour
             {
                 playerScript.Dash();
                 doOnce = true;
+                StartCoroutine(DashDelay());
             }
-        }
-        else
-        {
-            doOnce = false;
         }
     }
     
@@ -79,7 +79,8 @@ public class ButtonIndicator : MonoBehaviour
     {
 
         yield return new WaitForSeconds(dashDelay);
-        playerScript.TrailChange(Movement.DashState.idle);
+        isButtDown = false;
+        doOnce = false;
         isExhausted = false;
     }
 }
