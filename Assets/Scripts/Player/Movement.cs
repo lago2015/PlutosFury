@@ -181,7 +181,11 @@ public class Movement : MonoBehaviour
             move = Vector3.zero;
             move.x = joystick.Horizontal;
             move.y = joystick.Vertical;
-
+            if(move==Vector3.zero)
+            {
+                move.x = Input.GetAxis("Horizontal");
+                move.y = Input.GetAxis("Vertical");
+            }
 
             xMovementInput = move.x;
             zMovementInput = move.y;
@@ -469,7 +473,6 @@ public class Movement : MonoBehaviour
     {
         isWaiting = false;
         MoveSpeed = DefaultSpeed;
-        Debug.Log("Hit");
         myBody.drag = normalDrag;
         isDisabled = false;
     }

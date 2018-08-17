@@ -118,18 +118,16 @@ public class GameManager : MonoBehaviour
         {
             //stop player movement
             playerMoveScript.DisableMovement(isPlayerDead);
+            //turn off on screen controls
+            GameObject.FindObjectOfType<FloatingJoystickV2>().gameObject.SetActive(false);
+            GameObject.FindObjectOfType<ButtonIndicator>().gameObject.SetActive(false);
             if(!isPlayerDead)
             {
-                //save health for next scene
-                ScoreManager.HealthChange(playerCollisionScript.curHealth);
                 StartYouWin();
             }
             else
             {
                 StartCoroutine(GameOver());
-
-                //reset health otherwise
-                ScoreManager.DefaultHealth();
             }
         }
 
@@ -178,8 +176,6 @@ public class GameManager : MonoBehaviour
         //Time.timeScale = 0;
         if (ScoreManager)
         {
-            //save that score to show off to your friends
-            //ScoreManager.SaveScore(true);
 
             //Default health
             ScoreManager.DefaultHealth();

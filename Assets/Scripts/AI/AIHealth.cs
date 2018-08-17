@@ -71,12 +71,6 @@ public class AIHealth : MonoBehaviour {
                         GameObject.FindObjectOfType<PlayerManager>().niceCombo++;
                     }
                 }
-                //feedback on damage
-                if (vibrationHit)
-                {
-                    Handheld.Vibrate();
-                }
-
 
             }
             if (orbScript&&spawnOrbs)
@@ -115,7 +109,13 @@ public class AIHealth : MonoBehaviour {
                     audioScript.ShatterExplosion(transform.position);
                 }
             }
-            
+
+            //feedback on damage
+            if (vibrationHit)
+            {
+                Handheld.Vibrate();
+            }
+
             // Using Object Pool Manager to grab explosion to play and destroy enemy
             GameObject explosion = GameObject.FindObjectOfType<ObjectPoolManager>().FindObject(explosionPoolName);
             explosion.transform.position = transform.position;

@@ -23,10 +23,14 @@ public class CanvasToggle : MonoBehaviour {
     public float goSpriteFadeIn = 1;
     public float goSpriteFadeOut = 1;
 
+    private LoadTargetSceneButton loadScript;
     private FloatingJoystickController controllerScript;
     private Movement playerScript;
     private HUDManager hudManager;
-    
+    public Button gameOverReplayButton;
+    public Button gameOverMenuButton;
+    public Button winReplayButton;
+    public Button winMenuButton;
 
     public bool tipOnStart;
     // Use this for initialization
@@ -37,7 +41,13 @@ public class CanvasToggle : MonoBehaviour {
         ReadySprite.canvasRenderer.SetAlpha(0.0f);
         GoSprite.canvasRenderer.SetAlpha(0.0f);
         hudManager = GameObject.FindGameObjectWithTag("HUDManager").GetComponent<HUDManager>();
-        
+        loadScript = GameObject.FindObjectOfType<LoadTargetSceneButton>();
+        if (gameOverMenuButton && gameOverReplayButton && loadScript)
+        {
+            gameOverReplayButton.onClick.AddListener(loadScript.RestartLevel);
+            gameOverMenuButton.onClick.AddListener(loadScript.LoadToMainMenu);
+        }
+
         //get canvas script to enable fading
         if(WinScreenCanvas)
         {

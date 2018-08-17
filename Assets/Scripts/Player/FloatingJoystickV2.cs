@@ -34,9 +34,7 @@ public class FloatingJoystickV2 : Joystick
 
     void Awake()
     {
-        secondTouchImage.enabled = false;
-        background.gameObject.SetActive(false);
-        handle.gameObject.SetActive(false);
+        
     }
     private void Start()
     {
@@ -45,6 +43,9 @@ public class FloatingJoystickV2 : Joystick
         {
             moonballManagerScript = player.GetComponent<MoonballManager>();
         }
+        secondTouchImage.enabled = false;
+        background.gameObject.SetActive(false);
+        handle.gameObject.SetActive(false);
     }
 
     public override void OnDrag(PointerEventData eventData)
@@ -135,7 +136,7 @@ public class FloatingJoystickV2 : Joystick
                 curPosition = Vector3.zero;
                 startPos = Vector2.zero;
                 direction = Vector2.zero;
-                directionChosen = false;
+                
 
             }
 
@@ -149,6 +150,7 @@ public class FloatingJoystickV2 : Joystick
     {
         isCoolingDown = true;
         yield return new WaitForSeconds(spawnCooldown);
+        directionChosen = false;
         isCoolingDown = false;
     }
 
@@ -167,6 +169,7 @@ public class FloatingJoystickV2 : Joystick
 
     public override void OnPointerUp(PointerEventData eventData)
     {
+        //turn off joystick images because theres no more touch
         if (Input.touchCount == 1)
         {
             inputVector = Vector3.zero; // resets the inputVector so that output will no longer affect movement of the game object (example, a player character or any desired game object)
@@ -177,9 +180,8 @@ public class FloatingJoystickV2 : Joystick
             background.gameObject.SetActive(false);
             inputVector = Vector2.zero;
         }
-        else 
-
-        if (Input.touchCount == 2)
+        //still one finger on screen so check if player can dash depending if player is attempting spawning a moonball
+        else if (Input.touchCount == 2 && !directionChosen)
         {
             Touch[] mytouches = Input.touches; // gets all the touches and stores them in an array
             //secondsidefingerid = mytouches[i].fingerid; // stores the unique id for this touch that happened on the left-side half of the screen

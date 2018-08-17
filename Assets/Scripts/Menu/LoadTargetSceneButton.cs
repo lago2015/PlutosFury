@@ -71,7 +71,8 @@ public class LoadTargetSceneButton : MonoBehaviour {
 
     public void LoadToMainMenu()
     {
-
-        SceneManager.LoadScene(0);
+        PlayerPrefs.SetInt("levelSelect", 1);
+        LoadingScreenManager.LoadScene(0);
+        
     }
 }

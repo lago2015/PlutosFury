@@ -27,6 +27,7 @@ public class ButtonIndicator : MonoBehaviour
     }
     void Start()
     {
+
         //getter for audio controller and player movement script
         playerScript = GameObject.FindGameObjectWithTag("Player").GetComponent<Movement>();
         if(playerScript)

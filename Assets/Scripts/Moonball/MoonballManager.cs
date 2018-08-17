@@ -38,7 +38,15 @@ public class MoonballManager : MonoBehaviour {
 
     public void SaveCurrentBalls()
     {
-        PlayerPrefs.SetInt("moonBallAmount", moonballNum);
+        if(moonballNum>1)
+        {
+            PlayerPrefs.SetInt("moonBallAmount", moonballNum);
+        }
+        else
+        {
+            PlayerPrefs.SetInt("moonballAmount", 1);
+        }
+        
     }
 
 
