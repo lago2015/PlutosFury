@@ -156,8 +156,6 @@ public class RogueCollision : MonoBehaviour {
             }
 
             moonBall.rogueHit(forwardDirection, rogueDashing);
-         
-            moonBall.OnExplosion();
         }
 
         else if(curTag=="BigAsteroid")

@@ -16,4 +16,14 @@ public class ShatterPiece : MonoBehaviour
             }
         }
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "MoonBall")
+        {
+      
+            GetComponent<SpriteRenderer>().enabled = false;
+            GetComponent<Collider>().enabled = false;
+        }
+    }
 }

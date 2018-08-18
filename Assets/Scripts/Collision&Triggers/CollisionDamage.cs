@@ -35,7 +35,8 @@ public class CollisionDamage : MonoBehaviour {
 
         else if (col.gameObject.tag == "MoonBall")
         {
-            col.gameObject.GetComponent<MoonBall>().KnockBack(this.gameObject);
+            col.gameObject.GetComponent<MoonBall>().CheckHit(this.gameObject);
+            this.transform.parent.gameObject.SetActive(false);
         }
         else if(col.gameObject.tag=="BigAsteroid")
         {

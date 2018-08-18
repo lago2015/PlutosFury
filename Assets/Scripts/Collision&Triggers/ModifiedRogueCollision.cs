@@ -149,8 +149,6 @@ public class ModifiedRogueCollision : MonoBehaviour {
                 Vector3 forwardDirection = rogueMoveScript.transform.forward.normalized;
                 bool rogueDashing = rogueMoveScript.isDashing();
                 moonBall.rogueHit(forwardDirection, rogueDashing);
-
-                moonBall.OnExplosion();
             }
 
             else if (curTag == "BigAsteroid")

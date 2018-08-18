@@ -25,7 +25,6 @@ public class ShatterCore : MonoBehaviour
             
             transform.parent.GetComponent<Shatter>().OnDeath();
             MoonBall ballScript = collision.gameObject.GetComponent<MoonBall>();
-            ballScript.OnExplosion();
         }
     }
 }

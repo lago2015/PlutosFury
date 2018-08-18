@@ -3,12 +3,11 @@ using System.Collections;
 
 public class MoonBall : MonoBehaviour
 {
-
+    // Moonball Stats
+    [SerializeField]
     public float hitSpeed;
-    private SphereCollider colliderComp;
     [SerializeField]
     private float knockbackSpeed;
-    
     [SerializeField]
     private float velocityCap;
     [SerializeField]
@@ -20,16 +19,19 @@ public class MoonBall : MonoBehaviour
     [SerializeField]
     private int hitCount = 3;
 
-    private bool resetCollider;
+    // Public and Private references
     public GameObject gravityWell;
-    private GameObject newGravWell;
     public bool GravWellEnabled;
-    
-    private int upgrade1Index;
-    private int upgrade2Index;
+    private GameObject newGravWell;
+    private SphereCollider colliderComp;
     private Rigidbody rb;
     private Coroutine myCoroutine;
 
+    // Private flags
+    private bool resetCollider;
+    private int upgrade1Index;
+    private int upgrade2Index;
+   
     private void Awake()
     {
         hitCount = PlayerPrefs.GetInt("moonballHits");
@@ -53,16 +55,15 @@ public class MoonBall : MonoBehaviour
         }
     }
 
-
-    // Use this for initialization
     void Start ()
     {
+        // Create collector to grab asteroids if upgraded
         if (GravWellEnabled)
         {
             newGravWell = Instantiate(gravityWell, transform.position, Quaternion.identity);
             newGravWell.GetComponent<AsteroidCollector>().FollowBall(gameObject);
         }
-        // Get rigibody component
+       
         rb = GetComponent<Rigidbody>(); 
 	}
 
@@ -86,30 +87,14 @@ public class MoonBall : MonoBehaviour
         colliderComp = null;
     }
 	
-    // NEW FUNCTION FOR BALL MOVEMENT LOGIC
+    // Moves Ball when player Dashes into 
     public void MoveBall(Vector3 movementVec, float speed)
     {
         rb.velocity = movementVec * speed;
         rb.AddTorque(movementVec * speed);
     }
 
-    // This function is for spikes
-    public void KnockBack(GameObject obj)
-    {
-        if (isShockWave)
-        {
-            OnExplosion();
-        }
-        else
-        {
-            // This is for if we decide to have more health with moonball!
-            // get direction from ball to spike
-            Vector3 direction = obj.transform.position - transform.position;
-
-            // reverse direction and apply force to it to simulate bounce
-            rb.AddForce(-direction.normalized * 20.0f, ForceMode.VelocityChange);
-        }
-    }
+   
 
     private void OnCollisionEnter(Collision col)
     {
@@ -118,7 +103,8 @@ public class MoonBall : MonoBehaviour
         {
             Bounce(col);
         }
-        else if (col.gameObject.tag == "EnvironmentObstacle" || col.gameObject.tag == "BreakableWall" || col.gameObject.GetComponent<AIHealth>() || col.gameObject.tag == "Neptune"||col.gameObject.tag=="Obstacle")
+        else if (col.gameObject.tag == "EnvironmentObstacle" || col.gameObject.tag == "BreakableWall" || col.gameObject.GetComponent<AIHealth>() 
+            || col.gameObject.tag == "Neptune"||col.gameObject.tag =="Obstacle" || col.gameObject.tag == "ShatterPiece")
         {
             if(col.gameObject.name.Contains("DamageWall")||col.gameObject.name.Contains("Rocket")||col.gameObject.name.Contains("Landmine"))
             {
@@ -129,7 +115,6 @@ public class MoonBall : MonoBehaviour
                 if (isShockWave)
                 {
                     ShockWave();
-                    OnExplosion();
                 }
                 else
                 {
@@ -148,7 +133,7 @@ public class MoonBall : MonoBehaviour
         }
     }
 
-    // This will need work
+    // Logic for when rouge collides with Moonball
     public void rogueHit(Vector3 direction,bool isDashing)
     {
         if(isDashing)
@@ -164,14 +149,25 @@ public class MoonBall : MonoBehaviour
         if (isShockWave)
         {
             ShockWave();
+        }
+    }
 
+
+    public void CheckHit(GameObject obj)
+    {
+        if (--hitCount >= -1)
+        {
+            KnockBack(obj);
+        }
+        else
+        {
             OnExplosion();
         }
     }
+
+    // Destroying Moonball
     public void OnExplosion()
     {
-        
-        
         GameObject explosion = GameObject.FindObjectOfType<ObjectPoolManager>().FindObject("ContainerExplosion");
         explosion.transform.position = transform.position;
         explosion.SetActive(true);
@@ -180,6 +176,7 @@ public class MoonBall : MonoBehaviour
         GameObject.FindObjectOfType<FloatingJoystickV2>().SwitchPrevMoonball();
     }
 
+    // Physics for bouncing the ball off objects
     private void Bounce(Collision c)
     {
         Vector3 result = Vector3.Reflect(rb.velocity.normalized, c.contacts[0].normal);
@@ -190,6 +187,26 @@ public class MoonBall : MonoBehaviour
         rb.velocity = result * currentSpeed;
     }
 
+    // This function is for spikes
+    private void KnockBack(GameObject obj)
+    {
+        if (isShockWave)
+        {
+            OnExplosion();
+        }
+        else
+        {
+            rb.velocity = Vector3.zero;
+            // This is for if we decide to have more health with moonball!
+            // get direction from ball to spike
+            Vector3 direction = obj.transform.position - transform.position;
+
+            // reverse direction and apply force to it to simulate bounce
+            rb.AddForce(-direction.normalized * 20.0f, ForceMode.VelocityChange);
+        }
+    }
+
+    // Shockwave Power that destroys everything around moonball contact
     private void ShockWave()
     {
         Vector3 currentPos = transform.position;
@@ -229,6 +246,8 @@ public class MoonBall : MonoBehaviour
                 break;
             }
         }
+
+        OnExplosion();
     }
 
 }
