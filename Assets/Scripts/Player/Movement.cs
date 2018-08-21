@@ -59,8 +59,8 @@ public class Movement : MonoBehaviour
 
     public Rigidbody myBody;
     
-    private FloatingJoystickV2 joystick;
-
+    private FixedJoystick joystick;
+    private FloatingJoystickV2 floatJoystick;
     //Script References
     private AudioController audioScript;
     private PlayerManager ScoreManager;
@@ -126,7 +126,6 @@ public class Movement : MonoBehaviour
     {
         trailState = DashState.basicMove;   
         appearanceScript = GetComponent<PlayerAppearance>();
-        joystick = GameObject.FindGameObjectWithTag("GameController").GetComponent<FloatingJoystickV2>();
         
         //For physic things
         myBody = GetComponent<Rigidbody>();
@@ -143,7 +142,14 @@ public class Movement : MonoBehaviour
         //    CamShake = camObject.GetComponent<CameraShake>();
         //}
     }
-    
+    private void Start()
+    {
+        joystick = GameObject.FindGameObjectWithTag("GameController").GetComponent<FixedJoystick>();
+        if (!joystick)
+        {
+            floatJoystick = GameObject.FindGameObjectWithTag("GameController").GetComponent<FloatingJoystickV2>();
+        }
+    }
 
     void LateUpdate()
     {
@@ -174,13 +180,21 @@ public class Movement : MonoBehaviour
         {
             MoveSpeed = 0;
         }
-        if (joystick && !isDead)
+        if (!isDead)
         {
             //Joystick input
             
             move = Vector3.zero;
-            move.x = joystick.Horizontal;
-            move.y = joystick.Vertical;
+            if(joystick)
+            {
+                move.x = joystick.Horizontal;
+                move.y = joystick.Vertical;
+            }
+            else if(floatJoystick)
+            {
+                move.x = floatJoystick.Horizontal;
+                move.y = floatJoystick.Vertical;
+            }
             if(move==Vector3.zero)
             {
                 move.x = Input.GetAxis("Horizontal");
@@ -234,8 +248,16 @@ public class Movement : MonoBehaviour
                 lookingVector = tempPosition - transform.position;
                 if(lookingVector!=Vector3.zero)
                 {
-                    ////Get current rotation
-                    trailRot = joystick.rotation();
+                    if(joystick)
+                    {
+                        ////Get current rotation
+                        trailRot = joystick.rotation();
+                    }
+                    else if(floatJoystick)
+                    {
+                        ////Get current rotation
+                        trailRot = floatJoystick.rotation();
+                    }
                     if (curTrail)
                     {
                         //apply rotation

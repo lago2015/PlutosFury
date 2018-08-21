@@ -40,7 +40,7 @@ public class WindowManager : MonoBehaviour {
     }
     IEnumerator resetPlayerPref()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.1f);
         PlayerPrefs.SetInt("levelSelect", 0);
     }
     //ensure player goes back to title screen next time app is open

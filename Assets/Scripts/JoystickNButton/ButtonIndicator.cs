@@ -10,19 +10,39 @@ public class ButtonIndicator : MonoBehaviour
     public float curTime;
     public bool curStatus;
     public bool isButtDown;
-    private bool buttPressed;
 
-
-
+    private int buttonVisibilityPref;
+    private Color tempColor = new Color(255, 255, 255, 0);
     public bool doOnce;
     public bool isDashActive;
     public bool isExhausted;
     public bool isDashing;
     public float delayTimer;
-
+    
     private void Awake()
     {
-        GameObject.FindObjectOfType<FloatingJoystickV2>().GetButton(gameObject);
+        buttonVisibilityPref = 1;
+        
+        //buttonVisibilityPref = PlayerPrefs.GetInt("joystickVisPref");
+        if(buttonVisibilityPref==1)
+        {
+            Image buttonImage = GetComponent<Image>();
+            buttonImage.color = tempColor;
+        }
+
+        //FixedJoystick fixedJoystick = GameObject.FindObjectOfType<FixedJoystick>();
+        //if(fixedJoystick)
+        //{
+        //    fixedJoystick.GetButton(gameObject);
+        //}
+        //else
+        //{
+        //    FloatingJoystickV2 floatStick= GameObject.FindObjectOfType<FloatingJoystickV2>();
+        //    if(floatStick)
+        //    {
+        //        floatStick.GetButton(gameObject);
+        //    }
+        //}
 
     }
     void Start()

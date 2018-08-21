@@ -40,14 +40,23 @@ public class GameManager : MonoBehaviour
     private CanvasToggle canvasScript;
 
 
-
+    private void OnApplicationPause(bool pause)
+    {
+        if(pause)
+        {
+            PlayerPrefs.SetInt("levelSelect", 0);
+        }
+    }
 
     private void OnApplicationQuit()
     {
         PlayerPrefs.SetInt("levelSelect", 0);
     }
+
     void Awake()
     {
+        PlayerPrefs.SetInt("levelSelect", 0);
+
         //30 fps set rate
         Application.targetFrameRate = 30;
         //hard locking landscape rotation for the screen

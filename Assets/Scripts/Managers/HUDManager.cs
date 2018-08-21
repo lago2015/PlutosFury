@@ -13,10 +13,10 @@ public class HUDManager : MonoBehaviour {
     public Text scoreText;
     public Image[] healthSprites;
     public Image[] moonballSprites;
-    //public Text timerText;
-    private FloatingJoystickController joystickController;
-    private FloatingJoystickV2 joystickScript;
+    private int joystickPref;
+    public GameObject floatingJoystick;
     public GameObject joystick;
+    private GameObject curStick;
     public GameObject dashButton;
     private InGameCharacterManager charManager;
     private Movement moveScript;
@@ -32,14 +32,28 @@ public class HUDManager : MonoBehaviour {
         {
             scoreScript = scoreObject.GetComponent<PlayerManager>();
         }
+        joystickPref = 0;
+        //joystickPref = PlayerPrefs.GetInt("joystickPref");
 
-        if(joystick)
+        //fixed joystick
+        if(joystickPref==1)
+        {
+            curStick = joystick;
+            Destroy(floatingJoystick);
+        }
+        //floating joystick
+        else
+        {
+            curStick = floatingJoystick;
+            Destroy(joystick);
+        }
+        if(curStick)
         {
             charManager = GameObject.FindGameObjectWithTag("Spawner").transform.GetChild(0).GetComponent<InGameCharacterManager>();
             
             if(charManager)
             {
-                charManager.WaitForIntro(joystick);
+                charManager.WaitForIntro(curStick);
                 charManager = null;
             }
             

@@ -12,8 +12,8 @@ public class InGameCharacterManager : MonoBehaviour {
     private int curIngameIndex;
     private int curBallIndex;
     
-    private FloatingJoystickV2 joystickScript;
-
+    private Joystick joystickScript;
+    
     private void Awake()
     {
         curBallIndex = PlayerPrefs.GetInt("PlayerMoonballIndex");
@@ -26,8 +26,11 @@ public class InGameCharacterManager : MonoBehaviour {
         if(joystick)
         {
             joystickScript = joystick.GetComponent<FloatingJoystickV2>();
-
-            joystickScript.currentMoonball(InGameMoonballs[curBallIndex]);
+            if(joystickScript)
+            {
+                joystickScript.currentMoonball(InGameMoonballs[curBallIndex]);
+            }
+            
 
         }
     }

@@ -2,50 +2,40 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-
+using UnityEngine.UI;
 
 public class FloatingJoystickV2 : Joystick
 {
-    private bool doOnce;
-    private bool scriptDoOnce;
 
-    Vector2 joystickCenter = Vector2.zero;
-    private bool fingerDown;
-    private GameObject player;
-    public float ballLaunchPower = 30;
-    public float spawnCooldown = 3;
-    private float distance;
-    private float minDistance = 500;
-    private bool isCoolingDown;
-    private Rigidbody moonballBody;
-    private Vector2 startPos;
-    private Vector2 direction;
-    private Vector3 curPosition;
-    private Vector2 screenPos;
-    private bool directionChosen;
-    private GameObject previousMoonball;
-    private int CurMoonballAmount;
-    private MoonballManager moonballManagerScript;
-    public GameObject MoonballObject;
-    private int curTouchCount;
-
-    public GameObject currentMoonball(GameObject curBall) { return MoonballObject = curBall; }
-    public void SwitchPrevMoonball() { previousMoonball = null; }
-
-    void Awake()
+    private void Awake()
     {
-        
+        //joystickVisibilityPref = PlayerPrefs.GetInt("joystickVisPref");
+        //invisible
+        if (joystickVisibilityPref == 1)
+        {
+            Image joystickBG = gameObject.transform.GetChild(0).GetComponent<Image>();
+            Image joystickHandle = handle.GetComponent<Image>();
+            Color tempColor = joystickBG.color;
+            tempColor.a = 0;
+            joystickBG.color = tempColor;
+            joystickHandle.color = tempColor;
+
+        }
+        secondTouchImage = GameObject.FindGameObjectWithTag("DashButt").GetComponent<Image>();
+        dashScript = secondTouchImage.GetComponent<ButtonIndicator>();
     }
     private void Start()
     {
+        //Get reference for moonball object for number available and type
         player = GameObject.FindGameObjectWithTag("Player");
         if (player)
         {
             moonballManagerScript = player.GetComponent<MoonballManager>();
         }
-        secondTouchImage.enabled = false;
         background.gameObject.SetActive(false);
         handle.gameObject.SetActive(false);
+        
+        
     }
 
     public override void OnDrag(PointerEventData eventData)
@@ -79,16 +69,17 @@ public class FloatingJoystickV2 : Joystick
                     direction = touch.position - startPos;
                     //get distance of start and current touch
                     distance = Vector2.Distance(touch.position, startPos);
-                    break;
 
-                case TouchPhase.Ended:
                     //if distance is long enough then spawn moonball otherwise dash
                     if (distance >= minDistance)
                     {
                         directionChosen = true;
                     }
+                    break;
+
+                case TouchPhase.Ended:
                     fingerDown = false;
-                    
+
                     break;
             }
             if (directionChosen && !isCoolingDown)
@@ -96,12 +87,62 @@ public class FloatingJoystickV2 : Joystick
                 SpawnMoonball(direction);
             }
         }
-        if(curTouchCount == 1)
+        if (curTouchCount == 1)
         {
             secondTouchImage.enabled = false;
 
         }
 
+    }
+
+    
+
+    
+    public override void OnPointerDown(PointerEventData eventData)
+    {
+        if (Input.touchCount == 1)
+        {
+            handle.gameObject.SetActive(true);
+
+            background.gameObject.SetActive(true);
+            background.position = eventData.position;
+            handle.anchoredPosition = Vector2.zero;
+            joystickCenter = eventData.position;
+        }
+    }
+
+    public override void OnPointerUp(PointerEventData eventData)
+    {
+        //turn off joystick images because theres no more touch
+        if (Input.touchCount == 1)
+        {
+            inputVector = Vector3.zero; // resets the inputVector so that output will no longer affect movement of the game object (example, a player character or any desired game object)
+            handle.anchoredPosition = Vector3.zero; // resets the handle ("knob") of this joystick back to the center
+
+            handle.gameObject.SetActive(false);
+
+            background.gameObject.SetActive(false);
+            inputVector = Vector2.zero;
+        }
+        //still one finger on screen so check if player can dash depending if player is attempting spawning a moonball
+
+        else if (Input.touchCount == 2 && !directionChosen)
+        {
+            Touch[] mytouches = Input.touches; // gets all the touches and stores them in an array
+            //secondsidefingerid = mytouches[i].fingerid; // stores the unique id for this touch that happened on the left-side half of the screen
+            dashScript.changeChargeStatus(true);
+
+            var currentPosition = secondTouchImage.rectTransform.position; // gets the current position of the single joystick
+            currentPosition.x = mytouches[1].position.x; // calculates the x position of the single joystick to where the screen was touched
+            currentPosition.y = mytouches[1].position.y; // calculates the y position of the single joystick to where the screen was touched
+
+            // keeps this single joystick within the screen
+            currentPosition.x = Mathf.Clamp(currentPosition.x, 0 + secondTouchImage.rectTransform.sizeDelta.x, Screen.width);
+            currentPosition.y = Mathf.Clamp(currentPosition.y, 0, Screen.height - secondTouchImage.rectTransform.sizeDelta.y);
+
+            secondTouchImage.rectTransform.position = currentPosition;
+            secondTouchImage.enabled = true;
+        }
     }
 
     public void SpawnMoonball(Vector2 direction)
@@ -136,7 +177,7 @@ public class FloatingJoystickV2 : Joystick
                 curPosition = Vector3.zero;
                 startPos = Vector2.zero;
                 direction = Vector2.zero;
-                
+
 
             }
 
@@ -145,59 +186,11 @@ public class FloatingJoystickV2 : Joystick
 
         }
     }
-
     IEnumerator MoonballCooldown()
     {
         isCoolingDown = true;
         yield return new WaitForSeconds(spawnCooldown);
         directionChosen = false;
         isCoolingDown = false;
-    }
-
-    public override void OnPointerDown(PointerEventData eventData)
-    {
-        if (Input.touchCount == 1)
-        {
-            handle.gameObject.SetActive(true);
-
-            background.gameObject.SetActive(true);
-            background.position = eventData.position;
-            handle.anchoredPosition = Vector2.zero;
-            joystickCenter = eventData.position;
-        }
-    }
-
-    public override void OnPointerUp(PointerEventData eventData)
-    {
-        //turn off joystick images because theres no more touch
-        if (Input.touchCount == 1)
-        {
-            inputVector = Vector3.zero; // resets the inputVector so that output will no longer affect movement of the game object (example, a player character or any desired game object)
-            handle.anchoredPosition = Vector3.zero; // resets the handle ("knob") of this joystick back to the center
-
-            handle.gameObject.SetActive(false);
-
-            background.gameObject.SetActive(false);
-            inputVector = Vector2.zero;
-        }
-        //still one finger on screen so check if player can dash depending if player is attempting spawning a moonball
-        else if (Input.touchCount == 2 && !directionChosen)
-        {
-            Touch[] mytouches = Input.touches; // gets all the touches and stores them in an array
-            //secondsidefingerid = mytouches[i].fingerid; // stores the unique id for this touch that happened on the left-side half of the screen
-            dashScript.changeChargeStatus(true);
-
-            var currentPosition = secondTouchImage.rectTransform.position; // gets the current position of the single joystick
-            currentPosition.x = mytouches[1].position.x; // calculates the x position of the single joystick to where the screen was touched
-            currentPosition.y = mytouches[1].position.y; // calculates the y position of the single joystick to where the screen was touched
-
-            // keeps this single joystick within the screen
-            currentPosition.x = Mathf.Clamp(currentPosition.x, 0 + secondTouchImage.rectTransform.sizeDelta.x, Screen.width);
-            currentPosition.y = Mathf.Clamp(currentPosition.y, 0, Screen.height - secondTouchImage.rectTransform.sizeDelta.y);
-
-            secondTouchImage.rectTransform.position = currentPosition;
-            secondTouchImage.enabled = true;
-        }
-
     }
 }

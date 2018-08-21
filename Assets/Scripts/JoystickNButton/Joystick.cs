@@ -21,13 +21,58 @@ public class Joystick : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointer
     public float Horizontal { get { return inputVector.x; } }
     public float Vertical { get { return inputVector.y; } }
     public Vector2 Direction { get { return new Vector2(Horizontal, Vertical); } }
+    public void SwitchPrevMoonball() { previousMoonball = null; }
+    public GameObject currentMoonball(GameObject curBall) { return MoonballObject = curBall; }
+
+    [HideInInspector]
+    public int curTouchCount;
+
+    //Moonball Variables
+    [HideInInspector]
+    public float  ballLaunchPower = 30
+                , spawnCooldown = 3
+                , distance
+                , minDistance = 500;
+    
+    
+    public int CurMoonballAmount
+                ,joystickVisibilityPref;
+
+    [HideInInspector]
+    public bool directionChosen, 
+                isCoolingDown, 
+                fingerDown;
+    [HideInInspector]
+    public GameObject player, 
+                      previousMoonball, 
+                      MoonballObject;
+    
+    [HideInInspector]
+    public MoonballManager moonballManagerScript;
+    
+    [HideInInspector]
+    public Rigidbody moonballBody;
+
+    [HideInInspector]
+    public Vector2  startPos, 
+                    direction, 
+                    screenPos, 
+                    joystickCenter=Vector2.zero;
+
+    private Color tempColor=new Color(255,255,255,100);
+    [HideInInspector]
+    public Vector3 curPosition;
+
+
 
     public void GetButton(GameObject dashButt)
     {
         if (dashButt)
         {
             dashScript = dashButt.GetComponent<ButtonIndicator>();
-            secondTouchImage = dashButt.GetComponentInChildren<Image>();
+            secondTouchImage = dashButt.GetComponent<Image>();
+            secondTouchImage.color = tempColor;
+            secondTouchImage.enabled = false;
         }
             
     }
@@ -44,7 +89,7 @@ public class Joystick : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointer
 
     public virtual void OnPointerUp(PointerEventData eventData)
     {
-
+        
     }
 
     protected void ClampJoystick()
@@ -63,6 +108,8 @@ public class Joystick : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointer
 
         return Quaternion.Euler(0, 0, rotationInDegrees);
     }
+
+
 
 }
 
