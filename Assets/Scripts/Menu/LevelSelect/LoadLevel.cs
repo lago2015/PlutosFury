@@ -15,7 +15,7 @@ public class LoadLevel : MonoBehaviour {
     private Button curButton;
     public Image highlightImage;
     private LoadTargetSceneButton loadScreenScript;
-
+    private int curUnlocked;
 	// Use this for initialization
 	void Start ()
     {
@@ -42,7 +42,8 @@ public class LoadLevel : MonoBehaviour {
             isUnlocked = false;
             curButton.interactable = false;
         }
-        if(PlayerPrefs.GetInt(curWorld+"Unlocked")==loadLevel)
+        curUnlocked = PlayerPrefs.GetInt(curWorld + "Unlocked");
+        if (curUnlocked==loadLevel)
         {
             if(highlightImage)
             {

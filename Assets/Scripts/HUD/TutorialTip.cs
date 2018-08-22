@@ -16,6 +16,10 @@ public class TutorialTip : MonoBehaviour
     private CanvasToggle canvasScript;
     private GameObject joystick;
     private GameObject button;
+    public ShootProjectiles turret;
+    public SphereCollider turretCollider;
+    public FleeOrPursue rogue;
+    public SphereCollider rogueCollider;
     private Movement player;
     private bool doOnce;
     private void Awake()
@@ -71,6 +75,16 @@ public class TutorialTip : MonoBehaviour
             {
                 button.SetActive(false);
             }
+            if (rogue&&rogueCollider)
+            {
+                rogueCollider.enabled = false;
+                rogue.enabled = false;
+            }
+            if (turret&&turretCollider)
+            {
+                turretCollider.enabled = false;
+                turret.enabled = false;
+            }
             //set trigger for animation to begin going down
             anim.SetTrigger("down");
             //Display next text in array
@@ -119,6 +133,16 @@ public class TutorialTip : MonoBehaviour
         {
             joystick.SetActive(true);
             joystick.GetComponent<Joystick>().ResetHandle();
+        }
+        if (rogue && rogueCollider)
+        {
+            rogueCollider.enabled = true;
+            rogue.enabled = true;
+        }
+        if (turret && turretCollider)
+        {
+            turretCollider.enabled = true;
+            turret.enabled = true;
         }
         if (button)
         {

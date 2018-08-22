@@ -294,7 +294,7 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
                 audioScript.AsteroidBounce(transform.position);
             }
         }
-        else if (curTag == "Wall")
+        else if (curTag == "Wall"||curTag=="Door1")
         {
             if (audioScript)
             {

@@ -76,6 +76,12 @@ public class ShootProjectiles : MonoBehaviour {
         Muzzle.SetActive(false);
     }
 
+    public void ResumeShooting()
+    {
+        PlayerNear = true;
+        enabled = true;
+    }
+
     void OnTriggerEnter(Collider col)
     {
         if(col.gameObject.tag=="Player")
