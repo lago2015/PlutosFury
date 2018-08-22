@@ -41,11 +41,13 @@ public class FloatingJoystickV2 : Joystick
     public override void OnDrag(PointerEventData eventData)
     {
         curTouchCount = Input.touchCount;
+        //if player has at least a finger down for joystick
         if (curTouchCount >= 1)
         {
+            
             Vector2 direction = Input.GetTouch(0).position - joystickCenter;
             inputVector = (direction.magnitude > background.sizeDelta.x / 2f) ? direction.normalized : direction / (background.sizeDelta.x / 2f);
-            ClampJoystick();
+            
             handle.anchoredPosition = (inputVector * background.sizeDelta.x / 2f) * handleLimit;
             
         }

@@ -8,7 +8,6 @@ public class CanvasToggle : MonoBehaviour {
 
 
     public Image LevelSprite;
-    public Image LevelNumberSprite;
     public Image ReadySprite;
     public Image GoSprite;
     public GameObject hudCanvas;
@@ -37,7 +36,6 @@ public class CanvasToggle : MonoBehaviour {
     void Awake ()
     {
         LevelSprite.canvasRenderer.SetAlpha(0.0f);
-        LevelNumberSprite.canvasRenderer.SetAlpha(0.0f);
         ReadySprite.canvasRenderer.SetAlpha(0.0f);
         GoSprite.canvasRenderer.SetAlpha(0.0f);
         hudManager = GameObject.FindGameObjectWithTag("HUDManager").GetComponent<HUDManager>();
@@ -78,14 +76,20 @@ public class CanvasToggle : MonoBehaviour {
         {
             controllerScript.enabled = false;
         }
-
-        if (tipOnStart)
+        //find reference for tutorial script
+        TutorialTip tip = GameObject.FindObjectOfType<TutorialTip>();
+        //if enabled then begin tutorial
+        if (tipOnStart && tip)
         {
-            TutorialTip tip = GameObject.FindObjectOfType<TutorialTip>();
-            tip.TipDown();
-        }
 
-        StartCoroutine(ReadyIntro());
+            StartCoroutine(tip.delayTipDown());
+        }
+        //otherwise destroy that tip, only the tip though
+        else if (tip)
+        {
+            Destroy(tip.gameObject);
+            StartCoroutine(ReadyIntro());
+        }
     }
 
     public void StartGame()
@@ -99,7 +103,7 @@ public class CanvasToggle : MonoBehaviour {
         yield return new WaitForSeconds(StartReady);
         ReadySprite.CrossFadeAlpha(1, ReadySpriteFadeIn, true);
         LevelSprite.CrossFadeAlpha(1, ReadySpriteFadeIn, true);
-        LevelNumberSprite.CrossFadeAlpha(1, ReadySpriteFadeIn, true);
+        
         if (audioScript)
         {
             audioScript.StartReadyIntro();
@@ -111,7 +115,7 @@ public class CanvasToggle : MonoBehaviour {
     {
         yield return new WaitForSeconds(ReadySpriteFadeIn);
         LevelSprite.CrossFadeAlpha(0, goSpriteFadeIn, true);
-        LevelNumberSprite.CrossFadeAlpha(0, goSpriteFadeIn, true);
+        
         ReadySprite.CrossFadeAlpha(0, goSpriteFadeIn, true);
         StartCoroutine(GoIntro());
     }

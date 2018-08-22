@@ -121,6 +121,7 @@ public class PlayerShopManager : MonoBehaviour
         PlayerPrefs.SetInt("PlayerMoonballIndex", 0);
         PlayerPrefs.SetInt("PlayerCharacterIndex", 0);
         PlayerPrefs.SetInt("scorePref", 100);
+        PlayerPrefs.SetInt("firstTime", 0);
         orbTextScript.ChangeOrbAmount();
     }
 

@@ -63,7 +63,17 @@ public class Joystick : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointer
     [HideInInspector]
     public Vector3 curPosition;
 
+    //this is called from tutorial to make sure it resets after being disabled abruptly
+    public void ResetHandle()
+    {
+        inputVector = Vector3.zero; // resets the inputVector so that output will no longer affect movement of the game object (example, a player character or any desired game object)
+        handle.anchoredPosition = Vector3.zero; // resets the handle ("knob") of this joystick back to the center
 
+        handle.gameObject.SetActive(false);
+
+        background.gameObject.SetActive(false);
+        inputVector = Vector2.zero;
+    }
 
     public void GetButton(GameObject dashButt)
     {
@@ -91,7 +101,7 @@ public class Joystick : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointer
     {
         
     }
-
+    //function is for specific horizontal and vertical modes for the joystick
     protected void ClampJoystick()
     {
         if (joystickMode == JoystickMode.Horizontal)
@@ -99,6 +109,7 @@ public class Joystick : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointer
         if (joystickMode == JoystickMode.Vertical)
             inputVector = new Vector2(0f, inputVector.y);
     }
+    //called from movement script on player to pass to the trail particle
     public Quaternion rotation()
     {
         Vector3 rotate = Vector3.zero;

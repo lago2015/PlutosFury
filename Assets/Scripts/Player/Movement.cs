@@ -474,7 +474,7 @@ public class Movement : MonoBehaviour
     {
         isWaiting = true;
         MoveSpeed = 0;
-        myBody.velocity = Vector3.zero;
+        //myBody.velocity = Vector3.zero;
         myBody.drag = 100;
         isDisabled = true;
         TrailChange(DashState.idle);

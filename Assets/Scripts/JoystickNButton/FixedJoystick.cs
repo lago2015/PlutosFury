@@ -34,11 +34,11 @@ public class FixedJoystick : Joystick
     public override void OnDrag(PointerEventData eventData)
     {
         curTouchCount = Input.touchCount;
-        if(curTouchCount>=1)
+        //if player has at least a finger down for joystick
+        if (curTouchCount>=1)
         {
             Vector2 direction = Input.GetTouch(0).position - joystickCenter;
             inputVector = (direction.magnitude > background.sizeDelta.x / 2) ? direction.normalized : direction / (background.sizeDelta.x / 2);
-            ClampJoystick();
             handle.anchoredPosition = (inputVector * background.sizeDelta.x / 2) * handleLimit;
         }
         

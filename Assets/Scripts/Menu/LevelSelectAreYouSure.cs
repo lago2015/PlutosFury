@@ -24,11 +24,9 @@ public class LevelSelectAreYouSure : MonoBehaviour {
         else
         {
             Anim.SetBool("show", false);
-            //Debug.Log("Close");
+
         }
         mopen = forward;
-
-        //Debug.Log(mopen);
     }
     public void CurButton(GameObject curButton)
     {
