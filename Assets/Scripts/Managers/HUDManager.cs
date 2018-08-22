@@ -18,6 +18,7 @@ public class HUDManager : MonoBehaviour {
     public GameObject joystick;
     private GameObject curStick;
     public GameObject dashButton;
+    
     private InGameCharacterManager charManager;
     private Movement moveScript;
     //local variables for hud 
@@ -59,6 +60,8 @@ public class HUDManager : MonoBehaviour {
             
         }
         dashButton = GameObject.FindGameObjectWithTag("DashButt");
+        currentMoonballAmount = PlayerPrefs.GetInt("moonBallAmount",1);
+        UpdateBalls(currentMoonballAmount);
     }
 
     private void Start()
@@ -86,8 +89,7 @@ public class HUDManager : MonoBehaviour {
             UpdateScore(currentScore);
         }
         playerBallsScript = GameObject.FindGameObjectWithTag("Player").GetComponent<MoonballManager>();
-        currentMoonballAmount = playerBallsScript.CurrentMoonballsAmount();
-        UpdateBalls(currentMoonballAmount);
+        
 
     }
     //Gets called from Canvas Toggle after go sprite is played

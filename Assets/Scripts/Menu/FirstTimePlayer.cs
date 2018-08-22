@@ -8,6 +8,8 @@ public class FirstTimePlayer : MonoBehaviour {
     public Button continueButton;
     void Awake()
     {
+        PlayerPrefs.SetInt("healthPref", 1);
+        PlayerPrefs.SetInt("moonBallAmount", 1);
         preNum = PlayerPrefs.GetInt("firstTime");
         if(preNum==0)
         {

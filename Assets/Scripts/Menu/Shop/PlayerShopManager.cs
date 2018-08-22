@@ -106,7 +106,7 @@ public class PlayerShopManager : MonoBehaviour
         PlayerPrefs.SetInt("CurAddtionalHearts", 0);
         PlayerPrefs.SetInt("healthPref", 1);
         PlayerPrefs.SetInt("CurAddtionalBalls", 0);
-        PlayerPrefs.SetInt("moonBallAmount", 0);
+        PlayerPrefs.SetInt("moonBallAmount", 1);
         PlayerPrefs.SetInt("skin1", 0);
         PlayerPrefs.SetInt("skin2", 0);
         PlayerPrefs.SetInt("skin3", 0);

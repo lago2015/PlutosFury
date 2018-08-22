@@ -20,7 +20,7 @@ public class MoonballManager : MonoBehaviour {
         }
         
         moonballMaxContainer += PlayerPrefs.GetInt("CurAddtionalBalls");
-        moonballNum = PlayerPrefs.GetInt("moonBallAmount");
+        moonballNum = PlayerPrefs.GetInt("moonBallAmount",1);
 
         bonusController = GetComponent<ExPointController>();
 
@@ -33,7 +33,7 @@ public class MoonballManager : MonoBehaviour {
         {
             HUDScript.UpdateBalls(moonballNum);
         }
-        SaveCurrentBalls();
+        //SaveCurrentBalls();
     }
 
     public void SaveCurrentBalls()
