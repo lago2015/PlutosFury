@@ -6,6 +6,7 @@ public class FirstTimePlayer : MonoBehaviour {
 
     private int preNum;
     public Button continueButton;
+    private int curOrbs;
     void Awake()
     {
         PlayerPrefs.SetInt("healthPref", 1);
@@ -17,6 +18,11 @@ public class FirstTimePlayer : MonoBehaviour {
             PlayerPrefs.SetInt(1 + "Unlocked", 7);
             preNum++;
             PlayerPrefs.SetInt("firstTime", preNum);
+            
+        }
+        curOrbs = PlayerPrefs.GetInt("scorePref");
+        if(curOrbs==0)
+        {
             continueButton.interactable = false;
         }
     }
