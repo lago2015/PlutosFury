@@ -15,7 +15,6 @@ public class DetectWaitThenExplode : MonoBehaviour
     private bool doOnce;
     public float WaitTimeToExplode = 1f;
     public int orbDrop=2;
-    public Animator animComp;
     private Vector3 spawnPoint;
     private bool isLerping;
     private bool isDashing;
@@ -138,7 +137,6 @@ public class DetectWaitThenExplode : MonoBehaviour
             {
                 orbScript.SpawnAsteroidHere(orbDrop, transform.position);
             }
-            animComp.SetBool("isExploding", true);
           
                 //ensure audio gets played once
                 if (!doOnce)
@@ -163,7 +161,6 @@ public class DetectWaitThenExplode : MonoBehaviour
 
     public void TriggeredExplosion()
     {
-        animComp.SetBool("isExploding", true);
         if (pursuitScript)
         {
             pursuitScript.moveSpeed = 0;

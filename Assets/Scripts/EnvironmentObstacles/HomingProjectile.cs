@@ -22,7 +22,7 @@ public class HomingProjectile : MonoBehaviour {
     private Vector3 currentScale;
     private Vector3 scaleToVector;
     public float lerpSpeed;
-    public float scaleToNumber=3.5f;
+    public float scaleToNumber=5.5f;
     public float explosionTime;
     private bool timeToLerp;
     
