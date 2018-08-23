@@ -12,7 +12,11 @@ public class FirstTimePlayer : MonoBehaviour {
         PlayerPrefs.SetInt("healthPref", 1);
         PlayerPrefs.SetInt("moonBallAmount", 1);
         preNum = PlayerPrefs.GetInt("firstTime");
-        if(preNum==0)
+        if (curOrbs == 0 && preNum == 0)
+        {
+            continueButton.interactable = false;
+        }
+        if (preNum==0)
         {
             PlayerPrefs.SetInt(0 + "Unlocked", 2);
             PlayerPrefs.SetInt(1 + "Unlocked", 7);
@@ -21,10 +25,7 @@ public class FirstTimePlayer : MonoBehaviour {
             
         }
         curOrbs = PlayerPrefs.GetInt("scorePref");
-        if(curOrbs==0)
-        {
-            continueButton.interactable = false;
-        }
+        
     }
 
     public void QuitGame()

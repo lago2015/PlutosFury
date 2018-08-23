@@ -122,7 +122,7 @@ public class DetectThenExplode : MonoBehaviour {
         {
             
             // Using Object Pool Manager to grab explosion to play and destroy enemy
-            explosion = GameObject.FindObjectOfType<ObjectPoolManager>().FindObject("DamageExplosion");
+            explosion = GameObject.FindObjectOfType<ObjectPoolManager>().FindObject("SpaceMineExplosion");
             if(didDamage)
             {
                 damageScript = explosion.GetComponent<DamageOrPowerUp>();

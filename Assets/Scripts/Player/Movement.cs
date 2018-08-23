@@ -270,7 +270,7 @@ public class Movement : MonoBehaviour
                 }
                 //myBody.transform.Translate(move * Time.fixedDeltaTime);
                 myBody.AddForce(move * MoveSpeed * Time.fixedDeltaTime, ForceMode.VelocityChange);
-
+                Debug.Log("Current Velocity: " + myBody.velocity);
             }
         }
     }
@@ -361,32 +361,35 @@ public class Movement : MonoBehaviour
         //Check if exhausted dash
         if (!isExhausted)
         {
-            gameObject.layer = 9;
-            
-            if (!dashOnce)
+            if(myBody.velocity.x>=7f||myBody.velocity.y>=7f||myBody.velocity.x<=-7f||myBody.velocity.y<=-7f)
             {
-                //update dash variables
-                MoveSpeed = DashSpeed;
-                ShouldDash = true;  //Update dash status
+                gameObject.layer = 9;
 
-                //audio
-                if (audioScript)
+                if (!dashOnce)
                 {
-                    //audio for normal dash
-                    audioScript.PlutoDash1(transform.position);
+                    //update dash variables
+                    MoveSpeed = DashSpeed;
+                    ShouldDash = true;  //Update dash status
 
-                }
-                
-                dashOnce = true;    //ensure dash gets called once per dash
-                if(triggerScript)
-                {
-                    triggerScript.DashChange(ShouldDash);
-                }
-                appearanceScript.animComp.SetBool("isDashing", true);
+                    //audio
+                    if (audioScript)
+                    {
+                        //audio for normal dash
+                        audioScript.PlutoDash1(transform.position);
 
-                StartCoroutine(DashTransition());   //Start dash
+                    }
+
+                    dashOnce = true;    //ensure dash gets called once per dash
+                    if (triggerScript)
+                    {
+                        triggerScript.DashChange(ShouldDash);
+                    }
+                    appearanceScript.animComp.SetBool("isDashing", true);
+
+                    StartCoroutine(DashTransition());   //Start dash
+                }
+
             }
-
         }
     }
 

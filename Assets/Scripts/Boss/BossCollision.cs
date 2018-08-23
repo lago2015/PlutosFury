@@ -25,5 +25,12 @@ public class BossCollision : MonoBehaviour {
             }
             
         }
+        else if(CurTag=="Moonball")
+        {
+            if(phaseManager)
+            {
+                phaseManager.TakeDamage();
+            }
+        }
     }
 }
