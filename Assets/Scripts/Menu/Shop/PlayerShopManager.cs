@@ -14,12 +14,12 @@ public class PlayerShopManager : MonoBehaviour
     public GameObject[] CurrentHeartSavedContainer;
     public Button BuyHeartButton;
     public Button BuyHeartContainerButton;
-    private UpdateOrbAmount orbTextScript;
+    public UpdateOrbAmount orbTextScript;
     [HideInInspector]
     public bool canBuyHeart;
     [HideInInspector]
     public bool canBuyContainer;
-    private void Awake()
+    private void Start()
     {
         CheckPlayerShop();
     }
@@ -49,7 +49,6 @@ public class PlayerShopManager : MonoBehaviour
 
         //Get current hearts saved
         curHeartIndex = PlayerPrefs.GetInt("healthPref");
-        orbTextScript = GameObject.FindGameObjectWithTag("Finish").GetComponent<UpdateOrbAmount>();
         //ensure health isnt greater than container
         if (curHeartIndex > curHeartContainer)
         {

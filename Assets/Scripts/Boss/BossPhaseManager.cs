@@ -27,7 +27,6 @@ public class BossPhaseManager : MonoBehaviour {
             doOnce = true;
             StartCoroutine(DamageReset());
         }
-
     }
     public void StartAnimation()
     {

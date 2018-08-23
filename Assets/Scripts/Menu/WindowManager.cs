@@ -8,34 +8,33 @@ public class WindowManager : MonoBehaviour {
     public GameObject[] windowPool;
     private int curIndex;
 
-    private void Awake()
+    
+    private void Start()
     {
         //get int to find out if player needs level select or title screen popped up
         curIndex = PlayerPrefs.GetInt("levelSelect");
-        if(curIndex==0)
+        if (curIndex == 0)
         {
             //Title screen is active
             windowPool[0].SetActive(true);
             windowPool[1].GetComponent<QuitScreen>().WndowAnimation(false);
-            if(musicManager)
+            windowPool[2].SetActive(false);
+            if (musicManager)
             {
                 musicManager.TurnMusicOn(false);
             }
         }
-        else if(curIndex==1)
+        else if (curIndex == 1)
         {
             //level select screen is active
             windowPool[0].SetActive(false);
             windowPool[1].GetComponent<QuitScreen>().WndowAnimation(true);
+            windowPool[2].SetActive(true);
             if (musicManager)
             {
                 musicManager.TurnMusicOn(true);
             }
         }
-
-    }
-    private void Start()
-    {
         StartCoroutine(resetPlayerPref());
     }
     IEnumerator resetPlayerPref()

@@ -13,7 +13,7 @@ public class PlayerMoonballManager : MonoBehaviour {
     public GameObject[] CurrentMoonballSavedContainer;
     public Button BuyMoonballButton;
     public Button BuyMoonballContainerButton;
-    private UpdateOrbAmount orbTextScript;
+    public UpdateOrbAmount orbTextScript;
     [HideInInspector]
     public bool canBuyBall;
     [HideInInspector]
@@ -46,7 +46,6 @@ public class PlayerMoonballManager : MonoBehaviour {
         curMoonballContainer = PlayerPrefs.GetInt("CurAddtionalBalls")+1;
         //Get current hearts saved
         curMoonballIndex = PlayerPrefs.GetInt("moonBallAmount");
-        orbTextScript = GameObject.FindGameObjectWithTag("Finish").GetComponent<UpdateOrbAmount>();
         //ensure moonball isnt greater than container
         if (curMoonballIndex > curMoonballContainer)
         {

@@ -25,7 +25,7 @@ public class BossCollision : MonoBehaviour {
             }
             
         }
-        else if(CurTag=="Moonball")
+        else if(CurTag=="MoonBall")
         {
             if(phaseManager)
             {
