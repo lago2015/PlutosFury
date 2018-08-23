@@ -78,6 +78,10 @@ public class ButtonIndicator : MonoBehaviour
                 StartCoroutine(DashDelay());
             }
         }
+        else
+        {
+            doOnce = false;
+        }
     }
     
     

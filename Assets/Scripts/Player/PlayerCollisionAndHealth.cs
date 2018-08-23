@@ -141,7 +141,7 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
             {
                 Vector3 normalizePoint = hit.point - transform.position;
                 normalizePoint = normalizePoint.normalized;
-                myBody.AddForce(-normalizePoint * wallBump * 2, ForceMode.VelocityChange);
+                myBody.AddForce(-normalizePoint * wallBump, ForceMode.VelocityChange);
             }
         }
     }
@@ -294,7 +294,7 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
                 audioScript.AsteroidBounce(transform.position);
             }
         }
-        else if (curTag == "Wall"||curTag=="Door1")
+        else if (curTag == "Wall")
         {
             if (audioScript)
             {
@@ -304,15 +304,9 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
             myBody.velocity = Vector3.zero;
             direction = c.contacts[0].point - transform.position;
             direction = direction.normalized;
-            if (isDashing())
-            {
-                myBody.AddForce(-direction * wallBump*2);
-            }
-            else
-            {
-                myBody.AddForce(-direction * wallBump);
-            }
-            
+            myBody.AddForce(-direction * wallBump);
+
+
         }
         else if (curTag == "BreakableWall")
         {
@@ -378,7 +372,7 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
                 }
             }
         }
-        else if (curTag == "EnvironmentObstacle" || curTag == "ShatterPiece")
+        else if (curTag == "EnvironmentObstacle" || curTag == "ShatterPiece" )
         {
             myBody.velocity = Vector3.zero;
             if(c.gameObject.name.Contains("DamageWall"))
@@ -408,7 +402,7 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
             }
 
         }
-        else if (curTag == "Obstacle" || curTag=="Planet")
+        else if (curTag == "Obstacle" || curTag=="Planet" || curTag == "Door1")
         {
 
             direction = c.transform.position - transform.position;

@@ -7,25 +7,25 @@ public class WallHealth : MonoBehaviour
 
     private bool isPlayerDashing;
     public int EnemyHealth = 1;
-    public GameObject Explosion;
+    
     public GameObject Model;
     private Collider Mycollider;
-    public GameObject pickUpContained;
-    private Collider pickUpCollider;
+    private PickUpSkills pickUpContained;
     public string explosionPoolName;
     // Use this for initialization
     void Awake ()
     {
         Mycollider = GetComponent<Collider>();
-        if (Explosion && Model)
+        if (Model)
         {
-            Explosion.SetActive(false);
+            
             Model.SetActive(true);
 
         }
+        pickUpContained = GetComponent<PickUpSkills>();
         if(pickUpContained)
         {
-            pickUpCollider = pickUpContained.GetComponent<Collider>();
+            
             explosionPoolName = "ContainerExplosion";
         }
         else
@@ -80,10 +80,7 @@ public class WallHealth : MonoBehaviour
 
     public void ApplyPickup()
     {
-        if (pickUpContained)
-        {
-            pickUpContained.GetComponent<PickUpSkills>().PickUpObtained();
-        }
+        pickUpContained.PickUpObtained();
 
     }
 
