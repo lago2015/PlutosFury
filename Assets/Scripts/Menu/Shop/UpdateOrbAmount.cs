@@ -15,12 +15,12 @@ public class UpdateOrbAmount : MonoBehaviour {
     public void ChangeOrbAmount()
     {
         curOrbs = PlayerPrefs.GetInt("scorePref");
-        orbText.text = "Orbs: " + curOrbs;
+        orbText.text = " " + curOrbs;
     }
 
     private void OnEnable()
     {
         curOrbs = PlayerPrefs.GetInt("scorePref");
-        orbText.text = "Orbs: " + curOrbs;
+        orbText.text = " " + curOrbs;
     }
 }
