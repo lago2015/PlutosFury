@@ -128,7 +128,12 @@ public class GameManager : MonoBehaviour
             //stop player movement
             playerMoveScript.DisableMovement(isPlayerDead);
             //turn off on screen controls
-            GameObject.FindObjectOfType<FloatingJoystickV2>().gameObject.SetActive(false);
+            GameObject joystick = GameObject.FindGameObjectWithTag("GameController");
+            if(joystick)
+            {
+                joystick.SetActive(false);
+            }
+            
             GameObject.FindObjectOfType<ButtonIndicator>().gameObject.SetActive(false);
             if(!isPlayerDead)
             {

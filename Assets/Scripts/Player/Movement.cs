@@ -270,7 +270,6 @@ public class Movement : MonoBehaviour
                 }
                 //myBody.transform.Translate(move * Time.fixedDeltaTime);
                 myBody.AddForce(move * MoveSpeed * Time.fixedDeltaTime, ForceMode.VelocityChange);
-                Debug.Log("Current Velocity: " + myBody.velocity);
             }
         }
     }

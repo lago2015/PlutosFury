@@ -20,8 +20,7 @@ public class FirstTimePlayer : MonoBehaviour {
         {
             PlayerPrefs.SetInt(0 + "Unlocked", 2);
             PlayerPrefs.SetInt(1 + "Unlocked", 7);
-            preNum++;
-            PlayerPrefs.SetInt("firstTime", preNum);
+
             
         }
         curOrbs = PlayerPrefs.GetInt("scorePref");

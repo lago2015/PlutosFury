@@ -3,7 +3,7 @@ using System.Collections;
 
 public class PickUpSkills : MonoBehaviour {
 
-    public enum Skills { Health,Moonball}
+    public enum Skills { Health,Moonball,OrbBonus}
     public Skills curSkill;
     //Script references
     private HealthObtainedController healthController;
@@ -37,7 +37,6 @@ public class PickUpSkills : MonoBehaviour {
             case Skills.Moonball:
                 moonballManScript = playerRef.GetComponent<MoonballManager>();
                 appearanceScript = playerRef.GetComponent<PlayerAppearance>();
-
                 break;
         }
     }

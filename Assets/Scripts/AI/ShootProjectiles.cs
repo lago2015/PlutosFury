@@ -12,7 +12,7 @@ public class ShootProjectiles : MonoBehaviour {
     bool isReloading = false;
     public bool PlayerNear;
     public bool PlayerIsNotNear() { enabled = false; return PlayerNear = false; }
-
+    public string projectileName = "Rocket";
     public bool isPlayerNear(bool isHere)
     {
         if(isHere)
@@ -49,11 +49,10 @@ public class ShootProjectiles : MonoBehaviour {
                 {
                     if (!isReloading)
                     {
-                        GameObject proj = GameObject.FindObjectOfType<ObjectPoolManager>().FindObject("Rocket");
+                        GameObject proj = GameObject.FindObjectOfType<ObjectPoolManager>().FindObject(projectileName);
                         proj.transform.position = ProjectilePos[i].transform.position;
                         proj.transform.rotation = ProjectilePos[i].transform.rotation;
                         proj.SetActive(true);
-                        //Instantiate(Projectile, ProjectilePos[i].transform.position, ProjectilePos[i].transform.rotation);
                         Muzzle.SetActive(true);
                         
                         StartCoroutine(MuzzleShot()); 

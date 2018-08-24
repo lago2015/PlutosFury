@@ -28,11 +28,6 @@ public class WallHealth : MonoBehaviour
             
             explosionPoolName = "ContainerExplosion";
         }
-        else
-        {
-            gameObject.tag = "Obstacle";
-            explosionPoolName = "BigExplosion";
-        }
     }
 
     void OnCollisionEnter(Collision collision)

@@ -11,32 +11,32 @@ public class MovingTurret : MonoBehaviour {
     private Vector3 startPosition;
     private Vector3 shakeVector;
     public float WaitToExplode = 1f;
-    public float DistanceFromPlayerToExplode = 7f;
+    public float DistanceFromPlayerToExplode = 20f;
     //Movement
-    public float MoveSpeed;
+    public float MoveSpeed=5;
     public float chargeTime = 0.5f;
     public float durationToShoot = 2f;
     public float chargeCooldownTime = 0.5f;
-    public bool isExhausted = false;
-    public bool ShouldShoot;
+    private bool isExhausted = false;
+    private bool ShouldShoot;
     private bool firstEncounter = false;
 
-    public float maxDistAvoidance = 20f;
-    public float maxAvoidForce = 100f;
+    private float maxDistAvoidance = 20f;
+    private float maxAvoidForce = 100f;
     //components
     //private AudioController audioScript;          //going to add this in when charge audio sfx is ready
     Transform PlayerTransform;
     public GameObject myParent;
     public ShootProjectiles shootingScript1;
-    public ShootProjectiles shootingScript2;
-    public GameObject trailModel;
+    
+    
     public GameObject chargingParticle;
     
-    public bool isDead;
-    public bool isTriggered;
-    public bool ShouldPursue;// chase player or not
+    private bool isDead;
+    private bool isTriggered=true;
+    private bool ShouldPursue=true;// chase player or not
     private bool isCharging;
-    public bool PlayerNear;
+    private bool PlayerNear;
     public int RotationSpeed = 10;
     
     //public Animator animComp;
@@ -47,10 +47,6 @@ public class MovingTurret : MonoBehaviour {
         {
             shootingScript1.enabled = false;
         }
-        if (shootingScript2)
-        {
-            shootingScript2.enabled = false;
-        }
 
         //turning off all particles at start
         if (chargingParticle)
@@ -58,10 +54,7 @@ public class MovingTurret : MonoBehaviour {
             chargingParticle.SetActive(false);
         }
 
-        if (trailModel)
-        {
-            trailModel.SetActive(false);
-        }
+        
         
         //if we want the trigger player near
         if (isTriggered)
@@ -192,8 +185,7 @@ public class MovingTurret : MonoBehaviour {
         isCharging = true;
         //turn on charging particle
         chargingParticle.SetActive(true);
-        //ensure trail container is off
-        trailModel.SetActive(false);
+        
         yield return new WaitForSeconds(chargeTime);
         //double check if player is still near after charge
         if (PlayerNear)
@@ -223,29 +215,21 @@ public class MovingTurret : MonoBehaviour {
             shootingScript1.enabled = true;
             shootingScript1.isPlayerNear(true);    
         }
-        if (shootingScript2)
-        {
-            shootingScript2.enabled = true;
-            shootingScript2.isPlayerNear(true);
-        }
+        
         //Check if rogue is dead
         if (!isDead)
         {
             //Enable trail and disable charge particle
-            if (trailModel && chargingParticle)
+            if (chargingParticle)
             {
-                trailModel.SetActive(true);
+                
                 chargingParticle.SetActive(false);
             }
         }
         yield return new WaitForSeconds(durationToShoot);
         shootingScript1.enabled = false;
         shootingScript1.isPlayerNear(false);
-        if (shootingScript2)
-        {
-            shootingScript2.enabled = false;
-            shootingScript2.isPlayerNear(false);
-        }
+        
         ShouldShoot = false;
         isCharging = false;
 
@@ -260,13 +244,7 @@ public class MovingTurret : MonoBehaviour {
     {
         //Update cooldown of dash
         isExhausted = true;
-        if (!isDead)
-        {
-            if (trailModel)
-            {
-                trailModel.SetActive(false);
-            }
-        }
+        
         yield return new WaitForSeconds(chargeCooldownTime);
         isExhausted = false;
         
@@ -290,9 +268,9 @@ public class MovingTurret : MonoBehaviour {
         //Stop Coroutines
         StopAllCoroutines();
         //turn off some particles
-        if (trailModel && chargingParticle)
+        if (chargingParticle)
         {
-            trailModel.SetActive(false);
+            
             chargingParticle.SetActive(false);
         }
         return PlayerNear = false;
