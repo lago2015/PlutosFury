@@ -44,8 +44,12 @@ public class DamageOnCollision : MonoBehaviour {
             if (explosionObject)
             {
                 GetComponent<SpriteRenderer>().enabled = false;
-                explosionObject.SetActive(true);
-                
+
+                // Using Object Pool Manager to grab explosion to play and destroy enemy
+                GameObject explosion = GameObject.FindObjectOfType<ObjectPoolManager>().FindObject("AsteroidExplosion");
+                explosion.transform.position = transform.position;
+                explosion.SetActive(true);
+
             }
             else
             {
