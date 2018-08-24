@@ -5,14 +5,13 @@ using UnityEngine.UI;
 [System.Serializable]
 public class OptionsMenu : MonoBehaviour {
 
-	
-	public bool VibrationHit = true;
-	public bool InvertControls = false;
-
+    private int isJoystickFixed;
+    
     public Slider Music;
     public Slider SFX;
     public Toggle vHit;
 	public Toggle iControls;
+    public Toggle floatingJoystick;
     
 
     public Animator Anim;
@@ -21,7 +20,7 @@ public class OptionsMenu : MonoBehaviour {
     // Use this for initialization
     void Awake ()
     {
-        if (PlayerPrefs.HasKey("VibrationHit"))
+        if (PlayerPrefs.HasKey("VibrationHit")&&vHit)
         {
             if (PlayerPrefs.GetInt("VibrationHit") == 1)
             {
@@ -29,13 +28,10 @@ public class OptionsMenu : MonoBehaviour {
             }
             else
             {
-                if(vHit)
-                {
-                    vHit.isOn = false;
-                }
+                vHit.isOn = false;
             }
         }
-        if (PlayerPrefs.HasKey("godMode"))
+        if (PlayerPrefs.HasKey("godMode")&&iControls)
         {
             if (PlayerPrefs.GetInt("godMode") == 1)
             {
@@ -43,13 +39,23 @@ public class OptionsMenu : MonoBehaviour {
             }
             else
             {
-                if (iControls)
-                {
-                    iControls.isOn = false;
-                }
+                iControls.isOn = false;
             }
         }
-
+        if (PlayerPrefs.HasKey("joystickPref") && floatingJoystick)
+        {
+            if (PlayerPrefs.GetInt("joystickPref") == 1)
+            {
+                floatingJoystick.isOn = true;
+                isJoystickFixed = 1;
+            }
+            else
+            {
+                floatingJoystick.isOn = true;
+                isJoystickFixed = 0;
+                
+            }
+        }
 
     }
 
@@ -79,7 +85,22 @@ public class OptionsMenu : MonoBehaviour {
         PlayerPrefs.SetInt ("VibrationHit", VibrationHit);
         PlayerPrefs.SetInt("godMode", InvertControls);
     }
-
+    
+    public void UpdateJoystick()
+    {
+        if(isJoystickFixed==1)
+        {
+            isJoystickFixed = 0;
+            floatingJoystick.isOn = false;    
+        }
+        else
+        {
+            isJoystickFixed = 1;
+            floatingJoystick.isOn = true;
+        }
+        
+        PlayerPrefs.SetInt("joystickPref", isJoystickFixed);
+    }
    
     
 

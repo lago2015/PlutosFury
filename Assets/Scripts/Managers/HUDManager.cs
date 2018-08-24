@@ -33,8 +33,8 @@ public class HUDManager : MonoBehaviour {
         {
             scoreScript = scoreObject.GetComponent<PlayerManager>();
         }
-        joystickPref = 0;
-        //joystickPref = PlayerPrefs.GetInt("joystickPref");
+        
+        joystickPref = PlayerPrefs.GetInt("joystickPref");
 
         //fixed joystick
         if(joystickPref==1)

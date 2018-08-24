@@ -162,16 +162,21 @@ public class RogueCollision : MonoBehaviour {
         {
             col.gameObject.GetComponent<BigAsteroid>().AsteroidHit(2, false, false);
         }
-        else if(curTag=="EnvironmentObstacle")
+        else if(curTag=="Obstacle")
         {
             bool rogueDashing = rogueMoveScript.isDashing();
-            curName = col.gameObject.name;
-            if(curName.Contains("DamageWall"))
+            if (col.gameObject.name.Contains("DamageWall"))
             {
                 RogueDamage();
                 col.gameObject.GetComponent<WallHealth>().IncrementDamage();
             }
-            else if(curName.Contains("Landmine"))
+        }
+        else if(curTag=="EnvironmentObstacle")
+        {
+            bool rogueDashing = rogueMoveScript.isDashing();
+            curName = col.gameObject.name;
+            
+            if(curName.Contains("Landmine"))
             {
                 if(!rogueDashing)
                 {
@@ -200,6 +205,10 @@ public class RogueCollision : MonoBehaviour {
 
     }
 
-
+    IEnumerator WaitForKnockback()
+    {
+        yield return new WaitForSeconds(1);
+        rogueMoveScript.enabled = true;
+    }
 
 }
