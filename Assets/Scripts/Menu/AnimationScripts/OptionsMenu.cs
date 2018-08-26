@@ -66,7 +66,7 @@ public class OptionsMenu : MonoBehaviour {
         int InvertControls;
         PlayerPrefs.SetFloat("musicParam", Music.value);
         PlayerPrefs.SetFloat("sfxParam", SFX.value);
-
+        PlayerPrefs.SetInt("joystickPref", isJoystickFixed);
         if (vHit.isOn) {
 			VibrationHit = 1;
         } else {
