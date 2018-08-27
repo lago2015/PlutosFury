@@ -47,14 +47,12 @@ public class OptionsMenu : MonoBehaviour {
             if (PlayerPrefs.GetInt("joystickPref") == 1)
             {
                 floatingJoystick.isOn = true;
-                isJoystickFixed = 1;
             }
             else
             {
-                floatingJoystick.isOn = true;
-                isJoystickFixed = 0;
-                
+                floatingJoystick.isOn = false;
             }
+            
         }
 
     }
@@ -81,28 +79,21 @@ public class OptionsMenu : MonoBehaviour {
         {
             InvertControls = 0;
         }
+        
+        if(floatingJoystick.isOn)
+        {
+            isJoystickFixed = 1;
+        }
+        else
+        {
+            isJoystickFixed = 0;
+        }
 
         PlayerPrefs.SetInt ("VibrationHit", VibrationHit);
         PlayerPrefs.SetInt("godMode", InvertControls);
     }
     
-    public void UpdateJoystick()
-    {
-        if(isJoystickFixed==1)
-        {
-            isJoystickFixed = 0;
-            floatingJoystick.isOn = false;    
-        }
-        else
-        {
-            isJoystickFixed = 1;
-            floatingJoystick.isOn = true;
-        }
-        
-        PlayerPrefs.SetInt("joystickPref", isJoystickFixed);
-    }
    
-    
 
     public void WndowAnimation(bool forward)
     {

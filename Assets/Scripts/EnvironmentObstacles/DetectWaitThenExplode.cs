@@ -85,7 +85,7 @@ public class DetectWaitThenExplode : MonoBehaviour
         }
         else if (CurTag == "EnvironmentObstacle"||CurTag=="Obstacle"||CurTag=="Planet")
         {
-            if(col.gameObject.name.Contains("Landmine")||col.gameObject.name.Contains("DamageWall"))
+            if(col.gameObject.name.Contains("Landmine"))
             {
                 col.gameObject.GetComponent<DetectThenExplode>().TriggeredExplosion(false);
             }
@@ -110,7 +110,7 @@ public class DetectWaitThenExplode : MonoBehaviour
             TriggerExplosionInstantly();
 
         }
-        else if(CurTag=="BreakableWall")
+        else if(CurTag=="BreakableWall"||col.gameObject.name.Contains("DamageWall"))
         {
             WallHealth orbScript = col.gameObject.GetComponent<WallHealth>();
             if(orbScript)

@@ -82,7 +82,7 @@ public class Movement : MonoBehaviour
     public Vector3 move;
     private Vector3 tempPosition;
     private Vector3 lookingVector;
-    private float wallBump = 70f;
+    private float wallBump = 15f;
     private float velocityCap = 80;
     private float velocityMin = -80;
     private bool isWaiting;
@@ -360,7 +360,7 @@ public class Movement : MonoBehaviour
         //Check if exhausted dash
         if (!isExhausted)
         {
-            if(myBody.velocity.x>=7f||myBody.velocity.y>=7f||myBody.velocity.x<=-7f||myBody.velocity.y<=-7f)
+            if(myBody.velocity.x>=5f||myBody.velocity.y>=5f||myBody.velocity.x<=-5f||myBody.velocity.y<=-5f)
             {
                 gameObject.layer = 9;
 
@@ -465,7 +465,7 @@ public class Movement : MonoBehaviour
         myBody.velocity = Vector3.zero;
         dir = EnemyPoint - transform.position;
         dir = dir.normalized;
-        myBody.AddForce(-dir * wallBump,ForceMode.VelocityChange);
+        myBody.AddForce(-dir * wallBump ,ForceMode.VelocityChange);
         
     }
 

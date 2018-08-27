@@ -190,9 +190,31 @@ public class MovingTurret : MonoBehaviour {
         //double check if player is still near after charge
         if (PlayerNear)
         {
-           
-            //Change the variables to move faster and showing rogue is dashing
-            StartCoroutine(ShootTransition());
+            if (shootingScript1)
+            {
+                shootingScript1.enabled = true;
+                shootingScript1.isPlayerNear(true);
+            }
+
+            //Check if rogue is dead
+            if (!isDead)
+            {
+                //Enable trail and disable charge particle
+                if (chargingParticle)
+                {
+
+                    chargingParticle.SetActive(false);
+                }
+            }
+            yield return new WaitForSeconds(durationToShoot);
+            shootingScript1.enabled = false;
+            shootingScript1.isPlayerNear(false);
+
+            ShouldShoot = false;
+            isCharging = false;
+
+            
+            
 
             //Start animating the sprite for dashing
             //animComp.SetBool("isDashing", true);
@@ -203,40 +225,11 @@ public class MovingTurret : MonoBehaviour {
             ShouldShoot = false;
             isCharging = false;
         }
-    }
-    
-    //Shoot function with model switch
-    IEnumerator ShootTransition()
-    {
-
-        yield return new WaitForSeconds(0.2f);
-        if(shootingScript1)
-        {
-            shootingScript1.enabled = true;
-            shootingScript1.isPlayerNear(true);    
-        }
-        
-        //Check if rogue is dead
-        if (!isDead)
-        {
-            //Enable trail and disable charge particle
-            if (chargingParticle)
-            {
-                
-                chargingParticle.SetActive(false);
-            }
-        }
-        yield return new WaitForSeconds(durationToShoot);
-        shootingScript1.enabled = false;
-        shootingScript1.isPlayerNear(false);
-        
-        ShouldShoot = false;
-        isCharging = false;
-
         //Start Slowdown/Cooldown
         StartCoroutine(DashCooldown());
-
     }
+    
+    
 
 
     //Cool down for exhaustion from dash

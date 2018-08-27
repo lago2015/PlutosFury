@@ -37,10 +37,12 @@ public class ObjectPoolManager : MonoBehaviour
         for(int i = 0; i < pools.Length; ++i)
         {
             GameObject obj = Instantiate(poolPrefab);
+            
             obj.transform.position = gameObject.transform.position;
             obj.transform.SetParent(gameObject.transform);
 
             ObjectPool pool = obj.GetComponent<ObjectPool>();
+            obj.name =" "+ pools[i].name;
             pool.InitializePool(pools[i].prefab, pools[i].size);
 
             PoolList.Add(pools[i].name, pool);

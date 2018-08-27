@@ -17,7 +17,7 @@ public class ShootProjectiles : MonoBehaviour {
     {
         if(isHere)
         {
-            elapseTime = 0;
+            elapseTime = FireRate;
         }
         return PlayerNear = isHere;
     }

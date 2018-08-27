@@ -31,7 +31,7 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
     private MoonBall ball;
     private WallHealth healthScript;
     private HUDManager hudScript;
-    
+    private CameraShake cameraShakeScript;
     private PlayerAppearance appearanceScript;
     private ExPointController bonusController;
 
@@ -75,7 +75,7 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
         moonBallHitEffect.SetActive(false);
         hudScript = GameObject.FindGameObjectWithTag("HUDManager").GetComponent<HUDManager>();
         //Script reference
-        
+        cameraShakeScript = GameObject.FindObjectOfType<CameraShake>();
         appearanceScript = GetComponent<PlayerAppearance>();
         bonusController = GetComponent<ExPointController>();
 
@@ -217,6 +217,10 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
 
             StartCoroutine(DamageIndicator());
             //feedback on damage
+            if (cameraShakeScript)
+            {
+                cameraShakeScript.EnableCameraShake();
+            }
             if (vibrationHit)
             {
                 Handheld.Vibrate();
@@ -318,7 +322,11 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
                 {
 
                     healthScript.IncrementDamage();
-                    healthScript.ApplyPickup();
+
+                    if (!c.gameObject.name.Contains("DamageWall"))
+                        healthScript.ApplyPickup();
+
+
                     healthScript = null;
                 }
                 //feedback on damage
@@ -372,7 +380,7 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
                 }
             }
         }
-        else if (curTag == "EnvironmentObstacle" || curTag == "ShatterPiece" )
+        else if (curTag == "EnvironmentObstacle" || curTag == "ShatterPiece")
         {
             myBody.velocity = Vector3.zero;
             if(c.gameObject.name.Contains("DamageWall"))
@@ -391,14 +399,6 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
             if (!isDamaged)
             {
                 DamagePluto();
-
-                if (c.gameObject.name == "Spikes")
-                {
-                    if (audioScript)
-                    {
-                        audioScript.SpikeHitPluto(transform.position);
-                    }
-                }
             }
 
         }
@@ -408,6 +408,13 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
             direction = c.transform.position - transform.position;
             direction = direction.normalized;
             myBody.AddForce(-direction * obstacleBump);
+            if (c.gameObject.name == "Spikes")
+            {
+                if (audioScript)
+                {
+                    audioScript.SpikeHitPluto(transform.position);
+                }
+            }
 
         }
         else if (curTag == "Neptune")

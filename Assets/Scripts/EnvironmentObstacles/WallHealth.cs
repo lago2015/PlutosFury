@@ -28,6 +28,10 @@ public class WallHealth : MonoBehaviour
             
             explosionPoolName = "ContainerExplosion";
         }
+        if(gameObject.name.Contains("DamageWall"))
+        {
+            explosionPoolName = "BigExplosion";
+        }
     }
 
     void OnCollisionEnter(Collision collision)
