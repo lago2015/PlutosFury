@@ -2,22 +2,16 @@
 using UnityEngine.UI;
 using System.Collections;
 public class Door : MonoBehaviour {
-    
 
-    private GameManager gameScript;
-    public int numOfLevel;
-    private int curLevel;
-    public int curWorld;
-    private Movement moveScript;
-    private bool playerDash;
-    private bool doorActive;
+    
+    private GameObject wormHoleObject;      //wormhole particle object
+    private bool playerDash;                //check if player is dashing to break object for wormhole to appear
+    
+    //get wormhole object
     void Awake()
     {    
-        //reference game manager to call game ended function
-        gameScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<GameManager>();   
-        //getting cur level player has unlocked
-        curLevel = PlayerPrefs.GetInt(curWorld + "Unlocked");
-        
+        wormHoleObject = transform.GetChild(0).gameObject;
+        wormHoleObject.SetActive(false);
     }
 
 
@@ -25,29 +19,23 @@ public class Door : MonoBehaviour {
     {
         if(col.gameObject.tag=="Player")
         {
-            if(gameScript)
+            if(wormHoleObject)
             {
-                moveScript = col.gameObject.GetComponent<Movement>();
-                playerDash = moveScript.DashStatus();
+                playerDash = col.gameObject.GetComponent<Movement>().DashStatus();
                 if(playerDash)
                 {
-                    moveScript.KnockbackPlayer(col.contacts[0].normal);
+                    transform.DetachChildren();
+                    // Using Object Pool Manager to grab explosion to play and destroy enemy
                     GameObject explosion = GameObject.FindObjectOfType<ObjectPoolManager>().FindObject("AsteroidExplosion");
                     explosion.transform.position = transform.position;
                     explosion.SetActive(true);
-                    Collider c = GetComponent<Collider>();
-                    c.enabled = false;
-                    //ensure this gets called once
-                    doorActive = true;
-                    //disable gameobjects and save variables
-                    gameScript.GameEnded(false);
+                    wormHoleObject.SetActive(true);
 
-                    if (PlayerPrefs.GetInt(curWorld + "Unlocked") == numOfLevel)
-                    {
-                        PlayerPrefs.SetInt(curWorld + "Unlocked", curLevel + 1);
-                    }
+                    Destroy(gameObject);
 
                 }
+
+                col.gameObject.GetComponent<Movement>().KnockbackPlayer(col.contacts[0].normal);
 
             }
         }
