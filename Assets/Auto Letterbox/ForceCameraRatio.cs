@@ -12,6 +12,17 @@ namespace LetterboxCamera
      * Copyright Hexdragonal Games 2015
      * Written by Tom Elliott */
 
+        /*
+         Aspect ratio chart
+         3:2    =   1.5
+         4:3    =   1.3333333333333
+         8:5    =   1.6
+         5:3    =   1.6666666666666
+         16:9   =   1.7777777777
+         18:9   =   2
+         */
+
+
     // A class for tracking individual Cameras and their Viewports
     [System.Serializable]
     public class CameraRatio
@@ -37,6 +48,8 @@ namespace LetterboxCamera
         [HideInInspector]
         public Vector2 vectorAnchor;
         private Rect originViewPort;
+
+
 
         public CameraRatio (Camera _camera, Vector2 _anchor) {
             camera = _camera;
@@ -144,6 +157,13 @@ namespace LetterboxCamera
     [System.Serializable]
     public class ForceCameraRatio : MonoBehaviour
     {
+        
+        public RectTransform hearts;
+        public RectTransform orbsImage;
+        public RectTransform orbsText;
+        public RectTransform moonballs;
+        public GameObject obj;
+
         public Vector2 ratio = new Vector2(16, 9);
         public bool forceRatioOnAwake = true;
         public bool listenForWindowChanges = true;
@@ -154,7 +174,8 @@ namespace LetterboxCamera
         public List<CameraRatio> cameras;
 
         public Camera letterBoxCamera;
-
+        
+        
         private void Start () {
             // If no cameras have been assigned in editor, search for cameras in the scene
             if (findCamerasAutomatically) {
@@ -266,7 +287,7 @@ namespace LetterboxCamera
             if (currentAspect > targetAspect) {
                 horizontalLetterbox = false;
             }
-
+            Debug.Log("Width " + fullWidth+"Height "+fullHeight);
             for (int i = 0; i < cameras.Count; i++) {
                 cameras[i].SetAnchorBasedOnEnum(cameras[i].anchor);
                 cameras[i].CalculateAndSetCameraRatio(fullWidth, fullHeight, horizontalLetterbox);

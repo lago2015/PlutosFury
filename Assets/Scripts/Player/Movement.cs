@@ -360,7 +360,7 @@ public class Movement : MonoBehaviour
         //Check if exhausted dash
         if (!isExhausted)
         {
-            if(myBody.velocity.x>=5f||myBody.velocity.y>=5f||myBody.velocity.x<=-5f||myBody.velocity.y<=-5f)
+            if(myBody.velocity.x>=0.5f||myBody.velocity.y>= 0.5f || myBody.velocity.x<=-0.5f || myBody.velocity.y<=-0.5f)
             {
                 gameObject.layer = 9;
 

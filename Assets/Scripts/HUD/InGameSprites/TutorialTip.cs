@@ -20,6 +20,7 @@ public class TutorialTip : MonoBehaviour
     public SphereCollider turretCollider;
     public FleeOrPursue rogue;
     public SphereCollider rogueCollider;
+    public TutorialTrigger triggerScript;
     private Movement player;
     private bool doOnce;
     private void Awake()
@@ -151,6 +152,10 @@ public class TutorialTip : MonoBehaviour
         if (player)
         {
             player.ResumePluto();
+        }
+        if(triggerScript)
+        {
+            triggerScript.WaitForMoveNow();
         }
     }
 }

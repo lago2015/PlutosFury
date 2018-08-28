@@ -100,6 +100,14 @@ public class ButtonIndicator : MonoBehaviour
         return dashDelay;
     }
 
+    public void StopEverything()
+    {
+        StopAllCoroutines();
+        isButtDown = false;
+        doOnce = false;
+        isExhausted = false;
+    }
+
     IEnumerator DashDelay()
     {
 
