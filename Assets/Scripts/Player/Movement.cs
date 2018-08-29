@@ -135,19 +135,14 @@ public class Movement : MonoBehaviour
         }
         //Ensure speed is saved for default settings
         DefaultSpeed = MoveSpeed;
-        ////For camera Shakes
-        //GameObject camObject = GameObject.FindGameObjectWithTag("MainCamera");
-        //if(camObject)
-        //{
-        //    CamShake = camObject.GetComponent<CameraShake>();
-        //}
+        
     }
     private void Start()
     {
-        joystick = GameObject.FindGameObjectWithTag("GameController").GetComponent<FixedJoystick>();
+        joystick = GameObject.FindObjectOfType<FixedJoystick>();
         if (!joystick)
         {
-            floatJoystick = GameObject.FindGameObjectWithTag("GameController").GetComponent<FloatingJoystickV2>();
+            floatJoystick = GameObject.FindObjectOfType<FloatingJoystickV2>();
         }
     }
 

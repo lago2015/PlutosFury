@@ -30,19 +30,7 @@ public class ButtonIndicator : MonoBehaviour
             buttonImage.color = tempColor;
         }
 
-        //FixedJoystick fixedJoystick = GameObject.FindObjectOfType<FixedJoystick>();
-        //if(fixedJoystick)
-        //{
-        //    fixedJoystick.GetButton(gameObject);
-        //}
-        //else
-        //{
-        //    FloatingJoystickV2 floatStick= GameObject.FindObjectOfType<FloatingJoystickV2>();
-        //    if(floatStick)
-        //    {
-        //        floatStick.GetButton(gameObject);
-        //    }
-        //}
+      
 
     }
     void Start()

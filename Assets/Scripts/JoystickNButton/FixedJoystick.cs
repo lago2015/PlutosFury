@@ -29,6 +29,12 @@ public class FixedJoystick : Joystick
     void Start ()
     {
         joystickCenter = handle.position;
+        //Get reference for moonball object for number available and type
+        player = GameObject.FindGameObjectWithTag("Player");
+        if (player)
+        {
+            moonballManagerScript = player.GetComponent<MoonballManager>();
+        }
     }
 
     public override void OnDrag(PointerEventData eventData)
@@ -122,7 +128,7 @@ public class FixedJoystick : Joystick
     public void SpawnMoonball(Vector2 direction)
     {
         CurMoonballAmount = PlayerPrefs.GetInt("moonBallAmount");
-        if (CurMoonballAmount > 0)
+        if (CurMoonballAmount >= 0)
         {
             if (MoonballObject)
             {

@@ -33,8 +33,8 @@ public class HUDManager : MonoBehaviour {
         {
             scoreScript = scoreObject.GetComponent<PlayerManager>();
         }
-        
-        joystickPref = PlayerPrefs.GetInt("joystickPref");
+
+        joystickPref = 0;
 
         //fixed joystick
         if(joystickPref==1)
@@ -66,16 +66,7 @@ public class HUDManager : MonoBehaviour {
 
     private void Start()
     {
-        //if(joystick)
-        //{
-        //    moveScript = GameObject.FindGameObjectWithTag("Player").GetComponent<Movement>();
-        //    if(moveScript)
-        //    {
-        //        moveScript.GetController(joystick);
-        //        moveScript = null;
-        //    }
-        //    joystick.SetActive(false);
-        //}
+        
 
         
         if (scoreScript)
