@@ -118,6 +118,11 @@ public class TutorialTip : MonoBehaviour
         }
     }
     
+    public void IncrementText()
+    {
+        ++textIndex;
+    }
+
     //Called from animation event within Up clip
     public void Resume()
     {

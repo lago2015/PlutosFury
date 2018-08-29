@@ -33,12 +33,17 @@ public class MoonballManager : MonoBehaviour {
         {
             HUDScript.UpdateBalls(moonballNum);
         }
-        //SaveCurrentBalls();
+        SaveCurrentBalls();
     }
 
     public void SaveCurrentBalls()
     {
-        if(moonballNum>1)
+        PlayerPrefs.SetInt("moonBallAmount", moonballNum);
+
+    }
+    public void SaveGameEndedCurrentBalls()
+    {
+        if (moonballNum > 1)
         {
             PlayerPrefs.SetInt("moonBallAmount", moonballNum);
         }
@@ -46,9 +51,7 @@ public class MoonballManager : MonoBehaviour {
         {
             PlayerPrefs.SetInt("moonballAmount", 1);
         }
-        
     }
-
 
     public void IncrementBalls()
     {

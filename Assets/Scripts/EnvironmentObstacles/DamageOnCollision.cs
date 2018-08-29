@@ -4,17 +4,11 @@ using UnityEngine;
 
 public class DamageOnCollision : MonoBehaviour {
 
-    public GameObject explosionObject;
+    
     private PlayerCollisionAndHealth playerCollisionScript;
     private bool isDamaged;
     private float DamageCooldown = 0.2f;
-    void Awake()
-    {
-        if(explosionObject)
-        {
-            explosionObject.SetActive(false);
-        }
-    }
+    
     private void Start()
     {
         playerCollisionScript = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerCollisionAndHealth>();
@@ -40,23 +34,16 @@ public class DamageOnCollision : MonoBehaviour {
         }
         else if(curString=="MoonBall")
         {
-            
-            if (explosionObject)
-            {
-                GetComponent<SpriteRenderer>().enabled = false;
 
-                // Using Object Pool Manager to grab explosion to play and destroy enemy
-                GameObject explosion = GameObject.FindObjectOfType<ObjectPoolManager>().FindObject("AsteroidExplosion");
-                explosion.transform.position = transform.position;
-                explosion.SetActive(true);
+            GetComponent<SpriteRenderer>().enabled = false;
 
-            }
-            else
-            {
-                Destroy(this);
-            }
-            
-            
+            // Using Object Pool Manager to grab explosion to play and destroy enemy
+            GameObject explosion = GameObject.FindObjectOfType<ObjectPoolManager>().FindObject("TurretExplosion");
+            explosion.transform.position = transform.position;
+            explosion.SetActive(true);
+
+
+
         }
     }
 

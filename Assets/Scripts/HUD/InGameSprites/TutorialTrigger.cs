@@ -28,7 +28,6 @@ public class TutorialTrigger : MonoBehaviour
                 dashButton.StopEverything();
             }
             GameObject.FindObjectOfType<TutorialTip>().TipDown();
-
             Destroy(this.gameObject);
         }
     }
@@ -48,7 +47,6 @@ public class TutorialTrigger : MonoBehaviour
                 dashButton.StopEverything();
             }
             GameObject.FindObjectOfType<TutorialTip>().TipDown();
-
             Destroy(this.gameObject);
         }
     }
@@ -57,6 +55,7 @@ public class TutorialTrigger : MonoBehaviour
     {
         if(other.CompareTag("Player"))
         {
+            GameObject.FindObjectOfType<TutorialTip>().IncrementText();
             Destroy(this.gameObject);
         }
     }

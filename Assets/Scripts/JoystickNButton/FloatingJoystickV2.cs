@@ -150,7 +150,7 @@ public class FloatingJoystickV2 : Joystick
     public void SpawnMoonball(Vector2 direction)
     {
         CurMoonballAmount = PlayerPrefs.GetInt("moonBallAmount");
-        if (CurMoonballAmount > 0)
+        if (CurMoonballAmount >= 0)
         {
             if (MoonballObject)
             {
