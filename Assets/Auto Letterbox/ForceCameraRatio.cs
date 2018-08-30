@@ -287,7 +287,7 @@ namespace LetterboxCamera
             if (currentAspect > targetAspect) {
                 horizontalLetterbox = false;
             }
-            Debug.Log("Width " + fullWidth+"Height "+fullHeight);
+
             for (int i = 0; i < cameras.Count; i++) {
                 cameras[i].SetAnchorBasedOnEnum(cameras[i].anchor);
                 cameras[i].CalculateAndSetCameraRatio(fullWidth, fullHeight, horizontalLetterbox);
