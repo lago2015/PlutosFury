@@ -11,7 +11,7 @@ public class SkinManager : MonoBehaviour {
     private int skin1Bought;
     private int skin2Bought;
     private int skin3Bought;
-
+    private int neptuneBought;
     private int moonSkin1;
     private int moonSkin2;
     private int moonSkin3;
@@ -21,7 +21,7 @@ public class SkinManager : MonoBehaviour {
         skin1Bought = PlayerPrefs.GetInt("skin0");
         skin2Bought = PlayerPrefs.GetInt("skin1");
         skin3Bought = PlayerPrefs.GetInt("skin2");
-        
+        neptuneBought = PlayerPrefs.GetInt("skin6");
         moonSkin1 = PlayerPrefs.GetInt("skin3");
         moonSkin2 = PlayerPrefs.GetInt("skin4");
         moonSkin3 = PlayerPrefs.GetInt("skin5");
@@ -80,19 +80,28 @@ public class SkinManager : MonoBehaviour {
         {
             characterButtons[7].interactable = false;
         }
+        if (neptuneBought == 1)
+        {
+            characterButtons[8].interactable = true;
+        }
+        else
+        {
+            characterButtons[8].interactable = false;
+        }
+
 
     }
 
     private void Awake()
     {
         
-        skin1Bought = PlayerPrefs.GetInt("skin1");
-        skin2Bought = PlayerPrefs.GetInt("skin2");
-        skin3Bought = PlayerPrefs.GetInt("skin3");
-        
-        moonSkin1 = PlayerPrefs.GetInt("skin5");
-        moonSkin2 = PlayerPrefs.GetInt("skin6");
-        moonSkin3 = PlayerPrefs.GetInt("skin7");
+        skin1Bought = PlayerPrefs.GetInt("skin0");
+        skin2Bought = PlayerPrefs.GetInt("skin1");
+        skin3Bought = PlayerPrefs.GetInt("skin2");
+        neptuneBought = PlayerPrefs.GetInt("skin6");
+        moonSkin1 = PlayerPrefs.GetInt("skin3");
+        moonSkin2 = PlayerPrefs.GetInt("skin4");
+        moonSkin3 = PlayerPrefs.GetInt("skin5");
 
         //first character
         characterButtons[0].interactable = true;
@@ -147,6 +156,14 @@ public class SkinManager : MonoBehaviour {
         else
         {
             characterButtons[7].interactable = false;
+        }
+        if (neptuneBought == 1)
+        {
+            characterButtons[8].interactable = true;
+        }
+        else
+        {
+            characterButtons[8].interactable = false;
         }
     }
 

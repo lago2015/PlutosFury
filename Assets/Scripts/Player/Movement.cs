@@ -135,16 +135,9 @@ public class Movement : MonoBehaviour
         }
         //Ensure speed is saved for default settings
         DefaultSpeed = MoveSpeed;
-        
+        floatJoystick = GameObject.FindObjectOfType<FloatingJoystickV2>();
     }
-    private void Start()
-    {
-        joystick = GameObject.FindObjectOfType<FixedJoystick>();
-        if (!joystick)
-        {
-            floatJoystick = GameObject.FindObjectOfType<FloatingJoystickV2>();
-        }
-    }
+    
 
     void LateUpdate()
     {

@@ -8,7 +8,6 @@ public class HUDManager : MonoBehaviour {
 
     //Script References for hud
     private PlayerManager scoreScript;
-    private MoonballManager playerBallsScript;
     //Text to apply to hud
     public Text scoreText;
     public Image[] healthSprites;
@@ -66,22 +65,16 @@ public class HUDManager : MonoBehaviour {
 
     private void Start()
     {
-        
-
-        
         if (scoreScript)
         {
             UpdateHealth(scoreScript.playerHealth);
         }
-        
-        if(scoreScript)
+
+        if (scoreScript)
         {
             currentScore = scoreScript.ReturnScore();
             UpdateScore(currentScore);
         }
-        playerBallsScript = GameObject.FindGameObjectWithTag("Player").GetComponent<MoonballManager>();
-        
-
     }
     //Gets called from Canvas Toggle after go sprite is played
     public void EnableController()

@@ -9,19 +9,16 @@ public class FloatingJoystickV2 : Joystick
 
     private void Awake()
     {
-        //joystickVisibilityPref = PlayerPrefs.GetInt("joystickVisPref");
-        //invisible
-        if (joystickVisibilityPref == 1)
-        {
-            Image joystickBG = gameObject.transform.GetChild(0).GetComponent<Image>();
-            Image joystickHandle = handle.GetComponent<Image>();
-            Color tempColor = joystickBG.color;
-            tempColor.a = 0;
-            joystickBG.color = tempColor;
-            joystickHandle.color = tempColor;
+        joystickVisibilityPref = PlayerPrefs.GetFloat("joystickPref");
+        Image joystickBG = gameObject.transform.GetChild(0).GetComponent<Image>();
+        Image joystickHandle = handle.GetComponent<Image>();
+        Color tempColor = joystickBG.color;
+        tempColor.a = joystickVisibilityPref;
+        joystickBG.color = tempColor;
+        joystickHandle.color = tempColor;
 
-        }
         secondTouchImage = GameObject.FindGameObjectWithTag("DashButt").GetComponent<Image>();
+
         dashScript = secondTouchImage.GetComponent<ButtonIndicator>();
     }
     private void Start()

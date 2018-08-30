@@ -13,7 +13,6 @@ public class BurstBehavior : MonoBehaviour {
     private SphereCollider myCollider;
     private Rigidbody myBody;
     public SpriteRenderer spriteComp;
-    private AsteroidSpawner spawnerScript;
     public bool isConsumed;
     private Color visibleColor;
     private Color nearInvisibleColor;
@@ -30,7 +29,6 @@ public class BurstBehavior : MonoBehaviour {
         
         myBody = GetComponent<Rigidbody>();
         myCollider = GetComponent<SphereCollider>();
-        spawnerScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<AsteroidSpawner>();
         visibleColor = spriteComp.color;
         nearInvisibleColor = spriteComp.color;
         nearInvisibleColor.a = 0.7f;

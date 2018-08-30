@@ -49,7 +49,9 @@ public class AudioManager : MonoBehaviour
         for (int i = 0; i < audioSettings.Length; i++)
         {
             audioSettings[i].Initialize();
+            
         }
+        
 	}
     public void SetMusicVolume(float value)
     {
@@ -73,11 +75,13 @@ public class AudioSetting
         if(slider)
         {
             slider.value = PlayerPrefs.GetFloat(exposedParam);
+            
         }
     }
     public void SetExposedParam(float value) // 1
     {
         AudioManager.instance.mixer.SetFloat(exposedParam, value); // 3
+        
         PlayerPrefs.SetFloat(exposedParam, value); // 4
     }
 }

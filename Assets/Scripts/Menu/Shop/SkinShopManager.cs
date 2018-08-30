@@ -17,6 +17,7 @@ public class SkinShopManager : MonoBehaviour
     private int skin1Bought;
     private int skin2Bought;
     private int skin3Bought;
+    private int neptuneSkinBought;
     private int moonSkin1;
     private int moonSkin2;
     private int moonSkin3;
@@ -88,19 +89,28 @@ public class SkinShopManager : MonoBehaviour
                 }
                 else
                     return true;
+            case 6:
+                neptuneSkinBought = PlayerPrefs.GetInt("skin6");
+                if (neptuneSkinBought == 1)
+                {
+                    return false;
+                }
+                else
+                    return true;
+
         }
         return false;
     }
 
     public void CheckSkins()
     {
-        skin1Bought = PlayerPrefs.GetInt("skin1");
-        skin2Bought = PlayerPrefs.GetInt("skin2");
-        skin3Bought = PlayerPrefs.GetInt("skin3");
-
-        moonSkin1 = PlayerPrefs.GetInt("skin4");
-        moonSkin2 = PlayerPrefs.GetInt("skin5");
-        moonSkin3 = PlayerPrefs.GetInt("skin0");
+        skin1Bought = PlayerPrefs.GetInt("skin0");
+        skin2Bought = PlayerPrefs.GetInt("skin1");
+        skin3Bought = PlayerPrefs.GetInt("skin2");
+        neptuneSkinBought = PlayerPrefs.GetInt("skin6");
+        moonSkin1 = PlayerPrefs.GetInt("skin3");
+        moonSkin2 = PlayerPrefs.GetInt("skin4");
+        moonSkin3 = PlayerPrefs.GetInt("skin5");
         orbTextScript = GameObject.FindGameObjectWithTag("Finish").GetComponent<UpdateOrbAmount>();
         
     }

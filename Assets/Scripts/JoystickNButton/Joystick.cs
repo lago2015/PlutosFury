@@ -32,11 +32,11 @@ public class Joystick : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointer
     public float  ballLaunchPower = 30
                 , spawnCooldown = 3
                 , distance
-                , minDistance = 500;
+                , minDistance = 500
+                , joystickVisibilityPref;
     
     
-    public int CurMoonballAmount
-                ,joystickVisibilityPref;
+    public int CurMoonballAmount;
 
     [HideInInspector]
     public bool directionChosen, 

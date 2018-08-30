@@ -5,13 +5,14 @@ using UnityEngine.UI;
 [System.Serializable]
 public class OptionsMenu : MonoBehaviour {
 
-    private int isJoystickFixed;
+    //private int isJoystickFixed;
     
     public Slider Music;
     public Slider SFX;
+    public Slider joystickOpacity;
     public Toggle vHit;
 	public Toggle iControls;
-    public Toggle floatingJoystick;
+    
     
 
     public Animator Anim;
@@ -42,17 +43,10 @@ public class OptionsMenu : MonoBehaviour {
                 iControls.isOn = false;
             }
         }
-        if (PlayerPrefs.HasKey("joystickPref") && floatingJoystick)
+        if (PlayerPrefs.HasKey("joystickPref") && joystickOpacity)
         {
-            if (PlayerPrefs.GetInt("joystickPref") == 1)
-            {
-                floatingJoystick.isOn = true;
-            }
-            else
-            {
-                floatingJoystick.isOn = false;
-            }
-            
+            joystickOpacity.value = PlayerPrefs.GetFloat("joystickPref",1);
+
         }
 
     }
@@ -62,8 +56,9 @@ public class OptionsMenu : MonoBehaviour {
     {
 		int VibrationHit;
         int InvertControls;
-        PlayerPrefs.SetFloat("musicParam", Music.value);
-        PlayerPrefs.SetFloat("sfxParam", SFX.value);
+        PlayerPrefs.SetFloat("Music", Music.value);
+        PlayerPrefs.SetFloat("SFX", SFX.value);
+        PlayerPrefs.SetFloat("joystickPref", joystickOpacity.value);
         if (vHit.isOn) {
 			VibrationHit = 1;
         } else {
@@ -79,15 +74,7 @@ public class OptionsMenu : MonoBehaviour {
             InvertControls = 0;
         }
         
-        if(floatingJoystick.isOn)
-        {
-            isJoystickFixed = 1;
-        }
-        else
-        {
-            isJoystickFixed = 0;
-        }
-        PlayerPrefs.SetInt("joystickPref", isJoystickFixed);
+        
 
         PlayerPrefs.SetInt ("VibrationHit", VibrationHit);
         PlayerPrefs.SetInt("godMode", InvertControls);
