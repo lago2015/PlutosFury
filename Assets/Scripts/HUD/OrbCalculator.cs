@@ -69,8 +69,8 @@ public class OrbCalculator : MonoBehaviour
             if (currentAddNumber >= numberTo && currentSubtractNumber <= 0)
             {
                 isTallying = false;
-                continueBtn.SetActive(true);
-                retryBtn.SetActive(true);
+                //continueBtn.SetActive(true);
+               //retryBtn.SetActive(true);
             }
         }
     }
