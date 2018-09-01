@@ -356,7 +356,10 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
             }
             else
             {
-                ball.MoveBall(Vector3.zero, 0.0f);
+                if (ball.canTouch)
+                {
+                    ball.MoveBall(Vector3.zero, 0.0f);
+                }
             }
             ball = null;
             myBody.velocity = Vector3.zero;

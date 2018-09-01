@@ -157,6 +157,7 @@ public class FloatingJoystickV2 : Joystick
                 GameObject newMoonBall = GameObject.FindObjectOfType<ObjectPoolManager>().FindObject("MoonBall");
                 newMoonBall.transform.position = curPosition;
                 newMoonBall.SetActive(true);
+                newMoonBall.GetComponent<MoonBall>().PlayerSpawnIn();
 
                 if (!previousMoonball)
                 {

@@ -22,6 +22,7 @@ public class MoonBall : MonoBehaviour
     // Public and Private references
     public GameObject gravityWell;
     public bool GravWellEnabled;
+    public bool canTouch = false;
     private GameObject newGravWell;
     private SphereCollider colliderComp;
     private Rigidbody rb;
@@ -85,6 +86,18 @@ public class MoonBall : MonoBehaviour
         yield return new WaitForSeconds(0.3f);
         colliderComp.enabled = true;
         colliderComp = null;
+    }
+
+    public void PlayerSpawnIn()
+    {
+        StartCoroutine(ContactDelay());
+    }
+
+    IEnumerator ContactDelay()
+    {
+        canTouch = false;
+        yield return new WaitForSeconds(1.0f);
+        canTouch = true;
     }
 	
     // Moves Ball when player Dashes into 
