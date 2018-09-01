@@ -76,7 +76,8 @@ public class DetectThenExplode : MonoBehaviour {
             if(isLandmine)
             {
 
-                GameObject.FindObjectOfType<ComboTextManager>().CreateComboText(2);
+                GameObject.FindObjectOfType<ComboTextManager>().CreateComboText(0);
+                GameObject.FindObjectOfType<PlayerManager>().niceCombo++;
                 orbScript.SpawnAsteroidHere(orbDrop, transform.position);
 
             }
