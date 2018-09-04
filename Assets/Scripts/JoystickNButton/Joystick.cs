@@ -29,10 +29,10 @@ public class Joystick : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointer
 
     //Moonball Variables
     [HideInInspector]
-    public float  ballLaunchPower = 30
+    public float  ballLaunchPower = 42
                 , spawnCooldown = 3
                 , distance
-                , minDistance = 500
+                , minDistance = 450
                 , joystickVisibilityPref;
     
     

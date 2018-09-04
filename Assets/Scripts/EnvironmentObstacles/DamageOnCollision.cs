@@ -41,7 +41,7 @@ public class DamageOnCollision : MonoBehaviour {
             GameObject explosion = GameObject.FindObjectOfType<ObjectPoolManager>().FindObject("TurretExplosion");
             explosion.transform.position = transform.position;
             explosion.SetActive(true);
-
+            Destroy(gameObject);
 
 
         }

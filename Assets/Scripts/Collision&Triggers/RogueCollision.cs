@@ -112,6 +112,7 @@ public class RogueCollision : MonoBehaviour {
                 {
                     playerCollisionScript.DamagePluto();
                     rogueMoveScript.HitPlayerCooldown();
+                    rogueMoveScript.ApplyKnockback(col.transform.position);
 
                 }
             }

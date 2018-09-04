@@ -35,6 +35,7 @@ public class FleeOrPursue : MonoBehaviour {
     public GameObject chargingParticle;
     public GameObject burstParticle;
     private Rigidbody myBody;
+    public DetectPlayer detectScript;
     private Quaternion rotation;
     private bool lookingForPosition=true;
     public bool isTriggered;
@@ -44,12 +45,20 @@ public class FleeOrPursue : MonoBehaviour {
     private bool PlayerNear;
     public int RotationSpeed = 10;
     public bool isDead;
+    public bool theresAWall;
     public Animator animComp;
-
+    private Vector3 dir;
+    private float wallBump = 200f;
     //called from rogue collision script for both functions
     public bool isDashing() { return ShouldDash; }
     public bool yesDead() { return isDead = true; }
+    public bool isThereAWall (bool wallPresent)
+    {
+        if (wallPresent)
+            HitPlayerCooldown();
 
+        return theresAWall = wallPresent;
+    }
     // Use this for initialization
     void Awake()
     {
@@ -93,7 +102,10 @@ public class FleeOrPursue : MonoBehaviour {
     private void Start()
     {
         audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
-
+        if (!PlayerTransform)
+        {
+            PlayerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+        }
     }
     // Update is called once per frame
     void FixedUpdate()
@@ -118,42 +130,36 @@ public class FleeOrPursue : MonoBehaviour {
             startPosition = Vector3.zero;
             shakeVector = Vector3.zero;
         }
-        transform.parent.position = new Vector3(transform.position.x, transform.position.y, 0);
+  
+        //looking for the players position every x amount of seconds
+        if (lookingForPosition)
+        {
+            //calculate distance between player and rogue
+            curDistance = Vector3.Distance(transform.position, PlayerTransform.transform.position);
+            StartCoroutine(LookForPlayerLocation());
+        }
+        //Where rotation is applied while pursing
+        if (RotationSpeed > 0)
+        {
+            rotation = Quaternion.LookRotation(PlayerTransform.transform.position - transform.position);
 
+            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * RotationSpeed);
+        }
         //when detection collider finds player than this is enabled
-        if (PlayerNear)
+        if (PlayerNear && !theresAWall)
         {
             PursuePlayer();
 
             if (!isCharging || ShouldDash)
             {
-                if (!PlayerTransform)
-                {
-                    PlayerTransform = GameObject.FindGameObjectWithTag("Player").transform;
-                }
-                else
-                {
-                    if(lookingForPosition)
-                    {
-                        //calculate distance between player and rogue
-                        curDistance = Vector3.Distance(transform.position, PlayerTransform.transform.position);
-                        StartCoroutine(LookForPlayerLocation());
-                    }
-                    
-                    //check if player is close enough, if not then pursue
-                    if (curDistance > DistanceFromPlayerToExplode)
-                    {
-                        //Where rotation is applied while pursing
-                        if (RotationSpeed > 0)
-                        {
-                            rotation = Quaternion.LookRotation(PlayerTransform.transform.position - transform.position);
 
-                            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * RotationSpeed);
-                        }
-                        //move rogue forward if hes not charging
-                        transform.parent.position += transform.forward * MoveSpeed * Time.deltaTime;
-                        transform.parent.position = new Vector3(transform.position.x, transform.position.y, 0);
-                    }
+                //check if player is close enough, if not then pursue
+                if (curDistance > DistanceFromPlayerToExplode)
+                {
+
+                    //move rogue forward if hes not charging
+                    transform.parent.position += transform.forward * MoveSpeed * Time.deltaTime;
+                    transform.parent.position = new Vector3(transform.position.x, transform.position.y, 0);
                 }
 
             }
@@ -177,13 +183,26 @@ public class FleeOrPursue : MonoBehaviour {
             trailModel.SetActive(false);
             chargingParticle.SetActive(false);
         }
+        ShouldPursue = false;
+        PlayerNear = false;
         StartCoroutine(HitCooldown());
+    }
+
+    public void ApplyKnockback(Vector3 playerPosition)
+    {
+        if (playerPosition != Vector3.zero)
+        {
+            myBody.velocity = Vector3.zero;
+            dir = playerPosition - transform.position;
+            dir = dir.normalized;
+            myBody.AddForce(-dir * wallBump,ForceMode.Impulse);
+
+        }
     }
 
     IEnumerator HitCooldown()
     {
-        ShouldPursue = false;
-        PlayerNear = false;
+        
         yield return new WaitForSeconds(2.5f);
         ShouldPursue = true;
         PlayerNear = true;
@@ -274,7 +293,6 @@ public class FleeOrPursue : MonoBehaviour {
     }
     IEnumerator burstTimeout()
     {
-
         //enable particle system for burst
         burstParticle.SetActive(true);
         //change move speed to dash
@@ -374,6 +392,7 @@ public class FleeOrPursue : MonoBehaviour {
             trailModel.SetActive(false);
             chargingParticle.SetActive(false);
         }
+
         return PlayerNear = false;
     }
 }

@@ -14,17 +14,7 @@ public class MenuMusicScript : MonoBehaviour {
     //This will be called from window manager to determine what song to player
     public bool TurnMusicOn(bool isHubActive)
     {
-        //turn on or off the voice intro
-        if(isHubActive)
-        {
-            VoiceIntro.playOnAwake = false;
-            VoiceIntro.Stop();
-        }
-        else
-        {
-            VoiceIntro.playOnAwake = true;
-            VoiceIntro.Play();
-        }
+        
         return isHubOn = isHubActive;
     }
 
@@ -40,12 +30,12 @@ public class MenuMusicScript : MonoBehaviour {
         //otherwise play voice intro and background music
         else
         {
-
+            VoiceIntro.Play();
             BackgroundMusic();
             BgMusicSource.volume = 0.11f;
             if (VoiceIntro != null)
             {
-                bgMusicStartDelay = VoiceIntro.clip.length - 1f;
+                bgMusicStartDelay = VoiceIntro.clip.length - 0.5f;
             }
             myCoroutine = StartCoroutine(DelayMusic());
         }
@@ -73,6 +63,8 @@ public class MenuMusicScript : MonoBehaviour {
         }
         myCoroutine = StartCoroutine(DelayMusic());
     }
+    
+
     IEnumerator DelayHub()
     {
         yield return new WaitForSeconds(hubMusicDelay);

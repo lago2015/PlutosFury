@@ -23,6 +23,7 @@ public class CollisionDamage : MonoBehaviour {
                 if(pursueScript)
                 {
                     pursueScript.HitPlayerCooldown();
+                    pursueScript.ApplyKnockback(col.transform.position);
                 }
                 CollisionScript.DamagePluto();
                 col.gameObject.GetComponent<Movement>().KnockbackPlayer(transform.position);

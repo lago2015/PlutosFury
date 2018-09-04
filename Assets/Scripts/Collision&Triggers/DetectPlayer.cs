@@ -6,7 +6,7 @@ public class DetectPlayer : MonoBehaviour {
     //***For Rogue Enemy
     private ExPointController exPointController;
     private SphereCollider TrigCollider;
-
+    private ChargerAvoidance chargerAvoidance;
     public GameObject ScriptModel;
     public LookAtObject rotationScript;
     private ChasePlayer ChaseScript;
@@ -15,6 +15,8 @@ public class DetectPlayer : MonoBehaviour {
     private RogueAvoidance avoidanceScript;
     private bool playOnce;
     private AudioController audioScript;
+
+    public void EnableCollider() { TrigCollider.enabled = true; }
     void Awake()
     {
         exPointController = GetComponent<ExPointController>();
@@ -35,6 +37,10 @@ public class DetectPlayer : MonoBehaviour {
                 }
             }
             avoidanceScript = ScriptModel.GetComponent<RogueAvoidance>();
+            if(!avoidanceScript)
+            {
+                chargerAvoidance = ScriptModel.GetComponent<ChargerAvoidance>();
+            }
         }
 
         TrigCollider = GetComponent<SphereCollider>();
@@ -58,6 +64,10 @@ public class DetectPlayer : MonoBehaviour {
             {
                 avoidanceScript.EnableScript();
             }
+            if(chargerAvoidance)
+            {
+                chargerAvoidance.EnableScript();
+            }
             if (pursueScript)
             {
                 if(audioScript && !playOnce)
@@ -68,7 +78,7 @@ public class DetectPlayer : MonoBehaviour {
                 if(TrigCollider)
                 {
                     TrigCollider.enabled = false;
-                    TrigCollider.radius = 1;
+                    //TrigCollider.radius = 1;
                 }
                 pursueScript.enabled = true;
                 pursueScript.PlayerIsNear();
@@ -112,6 +122,10 @@ public class DetectPlayer : MonoBehaviour {
             if (avoidanceScript)
             {
                 avoidanceScript.DisableScript();
+            }
+            if(chargerAvoidance)
+            {
+                chargerAvoidance.DisableScript();
             }
         }
 

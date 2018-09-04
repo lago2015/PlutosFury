@@ -39,19 +39,27 @@ public class LookAtObject : MonoBehaviour {
     //is player close enough to attack
     void CalculatePlayerDistance()
     {
-        distanceToPlayer = Vector3.Distance(transform.position, Player.transform.position);
-        if(distanceToPlayer>=maxDistanceToAttack)
+        if(Player)
         {
-            if(TrigCollider)
+            distanceToPlayer = Vector3.Distance(transform.position, Player.transform.position);
+            if (distanceToPlayer >= maxDistanceToAttack)
             {
-                TrigCollider.enabled = true;
-                enabled = false;
-                if (shootScript)
+                if (TrigCollider)
                 {
-                    shootScript.PlayerIsNotNear();
+                    TrigCollider.enabled = true;
+                    enabled = false;
+                    if (shootScript)
+                    {
+                        shootScript.PlayerIsNotNear();
+                    }
                 }
             }
         }
+        else
+        {
+            Player = GameObject.FindGameObjectWithTag("Player");
+        }
+        
     }
     
     void RotateToObject()

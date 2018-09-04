@@ -348,34 +348,30 @@ public class Movement : MonoBehaviour
         //Check if exhausted dash
         if (!isExhausted)
         {
-            if(myBody.velocity.x>=0.5f||myBody.velocity.y>= 0.5f || myBody.velocity.x<=-0.5f || myBody.velocity.y<=-0.5f)
+            gameObject.layer = 9;
+
+            if (!dashOnce)
             {
-                gameObject.layer = 9;
+                //update dash variables
+                MoveSpeed = DashSpeed;
+                ShouldDash = true;  //Update dash status
 
-                if (!dashOnce)
+                //audio
+                if (audioScript)
                 {
-                    //update dash variables
-                    MoveSpeed = DashSpeed;
-                    ShouldDash = true;  //Update dash status
+                    //audio for normal dash
+                    audioScript.PlutoDash1(transform.position);
 
-                    //audio
-                    if (audioScript)
-                    {
-                        //audio for normal dash
-                        audioScript.PlutoDash1(transform.position);
-
-                    }
-
-                    dashOnce = true;    //ensure dash gets called once per dash
-                    if (triggerScript)
-                    {
-                        triggerScript.DashChange(ShouldDash);
-                    }
-                    appearanceScript.animComp.SetBool("isDashing", true);
-
-                    StartCoroutine(DashTransition());   //Start dash
                 }
 
+                dashOnce = true;    //ensure dash gets called once per dash
+                if (triggerScript)
+                {
+                    triggerScript.DashChange(ShouldDash);
+                }
+                appearanceScript.animComp.SetBool("isDashing", true);
+
+                StartCoroutine(DashTransition());   //Start dash
             }
         }
     }

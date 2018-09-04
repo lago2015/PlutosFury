@@ -2,18 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RogueAvoidance : MonoBehaviour {
+public class ChargerAvoidance : MonoBehaviour
+{
 
-    
+
 
     // Fix a range how early u want your enemy detect the obstacle.
     public int range;
-    public int lostInterestRange=20;
+    public int lostInterestRange = 20;
+    
+    
     public float MaxAvoidForce = 30;
     public bool isThereAnyThing = false;
+    
     private Vector3 direction;
     private Vector3 ahead;
-    
+    public Vector3 moveableVector;
+    public float unitsMultiplied;
     private Vector3 avoidanceForce;
     private RaycastHit hit;
     private FleeOrPursue dashScript;
@@ -28,9 +33,9 @@ public class RogueAvoidance : MonoBehaviour {
 
     // Update is called once per frame
     void FixedUpdate()
-    {    
+    {
         direction = transform.forward;
-        
+
         Transform leftRay = transform;
         Transform rightRay = transform;
         // Now Two More RayCast At The End of Object to detect that object has already pass the obsatacle.
@@ -42,21 +47,21 @@ public class RogueAvoidance : MonoBehaviour {
             string curTag = hit.transform.gameObject.tag;
             if (curTag == ("Wall"))
             {
-                
+                //Debug.Log("Lost1");
                 isThereAnyThing = false;
                 dashScript.isThereAWall(isThereAnyThing);
             }
-            
         }
         else
         {
+            //Debug.Log("Lost2");
             isThereAnyThing = false;
             dashScript.isThereAWall(isThereAnyThing);
 
         }
-        if (Physics.Raycast(leftRay.position+(transform.up*4), direction, out hit, range)
-         || Physics.Raycast(rightRay.position - (transform.up * 4), direction, out hit, range))
-         
+        if (Physics.Raycast(leftRay.position + (transform.up * unitsMultiplied), direction, out hit, range)
+         || Physics.Raycast(rightRay.position - (transform.up * unitsMultiplied), direction, out hit, range))
+
         {
             string curTag = hit.transform.gameObject.tag;
             if (curTag == ("BigAsteroid"))
@@ -72,19 +77,23 @@ public class RogueAvoidance : MonoBehaviour {
 
             }
         }
+
         //Trace rays for debugging
-        Debug.DrawRay(transform.position + (transform.up * 4), direction*range, Color.green);
-        Debug.DrawRay(transform.position - (transform.up * 4), direction*range , Color.green);
+        Debug.DrawRay(transform.position + (transform.up * unitsMultiplied), direction * range, Color.green);
+        Debug.DrawRay(transform.position - (transform.up * unitsMultiplied), direction * range, Color.green);
         Debug.DrawRay(transform.position - (transform.forward * 6), transform.up * lostInterestRange, Color.red);
         Debug.DrawRay(transform.position - (transform.forward * 6), -transform.up * lostInterestRange, Color.red);
+
+
     }
 
     void CollisionAvoidance(RaycastHit raycastHit)
     {
         ahead = transform.position + direction * range;
-        
+
         Vector3 objectInSight = raycastHit.transform.position;
         avoidanceForce = ahead - objectInSight;
         avoidanceForce = avoidanceForce.normalized * MaxAvoidForce;
     }
 }
+
