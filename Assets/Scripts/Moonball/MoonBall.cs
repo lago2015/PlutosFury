@@ -17,7 +17,7 @@ public class MoonBall : MonoBehaviour
     [SerializeField]
     private int explosionRadius = 3;
     [SerializeField]
-    private int hitCount = 3;
+    private int hitCount = 2;
 
     // Public and Private references
     public GameObject gravityWell;
@@ -30,15 +30,13 @@ public class MoonBall : MonoBehaviour
 
     // Private flags
     private bool resetCollider;
-    private int upgrade1Index;
-    private int upgrade2Index;
+    private int currentlyEquipped;
    
     private void Awake()
     {
         hitCount = PlayerPrefs.GetInt("moonballHits");
-        upgrade1Index = PlayerPrefs.GetInt("MoonballUpgrade0");
-        upgrade2Index = PlayerPrefs.GetInt("MoonballUpgrade1");
-        if (upgrade1Index == 1)
+        currentlyEquipped = PlayerPrefs.GetInt("CurEquip");
+        if (currentlyEquipped == 1)
         {
             isShockWave = true;
         }
@@ -46,13 +44,9 @@ public class MoonBall : MonoBehaviour
         {
             isShockWave = false;
         }
-        if (upgrade2Index == 1)
+        if (currentlyEquipped == 2)
         {
-            GravWellEnabled = true;
-        }
-        else
-        {
-            GravWellEnabled = false;
+            hitCount++;
         }
     }
 

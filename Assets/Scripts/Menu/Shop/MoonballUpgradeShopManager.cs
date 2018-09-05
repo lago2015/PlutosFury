@@ -19,55 +19,107 @@ public class MoonballUpgradeShopManager : MonoBehaviour
     private int curOrbs;
     private int moonballHits;
     private UpdateOrbAmount orbTextScript;
-
+    public Image[] equipIcons;
+    public GameObject highlightIcon;
+    private int curEquipped;
     private void Awake()
     {
         CheckUpgrades();
         orbTextScript = GameObject.FindGameObjectWithTag("Finish").GetComponent<UpdateOrbAmount>();
     }
-
+    //Last level for kuiper belt is 6
+    //Last level for frost belt is 12
     public void CheckUpgrades()
     {
+        //get reference from saved data if player has moonball upgrades
         upgrade1Bought = PlayerPrefs.GetInt("MoonballUpgrade0");
         upgrade2Bought = PlayerPrefs.GetInt("MoonballUpgrade1");
         moonballHits = PlayerPrefs.GetInt("moonballHits");
+        curEquipped = PlayerPrefs.GetInt("CurEquip");
+        //check for shockwave if its unlocked
         if (upgrade1Bought == 1)
         {
-            canBuyUpgrade1 = false;
+            
+            UpgradeButtons[0].interactable = true;
         }
         else
         {
-            canBuyUpgrade1 = true;
+            UpgradeButtons[0].interactable = false;
+            
         }
+        //check for extra hit if its unlocked
         if (upgrade2Bought == 1)
         {
-            canBuyUpgrade2 = false;
+            UpgradeButtons[1].interactable = true;
         }
         else
         {
-            canBuyUpgrade2 = true;
+            UpgradeButtons[1].interactable = false;
         }
 
-        for(int i=0;i<=hitSprites.Length-1;i++)
+        //check for currently equipped skills
+        if (curEquipped > 0)
         {
-            if(i<=moonballHits)
+            for (int i = 0; i <= equipIcons.Length - 1; i++)
             {
-                hitSprites[i].SetActive(true);
+                if (i == curEquipped-1)
+                {
+                    equipIcons[i].enabled = true;
+                    UpgradeButtons[i].GetComponent<MoveHighlightIcon>().MoveIcon();
+                }
+                else
+                {
+                    equipIcons[i].enabled = false;
+                }
+            }
+        }
+        else
+        {
+            highlightIcon.SetActive(false);
+            for(int i=0;i<=equipIcons.Length-1;i++)
+            {
+                equipIcons[i].enabled = false;
+            }
+        }
+        //for(int i=0;i<=hitSprites.Length-1;i++)
+        //{
+        //    if(i<=moonballHits)
+        //    {
+        //        hitSprites[i].SetActive(true);
+        //    }
+        //    else
+        //    {
+        //        hitSprites[i].SetActive(false);
+        //    }
+        //}
+        //if(moonballHits==2)
+        //{
+        //    canBuyUpgradeHits = false;
+        //}
+        //else
+        //{
+        //    canBuyUpgradeHits = true;
+        //}
+    }
+
+    //called from customize button to switch display icons for level select and move the highlight icon for customization
+    public void SwapSprites(int curIndex)
+    {
+        PlayerPrefs.SetInt("CurEquip",curIndex);
+        for (int i = 0; i <= equipIcons.Length - 1; i++)
+        {
+            if (i == curIndex-1)
+            {
+                equipIcons[i].enabled = true;
+                highlightIcon.SetActive(true);
             }
             else
             {
-                hitSprites[i].SetActive(false);
+                equipIcons[i].enabled = false;
             }
         }
-        if(moonballHits==2)
-        {
-            canBuyUpgradeHits = false;
-        }
-        else
-        {
-            canBuyUpgradeHits = true;
-        }
     }
+
 
     public int CurPrice(int curUpgrade)
     {

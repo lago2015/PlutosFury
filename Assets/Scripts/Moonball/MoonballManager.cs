@@ -9,6 +9,8 @@ public class MoonballManager : MonoBehaviour {
     private int moonballMaxContainer=1;
     private HUDManager HUDScript;
     private ExPointController bonusController;
+    private PlayerManager scoreManager;
+    public int bonusAmount = 50;
 
     void Awake()
     {
@@ -23,6 +25,12 @@ public class MoonballManager : MonoBehaviour {
         moonballNum = PlayerPrefs.GetInt("moonBallAmount",1);
 
         bonusController = GetComponent<ExPointController>();
+
+    }
+
+    private void Start()
+    {
+        scoreManager = GameObject.FindGameObjectWithTag("ScoreManager").GetComponent<PlayerManager>();
 
     }
 
@@ -67,6 +75,10 @@ public class MoonballManager : MonoBehaviour {
         else if (bonusController)
         {
             bonusController.CreateFloatingExPoint(transform.position);
+            for (int i = 0; i <= bonusAmount - 1; i++)
+            {
+                scoreManager.OrbObtained();
+            }
         }
     }
 

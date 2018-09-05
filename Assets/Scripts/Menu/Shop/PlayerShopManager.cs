@@ -116,7 +116,8 @@ public class PlayerShopManager : MonoBehaviour
         PlayerPrefs.SetInt("skin6", 0);
         PlayerPrefs.SetInt("MoonballUpgrade0", 0);
         PlayerPrefs.SetInt("MoonballUpgrade1", 0);
-        PlayerPrefs.SetInt("moonballHits", 0);
+        PlayerPrefs.SetInt("CurEquip", 0);
+        PlayerPrefs.SetInt("moonballHits", 2);
         PlayerPrefs.SetInt(0 + "Unlocked", 2);
         PlayerPrefs.SetInt(1 + "Unlocked", 7);
         PlayerPrefs.SetInt("PlayerMoonballIndex", 0);

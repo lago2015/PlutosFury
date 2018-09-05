@@ -34,7 +34,7 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
     private CameraShake cameraShakeScript;
     private PlayerAppearance appearanceScript;
     private ExPointController bonusController;
-
+    public int bonusAmount = 50;
     //knockback values
     public float wallBump = 20.0f;
     public float OrbBump = 10f;
@@ -193,6 +193,10 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
         else if (bonusController)
         {
             bonusController.CreateFloatingExPoint(transform.position);
+            for(int i=0;i<=bonusAmount-1;i++)
+            {
+                ScoreManager.OrbObtained();
+            }
         }
 
     }

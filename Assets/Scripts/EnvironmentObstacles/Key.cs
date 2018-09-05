@@ -11,6 +11,8 @@ public class Key : MonoBehaviour {
     private Movement moveScript;
     private bool doorActive;
     public bool isTutorial = false;
+    public bool lastLevel = false;
+    public int skillIndex;
     private void Awake()
     {
 
@@ -37,7 +39,10 @@ public class Key : MonoBehaviour {
             {
                 PlayerPrefs.SetInt(curWorld + "Unlocked", curLevel + 1);
             }
-
+            if(lastLevel)
+            {
+                GetComponent<UnlockedSkill>().UnlockingSkill(skillIndex);
+            }
         }
     }
 }
