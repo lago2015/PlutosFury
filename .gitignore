@@ -25,6 +25,8 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+.Thumbs.db.meta
+
 
 # =========================
 # Operating System Files
@@ -34,8 +36,10 @@ sysinfo.txt
 # =========================
 
 .DS_Store
+.Spotlight-V100 
 .AppleDouble
 .LSOverride
+Thumbs.db.meta
 
 # Thumbnails
 ._*
@@ -61,7 +65,8 @@ Temporary Items
 # Windows image file caches
 Thumbs.db
 ehthumbs.db
-
+Thumbs.db.meta
+ehthumbs.db.meta
 # Folder config file
 Desktop.ini
 
