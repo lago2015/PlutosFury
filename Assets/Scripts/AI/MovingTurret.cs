@@ -18,11 +18,9 @@ public class MovingTurret : MonoBehaviour {
     public float durationToShoot = 2f;
     public float chargeCooldownTime = 0.5f;
     private bool isExhausted = false;
-    private bool ShouldShoot;
     private bool firstEncounter = false;
 
-    private float maxDistAvoidance = 20f;
-    private float maxAvoidForce = 100f;
+    
     //components
     //private AudioController audioScript;          //going to add this in when charge audio sfx is ready
     Transform PlayerTransform;
@@ -32,7 +30,7 @@ public class MovingTurret : MonoBehaviour {
     
     public GameObject chargingParticle;
     
-    private bool isDead;
+    
     private bool isTriggered=true;
     private bool ShouldPursue=true;// chase player or not
     private bool isCharging;
@@ -196,21 +194,17 @@ public class MovingTurret : MonoBehaviour {
                 shootingScript1.isPlayerNear(true);
             }
 
-            //Check if rogue is dead
-            if (!isDead)
+            //Enable trail and disable charge particle
+            if (chargingParticle)
             {
-                //Enable trail and disable charge particle
-                if (chargingParticle)
-                {
 
-                    chargingParticle.SetActive(false);
-                }
+                chargingParticle.SetActive(false);
             }
             yield return new WaitForSeconds(durationToShoot);
             shootingScript1.enabled = false;
             shootingScript1.isPlayerNear(false);
 
-            ShouldShoot = false;
+            
             isCharging = false;
 
             
@@ -222,7 +216,7 @@ public class MovingTurret : MonoBehaviour {
         else
         {
             //Reset Values
-            ShouldShoot = false;
+            
             isCharging = false;
         }
         //Start Slowdown/Cooldown
@@ -255,7 +249,7 @@ public class MovingTurret : MonoBehaviour {
     public bool PlayerNotNear()
     {
         //Reset all values
-        ShouldShoot = false;
+        
         isCharging = false;
         //animComp.SetBool("isDashing", false);
         //Stop Coroutines

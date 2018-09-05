@@ -23,7 +23,7 @@ public class CanvasToggle : MonoBehaviour {
     public float goSpriteFadeOut = 1;
 
     private LoadTargetSceneButton loadScript;
-    private FloatingJoystickController controllerScript;
+    
     private Movement playerScript;
     private HUDManager hudManager;
     public Button gameOverReplayButton;
@@ -71,11 +71,7 @@ public class CanvasToggle : MonoBehaviour {
             playerScript.DisableMovement(false);
         }
 
-        controllerScript = GameObject.FindObjectOfType<FloatingJoystickController>();
-        if(controllerScript)
-        {
-            controllerScript.enabled = false;
-        }
+        
         //find reference for tutorial script
         TutorialTip tip = GameObject.FindObjectOfType<TutorialTip>();
         //if enabled then begin tutorial
@@ -151,21 +147,14 @@ public class CanvasToggle : MonoBehaviour {
         }
         GoSprite.gameObject.SetActive(false);
         ReadySprite.gameObject.SetActive(false);
-        if (controllerScript)
-        {
-            controllerScript.enabled = true;
-        }
+        
     }
 
     //toggle canvas and pass through if the player is dead or not to know 
     //which button to set active(one for going to menu and one to next level
     public void GameEnded(bool isGameOver)
     {
-        //turn off controller
-        if (controllerScript)
-        {
-            controllerScript.enabled = false;
-        }
+        
 
         if (isGameOver)
         {

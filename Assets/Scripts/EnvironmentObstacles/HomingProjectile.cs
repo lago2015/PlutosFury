@@ -14,21 +14,8 @@ public class HomingProjectile : MonoBehaviour {
     
     private SphereCollider TriggerCollider;
     public float DistanceFromPlayerToExplode = 7f;
-    private DetectWaitThenExplode explodeScript;
 
-
-    //To scale object variables
-    public GameObject ObjectToScale;
-    private Vector3 currentScale;
-    private Vector3 scaleToVector;
-    public float lerpSpeed;
-    public float scaleToNumber=5.5f;
-    public float explosionTime;
-    private bool timeToLerp;
     
-    private float scaleCovered;
-    private float startTime;
-    public bool AmILerping() { return timeToLerp; }
     public bool activateMovement(bool isActive)
     {
         enabled = isActive;
@@ -38,11 +25,8 @@ public class HomingProjectile : MonoBehaviour {
 
     void Awake()
     {
-        currentScale = ObjectToScale.transform.localScale;
-        scaleToVector = new Vector3(scaleToNumber, scaleToNumber, scaleToNumber);
     
         enabled = false;
-        explodeScript = GetComponent<DetectWaitThenExplode>();
         TriggerCollider = GetComponent<SphereCollider>();
         if(TriggerCollider)
         {
@@ -57,17 +41,7 @@ public class HomingProjectile : MonoBehaviour {
     void FixedUpdate()
     {
 
-        if (timeToLerp)
-        {
-            scaleCovered = (Time.time - startTime) * lerpSpeed;
-            ObjectToScale.transform.localScale = Vector3.Lerp(currentScale, scaleToVector, scaleCovered);
-            if(ObjectToScale.transform.localScale==scaleToVector)
-            {
-                timeToLerp = false;
-                enabled = false;
-            }
-        }
-        else if (ShouldMove)
+        if (ShouldMove)
         {
             //calculate distance between player and rogue
             float curDistance = Vector3.Distance(transform.position, Player.transform.position);
@@ -81,30 +55,10 @@ public class HomingProjectile : MonoBehaviour {
                 transform.parent.position += moveSpeed * transform.forward * Time.deltaTime;
                 transform.parent.position = new Vector3(transform.position.x, transform.position.y, 0);
             }
-            else
-            {
-                EnableLerp();
-            }
         }
     }
 
-    public void EnableLerp()
-    {
-        StartCoroutine(ExpandMothafucka());   
-    }
-
-    IEnumerator ExpandMothafucka()
-    {
-        yield return new WaitForSeconds(0.25f);
-        startTime = Time.time;
-        timeToLerp = true;
-        gameObject.tag = "Wall";
-        yield return new WaitForSeconds(explosionTime);
-        if (explodeScript)
-        {
-            explodeScript.TriggeredExplosion();
-        }
-    }
+  
 
     private void OnTriggerEnter(Collider other)
     {

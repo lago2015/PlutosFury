@@ -165,7 +165,6 @@ public class RogueCollision : MonoBehaviour {
         }
         else if(curTag=="Obstacle")
         {
-            bool rogueDashing = rogueMoveScript.isDashing();
             if (col.gameObject.name.Contains("DamageWall"))
             {
                 RogueDamage();

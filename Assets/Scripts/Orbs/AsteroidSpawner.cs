@@ -20,15 +20,10 @@ public class AsteroidSpawner : MonoBehaviour
     public float newMinX(float newMin) { return minX = newMin; }
     public float newMaxX(float newMax) { return maxX = newMax; }
     private Vector3 curObjectPosition;
-    private PlayerManager scoreScript;
 
     void Awake()
     {
-        GameObject scoreObject = GameObject.FindGameObjectWithTag("ScoreManager");
-        if(scoreObject)
-        {
-            scoreScript = scoreObject.GetComponent<PlayerManager>();
-        }
+        
         //using border cube colliders to give the min and max of the level
         if (levelBounds.Length == 4)
         {

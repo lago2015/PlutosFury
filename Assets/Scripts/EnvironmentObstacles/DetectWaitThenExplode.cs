@@ -16,7 +16,7 @@ public class DetectWaitThenExplode : MonoBehaviour
     public float WaitTimeToExplode = 1f;
     public int orbDrop=2;
     private Vector3 spawnPoint;
-    private bool isLerping;
+    
     private bool isDashing;
     // Use this for initialization
     void Awake()
@@ -53,27 +53,15 @@ public class DetectWaitThenExplode : MonoBehaviour
                 isDashing = playerScript.DashStatus();
                 if (isDashing)
                 {
-                    isLerping = pursuitScript.AmILerping();
-                    if(!isLerping)
+                    if (damageScript)
                     {
-                        if (damageScript)
-                        {
-                            damageScript.didDamage();
-                        }
-
-                        
-
-                        WaitTimeToExplode = 0;
-                        playerScript.KnockbackPlayer(col.contacts[0].normal);
-                        playerScript.KillCombo();
-                        TriggerExplosionInstantly();
-                        
+                        damageScript.didDamage();
                     }
-                }
-                else
-                {
+                    WaitTimeToExplode = 0;
+                    playerScript.KnockbackPlayer(col.contacts[0].normal);
+                    playerScript.KillCombo();
+                    TriggerExplosionInstantly();
 
-                    pursuitScript.EnableLerp();
                 }
             }
         }
@@ -123,40 +111,37 @@ public class DetectWaitThenExplode : MonoBehaviour
     }
     public void TriggerExplosionInstantly()
     {
-        if(!isLerping)
+        if (damageCollider)
         {
-            if(damageCollider)
-            {
-                damageCollider.enabled = false;
-            }
-            if (pursuitScript)
-            {
-                pursuitScript.moveSpeed = 0;
-            }
-            if(orbScript)
-            {
-                orbScript.SpawnAsteroidHere(orbDrop, transform.position);
-            }
-          
-                //ensure audio gets played once
-                if (!doOnce)
-                {
-                    if (audioScript)
-                    {
-                        //get audio controller and play audio
-                        audioScript.DestructionSmall(transform.position);
-                    }
-                    doOnce = true;
-                }
-
-                //activate explosion gameobject
-                GameObject explosion = GameObject.FindObjectOfType<ObjectPoolManager>().FindObject("BigExplosion");
-                explosion.transform.position = transform.position;
-                explosion.SetActive(true);
-
-                Destroy(gameObject);
+            damageCollider.enabled = false;
         }
-        
+        if (pursuitScript)
+        {
+            pursuitScript.moveSpeed = 0;
+        }
+        if (orbScript)
+        {
+            orbScript.SpawnAsteroidHere(orbDrop, transform.position);
+        }
+
+        //ensure audio gets played once
+        if (!doOnce)
+        {
+            if (audioScript)
+            {
+                //get audio controller and play audio
+                audioScript.DestructionSmall(transform.position);
+            }
+            doOnce = true;
+        }
+
+        //activate explosion gameobject
+        GameObject explosion = GameObject.FindObjectOfType<ObjectPoolManager>().FindObject("BigExplosion");
+        explosion.transform.position = transform.position;
+        explosion.SetActive(true);
+
+        Destroy(gameObject);
+
     }
 
     public void TriggeredExplosion()

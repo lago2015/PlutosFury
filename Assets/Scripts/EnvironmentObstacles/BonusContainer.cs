@@ -5,15 +5,10 @@ using UnityEngine;
 public class BonusContainer : MonoBehaviour {
 
 
-    private GameObject pickUpParticle;
     bool isDashing;
     private Movement moveScript;
 
-    private void Awake()
-    {
-        pickUpParticle = transform.GetChild(0).gameObject;
-    
-    }
+
 
 
     private void OnCollisionEnter(Collision col)
