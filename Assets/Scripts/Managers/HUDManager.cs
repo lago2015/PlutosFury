@@ -8,6 +8,11 @@ public class HUDManager : MonoBehaviour {
 
     //Script References for hud
     private PlayerManager scoreScript;
+    public GameObject[] HeartImageContainer;
+    public GameObject[] MoonballImageContainer;
+    private int curHeartContainer;
+    private int curMoonballContainer;
+
     //Text to apply to hud
     public Text scoreText;
     public Image[] healthSprites;
@@ -57,6 +62,33 @@ public class HUDManager : MonoBehaviour {
                 charManager = null;
             }
             
+        }
+        curHeartContainer = PlayerPrefs.GetInt("CurAddtionalHearts") + 1;
+        curMoonballContainer = PlayerPrefs.GetInt("CurAddtionalBalls") + 1;
+
+        //enable amount of available heart containers the player has in saved file
+        for (int i = 0; i <= HeartImageContainer.Length - 1; i++)
+        {
+            if (i <= curHeartContainer)
+            {
+                HeartImageContainer[i].SetActive(true);
+            }
+            else
+            {
+                HeartImageContainer[i].SetActive(false);
+            }
+        }
+        //enable amount of available heart containers the player has in saved file
+        for (int i = 0; i <= MoonballImageContainer.Length - 1; i++)
+        {
+            if (i <= curMoonballContainer)
+            {
+                MoonballImageContainer[i].SetActive(true);
+            }
+            else
+            {
+                MoonballImageContainer[i].SetActive(false);
+            }
         }
         dashButton = GameObject.FindGameObjectWithTag("DashButt");
         currentMoonballAmount = PlayerPrefs.GetInt("moonBallAmount",1);
