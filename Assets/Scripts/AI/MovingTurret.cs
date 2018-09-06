@@ -26,8 +26,8 @@ public class MovingTurret : MonoBehaviour {
     Transform PlayerTransform;
     public GameObject myParent;
     public ShootProjectiles shootingScript1;
-    
-    
+
+    private AudioController audioScript;
     public GameObject chargingParticle;
     
     
@@ -66,10 +66,10 @@ public class MovingTurret : MonoBehaviour {
         }
     }
 
-    //private void Start()
-    //{
-    //    audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
-    //}
+    private void Start()
+    {
+        audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
+    }
 
     // Update is called once per frame
     void FixedUpdate()
@@ -183,7 +183,11 @@ public class MovingTurret : MonoBehaviour {
         isCharging = true;
         //turn on charging particle
         chargingParticle.SetActive(true);
-        
+        //play charge sound cue
+        if(audioScript)
+        {
+            audioScript.HunterCharge(transform.position);
+        }
         yield return new WaitForSeconds(chargeTime);
         //double check if player is still near after charge
         if (PlayerNear)

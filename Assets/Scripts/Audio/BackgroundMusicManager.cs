@@ -59,7 +59,7 @@ public class BackgroundMusicManager : MonoBehaviour
             BgMusicSource.Stop();
             BgMusicWinSource.priority = 200;
             BgMusicWinSource.minDistance = 1000f;
-            BgMusicWinSource.loop = true;
+            BgMusicWinSource.loop = false;
             BgMusicWinSource.Play();
         }
     }

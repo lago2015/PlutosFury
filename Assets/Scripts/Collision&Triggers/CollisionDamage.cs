@@ -5,7 +5,8 @@ public class CollisionDamage : MonoBehaviour {
     public FleeOrPursue pursueScript;
     public bool CheckDash=false;
     private AudioController audioScript;
-    
+    public bool isCharger;
+    public bool isMetalSpike;
     void Start()
     {
         audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
@@ -29,7 +30,14 @@ public class CollisionDamage : MonoBehaviour {
                 col.gameObject.GetComponent<Movement>().KnockbackPlayer(transform.position);
                 if (audioScript)
                 {
-                    audioScript.SpikeHitPluto(transform.position);
+                    if(isMetalSpike)
+                    {
+                        audioScript.SpikeHitPluto(transform.position);
+                    }
+                    else if(isCharger)
+                    {
+                        audioScript.ChargerShieldTing(transform.position);
+                    }
                 }
             }
         }

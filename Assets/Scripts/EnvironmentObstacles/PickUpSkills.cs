@@ -86,7 +86,7 @@ public class PickUpSkills : MonoBehaviour {
                     }
                     if(audioScript)
                     {
-                        audioScript.PlutoHealthUp(transform.position);
+                        audioScript.PlutoBallUp(transform.position);
                     }
                     Destroy(gameObject);
                 }

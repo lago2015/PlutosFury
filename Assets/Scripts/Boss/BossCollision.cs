@@ -22,6 +22,7 @@ public class BossCollision : MonoBehaviour {
                 {
                     phaseManager.TakeDamage();
                 }
+                GameObject.FindObjectOfType<AudioController>().BossHit(transform.position);
             }
             
         }
@@ -31,6 +32,7 @@ public class BossCollision : MonoBehaviour {
             {
                 phaseManager.TakeDamage();
             }
+            GameObject.FindObjectOfType<AudioController>().BossHit(transform.position);
         }
     }
 }

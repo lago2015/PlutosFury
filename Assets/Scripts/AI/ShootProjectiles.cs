@@ -7,6 +7,7 @@ public class ShootProjectiles : MonoBehaviour {
     public GameObject[] ProjectilePos;
     public GameObject Projectile;
     public GameObject Muzzle;
+    private AudioController audioScript;
     public float FireRate;
     float elapseTime;
     bool isReloading = false;
@@ -24,13 +25,18 @@ public class ShootProjectiles : MonoBehaviour {
 
     void Awake()
     {
+        
         if(Muzzle)
         {
             Muzzle.SetActive(false);
         }
         enabled = false;
     }
+    private void Start()
+    {
+        audioScript = GameObject.FindObjectOfType<AudioController>();
 
+    }
     void FixedUpdate()
     {
         LaunchProjectiles();
@@ -54,7 +60,10 @@ public class ShootProjectiles : MonoBehaviour {
                         proj.transform.rotation = ProjectilePos[i].transform.rotation;
                         proj.SetActive(true);
                         Muzzle.SetActive(true);
-                        
+                        if(audioScript)
+                        {
+                            audioScript.HunterShooting(transform.position);
+                        }
                         StartCoroutine(MuzzleShot()); 
                     }
                 }

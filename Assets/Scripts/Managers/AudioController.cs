@@ -5,7 +5,7 @@ public class AudioController : MonoBehaviour {
     // Singleton instance 
     [SerializeField]
     public static AudioController instance;
-    
+
     [SerializeField]
     [Header("Pluto Hit")]
     public AudioSource plutoHitSource;
@@ -14,7 +14,7 @@ public class AudioController : MonoBehaviour {
     [SerializeField]
     [Header("Asteroid Absorbed")]
     public AudioSource asteroidAbsorbedSrc;
-    public float absorbDelay=0.5f;
+    public float absorbDelay = 0.5f;
     [SerializeField]
     [Header("Pluto Death")]
     public AudioSource plutoDeathSource;
@@ -27,6 +27,10 @@ public class AudioController : MonoBehaviour {
     [Header("PlutoHealthPickUp")]
     public AudioSource plutoHealthUp;
     public float HealthUpDelay = 0.5f;
+
+    [Header("PlutoBallPickup")]
+    public AudioSource plutoMoonballUp;
+    public float moonballDelay = 0.5f;
     [SerializeField]
     [Header("RogueDash")]
     public AudioSource RogueDashSource;
@@ -63,8 +67,26 @@ public class AudioController : MonoBehaviour {
     [Header("AsteroidBounce")]
     public AudioSource asteroidBounce;
     public float asteroidBounceDelay = 0.5f;
-    
-    
+
+    [Header("ChargerShieldDing")]
+    public AudioSource chargerShieldHit;
+
+    [Header("HunterCharging")]
+    public AudioSource hunterChargeCue;
+
+    [Header("HunterChargeShot")]
+    public AudioSource hunterShotCue;
+
+    public enum ComboState { nice,cool,awesome}
+    private ComboState curCombo;
+    [Header("Combos")]
+    public AudioSource coolCue;
+    public AudioSource niceCue;
+    public AudioSource awesomeCue;
+
+    [Header("Boss Hit")]
+    public AudioSource bossHitCue;
+
 
     // Use this for initialization
     void Start () {
@@ -136,6 +158,15 @@ public class AudioController : MonoBehaviour {
             plutoHealthUp.Play();
         }
     }
+    public void PlutoBallUp(Vector3 pos)
+    {
+        if (plutoMoonballUp != null)
+        {
+            plutoMoonballUp.transform.position = pos;
+            plutoMoonballUp.loop = false;
+            plutoMoonballUp.Play();
+        }
+    }
 
     public void WormholeEntered(Vector3 MyPos)
     {
@@ -149,6 +180,32 @@ public class AudioController : MonoBehaviour {
         }
     }
 
+    public void ComboAchieved(ComboState thisCombo)
+    {
+        switch(thisCombo)
+        {
+            case ComboState.nice:
+                if(niceCue!=null)
+                {
+                    niceCue.Play();
+                }
+                break;
+
+            case ComboState.cool:
+                if (coolCue != null)
+                {
+                    coolCue.Play();
+                }
+                break;
+
+            case ComboState.awesome:
+                if (awesomeCue != null)
+                {
+                    awesomeCue.Play();
+                }
+                break;
+        }
+    }
 
     public void RogueDash(Vector3 pos)
     {
@@ -201,8 +258,29 @@ public class AudioController : MonoBehaviour {
         }
     }
 
+    public void HunterCharge(Vector3 pos)
+    {
+        if (hunterChargeCue != null)
+        {
+            hunterChargeCue.transform.position = pos;
+            hunterChargeCue.loop = false;
+            hunterChargeCue.Play();
+        }
+    }
 
-
+    public void HunterShooting(Vector3 pos)
+    {
+        if (hunterShotCue != null)
+        {
+            if(hunterChargeCue.isPlaying)
+            {
+                hunterChargeCue.Stop();
+            }
+            hunterShotCue.transform.position = pos;
+            hunterShotCue.loop = false;
+            hunterShotCue.Play();
+        }
+    }
 
     public void AsteroidExplosion(Vector3 pos)
     {
@@ -254,8 +332,35 @@ public class AudioController : MonoBehaviour {
           
         }
     }
+    public void BossHit(Vector3 pos)
+    {
+        if (bossHitCue != null)
+        {
 
- 
+            bossHitCue.pitch = Random.Range(0.8f, 1f);
+            bossHitCue.volume = Random.Range(0.8f, 1f);
+
+            bossHitCue.loop = false;
+            bossHitCue.Play();
+
+
+        }
+    }
+
+    public void ChargerShieldTing(Vector3 pos)
+    {
+        if (chargerShieldHit != null)
+        {
+            chargerShieldHit.pitch = Random.Range(0.8f, 1f);
+            chargerShieldHit.volume = Random.Range(0.8f, 1f);
+
+            chargerShieldHit.loop = false;
+            chargerShieldHit.Play();
+
+
+        }
+    }
+
     public void ShatterExplosion(Vector3 pos)
     {
         if (shatterExplosionSrc != null)
