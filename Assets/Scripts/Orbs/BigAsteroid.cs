@@ -27,6 +27,7 @@ public class BigAsteroid : MonoBehaviour {
         }
         spawnPointScript = GameObject.FindGameObjectWithTag("Spawner").GetComponent<AsteroidSpawner>();
         Collider = GetComponent<SphereCollider>();
+        Debug.Log("Big Terras: ");
     }
 
     public void SpawnAsteroids()

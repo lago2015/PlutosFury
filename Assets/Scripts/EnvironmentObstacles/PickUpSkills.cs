@@ -32,11 +32,13 @@ public class PickUpSkills : MonoBehaviour {
                 playerCollisionScript = playerRef.GetComponent<PlayerCollisionAndHealth>();
                 healthController = GetComponent<HealthObtainedController>();
                 appearanceScript = playerRef.GetComponent<PlayerAppearance>();
+                Debug.Log("Health: ");
                 break;
             
             case Skills.Moonball:
                 moonballManScript = playerRef.GetComponent<MoonballManager>();
                 appearanceScript = playerRef.GetComponent<PlayerAppearance>();
+                Debug.Log("Moonball: ");
                 break;
         }
     }

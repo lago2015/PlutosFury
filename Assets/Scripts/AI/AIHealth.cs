@@ -42,7 +42,31 @@ public class AIHealth : MonoBehaviour {
         {
             vibrationHit = false;
         }
+        CheckForNumberOfEnemies();
     }
+
+    private void CheckForNumberOfEnemies()
+    {
+        switch(currentEnemy)
+        {
+            case EnemyOptions.Hunter:
+                Debug.Log("Hunter: ");
+                break;
+            case EnemyOptions.Shatter:
+                Debug.Log("Shatter: ");
+                break;
+            case EnemyOptions.Spike:
+                Debug.Log("MetalSpike: ");
+                break;
+            case EnemyOptions.TurretScatter:
+                Debug.Log("TurretScatter: ");
+                break;
+            case EnemyOptions.TurretSingle:
+                Debug.Log("TurretSingle: ");
+                break;
+        }
+    }
+
     private void Start()
     {
         audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();

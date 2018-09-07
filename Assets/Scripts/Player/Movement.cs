@@ -14,7 +14,7 @@ public class Movement : MonoBehaviour
     private bool isDead;
     //******Dash Variables
     //Dash States
-    
+    private int orbComboAmount = 15;
     public enum DashState { idle, basicMove, dashMove, chargeStart, chargeComplete, burst }
     [HideInInspector]
     public DashState trailState;
@@ -508,7 +508,7 @@ public class Movement : MonoBehaviour
 
     public void OrbCombo()
     {
-        if(++orbCount >= 10)
+        if(++orbCount >= orbComboAmount)
         {
             ComboTextManager ComboObject = GameObject.FindObjectOfType<ComboTextManager>();
             if(ComboObject)
