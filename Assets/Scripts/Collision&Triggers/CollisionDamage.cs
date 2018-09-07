@@ -45,6 +45,10 @@ public class CollisionDamage : MonoBehaviour {
         else if (col.gameObject.tag == "MoonBall")
         {
             col.gameObject.GetComponent<MoonBall>().CheckHit(this.gameObject);
+            GameObject explosion = GameObject.FindObjectOfType<ObjectPoolManager>().FindObject("TurretExplosion");
+            explosion.transform.position = transform.position;
+            GameObject.FindObjectOfType<AsteroidSpawner>().SpawnAsteroidHere(3, transform.position);
+            explosion.SetActive(true);
             this.transform.parent.gameObject.SetActive(false);
         }
         else if(col.gameObject.tag=="BigAsteroid")

@@ -449,7 +449,7 @@ public class Movement : MonoBehaviour
         myBody.velocity = Vector3.zero;
         dir = EnemyPoint - transform.position;
         dir = dir.normalized;
-        myBody.AddForce(-dir * wallBump ,ForceMode.VelocityChange);
+        myBody.AddForce(-dir * 50 ,ForceMode.VelocityChange);
         
     }
 

@@ -414,13 +414,18 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
 
             direction = c.transform.position - transform.position;
             direction = direction.normalized;
-            myBody.AddForce(-direction * obstacleBump);
+            
             if (c.gameObject.name == "Spikes")
             {
                 if (audioScript)
                 {
                     audioScript.SpikeHitPluto(transform.position);
                 }
+                myBody.AddForce(-direction * 100);
+            }
+            else
+            {
+                myBody.AddForce(-direction * obstacleBump);
             }
 
         }
@@ -429,11 +434,7 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
             direction = c.transform.position - transform.position;
             direction = direction.normalized;
             myBody.AddForce(-direction * obstacleBump*30);
-            ShouldDash = moveScript.DashStatus();
-            if (!ShouldDash)
-            {
-                DamagePluto();
-            }
+            
         }
         direction = Vector3.zero;
     } 

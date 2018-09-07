@@ -25,7 +25,7 @@ public class PlayerManager : MonoBehaviour {
     {
         if(playerHealth<1)
         {
-            playerHealth = 1;
+            playerHealth = 0;
         }
         return playerHealth;
     }
@@ -80,13 +80,13 @@ public class PlayerManager : MonoBehaviour {
     //For game over and about to get into game over to ensure health is 0
     public void DefaultHealth()
     {
-        PlayerPrefs.SetInt("healthPref", 1);
+        PlayerPrefs.SetInt("healthPref", 0);
     }
 
     
     public int OrbObtained()
     {
-        OrbsObtainedInLevel++;
+        OrbsObtainedInLevel+=5;
         if (HUDScript)
         {
             HUDScript.UpdateScore(OrbsObtainedInLevel);

@@ -45,7 +45,7 @@ public class OptionsMenu : MonoBehaviour {
         }
         if (PlayerPrefs.HasKey("joystickPref") && joystickOpacity)
         {
-            joystickOpacity.value = PlayerPrefs.GetFloat("joystickPref",1);
+            joystickOpacity.value = PlayerPrefs.GetFloat("joystickPref");
 
         }
 

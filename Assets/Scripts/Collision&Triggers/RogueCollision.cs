@@ -75,14 +75,9 @@ public class RogueCollision : MonoBehaviour {
         {
             isDashing = playerMoveScript.DashStatus();
 
-            if (!isDashing && playerMoveScript)
-            {
-                playerCollisionScript.DamagePluto();
-            }
-            else
+            if (isDashing && playerMoveScript)
             {
                 RogueDamage();
-
             }
         }
         else

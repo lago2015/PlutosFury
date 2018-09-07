@@ -8,7 +8,7 @@ public class BigAsteroid : MonoBehaviour {
     public float spawnRadius = 2;
     public int curHits;
     public int HitPoints;
-    private int orbDrop=2;
+    private int orbDrop=3;
     
     private bool isDestroyed;
     
