@@ -165,7 +165,7 @@ public class FloatingJoystickV2 : Joystick
                 }
                 else
                 {
-                    previousMoonball.GetComponent<MoonBall>().OnExplosion();
+                    previousMoonball.GetComponent<MoonBall>().OnExplosion("ContainerExplosion");
                     previousMoonball = newMoonBall;
                 }
                 moonballBody = newMoonBall.GetComponent<Rigidbody>();

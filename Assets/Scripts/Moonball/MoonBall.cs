@@ -113,30 +113,7 @@ public class MoonBall : MonoBehaviour
         else if (col.gameObject.tag == "EnvironmentObstacle" || col.gameObject.tag == "BreakableWall" || col.gameObject.GetComponent<AIHealth>() 
             || col.gameObject.tag == "Neptune"||col.gameObject.tag =="Obstacle" || col.gameObject.tag == "ShatterPiece")
         {
-            if(col.gameObject.name.Contains("DamageWall")||col.gameObject.name.Contains("Rocket")||col.gameObject.name.Contains("Landmine"))
-            {
-                OnExplosion();
-            }
-            else
-            {
-                if (isShockWave)
-                {
-                    ShockWave();
-                }
-                else
-                {
-                    if (--hitCount >= -1)
-                    {
-                        Bounce(col);
-                    }
-                    else
-                    {
-                        OnExplosion();
-                    }
-
-                }
-            }
-                          
+            HandleHit(col);        
         }
     }
 
@@ -159,7 +136,7 @@ public class MoonBall : MonoBehaviour
         }
     }
 
-
+   
     public void CheckHit(GameObject obj)
     {
         if (--hitCount >= -1)
@@ -168,19 +145,40 @@ public class MoonBall : MonoBehaviour
         }
         else
         {
-            OnExplosion();
+            OnExplosion("ContainerExplosion");
         }
     }
 
     // Destroying Moonball
-    public void OnExplosion()
+    public void OnExplosion(string explosionPool)
     {
-        GameObject explosion = GameObject.FindObjectOfType<ObjectPoolManager>().FindObject("ContainerExplosion");
+        GameObject explosion = GameObject.FindObjectOfType<ObjectPoolManager>().FindObject(explosionPool);
         explosion.transform.position = transform.position;
         explosion.SetActive(true);
 
         GameObject.FindObjectOfType<ObjectPoolManager>().PutBackObject("MoonBall", gameObject);
         GameObject.FindObjectOfType<FloatingJoystickV2>().SwitchPrevMoonball();
+    }
+
+    // Logic to handle the hit
+    private void HandleHit(Collision col)
+    {
+        if(!isShockWave)
+        {
+            if (--hitCount >= -1)
+            {
+                Bounce(col);
+            }
+            else
+            {
+                OnExplosion("ContainerExplosion");
+            }
+        }
+        else
+        {
+
+            ShockWave();
+        }
     }
 
     // Physics for bouncing the ball off objects
@@ -199,7 +197,7 @@ public class MoonBall : MonoBehaviour
     {
         if (isShockWave)
         {
-            OnExplosion();
+            ShockWave();
         }
         else
         {
@@ -222,39 +220,46 @@ public class MoonBall : MonoBehaviour
 
         foreach (Collider col in colliders)
         {
-            DetectThenExplode explodeScript = col.GetComponent<DetectThenExplode>();
-            if (explodeScript)
-            {
-                explodeScript.TriggeredExplosion(false);
-                break;
-            }
-            DetectWaitThenExplode explodeThenWaitScript = col.GetComponent<DetectWaitThenExplode>();
-            if (explodeThenWaitScript)
-            {
-                explodeThenWaitScript.TriggerExplosionInstantly();
-                break;
-            }
-            AIHealth enemyScript = col.GetComponent<AIHealth>();
-            if (enemyScript)
-            {
-                enemyScript.IncrementDamage(this.gameObject.tag,true);
-                break;
-            }
-            RogueCollision rogueScript = col.GetComponent<RogueCollision>();
-            if (rogueScript)
-            {
-                rogueScript.RogueDamage();
-                break;
-            }
+
             BigAsteroid asteroidScript = col.GetComponent<BigAsteroid>();
             if (asteroidScript)
             {
-                asteroidScript.SpawnAsteroids();
-                break;
+                asteroidScript.AsteroidHit(1, false, true);
+                continue;
             }
+            AIHealth enemyScript = col.GetComponentInChildren<AIHealth>();
+            if (enemyScript)
+            {
+                enemyScript.IncrementDamage(this.gameObject.tag, true);
+                continue;
+            }
+            RogueCollision rogueScript = col.GetComponentInChildren<RogueCollision>();
+            if (rogueScript)
+            {
+                rogueScript.RogueDamage();
+                continue;
+            }
+            DetectThenExplode explodeScript = col.GetComponentInChildren<DetectThenExplode>();
+            if (explodeScript)
+            {
+                explodeScript.TriggeredExplosion(false);
+                continue;
+            }
+            DetectWaitThenExplode explodeThenWaitScript = col.GetComponentInChildren<DetectWaitThenExplode>();
+            if (explodeThenWaitScript)
+            {
+                explodeThenWaitScript.TriggerExplosionInstantly();
+                continue;
+            }
+            DamageOnCollision dmgColScript = col.GetComponent<DamageOnCollision>();
+            if (dmgColScript)
+            {
+                dmgColScript.Die();
+            }
+            
         }
 
-        OnExplosion();
+        OnExplosion("ContainerExplosion");
     }
 
 }

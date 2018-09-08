@@ -37,14 +37,17 @@ public class DamageOnCollision : MonoBehaviour {
 
             GetComponent<SpriteRenderer>().enabled = false;
 
-            // Using Object Pool Manager to grab explosion to play and destroy enemy
-            GameObject explosion = GameObject.FindObjectOfType<ObjectPoolManager>().FindObject("TurretExplosion");
-            explosion.transform.position = transform.position;
-            explosion.SetActive(true);
-            Destroy(gameObject);
-
-
+            Die();
         }
+    }
+
+    public void Die()
+    {
+        // Using Object Pool Manager to grab explosion to play and destroy enemy
+        GameObject explosion = GameObject.FindObjectOfType<ObjectPoolManager>().FindObject("TurretExplosion");
+        explosion.transform.position = transform.position;
+        explosion.SetActive(true);
+        Destroy(gameObject);
     }
 
     IEnumerator DamageReset()
