@@ -42,7 +42,7 @@ public class AIHealth : MonoBehaviour {
         {
             vibrationHit = false;
         }
-        CheckForNumberOfEnemies();
+        //CheckForNumberOfEnemies();
     }
 
     private void CheckForNumberOfEnemies()

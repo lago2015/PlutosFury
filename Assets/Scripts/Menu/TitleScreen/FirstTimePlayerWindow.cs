@@ -9,15 +9,16 @@ public class FirstTimePlayerWindow : MonoBehaviour {
     public Button continueButton;
     public QuitScreen newGameWindowScript;
     public TutorialScript loreWindowScript;
+    public QuitScreen levelSelectAnim;
 	public void CheckFirstTimePlayer()
     {
         firstimePref = PlayerPrefs.GetInt("firstTime");
         //this is not the players first time
         if (firstimePref == 1)
         {
-            if(newGameWindowScript)
+            if(levelSelectAnim)
             {
-                newGameWindowScript.WndowAnimation(true);
+                levelSelectAnim.WndowAnimation(true);
             }
         }
         else
@@ -36,5 +37,13 @@ public class FirstTimePlayerWindow : MonoBehaviour {
             mainMenuWindow.SetActive(false);
         }
         
+    }
+
+    public void OpenNewGameWindow()
+    {
+        if (newGameWindowScript)
+        {
+            newGameWindowScript.WndowAnimation(true);
+        }
     }
 }

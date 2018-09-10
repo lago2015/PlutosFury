@@ -32,11 +32,11 @@ public class RogueCollision : MonoBehaviour {
         if(transform.parent.name.Contains("Charger"))
         {
             isCharger = true;
-            Debug.Log("Charger: ");
+            //Debug.Log("Charger: ");
         }
         else
         {
-            Debug.Log("Rogue: ");
+            //Debug.Log("Rogue: ");
         }
 
     }

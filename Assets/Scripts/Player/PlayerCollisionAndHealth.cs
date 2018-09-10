@@ -433,7 +433,7 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
         {
             direction = c.transform.position - transform.position;
             direction = direction.normalized;
-            myBody.AddForce(-direction * obstacleBump*30);
+            myBody.AddForce(-direction * obstacleBump*2);
             
         }
         direction = Vector3.zero;

@@ -20,7 +20,8 @@ public class PlayerManager : MonoBehaviour {
     public int niceCombo;
     public int coolCombo;
     public int awesomeCombo;
-    
+    private bool isTutorial;
+    public bool isItTutorial() { return isTutorial = true; }
     public int CurrentHealth()
     {
         if(playerHealth<1)
@@ -102,8 +103,15 @@ public class PlayerManager : MonoBehaviour {
     public void AwardOrbsForCompletion()
     {
         OrbsObtainedTotal = PlayerPrefs.GetInt("scorePref");
-
-        OrbsObtainedTotal += OrbsObtainedInLevel;
+        if(isTutorial)
+        {
+            OrbsObtainedTotal += OrbsObtainedInLevel + 200;
+        }
+        else
+        {
+            OrbsObtainedTotal += OrbsObtainedInLevel;
+        }
+        
         PlayerPrefs.SetInt("scorePref", OrbsObtainedTotal);
     }
     

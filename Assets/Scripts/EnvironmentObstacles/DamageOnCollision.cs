@@ -12,7 +12,7 @@ public class DamageOnCollision : MonoBehaviour {
     private void Start()
     {
         playerCollisionScript = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerCollisionAndHealth>();
-        Debug.Log("Spike: ");
+        //Debug.Log("Spike: ");
     }
 
     void OnCollisionEnter(Collision col)

@@ -9,8 +9,11 @@ public class ShootProjectiles : MonoBehaviour {
     public GameObject Muzzle;
     private AudioController audioScript;
     public float FireRate;
-    float elapseTime;
-    bool isReloading = false;
+    public float numOfShots = 5;
+    public float curNumOfShots;
+    public float firingCooldown = 1.5f;
+    public float elapseTime;
+    public bool isReloading = false;
     public bool PlayerNear;
     public bool PlayerIsNotNear() { enabled = false; return PlayerNear = false; }
     public string projectileName = "Rocket";
@@ -67,12 +70,17 @@ public class ShootProjectiles : MonoBehaviour {
                         StartCoroutine(MuzzleShot()); 
                     }
                 }
-                isReloading = true;
+                curNumOfShots++;
+
+
+                if (curNumOfShots>=numOfShots)
+                {
+                    curNumOfShots = 0;
+                    isReloading = true;
+                    
+                    StartCoroutine(StartReloading());
+                }
                 elapseTime = 0;
-            }
-            else
-            {
-                isReloading = false;
             }
 
         }
@@ -82,6 +90,12 @@ public class ShootProjectiles : MonoBehaviour {
     {
         yield return new WaitForSeconds(0.5f);
         Muzzle.SetActive(false);
+    }
+
+    IEnumerator StartReloading()
+    {
+        yield return new WaitForSeconds(firingCooldown);
+        isReloading = false;
     }
 
     public void ResumeShooting()

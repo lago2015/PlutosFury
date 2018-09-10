@@ -39,6 +39,10 @@ public class Key : MonoBehaviour {
             {
                 PlayerPrefs.SetInt(curWorld + "Unlocked", curLevel + 1);
             }
+            else if(isTutorial)
+            {
+                GameObject.FindObjectOfType<PlayerManager>().isItTutorial();
+            }
             if(lastLevel)
             {
                 GetComponent<UnlockedSkill>().UnlockingSkill(skillIndex);

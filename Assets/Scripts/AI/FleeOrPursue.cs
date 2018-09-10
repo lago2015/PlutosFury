@@ -165,6 +165,13 @@ public class FleeOrPursue : MonoBehaviour {
             }
 
         }
+        else if(theresAWall)
+        {
+
+            //move rogue forward if hes not charging
+            transform.parent.position -= transform.forward * MoveSpeed * Time.deltaTime;
+            transform.parent.position = new Vector3(transform.position.x, transform.position.y, 0);
+        }
     }
 
     IEnumerator LookForPlayerLocation()

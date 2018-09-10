@@ -80,7 +80,9 @@ public class WallHealth : MonoBehaviour
     public void ApplyPickup()
     {
         pickUpContained.PickUpObtained();
-
+        GameObject explosion = GameObject.FindObjectOfType<ObjectPoolManager>().FindObject("ContainerExplosion");
+        explosion.transform.position = transform.position;
+        explosion.SetActive(true);
     }
 
     public void IncrementDamage()

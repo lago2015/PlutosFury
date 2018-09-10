@@ -14,7 +14,7 @@ public class FirstTimePlayer : MonoBehaviour {
         preNum = PlayerPrefs.GetInt("firstTime");
         if (curOrbs == 0 && preNum == 0)
         {
-            continueButton.interactable = false;
+            //continueButton.interactable = false;
         }
         if (preNum==0)
         {
