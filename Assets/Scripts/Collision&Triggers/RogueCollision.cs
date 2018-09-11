@@ -83,6 +83,7 @@ public class RogueCollision : MonoBehaviour {
 
             if (isDashing && playerMoveScript)
             {
+                playerMoveScript.KillCombo();
                 RogueDamage();
             }
         }
@@ -98,6 +99,7 @@ public class RogueCollision : MonoBehaviour {
                 }
                 else
                 {
+                    playerMoveScript.KillCombo();
                     RogueDamage();
 
                 }

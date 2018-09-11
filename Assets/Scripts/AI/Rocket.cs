@@ -8,8 +8,12 @@ public class Rocket : MonoBehaviour {
     public bool ShouldMove = true;
     public float travelTimeRocket = 3;
 
+    public string projectilePool;
+
     private DamageOrPowerUp damageScript;
     private AudioController audioScript;
+
+
 
     void Start()
     {
@@ -101,7 +105,7 @@ public class Rocket : MonoBehaviour {
             audioScript.DestructionSmallEnvirObstacle(transform.position);
         }
 
-        pool.PutBackObject("Rocket", gameObject);
+        pool.PutBackObject(projectilePool, gameObject);
        
     }
 }

@@ -167,9 +167,9 @@ public class AIHealth : MonoBehaviour {
             bool isDashing = player.DashStatus();
             if (isDashing)
             {
-                IncrementDamage(CurTag,true);
-
                 player.KillCombo();
+
+                IncrementDamage(CurTag,true);
 
                 if (myBody)
                 {
