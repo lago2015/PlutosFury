@@ -22,7 +22,7 @@ public class BonusContainer : MonoBehaviour {
                 if(isDashing)
                 {
                     transform.DetachChildren();
-                    GameObject explosion = GameObject.FindObjectOfType<ObjectPoolManager>().FindObject("AsteroidExplosion");
+                    GameObject explosion = GameObject.FindObjectOfType<ObjectPoolManager>().FindObject("ContainerExplosion");
                     explosion.transform.position = transform.position;
                     explosion.SetActive(true);
                     Destroy(gameObject);
@@ -32,7 +32,7 @@ public class BonusContainer : MonoBehaviour {
         else if(col.gameObject.tag=="MoonBall")
         {
             transform.DetachChildren();
-            GameObject explosion = GameObject.FindObjectOfType<ObjectPoolManager>().FindObject("AsteroidExplosion");
+            GameObject explosion = GameObject.FindObjectOfType<ObjectPoolManager>().FindObject("ContainerExplosion");
             explosion.transform.position = transform.position;
             explosion.SetActive(true);
             Destroy(gameObject);

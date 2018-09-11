@@ -83,7 +83,7 @@ public class FloatingJoystickV2 : Joystick
             }
             if (directionChosen && !isCoolingDown)
             {
-                SpawnMoonball(-direction);
+                SpawnMoonball(direction);
             }
         }
         if (curTouchCount == 1)
