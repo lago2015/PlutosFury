@@ -7,7 +7,6 @@ public class MenuMusicScript : MonoBehaviour {
     public AudioSource VoiceIntro;
     public AudioSource BgMusicSource;
     private float bgMusicStartDelay;
-    private float hubMusicDelay = 1;
     private bool isHubOn;
     private Coroutine myCoroutine;
     //This will be called from window manager to determine what song to player

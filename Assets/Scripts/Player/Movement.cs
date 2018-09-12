@@ -14,7 +14,7 @@ public class Movement : MonoBehaviour
     private bool isDead;
     //******Dash Variables
     //Dash States
-    private int orbComboAmount = 15;
+    private int orbComboAmount = 17;
     public enum DashState { idle, basicMove, dashMove, chargeStart, chargeComplete, burst }
     [HideInInspector]
     public DashState trailState;
