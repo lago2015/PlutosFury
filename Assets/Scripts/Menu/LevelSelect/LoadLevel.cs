@@ -16,39 +16,69 @@ public class LoadLevel : MonoBehaviour {
     public Image highlightImage;
     private LoadTargetSceneButton loadScreenScript;
     private int curUnlocked;
+    public bool isBossLevel;
+    private int curLevelWorld1;
+    private int curLevelWorld2;
 	// Use this for initialization
 	void Start ()
     {
         curButton = GetComponent<Button>();
         loadScreenScript = GameObject.Find("MyMenuSystem").GetComponent<LoadTargetSceneButton>();
-        CheckButton();
+        if(isBossLevel)
+        {
+            CheckBossButton();
+        }
+        else
+        {
+            CheckButton();
+        }
+        
+    }
+    //Check if player has beaten all levels
+    public void CheckBossButton()
+    {
+        curLevelWorld1= PlayerPrefs.GetInt(0 + "Unlocked");
+        curLevelWorld2 = PlayerPrefs.GetInt(1 + "Unlocked");
+        if(curLevelWorld1==6&&curLevelWorld2==11)
+        {
+            isUnlocked = true;
+            curButton.interactable = true;
+        }
+        else
+        {
+
+            isUnlocked = false;
+            curButton.interactable = false;
+        }
     }
 
     public void CheckButton()
     {
+        //check if its the first level
         if (loadLevel == 2 || loadLevel == 7||loadLevel==13)
         {
             isUnlocked = true;
             curButton.interactable = true;
         }
+        //check if the level is unlocked
         else if (PlayerPrefs.GetInt(curWorld + "Unlocked") >= loadLevel)
         {
             isUnlocked = true;
             curButton.interactable = true;
 
         }
+        //then disable button if nothing indicates this button as unlocked
         else
         {
             isUnlocked = false;
             curButton.interactable = false;
         }
+        //To check if this is the latest level the player has unlocked
         curUnlocked = PlayerPrefs.GetInt(curWorld + "Unlocked");
-        if (curUnlocked==loadLevel)
+        if (curUnlocked==loadLevel&&highlightImage)
         {
-            if(highlightImage)
-            {
-                highlightImage.transform.position = transform.position;
-            }
+            highlightImage.transform.position = transform.position;
+
         }
     }
 

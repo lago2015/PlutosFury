@@ -9,12 +9,15 @@ public class MoonballUpgradeShopManager : MonoBehaviour
     public Button[] UpgradeButtons;
     public GameObject[] hitSprites;
     public int[] moonballHitPrices;
+    public Image[] availablityIcons;
     public int upgrade1Bought;     //instant exploding moonball
     private int upgrade2Bought;     //gravity well
+    private Color fadeColor;
     public int priceOfUpgrade1 = 2000;
     public int priceOfUpgrade2 = 3000;
     private bool canBuyUpgrade1;
     private bool canBuyUpgrade2;
+    private int neptuneObtained;
     private bool canBuyUpgradeHits;
     private int curOrbs;
     private int moonballHits;
@@ -28,24 +31,34 @@ public class MoonballUpgradeShopManager : MonoBehaviour
         orbTextScript = GameObject.FindGameObjectWithTag("Finish").GetComponent<UpdateOrbAmount>();
     }
     //Last level for kuiper belt is 6
-    //Last level for frost belt is 12
+    //Last level for frost belt is 11
     public void CheckUpgrades()
     {
         //get reference from saved data if player has moonball upgrades
         upgrade1Bought = PlayerPrefs.GetInt("MoonballUpgrade0");
         upgrade2Bought = PlayerPrefs.GetInt("MoonballUpgrade1");
+        neptuneObtained= PlayerPrefs.GetInt("skin6");
         moonballHits = PlayerPrefs.GetInt("moonballHits");
         curEquipped = PlayerPrefs.GetInt("CurEquip");
+        if(neptuneObtained==0)
+        {
+            fadeColor = availablityIcons[2].color;
+            fadeColor.a = 0.3f;
+            availablityIcons[2].color = fadeColor;
+        }
         //check for shockwave if its unlocked
         if (upgrade1Bought == 1)
         {
             
             UpgradeButtons[0].interactable = true;
+            
         }
         else
         {
             UpgradeButtons[0].interactable = false;
-            
+            fadeColor = availablityIcons[0].color;
+            fadeColor.a = 0.3f;
+            availablityIcons[0].color = fadeColor;
         }
         //check for extra hit if its unlocked
         if (upgrade2Bought == 1)
@@ -55,6 +68,10 @@ public class MoonballUpgradeShopManager : MonoBehaviour
         else
         {
             UpgradeButtons[1].interactable = false;
+            fadeColor = availablityIcons[1].color;
+            fadeColor.a = 0.3f;
+            availablityIcons[1].color = fadeColor;
+
         }
 
         //check for currently equipped skills
