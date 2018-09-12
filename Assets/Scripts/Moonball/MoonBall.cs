@@ -259,7 +259,7 @@ public class MoonBall : MonoBehaviour
             
         }
 
-        OnExplosion("ContainerExplosion");
+        OnExplosion("Shockwave");
     }
 
 }
