@@ -10,10 +10,10 @@ public class PickUpSkills : MonoBehaviour {
     private PlayerCollisionAndHealth playerCollisionScript;
     private PlayerAppearance appearanceScript;
     private MoonballManager moonballManScript;
-    
+    private PlayerManager playerManager;
     private bool pickupObtained;
     private AudioController audioScript;
-    
+    public int orbBonus=20;
 
     private void Start()
     {
@@ -24,21 +24,23 @@ public class PickUpSkills : MonoBehaviour {
         }
         GameObject playerRef = GameObject.FindGameObjectWithTag("Player");
 
-    
+        appearanceScript = playerRef.GetComponent<PlayerAppearance>();
+
         switch (curSkill)
         {
             
             case Skills.Health:
                 playerCollisionScript = playerRef.GetComponent<PlayerCollisionAndHealth>();
                 healthController = GetComponent<HealthObtainedController>();
-                appearanceScript = playerRef.GetComponent<PlayerAppearance>();
-                //Debug.Log("Health: ");
+
                 break;
             
             case Skills.Moonball:
                 moonballManScript = playerRef.GetComponent<MoonballManager>();
-                appearanceScript = playerRef.GetComponent<PlayerAppearance>();
-                //Debug.Log("Moonball: ");
+
+                break;
+            case Skills.OrbBonus:
+                playerManager = GameObject.FindObjectOfType<PlayerManager>();
                 break;
         }
     }
@@ -66,8 +68,8 @@ public class PickUpSkills : MonoBehaviour {
                     {
                         audioScript.PlutoHealthUp(transform.position);
                     }
-                    Destroy(gameObject);
 
+                    Destroy(gameObject);
                 }
                 break;
             
@@ -82,6 +84,16 @@ public class PickUpSkills : MonoBehaviour {
                     if(audioScript)
                     {
                         audioScript.PlutoBallUp(transform.position);
+                    }
+                    Destroy(gameObject);
+                }
+                break;
+            case Skills.OrbBonus:
+                if(playerManager&&!pickupObtained)
+                {
+                    for (int i = 0; i <= orbBonus-1; i++)
+                    {
+                        playerManager.OrbObtained();
                     }
                     Destroy(gameObject);
                 }

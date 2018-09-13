@@ -6,7 +6,7 @@ public class PlayerManager : MonoBehaviour {
 
     //This manager is meant to handle UI elements of health,moonball and tracking orbs the player has collected
 
-    public int OrbGameoverReward = 250;
+    public int OrbGameoverReward = 25;
     private int OrbsObtainedTotal;   //used for total orbs collected
     [SerializeField]
     private int OrbsObtainedInLevel;       //total orbs collected in level
@@ -87,7 +87,7 @@ public class PlayerManager : MonoBehaviour {
     
     public int OrbObtained()
     {
-        OrbsObtainedInLevel+=5;
+        OrbsObtainedInLevel++;
         if (HUDScript)
         {
             HUDScript.UpdateScore(OrbsObtainedInLevel);

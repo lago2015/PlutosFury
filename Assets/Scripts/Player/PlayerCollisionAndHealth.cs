@@ -320,19 +320,7 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
         {
             if (isDashing())
             {
-
-                healthScript = c.gameObject.GetComponent<WallHealth>();
-                if (healthScript)
-                {
-
-                    healthScript.IncrementDamage();
-
-                    if (!c.gameObject.name.Contains("DamageWall"))
-                        healthScript.ApplyPickup();
-
-
-                    healthScript = null;
-                }
+                
                 //feedback on damage
                 if (vibrationHit)
                 {
