@@ -36,11 +36,16 @@ public class PickUpSkills : MonoBehaviour {
                 break;
             
             case Skills.Moonball:
+                playerCollisionScript = playerRef.GetComponent<PlayerCollisionAndHealth>();
                 moonballManScript = playerRef.GetComponent<MoonballManager>();
+                healthController = GetComponent<HealthObtainedController>();
 
                 break;
             case Skills.OrbBonus:
+                playerCollisionScript = playerRef.GetComponent<PlayerCollisionAndHealth>();
                 playerManager = GameObject.FindObjectOfType<PlayerManager>();
+                healthController = GetComponent<HealthObtainedController>();
+
                 break;
         }
     }
@@ -77,7 +82,11 @@ public class PickUpSkills : MonoBehaviour {
                 if (moonballManScript && !pickupObtained)
                 {
                     pickupObtained = true;
-                    if(moonballManScript)
+                    if (healthController)
+                    {
+                        healthController.CreateFloatingHealth(playerCollisionScript.transform.position);
+                    }
+                    if (moonballManScript)
                     {
                         moonballManScript.IncrementBalls();
                     }
@@ -94,6 +103,10 @@ public class PickUpSkills : MonoBehaviour {
                     for (int i = 0; i <= orbBonus-1; i++)
                     {
                         playerManager.OrbObtained();
+                    }
+                    if (healthController)
+                    {
+                        healthController.CreateFloatingHealth(playerCollisionScript.transform.position);
                     }
                     Destroy(gameObject);
                 }

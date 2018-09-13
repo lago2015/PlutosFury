@@ -72,11 +72,11 @@ public class RogueAvoidance : MonoBehaviour {
 
             }
         }
-        //Trace rays for debugging
-        Debug.DrawRay(transform.position + (transform.up * 4), direction*range, Color.green);
-        Debug.DrawRay(transform.position - (transform.up * 4), direction*range , Color.green);
-        Debug.DrawRay(transform.position - (transform.forward * 6), transform.up * lostInterestRange, Color.red);
-        Debug.DrawRay(transform.position - (transform.forward * 6), -transform.up * lostInterestRange, Color.red);
+        ////Trace rays for debugging
+        //Debug.DrawRay(transform.position + (transform.up * 4), direction*range, Color.green);
+        //Debug.DrawRay(transform.position - (transform.up * 4), direction*range , Color.green);
+        //Debug.DrawRay(transform.position - (transform.forward * 6), transform.up * lostInterestRange, Color.red);
+        //Debug.DrawRay(transform.position - (transform.forward * 6), -transform.up * lostInterestRange, Color.red);
     }
 
     void CollisionAvoidance(RaycastHit raycastHit)
