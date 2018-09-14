@@ -132,7 +132,6 @@ public class RogueCollision : MonoBehaviour {
         
         else if(curTag== "MoonBall")
         {
-            MoonBall moonBall = col.gameObject.GetComponent<MoonBall>();
 
             Vector3 forwardDirection = rogueMoveScript.transform.forward.normalized;
             bool rogueDashing = rogueMoveScript.isDashing();
@@ -147,7 +146,7 @@ public class RogueCollision : MonoBehaviour {
                         GameObject.FindObjectOfType<PlayerManager>().niceCombo++;
                     }
                 }
-
+                rogueMoveScript.HitPlayerCooldown();
                 RogueDamage();
             }
             else if(rogueDashing&&!isCharger)
@@ -159,7 +158,7 @@ public class RogueCollision : MonoBehaviour {
                 RogueDamage();
             }
 
-            moonBall.rogueHit(forwardDirection, rogueDashing);
+            col.gameObject.GetComponent<MoonBall>().rogueHit(forwardDirection, rogueDashing);
         }
 
         else if(curTag=="BigAsteroid")
@@ -207,11 +206,4 @@ public class RogueCollision : MonoBehaviour {
         }
 
     }
-
-    IEnumerator WaitForKnockback()
-    {
-        yield return new WaitForSeconds(1);
-        rogueMoveScript.enabled = true;
-    }
-
 }

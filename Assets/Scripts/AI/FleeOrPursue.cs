@@ -111,7 +111,7 @@ public class FleeOrPursue : MonoBehaviour {
     void FixedUpdate()
     {
         //playing the charging animation with the shaking
-        if (isCharging)
+        if (isCharging&&!theresAWall)
         {
             if (shake > 0.0f)
             {
@@ -164,13 +164,6 @@ public class FleeOrPursue : MonoBehaviour {
 
             }
 
-        }
-        else if(theresAWall)
-        {
-
-            //move rogue forward if hes not charging
-            transform.parent.position -= transform.forward * MoveSpeed * Time.deltaTime;
-            transform.parent.position = new Vector3(transform.position.x, transform.position.y, 0);
         }
     }
 

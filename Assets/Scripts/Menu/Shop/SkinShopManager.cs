@@ -18,6 +18,7 @@ public class SkinShopManager : MonoBehaviour
     private int skin2Bought;
     private int skin3Bought;
     private int neptuneSkinBought;
+    private int redSkinBought;
     private int moonSkin1;
     private int moonSkin2;
     private int moonSkin3;
@@ -97,6 +98,14 @@ public class SkinShopManager : MonoBehaviour
                 }
                 else
                     return true;
+            case 7:
+                redSkinBought = PlayerPrefs.GetInt("skin7");
+                if (redSkinBought == 1)
+                {
+                    return false;
+                }
+                else
+                    return true;
 
         }
         return false;
@@ -104,10 +113,13 @@ public class SkinShopManager : MonoBehaviour
 
     public void CheckSkins()
     {
+        //Player
         skin1Bought = PlayerPrefs.GetInt("skin0");
         skin2Bought = PlayerPrefs.GetInt("skin1");
         skin3Bought = PlayerPrefs.GetInt("skin2");
         neptuneSkinBought = PlayerPrefs.GetInt("skin6");
+        redSkinBought= PlayerPrefs.GetInt("skin7");
+        //Moonball
         moonSkin1 = PlayerPrefs.GetInt("skin3");
         moonSkin2 = PlayerPrefs.GetInt("skin4");
         moonSkin3 = PlayerPrefs.GetInt("skin5");

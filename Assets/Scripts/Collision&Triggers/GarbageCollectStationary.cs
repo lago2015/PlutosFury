@@ -10,6 +10,11 @@ public class GarbageCollectStationary : MonoBehaviour {
         {
             col.gameObject.GetComponent<BurstBehavior>().ReturnToPool();
         }
+        else if(col.gameObject.CompareTag("Player"))
+        {
+            col.gameObject.GetComponent<Movement>().DisableMovement(true);
+            GameObject.FindObjectOfType<GameManager>().GameEnded(true);
+        }
         else
         {
             Destroy(col.gameObject);

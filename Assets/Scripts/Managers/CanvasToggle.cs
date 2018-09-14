@@ -7,7 +7,6 @@ public class CanvasToggle : MonoBehaviour {
 
 
 
-    public Image LevelSprite;
     public Image ReadySprite;
     public Image GoSprite;
     public GameObject hudCanvas;
@@ -35,7 +34,6 @@ public class CanvasToggle : MonoBehaviour {
     // Use this for initialization
     void Awake ()
     {
-        LevelSprite.canvasRenderer.SetAlpha(0.0f);
         ReadySprite.canvasRenderer.SetAlpha(0.0f);
         GoSprite.canvasRenderer.SetAlpha(0.0f);
         hudManager = GameObject.FindGameObjectWithTag("HUDManager").GetComponent<HUDManager>();
@@ -98,7 +96,6 @@ public class CanvasToggle : MonoBehaviour {
         
         yield return new WaitForSeconds(StartReady);
         ReadySprite.CrossFadeAlpha(1, ReadySpriteFadeIn, true);
-        LevelSprite.CrossFadeAlpha(1, ReadySpriteFadeIn, true);
         
         if (audioScript)
         {
@@ -110,7 +107,6 @@ public class CanvasToggle : MonoBehaviour {
     IEnumerator SpriteFadeOut()
     {
         yield return new WaitForSeconds(ReadySpriteFadeIn);
-        LevelSprite.CrossFadeAlpha(0, goSpriteFadeIn, true);
         
         ReadySprite.CrossFadeAlpha(0, goSpriteFadeIn, true);
         StartCoroutine(GoIntro());

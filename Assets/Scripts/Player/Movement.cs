@@ -493,7 +493,6 @@ public class Movement : MonoBehaviour
 
     public void KillCombo()
     {
-        Debug.Log("activated");
         if (++killCount >= 2)
         {
             ComboTextManager ComboObject = GameObject.FindObjectOfType<ComboTextManager>();
