@@ -34,7 +34,9 @@ public class MoonBall : MonoBehaviour
    
     private void Awake()
     {
-        hitCount = PlayerPrefs.GetInt("moonballHits");
+        //NOTE: playerPrefs hit count returns 0, look more into it when we want to implement
+        // hitCount = PlayerPrefs.GetInt("moonballHits");
+        Debug.Log(PlayerPrefs.GetInt("moonballHits"));
         currentlyEquipped = PlayerPrefs.GetInt("CurEquip");
         if (currentlyEquipped == 1)
         {
@@ -48,6 +50,7 @@ public class MoonBall : MonoBehaviour
         {
             hitCount++;
         }
+        
     }
 
     void Start ()
@@ -165,14 +168,19 @@ public class MoonBall : MonoBehaviour
     {
         if(!isShockWave)
         {
-            if (--hitCount >= -1)
+            if (--hitCount > 0)
             {
                 Bounce(col);
+                Debug.Log(hitCount);
             }
             else
             {
                 OnExplosion("ContainerExplosion");
+                Debug.Log(hitCount);
+                Debug.Log("EXPLODE");
             }
+
+
         }
         else
         {
