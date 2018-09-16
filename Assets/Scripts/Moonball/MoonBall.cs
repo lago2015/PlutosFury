@@ -36,7 +36,6 @@ public class MoonBall : MonoBehaviour
     {
         //NOTE: playerPrefs hit count returns 0, look more into it when we want to implement
         // hitCount = PlayerPrefs.GetInt("moonballHits");
-        Debug.Log(PlayerPrefs.GetInt("moonballHits"));
         currentlyEquipped = PlayerPrefs.GetInt("CurEquip");
         if (currentlyEquipped == 1)
         {
