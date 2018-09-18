@@ -499,7 +499,7 @@ public class Movement : MonoBehaviour
             if (ComboObject)
             {
                 
-                ComboObject.CreateComboText(1);
+                ComboObject.CreateComboText(2);
                 GameObject.FindObjectOfType<PlayerManager>().coolCombo++;
                 killCount = 0;
             }

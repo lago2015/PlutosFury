@@ -22,8 +22,8 @@ public class SkinManager : MonoBehaviour {
         skin1Bought = PlayerPrefs.GetInt("skin0");
         skin2Bought = PlayerPrefs.GetInt("skin1");
         skin3Bought = PlayerPrefs.GetInt("skin2");
-        neptuneBought = 1;//PlayerPrefs.GetInt("skin6");
-        redBought = 1;//PlayerPrefs.GetInt("skin7");
+        neptuneBought = PlayerPrefs.GetInt("skin6");
+        redBought = PlayerPrefs.GetInt("skin7");
 
         moonSkin1 = PlayerPrefs.GetInt("skin3");
         moonSkin2 = PlayerPrefs.GetInt("skin4");
