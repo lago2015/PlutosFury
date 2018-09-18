@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 public class Door : MonoBehaviour {
 
-    
+    private GameObject deviceModel;
     private GameObject wormHoleObject;      //wormhole particle object
     private bool playerDash;                //check if player is dashing to break object for wormhole to appear
     
@@ -12,6 +12,7 @@ public class Door : MonoBehaviour {
     {    
         wormHoleObject = transform.GetChild(0).gameObject;
         wormHoleObject.SetActive(false);
+        deviceModel = transform.GetChild(1).gameObject;
     }
 
 
@@ -24,6 +25,7 @@ public class Door : MonoBehaviour {
                 playerDash = col.gameObject.GetComponent<Movement>().DashStatus();
                 if(playerDash)
                 {
+                    deviceModel.SetActive(false);
                     transform.DetachChildren();
                     // Using Object Pool Manager to grab explosion to play and destroy enemy
                     GameObject explosion = GameObject.FindObjectOfType<ObjectPoolManager>().FindObject("AsteroidExplosion");

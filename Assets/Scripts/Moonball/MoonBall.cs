@@ -170,13 +170,12 @@ public class MoonBall : MonoBehaviour
             if (--hitCount > 0)
             {
                 Bounce(col);
-                Debug.Log(hitCount);
+                
             }
             else
             {
                 OnExplosion("ContainerExplosion");
-                Debug.Log(hitCount);
-                Debug.Log("EXPLODE");
+                
             }
 
 
