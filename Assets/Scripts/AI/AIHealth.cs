@@ -86,8 +86,8 @@ public class AIHealth : MonoBehaviour {
                 {
                     if (currentEnemy == EnemyOptions.Spike || currentEnemy == EnemyOptions.Shatter)
                     {
-                        comboObject.CreateComboText(2);
-                        GameObject.FindObjectOfType<PlayerManager>().awesomeCombo++;
+                        comboObject.CreateComboText(0);
+                        GameObject.FindObjectOfType<PlayerManager>().niceCombo++;
                     }
                     else
                     {
