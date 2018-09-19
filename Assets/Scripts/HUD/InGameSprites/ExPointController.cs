@@ -7,20 +7,22 @@ public class ExPointController : MonoBehaviour {
     //reference animatied gameobject
     public GameObject exPointObject;
     private GameObject exPointChild;
-    
+    private GameObject hud;
     private void Awake()
     {
         if (exPointObject)
         {
             exPointObject = Instantiate(exPointObject, transform.position, Quaternion.identity);
             exPointChild = exPointObject.transform.GetChild(0).gameObject;
-    
+            hud = GameObject.FindGameObjectWithTag("HUDManager").gameObject;
+            exPointObject.transform.SetParent(GameObject.Find("HUD").transform, false);
+            exPointObject.transform.localPosition = hud.transform.localPosition;
             exPointObject.SetActive(false);
         }
     }
-    public void CreateFloatingExPoint(Vector3 Location)
+    public void CreateFloatingExPoint()
     {
-        exPointObject.transform.position = Location;
+        exPointObject.transform.localPosition = hud.transform.localPosition;
         exPointObject.SetActive(true);
         if (exPointChild.activeInHierarchy)
         {

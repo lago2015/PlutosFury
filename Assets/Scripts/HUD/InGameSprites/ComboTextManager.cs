@@ -7,7 +7,7 @@ public class ComboTextManager : MonoBehaviour
 {
     public GameObject canvas;
     public GameObject comboText;
-    public Sprite[] texts;      //0 = nice, 1= cool, 2=awesome
+    public Sprite[] texts;      //0 = nice, 1= cool, 2=awesome,3=Bonus orbs from pick ups
     private AudioController audioScript;
     public void Start()
     {
@@ -18,11 +18,8 @@ public class ComboTextManager : MonoBehaviour
     public void CreateComboText(int textDisplay)
     {
         GameObject text = Instantiate(comboText);
-
-        Vector2 screenPos = Camera.main.WorldToScreenPoint(new Vector2(transform.position.x, transform.position.y));
-
         text.transform.SetParent(canvas.transform, false);
-        text.transform.position = screenPos;
+        text.transform.position = Vector3.zero;
 
         if(audioScript)
         {
@@ -30,7 +27,7 @@ public class ComboTextManager : MonoBehaviour
             {
                 audioScript.ComboAchieved(AudioController.ComboState.nice);
             }
-            else if (textDisplay == 1)
+            else if (textDisplay == 1|| textDisplay == 3)
             {
                 audioScript.ComboAchieved(AudioController.ComboState.cool);
             }
@@ -38,6 +35,8 @@ public class ComboTextManager : MonoBehaviour
             {
                 audioScript.ComboAchieved(AudioController.ComboState.awesome);
             }
+            
+            
         }
         text.GetComponentInChildren<Image>().sprite = texts[textDisplay];
 

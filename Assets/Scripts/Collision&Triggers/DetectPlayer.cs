@@ -93,7 +93,7 @@ public class DetectPlayer : MonoBehaviour {
             
             if(exPointController)
             {
-                exPointController.CreateFloatingExPoint(transform.position);
+                exPointController.CreateFloatingExPoint();
             }   
         }
     }

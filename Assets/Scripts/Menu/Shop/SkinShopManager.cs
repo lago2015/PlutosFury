@@ -34,7 +34,6 @@ public class SkinShopManager : MonoBehaviour
 
     public bool checkSkinBought(int curSkin)
     {
-        Debug.Log("Missed");
 
         switch (curSkin)
         {

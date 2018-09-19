@@ -10,14 +10,12 @@ public class ComboText : MonoBehaviour
     void Start()
     {
         Destroy(this.gameObject, 0.75f);
-        player = GameObject.FindObjectOfType<ComboTextManager>().gameObject;
+        player = GameObject.FindObjectOfType<HUDManager>().gameObject;
+        transform.SetParent(player.transform, false);
+        transform.localPosition = Vector3.zero;
+        //Vector2 screenPos = Camera.main.WorldToScreenPoint(new Vector2(player.transform.position.x, player.transform.position.y));
+        //transform.localPosition = screenPos;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        Vector2 screenPos = Camera.main.WorldToScreenPoint(new Vector2(player.transform.position.x, player.transform.position.y));
-        transform.position = screenPos;
-    }
 
 }

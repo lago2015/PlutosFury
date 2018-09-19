@@ -186,7 +186,6 @@ public class ShopManager : MonoBehaviour {
         switch(curItem)
         {
             case 0:
-                Debug.Log("Check");
 
                 return enableButton = skinShopManager.checkSkinBought(skinToBuy);
                 

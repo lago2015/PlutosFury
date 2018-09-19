@@ -33,7 +33,7 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
     private HUDManager hudScript;
     private CameraShake cameraShakeScript;
     private PlayerAppearance appearanceScript;
-    private ExPointController bonusController;
+    private ComboTextManager bonusController;
     public int bonusAmount = 50;
     //knockback values
     public float wallBump = 20.0f;
@@ -77,7 +77,7 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
         //Script reference
         cameraShakeScript = GameObject.FindObjectOfType<CameraShake>();
         appearanceScript = GetComponent<PlayerAppearance>();
-        bonusController = GetComponent<ExPointController>();
+        bonusController = GetComponent<ComboTextManager>();
 
         //Setting colors
         w_Color = Color.white;
@@ -192,7 +192,7 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
         }
         else if (bonusController)
         {
-            bonusController.CreateFloatingExPoint(transform.position);
+            bonusController.CreateComboText(3);
             for(int i=0;i<=bonusAmount-1;i++)
             {
                 ScoreManager.OrbObtained();
@@ -265,6 +265,16 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
             }
             
         }
+    }
+
+    public void OutOfBounds()
+    {
+        isDamaged = true;
+        //Stop any dash currently being used
+        moveScript.CancelDash();
+
+        StartCoroutine(DamageIndicator());
+        StartCoroutine(DamageTransition());
     }
 
     IEnumerator DamageIndicator()

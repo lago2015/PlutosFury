@@ -61,7 +61,7 @@ public class HomingDetection : MonoBehaviour
             {
                 if(!doOnce)
                 {
-                    ExPointController.CreateFloatingExPoint(transform.position);
+                    ExPointController.CreateFloatingExPoint();
                     interestScript.enableScript(true);
                     doOnce = true;
                 }
