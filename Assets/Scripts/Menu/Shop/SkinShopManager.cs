@@ -34,7 +34,9 @@ public class SkinShopManager : MonoBehaviour
 
     public bool checkSkinBought(int curSkin)
     {
-        switch(curSkin)
+        Debug.Log("Missed");
+
+        switch (curSkin)
         {
             case 0:
                 skin1Bought = PlayerPrefs.GetInt("skin0");

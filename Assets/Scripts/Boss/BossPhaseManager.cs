@@ -23,9 +23,21 @@ public class BossPhaseManager : MonoBehaviour {
             {
                 animComp.SetInteger("CurState", curIndex);
             }
-            
+            if(curIndex>=3)
+            {
+                GameObject.FindObjectOfType<GameManager>().GameEnded(false);
+                gameObject.SetActive(false);
+                GameObject explosion = GameObject.FindObjectOfType<ObjectPoolManager>().FindObject("TurretExplosion");
+                explosion.transform.position = transform.position;
+                explosion.SetActive(true);
+
+            }
+            else
+            {
+                StartCoroutine(DamageReset());
+            }
             doOnce = true;
-            StartCoroutine(DamageReset());
+            
         }
     }
     public void StartAnimation()

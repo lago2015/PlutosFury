@@ -55,7 +55,7 @@ public class Movement : MonoBehaviour
 
     //Combo counts
     private int orbCount = 0;
-    private int killCount = 0;
+    public int killCount = 0;
 
     public Rigidbody myBody;
     
@@ -383,9 +383,9 @@ public class Movement : MonoBehaviour
 
         //reset everything
         slowDownDrag = normalDrag;
-        
+
         //Reset Value
-        
+        killCount = 0;
         myBody.drag = normalDrag;
 
         MoveSpeed = DefaultSpeed;
@@ -410,7 +410,7 @@ public class Movement : MonoBehaviour
         gameObject.layer = 8;
 
         orbCount = 0;
-        killCount = 0;
+        
     }
 
     //Cool down for exhaustion from dash

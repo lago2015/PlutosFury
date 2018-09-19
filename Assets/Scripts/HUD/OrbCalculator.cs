@@ -15,6 +15,7 @@ public class OrbCalculator : MonoBehaviour
     public Text playerTotalText;
     public GameObject continueBtn;
     public GameObject retryBtn;
+    public GameObject endGameScreen;
     private int levelOrb;
     private int niceNum;
     private int coolNum;
@@ -36,9 +37,9 @@ public class OrbCalculator : MonoBehaviour
     float duration = 1.0f;
 
     bool isTallying = false;
-
+    private bool startAnim;
     public bool CompleteLevel;
-
+    public bool bossLevel;
     // Use this for initialization
     void Start()
     {
@@ -50,6 +51,10 @@ public class OrbCalculator : MonoBehaviour
         else
         {
             GameOver();
+        }
+        if(endGameScreen)
+        {
+            endGameScreen.SetActive(false);
         }
         SetTallyMarksOrbs();
 
@@ -69,6 +74,12 @@ public class OrbCalculator : MonoBehaviour
             if (currentAddNumber >= numberTo && currentSubtractNumber <= 0)
             {
                 isTallying = false;
+                //if boss level then show end game screen
+                if(bossLevel&&endGameScreen&&startAnim)
+                {
+                    endGameScreen.SetActive(true);
+                    endGameScreen.GetComponent<QuitScreen>().WndowAnimation(true);
+                }
                 //continueBtn.SetActive(true);
                //retryBtn.SetActive(true);
             }
@@ -140,6 +151,7 @@ public class OrbCalculator : MonoBehaviour
 
         lerp = 0f;
         isTallying = true;
+        startAnim = true;
     }
 
     public void GameOver()

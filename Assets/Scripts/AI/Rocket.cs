@@ -86,6 +86,11 @@ public class Rocket : MonoBehaviour {
 
             BlowUp(false);
         }
+        else if(CurTag=="Planet")
+        {
+            col.gameObject.GetComponent<RogueCollision>().RogueDamage();
+            BlowUp(false);
+        }
     }
 
     public void BlowUp(bool damage)

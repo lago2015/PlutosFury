@@ -134,9 +134,11 @@ public class ShopManager : MonoBehaviour {
         curPrice = GetPrice();
         curOrbs = PlayerPrefs.GetInt("scorePref");
         CheckRoom(ItemNum);
+        
         if (curOrbs >= curPrice)
         {
             buyButton.interactable = enableButton;
+
         }
         else
         {
@@ -184,8 +186,9 @@ public class ShopManager : MonoBehaviour {
         switch(curItem)
         {
             case 0:
+                Debug.Log("Check");
+
                 return enableButton = skinShopManager.checkSkinBought(skinToBuy);
-                
                 
             case 1:
                 return enableButton = playerShopManager.canBuyHeart;

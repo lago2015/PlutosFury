@@ -61,7 +61,7 @@ public class PlayerManager : MonoBehaviour {
 
     public void SaveHealth()
     {
-        if (playerHealth > 1)
+        if (playerHealth > 0)
         {
             PlayerPrefs.SetInt("healthPref", playerHealth);
         }

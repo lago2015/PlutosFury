@@ -5,7 +5,6 @@ using System.Collections;
 public class ShootProjectiles : MonoBehaviour {
 
     public GameObject[] ProjectilePos;
-    public GameObject Projectile;
     public GameObject Muzzle;
     private AudioController audioScript;
     public float FireRate;
