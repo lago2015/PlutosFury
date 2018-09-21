@@ -137,6 +137,7 @@ public class ShopManager : MonoBehaviour {
         
         if (curOrbs >= curPrice)
         {
+            
             buyButton.interactable = enableButton;
 
         }
@@ -186,7 +187,6 @@ public class ShopManager : MonoBehaviour {
         switch(curItem)
         {
             case 0:
-
                 return enableButton = skinShopManager.checkSkinBought(skinToBuy);
                 
             case 1:
