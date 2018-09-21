@@ -141,7 +141,15 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
             {
                 Vector3 normalizePoint = hit.point - transform.position;
                 normalizePoint = normalizePoint.normalized;
-                myBody.AddForce(-normalizePoint * wallBump, ForceMode.VelocityChange);
+                if (ShouldDash)
+                {
+                    myBody.AddForce(-myBody.velocity * wallBump*5, ForceMode.VelocityChange);
+                }
+                else
+                {
+                    myBody.AddForce(-myBody.velocity, ForceMode.VelocityChange);
+                }
+                
             }
         }
     }
@@ -318,7 +326,7 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
             {
                 audioScript.WallBounce();
             }
-            
+
             myBody.velocity = Vector3.zero;
             direction = c.contacts[0].point - transform.position;
             direction = direction.normalized;

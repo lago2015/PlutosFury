@@ -17,6 +17,7 @@ public class HUDManager : MonoBehaviour {
     public Text scoreText;
     public Image[] healthSprites;
     public Image[] moonballSprites;
+    public Image[] moonballUpgrades;        //1=shockwave   2=bounce
     private int joystickPref;
     public GameObject floatingJoystick;
     public GameObject joystick;
@@ -37,7 +38,8 @@ public class HUDManager : MonoBehaviour {
         {
             scoreScript = scoreObject.GetComponent<PlayerManager>();
         }
-
+        //check moonball upgrades
+        CheckUpgrade();
         joystickPref = 0;
 
         //fixed joystick
@@ -78,6 +80,7 @@ public class HUDManager : MonoBehaviour {
                 HeartImageContainer[i].SetActive(false);
             }
         }
+
         //enable amount of available heart containers the player has in saved file
         for (int i = 0; i <= MoonballImageContainer.Length - 1; i++)
         {
@@ -119,6 +122,26 @@ public class HUDManager : MonoBehaviour {
         //{
         //    dashButton.SetActive(true);
         //}
+    }
+
+    void CheckUpgrade()
+    {
+        int currentlyEquipped = 0;//PlayerPrefs.GetInt("CurEquip");
+        if(currentlyEquipped==1)
+        {
+            moonballUpgrades[0].enabled = true;
+            moonballUpgrades[1].enabled = false;
+        }
+        else if(currentlyEquipped==2)
+        {
+            moonballUpgrades[0].enabled = false;
+            moonballUpgrades[1].enabled = true;
+        }
+        else
+        {
+            moonballUpgrades[0].enabled = false;
+            moonballUpgrades[1].enabled = false;
+        }
     }
 
     //Called from players collision and health script. ensures the health is 

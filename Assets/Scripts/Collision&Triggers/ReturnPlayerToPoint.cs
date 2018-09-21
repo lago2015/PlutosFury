@@ -25,6 +25,4 @@ public class ReturnPlayerToPoint : MonoBehaviour {
             other.transform.position = curPoint;
         }
     }
-
-    
 }
