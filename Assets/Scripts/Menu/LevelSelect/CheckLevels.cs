@@ -18,8 +18,8 @@ public class CheckLevels : MonoBehaviour {
 
     public void UnlockAllLevels()
     {
-        PlayerPrefs.SetInt(0 + "Unlocked", 6);
-        PlayerPrefs.SetInt(1 + "Unlocked", 11);
+        PlayerPrefs.SetInt(0 + "Unlocked", 7);
+        PlayerPrefs.SetInt(1 + "Unlocked", 12);
         for (int i = 0; i <= levelButtons.Length - 1; i++)
         {
             levelButtons[i].GetComponent<LoadLevel>().CheckButton();

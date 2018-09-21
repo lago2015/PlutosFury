@@ -19,6 +19,7 @@ public class LoadLevel : MonoBehaviour {
     public bool isBossLevel;
     private int curLevelWorld1;
     private int curLevelWorld2;
+    public bool lastLevel;
 	// Use this for initialization
 	void Start ()
     {
@@ -39,7 +40,7 @@ public class LoadLevel : MonoBehaviour {
     {
         curLevelWorld1= PlayerPrefs.GetInt(0 + "Unlocked");
         curLevelWorld2 = PlayerPrefs.GetInt(1 + "Unlocked");
-        if(curLevelWorld1==6&&curLevelWorld2==11)
+        if(curLevelWorld1==7&&curLevelWorld2==12)
         {
             isUnlocked = true;
             curButton.interactable = true;
@@ -75,11 +76,34 @@ public class LoadLevel : MonoBehaviour {
         }
         //To check if this is the latest level the player has unlocked
         curUnlocked = PlayerPrefs.GetInt(curWorld + "Unlocked");
-        if (curUnlocked==loadLevel&&highlightImage)
+        if(curWorld==0)
         {
-            highlightImage.transform.position = transform.position;
+            if(lastLevel&&curUnlocked>=loadLevel)
+            {
+                highlightImage.enabled = false;
+            }
+            else if (curUnlocked == loadLevel && highlightImage)
+            {
+                highlightImage.enabled = true;
+                highlightImage.transform.position = transform.position;
 
+            }
         }
+        else
+        {
+            if (lastLevel && curUnlocked >= loadLevel)
+            {
+                highlightImage.enabled = false;
+            }
+            else if (curUnlocked == loadLevel && highlightImage)
+            {
+                highlightImage.enabled = true;
+
+                highlightImage.transform.position = transform.position;
+
+            }
+        }
+        
     }
 
     public void LoadCurLevel ()

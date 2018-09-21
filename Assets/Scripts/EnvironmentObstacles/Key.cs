@@ -35,11 +35,11 @@ public class Key : MonoBehaviour {
             gameScript.GameEnded(false);
 
             //Saves if level completed
-            if (PlayerPrefs.GetInt(curWorld + "Unlocked") == numOfLevel&&!isTutorial)
+            if (PlayerPrefs.GetInt(curWorld + "Unlocked") == numOfLevel && !isTutorial)
             {
                 PlayerPrefs.SetInt(curWorld + "Unlocked", curLevel + 1);
             }
-            else if(isTutorial)
+            else if (isTutorial)
             {
                 GameObject.FindObjectOfType<PlayerManager>().isItTutorial();
             }
