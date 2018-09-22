@@ -131,21 +131,25 @@ public class ShopManager : MonoBehaviour {
 
     public void CheckPrice(int ItemNum)
     {
+        //getting current price for item
         curPrice = GetPrice();
+        //getting current amount of orbs
         curOrbs = PlayerPrefs.GetInt("scorePref");
+        //checking if bought
         CheckRoom(ItemNum);
         
         if (curOrbs >= curPrice)
         {
             if(enableButton)
             {
-
+                buyButton.gameObject.SetActive(true);
             }
             buyButton.interactable = enableButton;
 
         }
         else
         {
+            buyButton.gameObject.SetActive(true);
             buyButton.interactable = false;
         }
         if(!enableButton)
@@ -154,8 +158,14 @@ public class ShopManager : MonoBehaviour {
             {
                 buyButton.gameObject.SetActive(false);
             }
+            else
+            {
+                buyButton.gameObject.SetActive(true);
+
+            }
         }
     }
+
     //this function is to get current item price
     int GetPrice()
     {
