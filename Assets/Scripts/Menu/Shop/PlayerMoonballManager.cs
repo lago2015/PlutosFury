@@ -46,12 +46,12 @@ public class PlayerMoonballManager : MonoBehaviour {
         curMoonballContainer = PlayerPrefs.GetInt("CurAddtionalBalls")+1;
         //Get current hearts saved
         curMoonballIndex = PlayerPrefs.GetInt("moonBallAmount");
-        //ensure moonball isnt greater than container
-        if (curMoonballIndex > curMoonballContainer)
-        {
-            curMoonballIndex = curMoonballContainer;
-            PlayerPrefs.GetInt("moonBallAmount", curMoonballIndex);
-        }
+        ////ensure moonball isnt greater than container
+        //if (curMoonballIndex > curMoonballContainer)
+        //{
+        //    curMoonballIndex = curMoonballContainer;
+        //    PlayerPrefs.GetInt("moonBallAmount", curMoonballIndex);
+        //}
         //enable amount of available heart containers the player has in saved file
         for (int i = 0; i <= MoonballImageContainer.Length - 1; i++)
         {

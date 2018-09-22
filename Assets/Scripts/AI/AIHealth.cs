@@ -186,6 +186,10 @@ public class AIHealth : MonoBehaviour {
 
             }
         }
+        else if (CurTag == "BigAsteroid")
+        {
+            col.gameObject.GetComponent<BigAsteroid>().AsteroidHit(2, false, false);
+        }
         else if(CurTag=="EnvironmentObstacle")
         {
             if(col.gameObject.name.Contains("Rocket"))

@@ -27,13 +27,38 @@ public class GarbageCollectStationary : MonoBehaviour {
             curPoint.z = 0;
             col.transform.position = curPoint;
         }
+        else if(col.CompareTag("EnvironmentObstacle"))
+        {
+            Rocket rocketObject = col.GetComponent<Rocket>();
+            if(rocketObject)
+            {
+                rocketObject.BlowUp(true);
+            }
+        }
+        else
+        {
+            Destroy(col.gameObject);
+        }
+    }
+
+    private void OnTriggerExit(Collider col)
+    {
+        if (col.gameObject.CompareTag("Asteroid"))
+        {
+            col.gameObject.GetComponent<BurstBehavior>().ReturnToPool();
+        }
+        else if (col.CompareTag("Player") && returnPoint)
+        {
+            curPoint = cam.ScreenToWorldPoint(new Vector3(returnPoint.transform.position.x, returnPoint.transform.position.y, 0));
+            col.GetComponent<PlayerCollisionAndHealth>().OutOfBounds();
+            curPoint.z = 0;
+            col.transform.position = curPoint;
+        }
         else
         {
             Destroy(col.gameObject);
 
 
         }
-
-
     }
 }

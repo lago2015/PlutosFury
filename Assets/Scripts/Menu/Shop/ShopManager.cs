@@ -137,13 +137,23 @@ public class ShopManager : MonoBehaviour {
         
         if (curOrbs >= curPrice)
         {
-            
+            if(enableButton)
+            {
+
+            }
             buyButton.interactable = enableButton;
 
         }
         else
         {
             buyButton.interactable = false;
+        }
+        if(!enableButton)
+        {
+            if(ItemNum!=1&&ItemNum!=3)
+            {
+                buyButton.gameObject.SetActive(false);
+            }
         }
     }
     //this function is to get current item price

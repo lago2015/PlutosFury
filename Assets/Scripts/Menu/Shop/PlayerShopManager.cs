@@ -49,12 +49,12 @@ public class PlayerShopManager : MonoBehaviour
 
         //Get current hearts saved
         curHeartIndex = PlayerPrefs.GetInt("healthPref");
-        //ensure health isnt greater than container
-        if (curHeartIndex > curHeartContainer)
-        {
-            curHeartIndex = curHeartContainer;
-            PlayerPrefs.GetInt("healthPref", curHeartIndex);
-        }
+        ////ensure health isnt greater than container
+        //if (curHeartIndex > curHeartContainer)
+        //{
+        //    curHeartIndex = curHeartContainer;
+        //    PlayerPrefs.GetInt("healthPref", curHeartIndex);
+        //}
 
         //enable amount of available heart containers the player has in saved file
         for (int i = 0; i <= HeartImageContainer.Length - 1; i++)

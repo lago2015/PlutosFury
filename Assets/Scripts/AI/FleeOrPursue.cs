@@ -358,8 +358,9 @@ public class FleeOrPursue : MonoBehaviour {
     //Reset velocity by increasing drag
     IEnumerator SlowDown()
     {
-        //apply drag for slow down
-        myBody.drag = slowDownDrag;
+        if (myBody)
+            //apply drag for slow down
+            myBody.drag = slowDownDrag;
 
         yield return new WaitForSeconds(0.1f);
         
@@ -367,7 +368,8 @@ public class FleeOrPursue : MonoBehaviour {
         doOnce = false;
         MoveSpeed = DefaultSpeed;
         isCharging = false;
-        myBody.drag = normalDrag;
+        if(myBody)
+            myBody.drag = normalDrag;
 
     }
     //this is called from DetectPlayer script on the parent for when the player is near

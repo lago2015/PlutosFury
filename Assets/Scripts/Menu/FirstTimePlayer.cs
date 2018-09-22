@@ -9,8 +9,6 @@ public class FirstTimePlayer : MonoBehaviour {
     private int curOrbs;
     void Awake()
     {
-        PlayerPrefs.SetInt("healthPref", 1);
-        PlayerPrefs.SetInt("moonBallAmount", 1);
         preNum = PlayerPrefs.GetInt("firstTime");
         if (curOrbs == 0 && preNum == 0)
         {
