@@ -74,14 +74,14 @@ public class Joystick : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointer
         background.gameObject.SetActive(false);
         inputVector = Vector2.zero;
     }
-
+    //getting the dash script indicator to inform when theres a dash happening
     public void GetButton(GameObject dashButt)
     {
         if (dashButt)
         {
             dashScript = dashButt.GetComponent<ButtonIndicator>();
-            secondTouchImage = dashButt.GetComponent<Image>();
-            secondTouchImage.color = tempColor;
+            //secondTouchImage = dashButt.GetComponent<Image>();
+            //secondTouchImage.color = tempColor;
             secondTouchImage.enabled = false;
         }
             
@@ -119,9 +119,6 @@ public class Joystick : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointer
 
         return Quaternion.Euler(0, 0, rotationInDegrees);
     }
-
-
-
 }
 
 public enum JoystickMode { AllAxis, Horizontal, Vertical }

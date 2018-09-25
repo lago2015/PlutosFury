@@ -29,6 +29,68 @@ public class DetectThenExplode : MonoBehaviour {
     {
         audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
     }
+    private void OnTriggerEnter(Collider col)
+    {
+        string CurTag = col.gameObject.tag;
+        //turn off collider to ensure nothing gets called twice
+
+        if (CurTag == "Player")
+        {
+            if (!doOnce)
+            {
+                col.gameObject.GetComponent<Movement>().KnockbackPlayer(col.ClosestPoint(transform.position));
+                col.gameObject.GetComponent<PlayerCollisionAndHealth>().DamagePluto();
+                //Start Explosion
+                TriggeredExplosion(true);
+            }
+        }
+        else if (CurTag == "BigAsteroid")
+        {
+            //start explosion
+            TriggeredExplosion(false);
+
+            //apply damage to asteroid
+            col.gameObject.GetComponent<BigAsteroid>().AsteroidHit(5, false, false);
+        }
+        else if (CurTag == "EnvironmentObstacle" || CurTag == "Obstacle")
+        {
+            if (col.gameObject.name.Contains("DamageWall"))
+            {
+                col.gameObject.GetComponent<WallHealth>().IncrementDamage();
+            }
+            //start explosion
+            TriggeredExplosion(false);
+        }
+        else if (CurTag == "Neptune")
+        {
+            TriggeredExplosion(false);
+        }
+        else if (CurTag == "BreakableWall")
+        {
+            //start explosion
+            TriggeredExplosion(false);
+        }
+        else if (CurTag == "MoonBall")
+        {
+
+            if (isLandmine)
+            {
+
+                GameObject.FindObjectOfType<ComboTextManager>().CreateComboText(0);
+                GameObject.FindObjectOfType<PlayerManager>().niceCombo++;
+                orbScript.SpawnAsteroidHere(orbDrop, transform.position);
+
+            }
+
+            TriggeredExplosion(false);
+        }
+        else if (CurTag == "Wall")
+        {
+            TriggeredExplosion(false);
+
+        }
+    }
+
     void OnCollisionEnter(Collision col)
     {
         string CurTag = col.gameObject.tag;
@@ -42,6 +104,8 @@ public class DetectThenExplode : MonoBehaviour {
                 col.gameObject.GetComponent<PlayerCollisionAndHealth>().DamagePluto();
                 //Start Explosion
                 TriggeredExplosion(true);
+                doOnce = true;
+
             }
         }
         else if (CurTag == "BigAsteroid")
@@ -97,29 +161,24 @@ public class DetectThenExplode : MonoBehaviour {
         {
             TriggerCollider.enabled = false;
         }
-        
-        //ensure audio gets played once
-        if (!doOnce)
+
+        if (audioScript)
         {
-            if(audioScript)
+
+            //get audio controller and play audio
+            audioScript.DestructionSmall(transform.position);
+        }
+        else
+        {
+            audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
+            if (audioScript)
             {
 
                 //get audio controller and play audio
                 audioScript.DestructionSmall(transform.position);
             }
-            else
-            {
-                audioScript = GameObject.FindGameObjectWithTag("AudioController").GetComponent<AudioController>();
-                if(audioScript)
-                {
-
-                    //get audio controller and play audio
-                    audioScript.DestructionSmall(transform.position);
-                }
-            }
-            doOnce = true;
         }
-        if(isLandmine)
+        if (isLandmine)
         {
             
             // Using Object Pool Manager to grab explosion to play and destroy enemy

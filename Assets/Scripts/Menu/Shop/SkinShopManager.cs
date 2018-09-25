@@ -25,8 +25,8 @@ public class SkinShopManager : MonoBehaviour
     private int curOrbs;
     public int[] PriceOfSkin;
     private UpdateOrbAmount orbTextScript;
-    
-    
+
+
     private void Awake()
     {
         CheckSkins();
@@ -40,7 +40,7 @@ public class SkinShopManager : MonoBehaviour
             case 0:
                 skin1Bought = PlayerPrefs.GetInt("skin0");
 
-                if (skin1Bought==1)
+                if (skin1Bought == 1)
                 {
                     return false;
                 }
@@ -119,23 +119,24 @@ public class SkinShopManager : MonoBehaviour
         skin2Bought = PlayerPrefs.GetInt("skin1");
         skin3Bought = PlayerPrefs.GetInt("skin2");
         neptuneSkinBought = PlayerPrefs.GetInt("skin6");
-        redSkinBought= PlayerPrefs.GetInt("skin7");
+        redSkinBought = PlayerPrefs.GetInt("skin7");
         //Moonball
         moonSkin1 = PlayerPrefs.GetInt("skin3");
         moonSkin2 = PlayerPrefs.GetInt("skin4");
         moonSkin3 = PlayerPrefs.GetInt("skin5");
         orbTextScript = GameObject.FindGameObjectWithTag("Finish").GetComponent<UpdateOrbAmount>();
-        
+
     }
     public int CurPrice(int curSkin)
     {
         return PriceOfSkin[curSkin];
     }
+
     public void BuySkin(int curSkin)
     {
         curOrbs = PlayerPrefs.GetInt("scorePref");
-        
-        if(curOrbs>=PriceOfSkin[curSkin] && curSkin != -1)
+
+        if (curOrbs >= PriceOfSkin[curSkin] && curSkin != -1)
         {
             PlayerPrefs.SetInt("skin" + curSkin, 1);
 
@@ -144,6 +145,4 @@ public class SkinShopManager : MonoBehaviour
             orbTextScript.ChangeOrbAmount();
         }
     }
-    
-
 }

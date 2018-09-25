@@ -24,9 +24,6 @@ public class GravityPull : MonoBehaviour {
         ColliderRadius = myCollider.radius;
     }
     
-
-
-
     IEnumerator SkillActive()
     {
         yield return new WaitForSeconds(SkillTimeout);

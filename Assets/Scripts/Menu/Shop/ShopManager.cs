@@ -12,6 +12,9 @@ public class ShopManager : MonoBehaviour {
     private GameObject managerObject;
     public GameObject[] descriptionSprites;
     public Button buyButton;
+    public Text curAmountText;
+    private string curText;
+    private int curAmountIndex;
     private int curPrice;
     private int curOrbs;
     bool enableButton;
@@ -127,6 +130,47 @@ public class ShopManager : MonoBehaviour {
                 return;
         } 
 
+    }
+
+    public void IncreaseText()
+    {
+        //Check if increment is possible
+        //check for available heart or moonball slot
+        //if conditions meet then increment text
+        //ensure theres a cap 
+    }
+
+    public void DecreaseText()
+    {
+        //decrease number on text
+        //ensure it doesnt fall below 0
+    }
+    //if play hits confirm then player will recieve the consumables 
+    public void BuyConsumable(int curConsumable)
+    {
+        if(curAmountText)
+        {
+            curText = curAmountText.text;
+            curAmountIndex=System.Convert.ToInt32(curText);
+            switch (curConsumable)
+            {
+                //health
+                case 0:
+                    for (int i = 0; i >= curAmountIndex; i++)
+                    {
+                        playerShopManager.BuyAHeart();
+                    }
+                    break;
+                //moonball
+                case 1:
+                    for (int i = 0; i >= curAmountIndex; i++)
+                    {
+                        moonballManager.BuyAMoonball();
+                    }
+                    break;
+            }
+        }
+        
     }
 
     public void CheckPrice(int ItemNum)

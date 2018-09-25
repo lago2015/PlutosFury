@@ -366,6 +366,7 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
             }
             else
             {
+                //boolean controlled from moonball script to determine if player can touch the ball
                 if (ball.canTouch)
                 {
                     ball.MoveBall(Vector3.zero, 0.0f);
