@@ -12,6 +12,7 @@ public class ShopManager : MonoBehaviour {
     private GameObject managerObject;
     public GameObject[] descriptionSprites;
     public Button buyButton;
+    public Button buyConsumableButton;
     public Text curAmountText;
     private string curText;
     private int curAmountIndex;
@@ -43,6 +44,8 @@ public class ShopManager : MonoBehaviour {
                 descriptionSprites[i].SetActive(false);
             }
         }
+        ResetIndex();
+        SetTextDefault();
     }
 
     private void Start()
@@ -52,8 +55,11 @@ public class ShopManager : MonoBehaviour {
 
     public void CheckFirstItem()
     {
-        enableButton = playerShopManager.canBuyHeart;
-        buyButton.interactable = enableButton;
+        
+        buyConsumableButton.gameObject.SetActive(true);
+        buyButton.gameObject.SetActive(false);
+        curItem = 1;
+        CheckPrice(curItem);
     }
 
     public void CheckItems()
@@ -82,6 +88,16 @@ public class ShopManager : MonoBehaviour {
     //this is called with Are you sure window for player consumables
     public void ConfirmPurchase(int curPurchase)
     {
+        if(curPurchase==1 || curPurchase==3)
+        {
+            buyConsumableButton.gameObject.SetActive(true);
+            buyButton.gameObject.SetActive(false);
+        }
+        else
+        {
+            buyConsumableButton.gameObject.SetActive(false);
+            buyButton.gameObject.SetActive(true);
+        }
         curItem = curPurchase;
     }
 
@@ -132,43 +148,88 @@ public class ShopManager : MonoBehaviour {
 
     }
 
+    public void SetTextDefault()
+    {
+        curAmountText.text = curAmountIndex.ToString();
+    }
+
+    public void ResetIndex()
+    {
+        curAmountIndex = 1;
+    }
+
     public void IncreaseText()
     {
-        //Check if increment is possible
-        //check for available heart or moonball slot
-        //if conditions meet then increment text
-        //ensure theres a cap 
+
+        switch(curItem)
+        {
+            case 1:
+                //Check if increment is possible
+                if (curAmountIndex + playerShopManager.curHeartIndex - 1 >= playerShopManager.curHeartIndex)
+                {
+                    //check for available heart or moonball slot
+                    if (curAmountIndex + playerShopManager.curHeartIndex <= playerShopManager.curHeartContainer - 1)
+                    {
+                        //if conditions meet then increment text
+                        curAmountIndex++;
+                        curAmountText.text = curAmountIndex.ToString();
+                    }
+                }
+                break;
+
+            case 3:
+                //Check if increment is possible
+                if (curAmountIndex + moonballManager.curMoonballIndex - 1 >= moonballManager.curMoonballIndex)
+                {
+                    //check for available heart or moonball slot
+                    if (curAmountIndex + moonballManager.curMoonballIndex <= moonballManager.curMoonballContainer - 1)
+                    {
+                        //if conditions meet then increment text
+                        curAmountIndex++;
+                        curAmountText.text = curAmountIndex.ToString();
+                    }
+                }
+                break;
+        }
+        
     }
 
     public void DecreaseText()
     {
+        
         //decrease number on text
+        if(curAmountIndex>1)
+        {
+            curAmountIndex--;
+            curAmountText.text = curAmountIndex.ToString();
+        }
         //ensure it doesnt fall below 0
     }
     //if play hits confirm then player will recieve the consumables 
-    public void BuyConsumable(int curConsumable)
+    public void BuyConsumable()
     {
         if(curAmountText)
         {
-            curText = curAmountText.text;
-            curAmountIndex=System.Convert.ToInt32(curText);
-            switch (curConsumable)
+            
+            switch (curItem)
             {
                 //health
-                case 0:
-                    for (int i = 0; i >= curAmountIndex; i++)
+                case 1:
+                    for (int i = 1; i <= curAmountIndex; i++)
                     {
                         playerShopManager.BuyAHeart();
                     }
                     break;
                 //moonball
-                case 1:
-                    for (int i = 0; i >= curAmountIndex; i++)
+                case 3:
+                    for (int i = 1; i <= curAmountIndex; i++)
                     {
                         moonballManager.BuyAMoonball();
                     }
                     break;
             }
+            ResetIndex();
+            SetTextDefault();
         }
         
     }
@@ -182,22 +243,50 @@ public class ShopManager : MonoBehaviour {
         //checking if bought
         CheckRoom(ItemNum);
         
+        //check if player has enough
         if (curOrbs >= curPrice)
         {
+            //if theres room for another item then button is enabled
             if(enableButton)
             {
-                buyButton.gameObject.SetActive(true);
+                if(ItemNum==1||ItemNum==3)
+                {
+                    buyConsumableButton.gameObject.SetActive(true);
+                }
+                else
+                {
+                    buyButton.gameObject.SetActive(true);
+                }
+                
             }
-            buyButton.interactable = enableButton;
+            if (ItemNum == 1 || ItemNum == 3)
+                buyConsumableButton.interactable = enableButton;
+            else
+                buyButton.interactable = enableButton;
 
         }
+        //if player has not enough orbs to buy disable interactable
         else
         {
-            buyButton.gameObject.SetActive(true);
-            buyButton.interactable = false;
+            if(ItemNum==1||ItemNum==3)
+            {
+                buyConsumableButton.gameObject.SetActive(true);
+                buyConsumableButton.interactable = false;
+            }
+            else
+            {
+                //this enables the gameobject incase an item
+                //was sold out previous to this selection
+                buyButton.gameObject.SetActive(true);
+                buyButton.interactable = false;
+            }
+            
         }
+        //if button is not enabled but still want to show the button 
+        //other than health and moonball consumables
         if(!enableButton)
         {
+            //if the items dont match with moonball or health make it false(because they never sell out)
             if(ItemNum!=1&&ItemNum!=3)
             {
                 buyButton.gameObject.SetActive(false);

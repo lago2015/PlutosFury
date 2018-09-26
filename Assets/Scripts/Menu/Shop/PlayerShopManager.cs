@@ -7,7 +7,8 @@ public class PlayerShopManager : MonoBehaviour
 {
     public int curHeartIndex;
     private int curOrbs;
-    private int curHeartContainer;
+    [HideInInspector]
+    public int curHeartContainer;
     public int perHeartPrice=1000;
     public int[] heartContainerPrices;
     public GameObject[] HeartImageContainer;
