@@ -45,7 +45,7 @@ public class Movement : MonoBehaviour
     private bool dashOnce;
     /////Speeds
     private float DefaultSpeed;
-    public float MoveSpeed;
+    private float MoveSpeed=8;
     public float DashSpeed;
     public int rotationSpeed = 8;   //how quick the player rotate to target location
     //Rigidbody drag floats
@@ -73,7 +73,6 @@ public class Movement : MonoBehaviour
     private GameObject hitEffect;
 
     //collider radius
-    
     private float tempAngle;
     private float xMovementInput;
     private float zMovementInput;
@@ -257,11 +256,12 @@ public class Movement : MonoBehaviour
                     }
                 }
                 //myBody.transform.Translate(move * Time.fixedDeltaTime);
-                myBody.AddForce(move * MoveSpeed * Time.fixedDeltaTime, ForceMode.VelocityChange);
+                myBody.AddForce(move * MoveSpeed * Time.deltaTime, ForceMode.VelocityChange);
             }
         }
     }
-//Function for changing trails depending on overload
+
+    //Function for changing trails depending on overload
     public void TrailChange(DashState nextState)
     {
         trailState = nextState;
@@ -434,15 +434,12 @@ public class Movement : MonoBehaviour
         myBody.drag = normalDrag;
     }
 
-    
     //Check for if player is dashing to determine to damage player or opposing object
     public bool DashStatus()
     {
         return ShouldDash;
     }
 
-    
-    
     //Called from gameobjects with triggers to apply knockback as player takes damage
     public void KnockbackPlayer(Vector3 EnemyPoint)
     {

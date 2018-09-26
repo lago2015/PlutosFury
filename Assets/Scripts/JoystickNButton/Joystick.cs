@@ -59,7 +59,6 @@ public class Joystick : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointer
                     screenPos, 
                     joystickCenter=Vector2.zero;
 
-    private Color tempColor=new Color(255,255,255,100);
     [HideInInspector]
     public Vector3 curPosition;
 
