@@ -41,22 +41,13 @@ public class PlayerShopManager : MonoBehaviour
             return 0;
         
     }
-
     public void CheckPlayerShop()
     {
         //get current heart container saved
         curHeartContainer = PlayerPrefs.GetInt("CurAddtionalHearts")+1;
-
-
         //Get current hearts saved
         curHeartIndex = PlayerPrefs.GetInt("healthPref");
-        ////ensure health isnt greater than container
-        //if (curHeartIndex > curHeartContainer)
-        //{
-        //    curHeartIndex = curHeartContainer;
-        //    PlayerPrefs.GetInt("healthPref", curHeartIndex);
-        //}
-
+        
         //enable amount of available heart containers the player has in saved file
         for (int i = 0; i <= HeartImageContainer.Length - 1; i++)
         {
@@ -103,7 +94,6 @@ public class PlayerShopManager : MonoBehaviour
     //Reset all player preferences for new game
     public void ResetValues()
     {
-        
         PlayerPrefs.SetInt("CurAddtionalHearts", 0);
         PlayerPrefs.SetInt("healthPref", 0);
         PlayerPrefs.SetInt("CurAddtionalBalls", 0);
@@ -119,8 +109,7 @@ public class PlayerShopManager : MonoBehaviour
         PlayerPrefs.SetInt("MoonballUpgrade1", 0);
         PlayerPrefs.SetInt("CurEquip", 0);
         PlayerPrefs.SetInt("moonballHits", 2);
-        PlayerPrefs.SetInt(0 + "Unlocked", 2);
-        PlayerPrefs.SetInt(1 + "Unlocked", 7);
+        PlayerPrefs.SetInt("Unlocked", 2);
         PlayerPrefs.SetInt("PlayerMoonballIndex", 0);
         PlayerPrefs.SetInt("PlayerCharacterIndex", 0);
         PlayerPrefs.SetInt("scorePref", 0);

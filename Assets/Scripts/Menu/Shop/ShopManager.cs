@@ -17,6 +17,7 @@ public class ShopManager : MonoBehaviour {
     private string curText;
     private int curAmountIndex;
     private int curPrice;
+    private int curItemSelected;
     private int curOrbs;
     bool enableButton;
     private int curSprite;
@@ -95,8 +96,8 @@ public class ShopManager : MonoBehaviour {
         }
         else
         {
-            buyConsumableButton.gameObject.SetActive(false);
             buyButton.gameObject.SetActive(true);
+            buyConsumableButton.gameObject.SetActive(false);
         }
         curItem = curPurchase;
     }
@@ -230,12 +231,81 @@ public class ShopManager : MonoBehaviour {
             }
             ResetIndex();
             SetTextDefault();
+            CheckItemIsAvailable();
         }
         
     }
 
+    public void CheckItemIsAvailable()
+    {
+        //getting current price for item
+        curPrice = GetPrice();
+        //getting current amount of orbs
+        curOrbs = PlayerPrefs.GetInt("scorePref");
+        //checking if bought
+        CheckRoom(curItemSelected);
+
+        //check if player has enough
+        if (curOrbs >= curPrice)
+        {
+            if (curItemSelected == 1 || curItemSelected == 3)
+                buyConsumableButton.interactable = enableButton;
+            else
+                buyButton.interactable = enableButton;
+
+            //if theres room for another item then button is enabled
+            if (enableButton)
+            {
+                if (curItemSelected == 1 || curItemSelected == 3)
+                {
+                    buyConsumableButton.gameObject.SetActive(true);
+                }
+                else
+                {
+                    buyButton.gameObject.SetActive(true);
+                }
+
+            }
+
+
+        }
+        //if player has not enough orbs to buy disable interactable
+        else
+        {
+            if (curItemSelected == 1 || curItemSelected == 3)
+            {
+                buyConsumableButton.gameObject.SetActive(true);
+                buyConsumableButton.interactable = false;
+            }
+            else
+            {
+                //this enables the gameobject incase an item
+                //was sold out previous to this selection
+                buyButton.gameObject.SetActive(true);
+                buyButton.interactable = false;
+            }
+
+        }
+        //if button is not enabled but still want to show the button 
+        //other than health and moonball consumables
+        if (!enableButton)
+        {
+            //if the items dont match with moonball or health make it false(because they never sell out)
+            if (curItemSelected != 1 && curItemSelected != 3)
+            {
+                buyButton.gameObject.SetActive(false);
+            }
+            else
+            {
+                buyButton.gameObject.SetActive(true);
+
+            }
+        }
+    }
+
     public void CheckPrice(int ItemNum)
     {
+        curItemSelected = ItemNum;
         //getting current price for item
         curPrice = GetPrice();
         //getting current amount of orbs
@@ -246,10 +316,15 @@ public class ShopManager : MonoBehaviour {
         //check if player has enough
         if (curOrbs >= curPrice)
         {
+            if (ItemNum == 1 || ItemNum == 3)
+                buyConsumableButton.interactable = enableButton;
+            else
+                buyButton.interactable = enableButton;
+            
             //if theres room for another item then button is enabled
-            if(enableButton)
+            if (enableButton)
             {
-                if(ItemNum==1||ItemNum==3)
+                if (ItemNum==1||ItemNum==3)
                 {
                     buyConsumableButton.gameObject.SetActive(true);
                 }
@@ -259,10 +334,7 @@ public class ShopManager : MonoBehaviour {
                 }
                 
             }
-            if (ItemNum == 1 || ItemNum == 3)
-                buyConsumableButton.interactable = enableButton;
-            else
-                buyButton.interactable = enableButton;
+            
 
         }
         //if player has not enough orbs to buy disable interactable

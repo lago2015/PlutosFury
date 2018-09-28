@@ -35,8 +35,6 @@ public class ComboTextManager : MonoBehaviour
             {
                 audioScript.ComboAchieved(AudioController.ComboState.awesome);
             }
-            
-            
         }
         text.GetComponentInChildren<Image>().sprite = texts[textDisplay];
 

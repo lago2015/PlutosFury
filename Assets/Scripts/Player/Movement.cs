@@ -45,7 +45,7 @@ public class Movement : MonoBehaviour
     private bool dashOnce;
     /////Speeds
     private float DefaultSpeed;
-    private float MoveSpeed=8;
+    private float MoveSpeed=15;
     public float DashSpeed;
     public int rotationSpeed = 8;   //how quick the player rotate to target location
     //Rigidbody drag floats

@@ -108,7 +108,7 @@ public class MoonBall : MonoBehaviour
     private void OnCollisionEnter(Collision col)
     {
         // APPLYING BOUNCE BACK TO CERTAIN OBJECTS
-        if (col.gameObject.tag == "Wall")
+        if (col.gameObject.tag == "Wall"||col.gameObject.CompareTag("LazerWall"))
         {
             Bounce(col);
         }

@@ -36,7 +36,7 @@ public class HomingProjectile : MonoBehaviour {
     private void Start()
     {
         Player = GameObject.FindGameObjectWithTag("Player");
-        Debug.Log("Expander: ");
+        //Debug.Log("Expander: ");
     }
     //move towards the plaey
     void FixedUpdate()

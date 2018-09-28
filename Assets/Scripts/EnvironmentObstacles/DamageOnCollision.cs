@@ -12,7 +12,6 @@ public class DamageOnCollision : MonoBehaviour {
     private void Start()
     {
         playerCollisionScript = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerCollisionAndHealth>();
-        //Debug.Log("Spike: ");
     }
 
     void OnCollisionEnter(Collision col)
@@ -43,6 +42,12 @@ public class DamageOnCollision : MonoBehaviour {
 
     public void Die()
     {
+        ComboTextManager comboObject = GameObject.FindObjectOfType<ComboTextManager>();
+        if (comboObject)
+        {
+            comboObject.CreateComboText(0);
+            GameObject.FindObjectOfType<PlayerManager>().niceCombo++;
+        }
         // Using Object Pool Manager to grab explosion to play and destroy enemy
         GameObject explosion = GameObject.FindObjectOfType<ObjectPoolManager>().FindObject("TurretExplosion");
         explosion.transform.position = transform.position;

@@ -10,15 +10,13 @@ public class LoadLevel : MonoBehaviour {
 
 
     public int loadLevel;
-    public int curWorld;
     public bool isUnlocked;
     private Button curButton;
     public Image highlightImage;
     private LoadTargetSceneButton loadScreenScript;
     private int curUnlocked;
     public bool isBossLevel;
-    private int curLevelWorld1;
-    private int curLevelWorld2;
+    private int curLevel;
     public bool lastLevel;
 	// Use this for initialization
 	void Start ()
@@ -38,12 +36,14 @@ public class LoadLevel : MonoBehaviour {
     //Check if player has beaten all levels
     public void CheckBossButton()
     {
-        curLevelWorld1= PlayerPrefs.GetInt(0 + "Unlocked");
-        curLevelWorld2 = PlayerPrefs.GetInt(1 + "Unlocked");
-        if(curLevelWorld1==7&&curLevelWorld2==12)
+        
+        curLevel = PlayerPrefs.GetInt("Unlocked");
+        if(curLevel==12)
         {
             isUnlocked = true;
             curButton.interactable = true;
+            highlightImage.enabled = true;
+            highlightImage.transform.position = transform.position;
         }
         else
         {
@@ -56,13 +56,13 @@ public class LoadLevel : MonoBehaviour {
     public void CheckButton()
     {
         //check if its the first level
-        if (loadLevel == 2 || loadLevel == 7||loadLevel==13)
+        if (loadLevel == 2)
         {
             isUnlocked = true;
             curButton.interactable = true;
         }
         //check if the level is unlocked
-        else if (PlayerPrefs.GetInt(curWorld + "Unlocked") >= loadLevel)
+        else if (PlayerPrefs.GetInt("Unlocked") >= loadLevel)
         {
             isUnlocked = true;
             curButton.interactable = true;
@@ -75,35 +75,15 @@ public class LoadLevel : MonoBehaviour {
             curButton.interactable = false;
         }
         //To check if this is the latest level the player has unlocked
-        curUnlocked = PlayerPrefs.GetInt(curWorld + "Unlocked");
-        if(curWorld==0)
+        curUnlocked = PlayerPrefs.GetInt("Unlocked");
+        if (curUnlocked == loadLevel && highlightImage)
         {
-            if(lastLevel&&curUnlocked>=loadLevel)
-            {
-                highlightImage.enabled = false;
-            }
-            else if (curUnlocked == loadLevel && highlightImage)
-            {
-                highlightImage.enabled = true;
-                highlightImage.transform.position = transform.position;
+            highlightImage.enabled = true;
+            highlightImage.transform.position = transform.position;
 
-            }
-        }
-        else
-        {
-            if (lastLevel && curUnlocked >= loadLevel)
-            {
-                highlightImage.enabled = false;
-            }
-            else if (curUnlocked == loadLevel && highlightImage)
-            {
-                highlightImage.enabled = true;
-
-                highlightImage.transform.position = transform.position;
-
-            }
         }
         
+
     }
 
     public void LoadCurLevel ()
@@ -116,9 +96,9 @@ public class LoadLevel : MonoBehaviour {
 
     public void SaveUnlockedLevel (int levelBuildNum)
     {
-        if (PlayerPrefs.GetInt(curWorld + "Unlocked") == levelBuildNum)
+        if (PlayerPrefs.GetInt("Unlocked") == levelBuildNum)
         {
-            PlayerPrefs.SetInt(curWorld + "Unlocked", levelBuildNum + 1);
+            PlayerPrefs.SetInt("Unlocked", levelBuildNum + 1);
         }
     }
 }
