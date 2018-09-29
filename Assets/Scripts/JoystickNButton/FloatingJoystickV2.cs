@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class FloatingJoystickV2 : Joystick
 {
+    public int moonballOffset = 8;
 
     private void Awake()
     {
@@ -107,9 +108,6 @@ public class FloatingJoystickV2 : Joystick
 
     }
 
-    
-
-    
     public override void OnPointerDown(PointerEventData eventData)
     {
         //check if its only one finger in order to enable the joystick visibility
@@ -169,8 +167,10 @@ public class FloatingJoystickV2 : Joystick
             {
                 //direction is grabbed from the drag function and is normalized
                 direction = direction.normalized;
+
+                Vector2 offsetDir = direction * moonballOffset;
                 //getting the current position based on start of direction to player transform
-                curPosition = player.transform.position + new Vector3(direction.x, direction.y, 0);
+                curPosition = player.transform.position + new Vector3(offsetDir.x, offsetDir.y, 0);
                 //Grabbing moonball from object pooling
                 GameObject newMoonBall = GameObject.FindObjectOfType<ObjectPoolManager>().FindObject("MoonBall");
                 newMoonBall.transform.position = curPosition;

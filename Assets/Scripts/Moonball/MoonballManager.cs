@@ -23,7 +23,6 @@ public class MoonballManager : MonoBehaviour {
         
         moonballMaxContainer += PlayerPrefs.GetInt("CurAddtionalBalls");
         moonballNum = PlayerPrefs.GetInt("moonBallAmount");
-
         bonusController = GetComponent<ComboTextManager>();
     }
 
