@@ -41,7 +41,9 @@ public class LoadLevel : MonoBehaviour {
         if(curLevel==12)
         {
             isUnlocked = true;
-            curButton.interactable = true;
+            if(curButton)
+                curButton.interactable = true;
+
             highlightImage.enabled = true;
             highlightImage.transform.position = transform.position;
         }
@@ -49,7 +51,8 @@ public class LoadLevel : MonoBehaviour {
         {
 
             isUnlocked = false;
-            curButton.interactable = false;
+            if(curButton)
+                curButton.interactable = false;
         }
     }
 
@@ -59,20 +62,23 @@ public class LoadLevel : MonoBehaviour {
         if (loadLevel == 2)
         {
             isUnlocked = true;
-            curButton.interactable = true;
+            if(curButton)
+                curButton.interactable = true;
         }
         //check if the level is unlocked
         else if (PlayerPrefs.GetInt("Unlocked") >= loadLevel)
         {
             isUnlocked = true;
-            curButton.interactable = true;
+            if(curButton)
+              curButton.interactable = true;
 
         }
         //then disable button if nothing indicates this button as unlocked
         else
         {
             isUnlocked = false;
-            curButton.interactable = false;
+            if(curButton)
+                curButton.interactable = false;
         }
         //To check if this is the latest level the player has unlocked
         curUnlocked = PlayerPrefs.GetInt("Unlocked");

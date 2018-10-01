@@ -78,7 +78,7 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
         cameraShakeScript = GameObject.FindObjectOfType<CameraShake>();
         appearanceScript = GetComponent<PlayerAppearance>();
         bonusController = GetComponent<ComboTextManager>();
-        GetComponent<SphereCollider>().contactOffset = 2f;
+        GetComponent<SphereCollider>().contactOffset = 1f;
         //Setting colors
         w_Color = Color.white;
         r_Color = Color.red;
@@ -332,7 +332,7 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
             direction = direction.normalized;
             if (moveScript.DashStatus())
             {
-                myBody.AddForce(-direction * wallBump*10);
+                myBody.AddForce(-direction * wallBump*4);
             }
             else
             {
