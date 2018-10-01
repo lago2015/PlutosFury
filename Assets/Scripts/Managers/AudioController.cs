@@ -77,24 +77,26 @@ public class AudioController : MonoBehaviour {
     [Header("HunterChargeShot")]
     public AudioSource hunterShotCue;
 
-    public enum ComboState { nice,cool,awesome}
+    public enum ComboState { nice,cool,awesome,bonus}
     private ComboState curCombo;
     [Header("Combos")]
     public AudioSource coolCue;
     public AudioSource niceCue;
     public AudioSource awesomeCue;
-
+    public AudioSource bonusCue;
     [Header("Boss Hit")]
     public AudioSource bossHitCue;
 
+    [Header("SoccerBounce")]
+    public AudioSource soccerBounce;
+
+    [Header("WormholeDeviceOpen")]
+    public AudioSource wormHoleDevice;
 
     // Use this for initialization
     void Start () {
         instance = this;
 	}
-	
-	
-
     public void PlutoHit(Vector3 pos)
     {
         if (plutoHitSource != null)
@@ -204,6 +206,12 @@ public class AudioController : MonoBehaviour {
                     awesomeCue.Play();
                 }
                 break;
+            case ComboState.bonus:
+                if (bonusCue != null)
+                {
+                    bonusCue.Play();
+                }
+                break;
         }
     }
 
@@ -246,13 +254,29 @@ public class AudioController : MonoBehaviour {
   
         }
     }
+    public void WormholeDeviceOpen()
+    {
+        if (wormHoleDevice != null)
+        {
 
+            wormHoleDevice.loop = false;
+            wormHoleDevice.Play();
+        }
+    }
+    public void SoccerBounce()
+    {
+        if (soccerBounce != null)
+        {
 
+            soccerBounce.loop = false;
+            soccerBounce.Play();
+        }
+    }
     public void WallBounce()
     {
         if (wallBounceSource != null)
         {
-            
+
             wallBounceSource.loop = false;
             wallBounceSource.Play();
         }

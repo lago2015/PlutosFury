@@ -32,7 +32,7 @@ public class Door : MonoBehaviour {
                     explosion.transform.position = transform.position;
                     explosion.SetActive(true);
                     wormHoleObject.SetActive(true);
-
+                    GameObject.FindObjectOfType<AudioController>().WormholeDeviceOpen();
                     Destroy(gameObject);
 
                 }

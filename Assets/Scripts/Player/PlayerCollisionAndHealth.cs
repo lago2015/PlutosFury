@@ -200,7 +200,7 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
         }
         else if (bonusController)
         {
-            bonusController.CreateComboText(3);
+            bonusController.CreateComboText(4);
             for(int i=0;i<=bonusAmount-1;i++)
             {
                 ScoreManager.OrbObtained();

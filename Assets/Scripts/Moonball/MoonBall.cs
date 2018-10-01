@@ -27,7 +27,7 @@ public class MoonBall : MonoBehaviour
     private SphereCollider colliderComp;
     private Rigidbody rb;
     private Coroutine myCoroutine;
-
+    private AudioController audioScript;
     // Private flags
     private bool resetCollider;
     private int currentlyEquipped;
@@ -49,7 +49,6 @@ public class MoonBall : MonoBehaviour
         {
             hitCount++;
         }
-        
     }
 
     void Start ()
@@ -60,7 +59,8 @@ public class MoonBall : MonoBehaviour
             newGravWell = Instantiate(gravityWell, transform.position, Quaternion.identity);
             newGravWell.GetComponent<AsteroidCollector>().FollowBall(gameObject);
         }
-       
+        audioScript = GameObject.FindObjectOfType<AudioController>();
+
         rb = GetComponent<Rigidbody>(); 
 	}
 
@@ -177,8 +177,6 @@ public class MoonBall : MonoBehaviour
                 OnExplosion("ContainerExplosion");
                 
             }
-
-
         }
         else
         {
@@ -196,6 +194,11 @@ public class MoonBall : MonoBehaviour
 
         float currentSpeed = rb.velocity.magnitude;
         rb.velocity = result * currentSpeed;
+
+        if(audioScript)
+        {
+            audioScript.SoccerBounce();
+        }
     }
 
     // This function is for spikes

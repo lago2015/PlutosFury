@@ -34,6 +34,7 @@ public class GarbageCollectStationary : MonoBehaviour {
             {
                 rocketObject.BlowUp(true);
             }
+            
         }
         else
         {
@@ -56,7 +57,8 @@ public class GarbageCollectStationary : MonoBehaviour {
         }
         else
         {
-            Destroy(col.gameObject);
+            if(col.name!=("BlockOcker"))
+                Destroy(col.gameObject);
 
 
         }
