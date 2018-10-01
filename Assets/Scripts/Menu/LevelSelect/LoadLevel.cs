@@ -14,7 +14,6 @@ public class LoadLevel : MonoBehaviour {
     private Button curButton;
     public Image highlightImage;
     private LoadTargetSceneButton loadScreenScript;
-    private int curUnlocked;
     public bool isBossLevel;
     private int curLevel;
     public bool lastLevel;
@@ -58,6 +57,8 @@ public class LoadLevel : MonoBehaviour {
 
     public void CheckButton()
     {
+        curLevel = PlayerPrefs.GetInt("Unlocked");
+
         //check if its the first level
         if (loadLevel == 2)
         {
@@ -66,7 +67,7 @@ public class LoadLevel : MonoBehaviour {
                 curButton.interactable = true;
         }
         //check if the level is unlocked
-        else if (PlayerPrefs.GetInt("Unlocked") >= loadLevel)
+        else if (curLevel >= loadLevel)
         {
             isUnlocked = true;
             if(curButton)
@@ -80,9 +81,8 @@ public class LoadLevel : MonoBehaviour {
             if(curButton)
                 curButton.interactable = false;
         }
-        //To check if this is the latest level the player has unlocked
-        curUnlocked = PlayerPrefs.GetInt("Unlocked");
-        if (curUnlocked == loadLevel && highlightImage)
+
+        if (curLevel == loadLevel && highlightImage)
         {
             highlightImage.enabled = true;
             highlightImage.transform.position = transform.position;

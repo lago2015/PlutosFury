@@ -34,7 +34,7 @@ public class Key : MonoBehaviour {
             gameScript.GameEnded(false);
 
             //Saves if level completed
-            if (PlayerPrefs.GetInt("Unlocked") == numOfLevel && !isTutorial)
+            if (curLevel == numOfLevel && !isTutorial)
             {
                 PlayerPrefs.SetInt("Unlocked", curLevel + 1);
             }
