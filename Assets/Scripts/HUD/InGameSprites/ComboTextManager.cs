@@ -42,7 +42,6 @@ public class ComboTextManager : MonoBehaviour
         }
         text.GetComponentInChildren<Image>().sprite = texts[textDisplay];
 
-        Destroy(text, 0.75f);
     }
 
 }

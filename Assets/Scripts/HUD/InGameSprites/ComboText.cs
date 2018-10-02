@@ -9,7 +9,7 @@ public class ComboText : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        Destroy(this.gameObject, 0.75f);
+        Destroy(this.gameObject, 2f);
         player = GameObject.FindObjectOfType<HUDManager>().gameObject;
         transform.SetParent(player.transform, false);
         transform.localPosition = Vector3.zero;
