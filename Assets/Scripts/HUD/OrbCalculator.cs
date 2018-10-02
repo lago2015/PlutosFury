@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class OrbCalculator : MonoBehaviour
 {
-
+    public Text levelBonusText;
     public Text levelOrbText;
     public Text calcOrbText;
     public Text niceNumText;
@@ -16,6 +16,7 @@ public class OrbCalculator : MonoBehaviour
     public GameObject continueBtn;
     public GameObject retryBtn;
     public GameObject endGameScreen;
+    public int levelBonus;
     private int levelOrb;
     private int niceNum;
     private int coolNum;
@@ -103,7 +104,7 @@ public class OrbCalculator : MonoBehaviour
 
         // Add bonus to total orbs player has for grand total 
         bonusTotal = (int)Mathf.Round(levelOrb * totalBonus);
-        playerNewTotal += playerOldTotal + bonusTotal;
+        playerNewTotal += playerOldTotal + bonusTotal + levelBonus;
 
         PlayerPrefs.SetInt("scorePref", playerNewTotal);
 
@@ -112,6 +113,7 @@ public class OrbCalculator : MonoBehaviour
         niceNumText.text = niceNum.ToString();
         coolNumText.text = coolNum.ToString();
         awesomeNumText.text = awesomeNum.ToString();
+        levelBonusText.text = levelBonus.ToString();
         bonusTotalText.text = bonusTotal.ToString();
         playerTotalText.text = playerOldTotal.ToString();
 
