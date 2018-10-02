@@ -24,7 +24,7 @@ public class OrbCalculator : MonoBehaviour
     private int bonusTotal;
     private int playerOldTotal;
     private int playerNewTotal;
-
+    private int curBonusNum;
 
     private Text currentAddText;
     private Text currentSubtractText;
@@ -69,6 +69,8 @@ public class OrbCalculator : MonoBehaviour
             lerp += Time.deltaTime / duration;
             currentAddNumber = (int)Mathf.Lerp(numberFrom, numberTo, lerp);
             currentSubtractNumber = (int)Mathf.Lerp(numberSubtractFrom, 0, lerp);
+            curBonusNum = (int)Mathf.Lerp(levelBonus, 0, lerp);
+            levelBonusText.text = curBonusNum.ToString();
             currentAddText.text = currentAddNumber.ToString();
             currentSubtractText.text = currentSubtractNumber.ToString();
 
@@ -118,9 +120,7 @@ public class OrbCalculator : MonoBehaviour
         playerTotalText.text = playerOldTotal.ToString();
 
     }
-
-
-
+    
     public void SetTallyMarksOrbs()
     {
         // Set the correct current variables for interpolation
