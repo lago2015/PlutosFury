@@ -20,7 +20,7 @@ public class FirstTimePlayerWindow : MonoBehaviour {
             if(levelSelectAnim)
             {
                 levelSelectAnim.WndowAnimation(true);
-                //HUDObject.SetActive(true);
+                HUDObject.SetActive(true);
             }
         }
         else
@@ -29,7 +29,7 @@ public class FirstTimePlayerWindow : MonoBehaviour {
             {
                 continueButton.interactable = true;
                 loreWindowScript.WndowAnimation(true);
-                //HUDObject.SetActive(false);
+                HUDObject.SetActive(false);
             }
             firstimePref = 1;
             PlayerPrefs.SetInt("firstTime", firstimePref);

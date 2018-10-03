@@ -78,7 +78,7 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
         cameraShakeScript = GameObject.FindObjectOfType<CameraShake>();
         appearanceScript = GetComponent<PlayerAppearance>();
         bonusController = GetComponent<ComboTextManager>();
-        GetComponent<SphereCollider>().contactOffset = 1f;
+        GetComponent<SphereCollider>().contactOffset = 1.25f;
         //Setting colors
         w_Color = Color.white;
         r_Color = Color.red;

@@ -1,13 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class WindowManager : MonoBehaviour {
 
     public MenuMusicScript musicManager;
     public GameObject[] windowPool;
     private int curIndex;
-
+    public Button continueButton;
     
     private void Start()
     {
@@ -35,8 +35,18 @@ public class WindowManager : MonoBehaviour {
                 musicManager.TurnMusicOn(true);
             }
         }
+        StartCoroutine(enableButton());
         StartCoroutine(resetPlayerPref());
     }
+
+    IEnumerator enableButton()
+    {
+        continueButton.interactable = false;
+        yield return new WaitForSeconds(1f);
+        continueButton.interactable = true;
+    }
+
+
     IEnumerator resetPlayerPref()
     {
         yield return new WaitForSeconds(0.1f);

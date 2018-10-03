@@ -109,7 +109,7 @@ public class PickUpSkills : MonoBehaviour {
                     }
                     if(audioScript)
                     {
-                        audioScript.ComboAchieved(AudioController.ComboState.bonus);
+                        audioScript.OrbPickup(transform.position);
                     }
                     Destroy(gameObject);
                 }

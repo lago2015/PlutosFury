@@ -31,6 +31,8 @@ public class AudioController : MonoBehaviour {
     [Header("PlutoBallPickup")]
     public AudioSource plutoMoonballUp;
     public float moonballDelay = 0.5f;
+    [Header("PlutoOrbPickup")]
+    public AudioSource orbPickup;
     [SerializeField]
     [Header("RogueDash")]
     public AudioSource RogueDashSource;
@@ -169,7 +171,15 @@ public class AudioController : MonoBehaviour {
             plutoMoonballUp.Play();
         }
     }
-
+    public void OrbPickup(Vector3 pos)
+    {
+        if (plutoMoonballUp != null)
+        {
+            plutoMoonballUp.transform.position = pos;
+            plutoMoonballUp.loop = false;
+            plutoMoonballUp.Play();
+        }
+    }
     public void WormholeEntered(Vector3 MyPos)
     {
         if (WormholeEnterSource != null)
