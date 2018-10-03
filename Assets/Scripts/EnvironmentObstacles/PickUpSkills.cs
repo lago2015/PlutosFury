@@ -25,7 +25,6 @@ public class PickUpSkills : MonoBehaviour {
         GameObject playerRef = GameObject.FindGameObjectWithTag("Player");
 
         appearanceScript = playerRef.GetComponent<PlayerAppearance>();
-
         switch (curSkill)
         {
             
@@ -107,6 +106,10 @@ public class PickUpSkills : MonoBehaviour {
                     if (healthController)
                     {
                         healthController.CreateFloatingHealth(playerCollisionScript.transform.position);
+                    }
+                    if(audioScript)
+                    {
+                        audioScript.ComboAchieved(AudioController.ComboState.bonus);
                     }
                     Destroy(gameObject);
                 }

@@ -27,7 +27,7 @@ public class ComboTextManager : MonoBehaviour
             {
                 audioScript.ComboAchieved(AudioController.ComboState.nice);
             }
-            else if (textDisplay == 1|| textDisplay == 3)
+            else if (textDisplay == 1)
             {
                 audioScript.ComboAchieved(AudioController.ComboState.cool);
             }
@@ -35,10 +35,10 @@ public class ComboTextManager : MonoBehaviour
             {
                 audioScript.ComboAchieved(AudioController.ComboState.awesome);
             }
-            //else if(textDisplay==4)
-            //{
-            //    audioScript.ComboAchieved(AudioController.ComboState.bonus);
-            //}
+            else if (textDisplay == 3)
+            {
+                audioScript.ComboAchieved(AudioController.ComboState.bonus);
+            }
         }
         text.GetComponentInChildren<Image>().sprite = texts[textDisplay];
 

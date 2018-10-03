@@ -72,7 +72,7 @@ public class MoonballManager : MonoBehaviour {
         }
         else if (bonusController)
         {
-            bonusController.CreateComboText(4);
+            bonusController.CreateComboText(3);
             for (int i = 0; i <= bonusAmount - 1; i++)
             {
                 scoreManager.OrbObtained();
