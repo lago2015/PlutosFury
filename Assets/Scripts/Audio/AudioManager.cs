@@ -49,10 +49,12 @@ public class AudioManager : MonoBehaviour
         for (int i = 0; i < audioSettings.Length; i++)
         {
             audioSettings[i].Initialize();
-            
+
         }
-        
-	}
+
+    }
+
+    
     public void SetMusicVolume(float value)
     {
         audioSettings[(int)AudioGroups.Music].SetExposedParam(value);

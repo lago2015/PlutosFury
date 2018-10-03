@@ -70,7 +70,10 @@ public class OrbCalculator : MonoBehaviour
             currentAddNumber = (int)Mathf.Lerp(numberFrom, numberTo, lerp);
             currentSubtractNumber = (int)Mathf.Lerp(numberSubtractFrom, 0, lerp);
             curBonusNum = (int)Mathf.Lerp(levelBonus, 0, lerp);
-            levelBonusText.text = curBonusNum.ToString();
+            if(levelBonusText)
+            {
+                levelBonusText.text = curBonusNum.ToString();
+            }
             currentAddText.text = currentAddNumber.ToString();
             currentSubtractText.text = currentSubtractNumber.ToString();
 

@@ -94,11 +94,6 @@ public class GameManager : MonoBehaviour
             playerMoveScript.ReferenceAbsorbScript(collectorObject);
             playerMoveScript.ReferenceAudio(audioObject);
         }
-
-
-
-        
-
         scoreObject = GameObject.FindGameObjectWithTag("ScoreManager");
         if(scoreObject)
         {

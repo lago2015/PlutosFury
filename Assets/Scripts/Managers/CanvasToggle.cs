@@ -68,22 +68,8 @@ public class CanvasToggle : MonoBehaviour {
         {
             playerScript.DisableMovement(false);
         }
-
-        
-        //find reference for tutorial script
-        TutorialTip tip = GameObject.FindObjectOfType<TutorialTip>();
-        //if enabled then begin tutorial
-        if (tipOnStart && tip)
-        {
-
-            StartCoroutine(tip.delayTipDown());
-        }
-        //otherwise destroy that tip, only the tip though
-        else if (tip)
-        {
-            Destroy(tip.gameObject);
-            StartCoroutine(ReadyIntro());
-        }
+        StartGame();
+      
     }
 
     public void StartGame()

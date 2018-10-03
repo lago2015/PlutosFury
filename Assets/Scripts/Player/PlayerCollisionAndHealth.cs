@@ -326,7 +326,6 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
             {
                 audioScript.WallBounce();
             }
-            
             myBody.velocity = Vector3.zero;
             direction = c.contacts[0].point - transform.position;
             direction = direction.normalized;
@@ -338,9 +337,6 @@ public class PlayerCollisionAndHealth : MonoBehaviour {
             {
                 myBody.AddForce(-direction * wallBump);
             }
-            
-
-
         }
         else if (curTag == "BreakableWall")
         {
