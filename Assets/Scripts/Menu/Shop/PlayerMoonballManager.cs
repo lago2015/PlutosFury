@@ -28,7 +28,7 @@ public class PlayerMoonballManager : MonoBehaviour {
     }
     public int curBallContainerPrice()
     {
-        if(canBuyBallContainer)
+        if(canBuyBallContainer && curMoonballContainer!=4)
         {
             //get current heart container saved
             curMoonballContainer = PlayerPrefs.GetInt("CurAddtionalBalls")+1;
@@ -36,6 +36,7 @@ public class PlayerMoonballManager : MonoBehaviour {
         }
         else
         {
+            canBuyBallContainer = false;
             return 0;
         }
         

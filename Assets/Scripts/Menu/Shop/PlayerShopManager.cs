@@ -30,15 +30,18 @@ public class PlayerShopManager : MonoBehaviour
     }
     public int CurHeartContainerPrice()
     {
-        if (canBuyContainer)
+        if (canBuyContainer &&curHeartContainer!=4)
         {
             //get current heart container saved
             curHeartContainer = PlayerPrefs.GetInt("CurAddtionalHearts")+1;
-
-            return heartContainerPrices[curHeartContainer-1];
+            return heartContainerPrices[curHeartContainer - 1];
         }
         else
+        {
+            canBuyContainer = false;
             return 0;
+        }
+            
         
     }
     public void CheckPlayerShop()
