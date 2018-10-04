@@ -25,7 +25,6 @@ public class OptionsMenu : MonoBehaviour {
         {
             curJoystickOpacity = PlayerPrefs.GetFloat("joystickPref");
             joystickOpacity.value = curJoystickOpacity;
-            Debug.Log("JoystickPref: " + PlayerPrefs.GetFloat("joystickPref"));
         }
 
         if (PlayerPrefs.HasKey("VibrationHit")&&vHit)

@@ -24,5 +24,13 @@ public class ReturnPlayerToPoint : MonoBehaviour {
             curPoint.z = 0;
             other.transform.position = curPoint;
         }
+        else if(other.CompareTag("MoonBall") && returnPoint)
+        {
+            curPoint = cam.ScreenToWorldPoint(new Vector3(returnPoint.transform.position.x, returnPoint.transform.position.y, other.transform.position.z));
+            other.gameObject.SetActive(false);
+            curPoint.z = 0;
+            other.transform.position = curPoint;
+            other.gameObject.SetActive(true);
+        }
     }
 }
