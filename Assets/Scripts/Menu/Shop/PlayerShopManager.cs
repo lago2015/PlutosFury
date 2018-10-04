@@ -94,6 +94,7 @@ public class PlayerShopManager : MonoBehaviour
     //Reset all player preferences for new game
     public void ResetValues()
     {
+        PlayerPrefs.DeleteAll();
         PlayerPrefs.SetInt("CurAddtionalHearts", 0);
         PlayerPrefs.SetInt("healthPref", 0);
         PlayerPrefs.SetInt("CurAddtionalBalls", 0);
