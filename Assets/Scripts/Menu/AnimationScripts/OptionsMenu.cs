@@ -12,7 +12,7 @@ public class OptionsMenu : MonoBehaviour {
     public Slider joystickOpacity;
     public Toggle vHit;
 	public Toggle iControls;
-    
+    private float curJoystickOpacity;
     
 
     public Animator Anim;
@@ -21,6 +21,13 @@ public class OptionsMenu : MonoBehaviour {
     // Use this for initialization
     void Awake ()
     {
+        if (joystickOpacity)
+        {
+            curJoystickOpacity = PlayerPrefs.GetFloat("joystickPref");
+            joystickOpacity.value = curJoystickOpacity;
+            Debug.Log("JoystickPref: " + PlayerPrefs.GetFloat("joystickPref"));
+        }
+
         if (PlayerPrefs.HasKey("VibrationHit")&&vHit)
         {
             if (PlayerPrefs.GetInt("VibrationHit") == 1)
@@ -43,20 +50,21 @@ public class OptionsMenu : MonoBehaviour {
                 iControls.isOn = false;
             }
         }
-        if (joystickOpacity)
-        {
-            joystickOpacity.value = PlayerPrefs.GetFloat("joystickPref");
-
-        }
+      
 
     }
 
+    public void UpdateJoystick()
+    {
+        curJoystickOpacity = joystickOpacity.value;
+    }
 
 	public void UpdateValues()
     {
 		int VibrationHit;
         int InvertControls;
-        PlayerPrefs.SetFloat("joystickPref", joystickOpacity.value);
+        UpdateJoystick();
+        PlayerPrefs.SetFloat("joystickPref",curJoystickOpacity);
         if (vHit.isOn) {
 			VibrationHit = 1;
         } else {

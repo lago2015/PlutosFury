@@ -41,6 +41,9 @@ public class OrbCalculator : MonoBehaviour
     private bool startAnim;
     public bool CompleteLevel;
     public bool bossLevel;
+
+    
+
     // Use this for initialization
     void Start()
     {
@@ -57,8 +60,7 @@ public class OrbCalculator : MonoBehaviour
         {
             endGameScreen.SetActive(false);
         }
-        SetTallyMarksOrbs();
-        curBonusNum = levelBonus;
+
     }
 
     // Update is called once per frame
@@ -86,8 +88,7 @@ public class OrbCalculator : MonoBehaviour
                     endGameScreen.SetActive(true);
                     endGameScreen.GetComponent<QuitScreen>().WndowAnimation(true);
                 }
-                //continueBtn.SetActive(true);
-               //retryBtn.SetActive(true);
+                
             }
         }
     }
@@ -95,6 +96,14 @@ public class OrbCalculator : MonoBehaviour
     // Need to get the orbs obtain in level
     public void InitializeScoreNumbers()
     {
+        //setting level bonus
+        
+        if (levelBonusText)
+        {
+            levelBonusText.text = levelBonus.ToString();
+        }
+
+
         PlayerManager stats = GameObject.FindObjectOfType<PlayerManager>();
 
         // Get orb score in level, set text to that number
@@ -108,43 +117,45 @@ public class OrbCalculator : MonoBehaviour
         float totalBonus = ((niceNum * 0.02f) + (coolNum * 0.05f) + (awesomeNum * 0.08f)) + 1;
 
         // Add bonus to total orbs player has for grand total 
-        bonusTotal = (int)Mathf.Round(levelOrb * totalBonus);
+        bonusTotal = (int)Mathf.Round(levelOrb * totalBonus)+levelBonus;
         playerNewTotal += playerOldTotal + bonusTotal + levelBonus;
 
         PlayerPrefs.SetInt("scorePref", playerNewTotal);
 
         // set text numbers
-
+        //Bonus text achieved in game
         niceNumText.text = niceNum.ToString();
         coolNumText.text = coolNum.ToString();
         awesomeNumText.text = awesomeNum.ToString();
-        levelBonusText.text = levelBonus.ToString();
+        //total for level
         bonusTotalText.text = bonusTotal.ToString();
+        //total for player overall orbs
         playerTotalText.text = playerOldTotal.ToString();
 
     }
-    
+    //Called from animator event
     public void SetTallyMarksOrbs()
     {
-        // Set the correct current variables for interpolation
-        if (CompleteLevel)
-        {
-            numberTo = levelOrb;
-        }
-        else
-        {
-            numberTo = 0;
-        }
+      
         numberFrom = 0;
         numberSubtractFrom = levelOrb;
         currentSubtractNumber = levelOrb;
         currentAddNumber = 0;
         currentAddText = calcOrbText;
         currentSubtractText = levelOrbText;
-
-        isTallying = true;
+        // Set the correct current variables for interpolation
+        if (CompleteLevel)
+        {
+            numberTo = levelOrb;
+            currentAddText.text = levelOrb.ToString();
+        }
+        else
+        {
+            numberTo = 0;
+        }
+        //isTallying = true;
     }
-
+    //Called from animator event
     public void SetTallyMarksTotal()
     {
         numberTo = playerNewTotal;

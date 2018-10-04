@@ -15,7 +15,6 @@ public class FirstTimePlayer : MonoBehaviour {
             PlayerPrefs.SetInt("Unlocked", 2);
             
             PlayerPrefs.SetFloat("joystickPref", 255);
-            
         }        
     }
 
