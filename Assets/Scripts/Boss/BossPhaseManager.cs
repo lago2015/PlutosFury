@@ -7,10 +7,11 @@ public class BossPhaseManager : MonoBehaviour {
     public int curIndex;
     private bool doOnce;
     private Animator animComp;
-
+    private PlayerCollisionAndHealth playerScript;
     private void Awake()
     {
         animComp = GetComponent<Animator>();
+        playerScript = FindObjectOfType<PlayerCollisionAndHealth>();
     }
 
 
@@ -30,7 +31,8 @@ public class BossPhaseManager : MonoBehaviour {
                 GameObject explosion = GameObject.FindObjectOfType<ObjectPoolManager>().FindObject("TurretExplosion");
                 explosion.transform.position = transform.position;
                 explosion.SetActive(true);
-
+                PlayerPrefs.SetInt("skin6", 1);
+                playerScript.godMode = true;
             }
             else
             {

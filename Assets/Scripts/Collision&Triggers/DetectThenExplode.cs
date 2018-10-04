@@ -69,16 +69,9 @@ public class DetectThenExplode : MonoBehaviour {
         }
         else if (CurTag == "MoonBall")
         {
-
-            if (isLandmine)
-            {
-
-                GameObject.FindObjectOfType<ComboTextManager>().CreateComboText(0);
-                GameObject.FindObjectOfType<PlayerManager>().niceCombo++;
-                orbScript.SpawnAsteroidHere(orbDrop, transform.position);
-
-            }
-
+            GameObject.FindObjectOfType<ComboTextManager>().CreateComboText(0);
+            GameObject.FindObjectOfType<PlayerManager>().niceCombo++;
+            orbScript.SpawnAsteroidHere(orbDrop, transform.position);
             TriggeredExplosion(false);
         }
         else if (CurTag == "Wall")

@@ -58,7 +58,7 @@ public class OrbCalculator : MonoBehaviour
             endGameScreen.SetActive(false);
         }
         SetTallyMarksOrbs();
-
+        curBonusNum = levelBonus;
     }
 
     // Update is called once per frame

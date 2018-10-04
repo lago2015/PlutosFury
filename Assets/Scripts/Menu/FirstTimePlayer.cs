@@ -6,23 +6,17 @@ public class FirstTimePlayer : MonoBehaviour {
 
     private int preNum;
     public Button continueButton;
-    private int curOrbs;
     void Awake()
     {
         preNum = PlayerPrefs.GetInt("firstTime");
-        if (curOrbs == 0 && preNum == 0)
-        {
-            //continueButton.interactable = false;
-        }
+        
         if (preNum==0)
         {
-            PlayerPrefs.SetInt(0 + "Unlocked", 2);
-            PlayerPrefs.SetInt(1 + "Unlocked", 7);
+            PlayerPrefs.SetInt("Unlocked", 2);
+            
             PlayerPrefs.SetFloat("joystickPref", 255);
             
-        }
-        curOrbs = PlayerPrefs.GetInt("scorePref");
-        
+        }        
     }
 
     public void QuitGame()
