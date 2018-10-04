@@ -54,10 +54,7 @@ public class DetectThenExplode : MonoBehaviour {
         }
         else if (CurTag == "EnvironmentObstacle" || CurTag == "Obstacle")
         {
-            if (col.gameObject.name.Contains("DamageWall"))
-            {
-                col.gameObject.GetComponent<WallHealth>().IncrementDamage();
-            }
+            
             //start explosion
             TriggeredExplosion(false);
         }

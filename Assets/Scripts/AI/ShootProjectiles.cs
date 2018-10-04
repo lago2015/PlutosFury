@@ -105,11 +105,11 @@ public class ShootProjectiles : MonoBehaviour {
 
     void OnTriggerEnter(Collider col)
     {
-        //if(col.gameObject.tag=="Player")
-        //{
-        //    PlayerNear = true;
-        //    enabled = true;
-        //}
+        if (col.gameObject.tag == "Player")
+        {
+            PlayerNear = true;
+            enabled = true;
+        }
     }
 
 
