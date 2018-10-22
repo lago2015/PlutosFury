@@ -118,7 +118,7 @@ public class OrbCalculator : MonoBehaviour
 
         // Add bonus to total orbs player has for grand total 
         bonusTotal = (int)Mathf.Round(levelOrb * totalBonus)+levelBonus;
-        playerNewTotal += playerOldTotal + bonusTotal + levelBonus;
+        playerNewTotal += playerOldTotal + bonusTotal;
 
         PlayerPrefs.SetInt("scorePref", playerNewTotal);
 

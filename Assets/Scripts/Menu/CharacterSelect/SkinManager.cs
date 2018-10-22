@@ -13,18 +13,26 @@ public class SkinManager : MonoBehaviour {
     private int skin3Bought;
     private int neptuneBought;
     private int redBought;
+    private int newSkin1Bought;
+    private int newSkin2Bought;
+    private int newSkin3Bought;
+
     private int moonSkin1;
     private int moonSkin2;
     private int moonSkin3;
     public void CheckSkins()
     {
         
+        //pluto skins
         skin1Bought = PlayerPrefs.GetInt("skin0");
         skin2Bought = PlayerPrefs.GetInt("skin1");
         skin3Bought = PlayerPrefs.GetInt("skin2");
         neptuneBought = PlayerPrefs.GetInt("skin6");
         redBought = PlayerPrefs.GetInt("skin7");
-
+        newSkin1Bought = PlayerPrefs.GetInt("skin8");
+        newSkin2Bought = PlayerPrefs.GetInt("skin9");
+        newSkin3Bought = PlayerPrefs.GetInt("skin10");
+        //moonball skins
         moonSkin1 = PlayerPrefs.GetInt("skin3");
         moonSkin2 = PlayerPrefs.GetInt("skin4");
         moonSkin3 = PlayerPrefs.GetInt("skin5");
@@ -99,21 +107,36 @@ public class SkinManager : MonoBehaviour {
         {
             characterButtons[9].interactable = false;
         }
+        if (newSkin1Bought == 1)
+        {
+            characterButtons[10].interactable = true;
+        }
+        else
+        {
+            characterButtons[10].interactable = false;
+        }
+        if (newSkin2Bought == 1)
+        {
+            characterButtons[11].interactable = true;
+        }
+        else
+        {
+            characterButtons[11].interactable = false;
+        }
+        if (newSkin3Bought == 1)
+        {
+            characterButtons[12].interactable = true;
+        }
+        else
+        {
+            characterButtons[12].interactable = false;
+        }
 
     }
 
     private void Awake()
     {
         
-        skin1Bought = PlayerPrefs.GetInt("skin0");
-        skin2Bought = PlayerPrefs.GetInt("skin1");
-        skin3Bought = PlayerPrefs.GetInt("skin2");
-        neptuneBought = PlayerPrefs.GetInt("skin6");
-        redBought = PlayerPrefs.GetInt("skin7");
-        moonSkin1 = PlayerPrefs.GetInt("skin3");
-        moonSkin2 = PlayerPrefs.GetInt("skin4");
-        moonSkin3 = PlayerPrefs.GetInt("skin5");
-
         //first character
         characterButtons[0].interactable = true;
         //first moonball
