@@ -110,8 +110,6 @@ public class GameManager : MonoBehaviour
             startCamTrigger.SetActive(levelWallActive);
             
         }
-
-        
     }
     //function called from wormhole (aka door script) 
     //to retrieve or disable any gameobjects in scene 

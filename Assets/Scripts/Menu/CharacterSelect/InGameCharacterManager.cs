@@ -22,7 +22,6 @@ public class InGameCharacterManager : MonoBehaviour {
 
     public void WaitForIntro(GameObject joystick)
     {
-
         if(joystick)
         {
             joystickScript = joystick.GetComponent<FloatingJoystickV2>();
@@ -38,8 +37,6 @@ public class InGameCharacterManager : MonoBehaviour {
                     fixedJoystickScript.currentMoonball(InGameMoonballs[curBallIndex]);
                 }
             }
-            
-
         }
     }
 
